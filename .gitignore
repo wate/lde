@@ -1,0 +1,6 @@
+### Ansible ###
+# Ansible retry files
+*.retry
+
+### Vagrant ###
+.vagrant/
