@@ -1,3 +1,4 @@
 - name: setup local development environment
   hosts: all
+  become: true
   tasks:
