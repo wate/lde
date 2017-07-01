@@ -1,0 +1,42 @@
+domain: example.com
+
+# box: wate/centos-7
+# ipaddress: 192.168.33.10
+
+vm_name: example.com
+# vm_gui: true
+# vm_cpu: 1
+# vm_memory: 1024
+
+forwarded_ports:
+  - guest: 80
+    host: 8080
+  # - guest: 22
+  #   host: 2240
+  #   id: ssh
+  # - guest: 3306
+  # - guest: 5432
+
+# plugin:
+#   # vagrant-cachier
+#   # http://fgrehm.viewdocs.io/vagrant-cachier/
+#   cache:
+#     scope: box
+#     auto_detect: false
+#     buckets:
+#       - yum
+#       - apt
+#       - npm
+#       - gem
+#       - bower
+#       - composer
+#   # vagrant-hostsupdater
+#   # https://github.com/cogitatio/vagrant-hostsupdater
+#   hostsupdater:
+#     remove_on_suspend: true
+#   # vagrant-hostmanager
+#   # https://github.com/devopsgroup-io/vagrant-hostmanager
+#   hostmanager:
+#     enabled: true
+#     manage_host: true
+#     manage_guest: true
