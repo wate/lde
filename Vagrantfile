@@ -24,21 +24,6 @@ Vagrant.configure("2") do |config|
   # synced folders
   config.vm.synced_folder "./", "/vagrant"
 
-  # vagrant-cachier
-  plugin_config = {}
-  if vagrant_config.has_key?('plugin') and vagrant_config['plugin'].has_key?('cache')
-    plugin_config = vagrant_config['plugin']['cache']
-  end
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = plugin_config.has_key?('scope') ? plugin_config['scope'] : :box
-    config.cache.auto_detect = plugin_config.has_key?('auto_detect') ? plugin_config['auto_detect'] : true
-    if plugin_config.has_key?('buckets')
-      plugin_config['buckets'].each do |bucket|
-        config.cache.enable bucket
-      end
-    end
-  end
-
   vm_host_aliases = [
     vagrant_config['domain'],
     'www.' + vagrant_config['domain'],

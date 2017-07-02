@@ -18,18 +18,6 @@ forwarded_ports:
   # - guest: 5432
 
 # plugin:
-#   # vagrant-cachier
-#   # http://fgrehm.viewdocs.io/vagrant-cachier/
-#   cache:
-#     scope: box
-#     auto_detect: false
-#     buckets:
-#       - yum
-#       - apt
-#       - npm
-#       - gem
-#       - bower
-#       - composer
 #   # vagrant-hostsupdater
 #   # https://github.com/cogitatio/vagrant-hostsupdater
 #   hostsupdater:
