@@ -1,2 +1,23 @@
 ---
-# defaults file for common
+common_packages:
+  - unzip
+  - zip
+  - perl
+  - cpp
+  - make
+  - autoconf
+  - automake
+  - diffstat
+  - m4
+  - libtool
+  - gcc
+  - gcc-c++
+  - patch
+  - git
+  - yum-utils
+  - bash-completion
+  - tig
+
+fail2ban_jail_cfg:
+  sshd:
+    enabled: yes

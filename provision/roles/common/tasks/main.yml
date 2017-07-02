@@ -1,2 +1,40 @@
 ---
-# tasks file for common
+- name: install common packages
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ common_packages }}"
+- name: install firewalld
+  yum:
+    name: firewalld
+- name: firewalld is active and enabled on system startup
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+- name: install etckeeper
+  yum:
+    name: etckeeper
+    enablerepo: epel
+- name: initilize etckeeper
+  command: etckeeper init
+  args:
+    chdir: /etc
+    creates: /etc/.git
+  register: result
+- name: initial commit
+  command: etckeeper commit "Initial commit"
+  when: result|changed
+- name: install fail2ban
+  yum:
+    name: fail2ban
+    enablerepo: epel
+- name: create fail2ban setting
+  template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+  notify: restart fail2ban
+- name: fail2ban is active and enabled on system startup
+  systemd:
+    name: fail2ban
+    state: started
+    enabled: yes
