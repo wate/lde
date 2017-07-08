@@ -1,0 +1,54 @@
+---
+- name: install MariaDB packages
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ mariadb_packages }}"
+- name: MariaDB is active and enabled on system startup
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+- name: create MariaDB setting files
+  template:
+    src: "{{ item }}.cnf.j2"
+    dest: /etc/my.cnf.d/{{ item }}.cnf
+  notify: restart mariadb
+  with_items:
+    - client
+    - mysql
+    - mysqld
+- name: check root user connection setting
+  stat:
+    path: /root/.my.cnf
+  register: result
+- block:
+  - name: create mysql secure installation query file
+    template:
+      src: mysql_secure_installation.sql.j2
+      dest: /tmp/mysql_secure_installation.sql
+  - name: execute mysql secure installation
+    shell: mysql -u root mysql </tmp/mysql_secure_installation.sql
+  - name: remove mysql secure installation query file
+    file:
+      path: /tmp/mysql_secure_installation.sql
+      state: absent
+  when: not result.stat.exists
+- name: create root user connection setting
+  ini_file:
+    path: /root/.my.cnf
+    section: client
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0600"
+    create: yes
+  with_items:
+    - option: user
+      value: root
+    - option: password
+      value: "{{ mariadb_root_password }}"
+- name: allow MariaDB port
+  firewalld:
+    service: mysql
+    source: "{{ mariadb_allow_host|default('127.0.0.1') }}"
+    permanent: yes
+    state: enabled
