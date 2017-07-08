@@ -1,7 +1,9 @@
 require 'spec_helper'
 
-describe package('mariadb') do
-  it { should be_installed }
+%w{mariadb mariadb-server}.each do |pkg|
+  describe package(pkg) do
+    it { should be_installed }
+  end
 end
 
 describe service('mariadb') do
