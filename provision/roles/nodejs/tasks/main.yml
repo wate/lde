@@ -1,0 +1,31 @@
+---
+- name: download nodesource gpg key
+  get_url:
+    url: https://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
+    dest: /etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+- name: add gpg key
+  rpm_key:
+    key: /etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+- name: add nodesource repository(1/2)
+  yum_repository:
+    name: nodesource
+    description: Node.js Packages for Enterprise Linux {{ ansible_distribution_major_version }} - $basearch
+    baseurl: https://rpm.nodesource.com/pub_{{ nodejs_major_version }}.x/el/{{ ansible_distribution_major_version }}/$basearch
+    failovermethod: priority
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+    file: nodesource-el
+- name: add nodesource repository(2/2)
+  yum_repository:
+    name: nodesource-source
+    description: Node.js for Enterprise Linux {{ ansible_distribution_major_version }} - $basearch - Source
+    baseurl: https://rpm.nodesource.com/pub_{{ nodejs_major_version }}.x/el/{{ ansible_distribution_major_version }}/SRPMS
+    failovermethod: priority
+    enabled: no
+    gpgcheck: yes
+    gpgkey: file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+    file: nodesource-el
+- name: install nodejs
+  yum:
+    name: nodejs
