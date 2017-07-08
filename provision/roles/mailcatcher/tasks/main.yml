@@ -1,0 +1,22 @@
+---
+- name: install dependency packages
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - gcc
+    - gcc-c++
+    - sqlite-devel
+- name: install MailCatcher
+  gem:
+    name: mailcatcher
+    user_install: no
+- name: create systemd unit file
+  template:
+    src: mailcatcher.service.j2
+    dest: /usr/lib/systemd/system/mailcatcher.service
+  notify: restart mailcatcher
+- name: MailCatcher is active and enabled on system startup
+  systemd:
+    name: mailcatcher
+    state: started
+    enabled: yes
