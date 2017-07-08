@@ -15,6 +15,7 @@ common_packages:
   - patch
   - git
   - yum-utils
+  - vim
   - bash-completion
   - tig
 
