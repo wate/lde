@@ -34,6 +34,11 @@
     dest: /etc/httpd/conf.d/ssl.conf
   when: "'mod_ssl' in apache_packages"
   notify: reload apache
+- name: create extra setting file
+  template:
+    src: extra.conf.j2
+    dest: /etc/httpd/conf.d/extra.conf
+  notify: reload apache
 - name: create virtualhost setting files
   template:
     src: vhost.conf.j2
@@ -41,6 +46,26 @@
   when: item.state|default(true)
   with_items: "{{ apache_vhosts }}"
   notify: reload apache
+- name: remove virtualhost setting files
+  file:
+    path: "{{ apache_virtualhost_conf_dir }}/{{ item.name|default(item.server_name) }}.conf"
+    state: absent
+  when: not item.state|default(true)
+  with_items: "{{ apache_vhosts }}"
+  notify: reload apache
+- name: allow http port
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+  notify: restart firewalld
+- name: allow https port
+  firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+  when: "'mod_ssl' in apache_packages"
+  notify: restart firewalld
 - name: Apache is active and enabled on system startup
   systemd:
     name: httpd
