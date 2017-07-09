@@ -1,0 +1,48 @@
+- name: install apache
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ apache_packages }}"
+- name: create Virtualhost config directory
+  file:
+    path: "{{ apache_virtualhost_conf_dir }}"
+    state: directory
+- name: update load base module
+  include: module/base.yml
+- name: update load lua module
+  include: module/lua.yml
+- name: update load WebDAV module
+  include: module/dav.yml
+- name: update load MPM module
+  include: module/mpm.yml
+- name: update load load balancing method module
+  include: module/lbmethod.yml
+- name: update load proxy module
+  include: module/proxy.yml
+- name: create base setting file
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+  notify: reload apache
+- name: create security setting file
+  template:
+    src: security.conf.j2
+    dest: /etc/httpd/conf.d/security.conf
+  notify: reload apache
+- name: create SSL setting file
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+  when: "'mod_ssl' in apache_packages"
+  notify: reload apache
+- name: create virtualhost setting files
+  template:
+    src: vhost.conf.j2
+    dest: "{{ apache_virtualhost_conf_dir }}/{{ item.name|default(item.server_name) }}.conf"
+  when: item.state|default(true)
+  with_items: "{{ apache_vhosts }}"
+  notify: reload apache
+- name: Apache is active and enabled on system startup
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes

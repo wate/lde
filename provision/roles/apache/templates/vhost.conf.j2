@@ -1,0 +1,58 @@
+
+<VirtualHost *:{{ '443' if item.ssl is defined else '80' }}>
+  ServerName {{ item.server_name }}
+  {% if item.server_alias is defined -%}
+  ServerAlias {{ item.server_alias if item.server_alias is string else item.server_alias|join(' ') }}
+  {% endif -%}
+  {% if item.document_root is defined -%}
+  DocumentRoot {{ item.document_root }}
+  {% endif -%}
+  {% if item.custom_log is defined -%}
+  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }}
+  {% endif -%}
+  {% if item.error_log is defined -%}
+  ErrorLog {{ item.error_log.path }}
+  LogLevel {{ item.error_log.log_level|default('warn') }}
+  {% endif -%}
+  {% if item.transfer_log is defined -%}
+  {% if item.transfer_log.format is defined -%}
+  LogFormat "{{ item.transfer_log.format }}"
+  {% endif -%}
+  TransferLog {{ item.transfer_log.path }}
+  {% endif -%}
+  {% if item.ssl is defined -%}
+  SSLEngine on
+  # Server Certificate:
+  SSLCertificateFile {{ item.ssl.certificate_file }}
+  # Server Private Key:
+  SSLCertificateKeyFile {{ item.ssl.certificate_key_file }}
+  {% if item.ssl.certificate_chain_file is defined -%}
+  # Server Certificate Chain:
+  SSLCertificateChainFile {{ item.ssl.certificate_chain_file }}
+  {% endif -%}
+  {% if item.ssl.protocol is defined -%}
+  SSLProtocol {{ item.ssl.protocol|join(' ') }}
+  {% endif -%}
+  {% if item.ssl.cipher_suite is defined -%}
+  SSLCipherSuite {{ item.ssl.cipher_suite|join(':') }}
+  {% endif -%}
+  {% if item.ssl.honor_cipher_order is defined -%}
+  SSLHonorCipherOrder {{ 'on' if item.ssl.honor_cipher_order else 'off' }}
+  {% endif -%}
+  {% if item.ssl.compression is defined -%}
+  SSLCompression {{ 'on' if item.ssl.compression else 'off' }}
+  {% endif -%}
+  {% if item.ssl.stapling_responder_timeout is defined -%}
+  SSLStaplingResponderTimeout {{ item.ssl.stapling_responder_timeout }}
+  {% endif -%}
+  {% if item.ssl.stapling_return_responder_errors is defined -%}
+  SSLStaplingReturnResponderErrors {{ 'on' if item.ssl.stapling_return_responder_errors else 'off' }}
+  {% endif -%}
+  {% if item.ssl.stapling_cache is defined -%}
+  SSLStaplingCache {{ item.ssl.stapling_cache }}
+  {% endif -%}
+  {% if item.ssl.hsts is defined -%}
+  Header always set Strict-Transport-Security "{{ item.ssl.hsts }}"
+  {% endif -%}
+  {% endif -%}
+</VirtualHost>
