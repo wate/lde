@@ -3,11 +3,6 @@
   yum:
     name: "{{ item }}"
   with_items: "{{ mariadb_packages }}"
-- name: MariaDB is active and enabled on system startup
-  systemd:
-    name: mariadb
-    state: started
-    enabled: yes
 - name: create MariaDB setting files
   template:
     src: "{{ item }}.cnf.j2"
@@ -17,6 +12,11 @@
     - client
     - mysql
     - mysqld
+- name: MariaDB is active and enabled on system startup
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
 - name: check root user connection setting
   stat:
     path: /root/.my.cnf
@@ -52,3 +52,4 @@
     source: "{{ mariadb_allow_host|default('127.0.0.1') }}"
     permanent: yes
     state: enabled
+  notify: restart firewalld
