@@ -4,4 +4,14 @@
   roles:
     - common
     - mariadb
+    - apache
+    - php
+    - mailcatcher
   tasks:
+    - name: restart service
+      systemd:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - httpd
+        - mariadb
