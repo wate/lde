@@ -1,2 +1,25 @@
----
-# tasks file for apache
+- name: install apache
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ apache_packages }}"
+- name: create Virtualhost config directory
+  file:
+    path: /etc/httpd/vhosts
+    state: directory
+- name: update load base module
+  include: module/base.yml
+- name: update load lua module
+  include: module/lua.yml
+- name: update load WebDAV module
+  include: module/dav.yml
+- name: update load MPM module
+  include: module/mpm.yml
+- name: update load load balancing method module
+  include: module/lbmethod.yml
+- name: update load proxy module
+  include: module/proxy.yml
+- name: Apache is active and enabled on system startup
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes

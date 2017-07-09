@@ -1,2 +1,46 @@
 ---
-# defaults file for apache
+apache_packages:
+  - httpd
+  - mod_ssl
+
+# prefork OR worker OR event
+apache_module_mpm: prefork
+
+apache_module_base:
+  buffer: no
+  watchdog: no
+  heartbeat: no
+  heartmonitor: no
+  usertrack: no
+  dialup: no
+  charset_lite: no
+  log_debug: no
+  ratelimit: no
+  reflector: no
+  request: no
+  sed: no
+  speling: no
+
+apache_module_dav:
+  dav: yes
+  dav_fs: yes
+  dav_lock: yes
+
+apache_module_lua: yes
+
+apache_module_lbmethod:
+  bybusyness: yes
+  byrequests: yes
+  bytraffic: yes
+  heartbeat: yes
+
+apache_module_proxy:
+    ajp: yes
+    balancer: yes
+    connect: yes
+    express: yes
+    fcgi: yes
+    fdpass: yes
+    ftp: yes
+    http: yes
+    wstunnel: yes
