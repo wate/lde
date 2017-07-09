@@ -20,3 +20,15 @@
     name: mailcatcher
     state: started
     enabled: yes
+- name: allow MailCatcher smtp port
+  firewalld:
+    port: "{{ mailcatcher_smtp_port }}/tcp"
+    permanent: yes
+    state: enabled
+  notify: restart firewalld
+- name: allow MailCatcher http port
+  firewalld:
+    port: "{{ mailcatcher_web_port }}/tcp"
+    permanent: yes
+    state: enabled
+  notify: restart firewalld
