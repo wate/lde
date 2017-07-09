@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
     plugin_config = vagrant_config['plugin']['hostmanager']
   end
   if Vagrant.has_plugin?('vagrant-hostmanager')
-    config.hostmanager.enabled = plugin_config.has_key?('enabled') ? plugin_config['enabled'] : true
+    config.hostmanager.enabled = plugin_config.has_key?('enabled') ? plugin_config['enabled'] : false
     config.hostmanager.manage_host = plugin_config.has_key?('manage_host') ? plugin_config['manage_host'] : true
     config.hostmanager.manage_guest = plugin_config.has_key?('manage_guest') ? plugin_config['manage_guest'] : true
     config.hostmanager.aliases = vm_host_aliases
