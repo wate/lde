@@ -52,3 +52,4 @@
     source: "{{ mariadb_allow_host|default('127.0.0.1') }}"
     permanent: yes
     state: enabled
+  notify: restart firewalld
