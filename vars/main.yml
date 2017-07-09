@@ -1,2 +1,2 @@
 ---
-# vars file for apache
+apache_virtualhost_conf_dir: /etc/httpd/vhost

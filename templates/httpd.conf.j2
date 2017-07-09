@@ -83,16 +83,7 @@ Group apache
 # e-mailed.  This address appears on some server-generated pages, such
 # as error documents.  e.g. admin@your-domain.com
 #
-ServerAdmin root@localhost
-
-#
-# ServerName gives the name and port that the server uses to identify itself.
-# This can often be determined automatically, but we recommend you specify
-# it explicitly to prevent problems during startup.
-#
-# If your host doesn't have a registered DNS name, enter its IP address here.
-#
-#ServerName www.example.com:80
+ServerAdmin {{ apache_cfg.server_admin }}
 
 #
 # Deny access to the entirety of your server's filesystem. You must
@@ -103,20 +94,6 @@ ServerAdmin root@localhost
     AllowOverride none
     Require all denied
 </Directory>
-
-#
-# Note that from this point forward you must specifically allow
-# particular features to be enabled - so if something's not working as
-# you might expect, make sure that you have specifically enabled it
-# below.
-#
-
-#
-# DocumentRoot: The directory out of which you will serve your
-# documents. By default, all requests are taken from this directory, but
-# symbolic links and aliases may be used to point to other locations.
-#
-DocumentRoot "/var/www/html"
 
 #
 # Relax access to content within /var/www.
@@ -345,9 +322,11 @@ AddDefaultCharset UTF-8
 # Defaults if commented: EnableMMAP On, EnableSendfile Off
 #
 #EnableMMAP off
-EnableSendfile on
+EnableSendfile {{ 'on' if apache_cfg.enable_sendfile else 'off' }}
 
 # Supplemental configuration
 #
 # Load config files in the "/etc/httpd/conf.d" directory, if any.
 IncludeOptional conf.d/*.conf
+
+Include {{ apache_virtualhost_conf_dir }}/*.conf
