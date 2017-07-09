@@ -1,0 +1,494 @@
+---
+# 5.4 OR 5.5 OR 5.6 OR 7.0 OR 7.1 OR 7.2
+php_version: 5.6
+
+php_packages:
+  - php-common
+  - php-cli
+  - php-devel
+  - php-opcache
+  - php-mbstring
+  - php-mysqlnd
+  - php-json
+  - php-pdo
+  - php-gd
+  - php-xml
+
+
+php_cfg:
+  #################
+  # php.ini Options
+  #################
+  # user_ini:
+  #   filename : ".user.ini"
+  #   cache_ttl : 300
+  #################
+  # Language Options
+  #################
+  engine: true
+  short_open_tag: false
+  asp_tags: false
+  precision: 14
+  output_buffering: 4096
+  # output_handler: ""
+  zlib:
+    output_compression: false
+    # output_compression_level: -1
+    # output_handler: ""
+  implicit_flush: false
+  unserialize_callback_func: ""
+  serialize_precision: 17
+  # open_basedir: ""
+  disable_functions: ""
+  disable_classes: ""
+  # highlight:
+  #   string: #DD0000
+  #   comment: #FF9900
+  #   keyword: #007700
+  #   default: #0000BB
+  #   html: #000000
+  # ignore_user_abort: true
+  # realpath_cache_size: 16k
+  # realpath_cache_ttl: 120
+  zend:
+    enable_gc: true
+  #  multibyte: false
+  #  script_encoding: ""
+  #################
+  # Miscellaneous
+  #################
+  expose_php: true
+  #################
+  # Resource Limits
+  #################
+  max_execution_time: 30
+  max_input_time: 60
+  max_input_nesting_level: 64
+  # max_input_vars: 1000
+  memory_limit: 128M
+  #################
+  # Error handling and logging
+  #################
+  error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+  display_errors: true
+  display_startup_errors: true
+  log_errors: true
+  log_errors_max_len: 1024
+  ignore_repeated_errors: false
+  ignore_repeated_source: false
+  report_memleaks: true
+  # report_zend_debug: 0
+  track_errors: true
+  # xmlrpc_errors: 0
+  # xmlrpc_error_number: 0
+  html_errors: true
+  # docref_root: /phpmanual/
+  # docref_ext: .html
+  # error_prepend_string: ""
+  # error_append_string: ""
+  # error_log: ""
+  #################
+  # Data Handling
+  #################
+  # arg_separator:
+  #   output: "&"
+  #   input: "&"
+  variables_order: GPCS
+  request_order: GP
+  register_argc_argv: false
+  auto_globals_jit: true
+  # enable_post_data_reading: false
+  post_max_size: 8M
+  auto_prepend_file: ""
+  auto_append_file: ""
+  default_mimetype: "text/html"
+  default_charset: "UTF-8"
+  # internal_encoding: ""
+  # input_encoding: ""
+  # output_encoding: ""
+  # always_populate_raw_post_data: -1
+  #################
+  # Paths and Directories
+  #################
+  # include_path: ".:/php/includes"
+  doc_root: ""
+  user_dir: ""
+  # extension_dir: "./"
+  # sys_temp_dir: "/tmp"
+  enable_dl: false
+  # cgi:
+  #   force_redirect: 1
+  #   nph: 1
+  #   redirect_status_env: ""
+  #   fix_pathinfo: 1
+  #   rfc2616_headers: 0
+  # fastcgi:
+  #   impersonate: 1
+  #   logging: 0
+  #################
+  # File Uploads
+  #################
+  file_uploads: true
+  # upload_tmp_dir: "/tmp"
+  upload_max_filesize: 2M
+  max_file_uploads: 20
+  #################
+  # Fopen wrappers
+  #################
+  allow_url_fopen: true
+  allow_url_include: false
+  # from: "john@doe.com"
+  # user_agent: PHP
+  default_socket_timeout: 60
+  # auto_detect_line_endings: false
+  #################
+  # Module Settings
+  #################
+  cli_server:
+    color: true
+  date:
+    timezone: Asia/Tokyo
+  #  default_latitude: 31.7667
+  #  default_longitude: 35.2333
+  #  sunrise_zenith: 90.583333
+  #  sunset_zenith: 90.583333
+  # filter:
+  #   default: unsafe_raw
+  #   default_flags: ""
+  # iconv:
+  #   input_encoding: ""
+  #   internal_encoding: ""
+  #   output_encoding: ""
+  # intl:
+  #   default_locale: ""
+  #   error_level: E_WARNING
+  # sqlite:
+  #   assoc_case: 0
+  # sqlite3:
+  #   extension_dir: ""
+  # pcre:
+  #   backtrack_limit: 100000
+  #   recursion_limit: 100000
+  # pdo_odbc:
+  #   connection_pooling: strict
+  #   db2_instance_name: ""
+  pdo_mysql:
+    cache_size: 2000
+    default_socket: ""
+  # phar:
+  #   readonly: true
+  #   require_hash: true
+  #   cache_list: ""
+  sendmail_path: "/usr/sbin/sendmail -t -i"
+  mail:
+  #   force_extra_parameters: ""
+    add_x_header: true
+  #   log:
+  sql:
+    safe_mode: false
+  odbc:
+  #   default_db: ""
+  #   default_user: ""
+  #   default_pw: ""
+  #   default_cursortype: ""
+    allow_persistent: true
+    check_persistent: true
+    max_persistent: -1
+    max_links: -1
+    defaultlrl: 4096
+    defaultbinmode: 1
+  # birdstep:
+  #   max_links: -1
+  ibase:
+    allow_persistent: 1
+    max_persistent: -1
+    max_links: -1
+    # default_db: ""
+    # default_user: ""
+    # default_password: ""
+    # default_charset: ""
+    timestampformat: "%Y-%m-%d %H:%M:%S"
+    dateformat: "%Y-%m-%d"
+    timeformat: "%H:%M:%S"
+  mysql:
+    allow_local_infile: true
+    allow_persistent: true
+    cache_size: 2000
+    max_persistent: -1
+    max_links: -1
+    default_port: ""
+    default_socket: ""
+    default_host: ""
+    default_user: ""
+    default_password: ""
+    connect_timeout: 60
+    trace_mode: false
+  mysqli:
+    max_persistent: -1
+    # allow_local_infile: true
+    allow_persistent: true
+    max_links: -1
+    cache_size: 2000
+    default_port: 3306
+    default_socket: ""
+    default_host: ""
+    default_user: ""
+    default_pw: ""
+    reconnect: false
+  mysqlnd:
+    collect_statistics: true
+    collect_memory_statistics: true
+    # net_cmd_buffer_size: 2048
+    # net_read_buffer_size: 32768
+  # oci8:
+  #   privileged_connect: false
+  #   max_persistent: -1
+  #   persistent_timeout: -1
+  #   ping_interval: 60
+  #   connection_class: ""
+  #   events: false
+  #   statement_cache_size: 20
+  #   default_prefetch: 100
+  #   old_oci_close_semantics: false
+  pgsql:
+    allow_persistent: true
+    auto_reset_persistent: false
+    max_persistent: -1
+    max_links: -1
+    ignore_notice: 0
+    log_notice: 0
+  sybct:
+    allow_persistent: true
+    max_persistent: -1
+    max_links: -1
+    min_server_severity: 10
+    min_client_severity: 10
+  #   timeout: ""
+  #   packet_size: ""
+  #   login_timeout: ""
+  #   hostname: ""
+  #   deadlock_retry_count: 0
+  bcmath:
+    scale: 0
+  # browscap: extra/browscap.ini
+  session:
+    save_handler: files
+  # save_path: /tmp
+    use_strict_mode: true
+    use_cookies: true
+    cookie_secure: false
+    use_only_cookies: true
+    name: PHPSESSID
+    auto_start: false
+    cookie_lifetime: 0
+    cookie_path: /
+    cookie_domain: ""
+    cookie_httponly: false
+    serialize_handler: php
+    gc_probability: 1
+    gc_divisor: 1000
+    gc_maxlifetime: 1440
+    referer_check: ""
+    entropy_length: 32
+  # entropy_file: /dev/urandom
+    cache_limiter: nocache
+    cache_expire: 180
+    use_trans_sid: false
+    hash_function: 0
+    hash_bits_per_character: 5
+  #   upload_progress:
+  #     enabled: true
+  #     cleanup: true
+  #     prefix: upload_progress_
+  #     name: PHP_SESSION_UPLOAD_PROGRESS
+  #     freq:  1%
+  #     min_freq: 1
+  url_rewriter:
+    tags: "a=href,area=href,frame=src,input=src,form=fakeentry"
+  mssql:
+    allow_persistent: true
+    max_persistent: -1
+    max_links: -1
+    min_error_severity: 10
+    min_message_severity: 10
+    compatibility_mode: false
+  #   connect_timeout: 5
+  #   timeout: 60
+  #   textlimit: 4096
+  #   textsize: 4096
+  #   batchsize: 0
+  #   datetimeconvert: true
+    secure_connection: false
+  #   max_procs: -1
+  #   charset: ISO-8859-1
+  # assert:
+  #   active: true
+  #   warning: true
+  #   bail: false
+  #   callback: 0
+  #   quiet_eval: 0
+  # mbstring:
+  #   language: Japanese
+  #   internal_encoding: ""
+  #   http_input: ""
+  #   http_output: ""
+  #   encoding_translation: false
+  #   detect_order: auto
+  #   substitute_character: none
+  #   func_overload: 0
+  #   strict_detection: true
+  #   http_output_conv_mimetype: ""
+  # gd:
+  #   jpeg_ignore_warning: false
+  # exif:
+  #   encode_unicode: ISO-8859-15
+  #   decode_unicode_motorola: UCS-2BE
+  #   decode_unicode_intel  : UCS-2LE
+  #   encode_jis: ""
+  #   decode_jis_motorola: JIS
+  #   decode_jis_intel  : JIS
+  tidy:
+  #   default_config: /usr/local/lib/php/default.tcfg
+    clean_output: false
+  soap:
+    wsdl_cache_enabled: 1
+    wsdl_cache_dir: /tmp
+    wsdl_cache_ttl: 86400
+    wsdl_cache_limit: 5
+  # sysvshm:
+  #   init_mem: 10000
+  ldap:
+    max_links: -1
+  # mcrypt:
+  #   algorithms_dir: ""
+  #   modes_dir: ""
+  # dba:
+  #   default_handler: ""
+  # curl:
+  #   cainfo: ""
+  # openssl:
+  #   cafile: ""
+  #   capath: ""
+  # opcache:
+  #   enable: true
+  #   enable_cli: false
+  #   memory_consumption: 128
+  #   interned_strings_buffer: 8
+  #   max_accelerated_files: 4000
+  #   max_wasted_percentage: 5
+  #   use_cwd: true
+  #   validate_timestamps: true
+  #   revalidate_freq: 2
+  #   revalidate_path: false
+  #   save_comments: true
+  #   load_comments: true
+  #   fast_shutdown: true
+  #   enable_file_override: false
+  #   optimization_level: "0x7FFFBFFF"
+  #   inherited_hack: true
+  #   dups_fix: false
+  #   blacklist_filename: "/etc/php.d/opcache*.blacklist"
+  #   max_file_size: 0
+  #   force_restart_timeout: 180
+  #   error_log: ""
+  #   log_verbosity_level: 1
+  #   preferred_memory_model: ""
+  #   protect_memory: 0
+  #   file_update_protection: 2
+  #   restrict_api: ""
+  # extra_parameters:
+  #   geoip:
+  #     custom_directory: ""
+  #   imagick:
+  #     locale_fix: 'Off'
+  #     progress_monitor: 'Off'
+  #     skip_version_check: 'Off'
+  #   yaml:
+  #     decode_binary: 'Off'
+  #     decode_php: 'On'
+  #     decode_timestamp: 0
+  #     output_canonical: 'Off'
+  #     output_indent: 2
+  #     output_width: 80
+  #   memcached:
+  #     sess_locking: 1
+  #     sess_consistent_hash: 0
+  #     sess_binary: 0
+  #     sess_connect_timeout: 150000
+  #     sess_prefix: 'memc.sess.key.'
+  #     sess_number_of_replicas: 0
+  #     sess_randomize_replica_read: 0
+  #     sess_remove_failed: 0
+  #     compression_type: fastlz
+  #     compression_factor: 1.3
+  #     compression_threshold: 2000
+  #     serializer: php
+  #     use_sasl: 0
+  #   mongo:
+  #     allow_empty_keys: 0
+  #     chunk_size: 262144
+  #     cmd: '"$"'
+  #     default_host: localhost
+  #     default_port: 27017
+  #     is_master_interval: 15
+  #     long_as_object: 0
+  #     native_long: 1
+  #     ping_interval: 5
+  #     utf8: 1
+  #   xdebug:
+  #     default_enable: 1
+  #     auto_trace: 0
+  #     cli_color: 0
+  #     collect_includes: 1
+  #     collect_assignments: 0
+  #     collect_params: 0
+  #     collect_return: 0
+  #     collect_vars: 0
+  #     coverage_enable: 1
+  #     dump.COOKIE: ""
+  #     dump.ENV: ""
+  #     dump.FILES: ""
+  #     dump.GET: ""
+  #     dump.POST: ""
+  #     dump.REQUEST: ""
+  #     dump.SERVER: ""
+  #     dump.SESSION: ""
+  #     dump_globals: 1
+  #     dump_once: 1
+  #     dump_undefined: 0
+  #     extended_info: 1
+  #     file_link_format: ""
+  #     force_display_errors: 0
+  #     force_error_reporting: 0
+  #     halt_level: 0
+  #     idekey: ""
+  #     max_nesting_level: 256
+  #     overload_var_dump: 2
+  #     profiler_append: 0
+  #     profiler_enable: 0
+  #     profiler_enable_trigger: 0
+  #     profiler_enable_trigger_value: ""
+  #     profiler_output_dir: /tmp
+  #     profiler_output_name: "cachegrind.out.%p"
+  #     remote_enable: 0
+  #     remote_autostart: 0
+  #     remote_connect_back: 0
+  #     remote_cookie_expire_time: 3600
+  #     remote_handler: dbgp
+  #     remote_host: localhost
+  #     remote_log: ""
+  #     remote_mode: req
+  #     remote_port: 9000
+  #     scream: 0
+  #     show_exception_trace: 0
+  #     show_local_vars: 0
+  #     show_mem_delta: 0
+  #     trace_enable_trigger: 0
+  #     trace_enable_trigger_value: ""
+  #     trace_format: 0
+  #     trace_options: 0
+  #     trace_output_dir: /tmp
+  #     trace_output_name: "trace.%c"
+  #     var_display_max_children: 128
+  #     var_display_max_data: 512
+  #     var_display_max_depth: 3
