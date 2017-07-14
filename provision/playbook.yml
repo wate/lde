@@ -7,6 +7,8 @@
     - apache
     - php
     - mailcatcher
+    - phpmyadmin
+    - wp-cli
   tasks:
     - name: restart service
       systemd:
