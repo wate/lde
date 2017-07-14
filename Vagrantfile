@@ -4,17 +4,20 @@
 require 'yaml'
 
 Vagrant.configure("2") do |config|
-  # Load config file
-  config_file_path = File.expand_path(File.join(File.dirname(__FILE__), 'config.yml'))
-  vagrant_config = YAML.load_file(config_file_path)
+  # Load Vagrant config file
+  vagrant_setting_file = File.expand_path(File.join(File.dirname(__FILE__), 'config.yml'))
+  settings = YAML.load_file(vagrant_setting_file)
+  # Merge Ansiblle host variables
+  ansible_vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'provision','host_vars', 'default.yml'))
+  settings.merge!(YAML.load_file(ansible_vars_file));
 
-  config.vm.box = vagrant_config['box'] || 'wate/centos-7'
+  config.vm.box = settings['vagrant']['box'] || 'wate/centos-7'
 
-  config.vm.network "private_network", ip: vagrant_config['ipaddress'] || '192.168.33.10'
+  config.vm.network "private_network", ip: settings['vagrant']['ipaddress'] || '192.168.33.10'
 
   # port Forwarding
-  if vagrant_config.has_key?('forwarded_ports')
-    vagrant_config['forwarded_ports'].each do |forwarded_port|
+  if settings['vagrant'].has_key?('forwarded_ports')
+    settings['vagrant']['forwarded_ports'].each do |forwarded_port|
       config.vm.network "forwarded_port",
         guest: forwarded_port['guest'] ,
         host: forwarded_port['host'] || forwarded_port['guest'] ,
@@ -25,50 +28,50 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./", "/vagrant"
 
   vm_host_aliases = [
-    vagrant_config['domain'],
-    'www.' + vagrant_config['domain'],
-    'db.' + vagrant_config['domain'],
-    'mail.' + vagrant_config['domain'],
-    'log.' + vagrant_config['domain'],
+    settings['domain'],
+    'www.' + settings['domain'],
+    'db.' + settings['domain'],
+    'mail.' + settings['domain'],
+    'log.' + settings['domain'],
   ]
   # vagrant-hostsupdater
-  plugin_config = {}
-  if vagrant_config.has_key?('plugin') and vagrant_config['plugin'].has_key?('hostsupdater')
-    plugin_config = vagrant_config['plugin']['hostsupdater']
+  plugin_setting = {}
+  if settings['vagrant'].has_key?('plugin') and settings['vagrant']['plugin'].has_key?('hostsupdater')
+    plugin_setting = config['vagrant']['plugin']['hostsupdater']
   end
   if Vagrant.has_plugin?('vagrant-hostsupdater')
-    config.hostsupdater.remove_on_suspend = plugin_config.has_key?('remove_on_suspend') ? plugin_config['remove_on_suspend'] : true
+    config.hostsupdater.remove_on_suspend = plugin_setting.has_key?('remove_on_suspend') ? plugin_setting['remove_on_suspend'] : true
     config.hostsupdater.aliases = vm_host_aliases
   end
   # plugin vagrant-hostmanager
-  plugin_config = {}
-  if vagrant_config.has_key?('plugin') and vagrant_config['plugin'].has_key?('hostmanager')
-    plugin_config = vagrant_config['plugin']['hostmanager']
+  plugin_setting = {}
+  if settings['vagrant'].has_key?('plugin') and settings['vagrant']['plugin'].has_key?('hostmanager')
+    plugin_setting = config['plugin']['hostmanager']
   end
   if Vagrant.has_plugin?('vagrant-hostmanager')
-    config.hostmanager.enabled = plugin_config.has_key?('enabled') ? plugin_config['enabled'] : false
-    config.hostmanager.manage_host = plugin_config.has_key?('manage_host') ? plugin_config['manage_host'] : true
-    config.hostmanager.manage_guest = plugin_config.has_key?('manage_guest') ? plugin_config['manage_guest'] : true
+    config.hostmanager.enabled = plugin_setting.has_key?('enabled') ? plugin_setting['enabled'] : false
+    config.hostmanager.manage_host = plugin_setting.has_key?('manage_host') ? plugin_setting['manage_host'] : true
+    config.hostmanager.manage_guest = plugin_setting.has_key?('manage_guest') ? plugin_setting['manage_guest'] : true
     config.hostmanager.aliases = vm_host_aliases
   end
 
   # Provisioning
-  if Vagrant::Util::Platform.windows?
-    # config.vm.provision "ansible_local" do |ansible|
-    #   ansible.playbook = "provision/playbook.yml"
-    #   ansible.config_file = "provision/ansible.cfg"
-    # end
+  if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
+    config.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "playbook.yml"
+      ansible.provisioning_path = "/vagrant/provision"
+    end
   else
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision/playbook.yml"
       ansible.config_file = "provision/ansible.cfg"
     end
   end
-  # Set VirtualBox setting
-  config.vm.provider "virtualbox" do |v|
-    v.gui = vagrant_config['vm_gui'] || false
-    v.name = vagrant_config['vm_name'] || nil
-    v.cpus = vagrant_config['vm_cpu'] || 1
-    v.memory = vagrant_config['vm_memory'] || 1024
+  # Set VirtualBox settings
+  config.vm.provider "virtualbox" do |vm|
+    vm.name = settings['vagrant']['vm_name'] || settings['domain']
+    vm.gui = settings['vagrant']['vm_gui'] || false
+    vm.cpus = settings['vagrant']['vm_cpu'] || 1
+    vm.memory = settings['vagrant']['vm_memory'] || 1024
   end
 end
