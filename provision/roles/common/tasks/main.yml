@@ -1,4 +1,34 @@
 ---
+- name: manage group
+  group:
+    name: "{{ item.1 }}"
+  with_subelements:
+    - "{{ users }}"
+    - groups
+    - flags:
+        skip_missing: yes
+- name: manage user
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.password|default(omit) }}"
+    shell: "{{ item.shell|default(omit) }}"
+    home: "{{ item.home|default(omit) }}"
+    groups: "{{ item.groups|default(omit) }}"
+    group: "{{ item.group|default(omit) }}"
+    comment: "{{ item.comment|default(omit) }}"
+    system: "{{ item.system|default(false) }}"
+    uid: "{{ item.uid|default(omit) }}"
+    state: "{{ 'present' if item.state|default(true) else 'absent' }}"
+  with_items: "{{ users }}"
+- name: add authorized key
+  authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+  with_subelements:
+    - "{{ users }}"
+    - authorized_keys
+    - flags:
+        skip_missing: yes
 - name: install common packages
   yum:
     name: "{{ item }}"
