@@ -30,8 +30,11 @@ Vagrant.configure("2") do |config|
   vm_host_aliases = [
     settings['domain'],
     'www.' + settings['domain'],
+    # phpMyAdmin
     'db.' + settings['domain'],
+    # MailCatcher
     'mail.' + settings['domain'],
+    # rtail(予定)
     'log.' + settings['domain'],
   ]
   # vagrant-hostsupdater
@@ -67,7 +70,7 @@ Vagrant.configure("2") do |config|
       ansible.config_file = "provision/ansible.cfg"
     end
   end
-  # Set VirtualBox settings
+  # VirtualBox settings
   config.vm.provider "virtualbox" do |vm|
     vm.name = settings['vagrant']['vm_name'] || settings['domain']
     vm.gui = settings['vagrant']['vm_gui'] || false
