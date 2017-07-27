@@ -133,3 +133,28 @@ general_log                = {{ '1' if mariadb_cfg.mysqld.general_log else '0' }
 {% if mariadb_cfg.mysqld.general_log_file is defined -%}
 general_log_file           = {{ mariadb_cfg.mysqld.general_log_file }}
 {% endif %}
+
+# -----------------
+# Replication
+# -----------------
+{% if mariadb_cfg.mysqld.gtid_domain_id is defined -%}
+gtid_domain_id             = {{ mariadb_cfg.mysqld.gtid_domain_id }}
+{% endif %}
+{% if mariadb_cfg.mysqld.server_id is defined -%}
+server_id                  = {{ mariadb_cfg.mysqld.server_id }}
+{% endif %}
+{% if mariadb_cfg.mysqld.log_bin is defined -%}
+log_bin                    = {{ mariadb_cfg.mysqld.log_bin }}
+{% endif %}
+{% if mariadb_cfg.mysqld.binlog_format is defined -%}
+binlog_format              = {{ mariadb_cfg.mysqld.binlog_format }}
+{% endif %}
+{% if mariadb_cfg.mysqld.expire_logs_days is defined -%}
+expire_logs_days           = {{ mariadb_cfg.mysqld.expire_logs_days }}
+{% endif %}
+{% if mariadb_cfg.mysqld.read_only is defined and mariadb_cfg.mysqld.read_only -%}
+read_only
+{% endif %}
+{% if mariadb_cfg.mysqld.log_slave_updates is defined and mariadb_cfg.mysqld.log_slave_updates -%}
+log_slave_updates
+{% endif %}
