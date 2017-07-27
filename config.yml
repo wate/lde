@@ -1,11 +1,22 @@
 vagrant:
-  provisioner: ansible_local
-  box: wate/centos-7
-  ipaddress: 192.168.33.10
+  ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
+  ## ※Ansibleがインストールできない/されていない人向け
+  # provisioner: ansible_local
+  ## ベースのイメージ
+  # box: wate/centos-7
+  ## 仮想マシンのIPアドレス
+  # ipaddress: 192.168.33.10
+  ## 仮想マシン名(初期値は「provision/host_vars/default.yml」の「domain」の値を利用)
   # vm_name: dev.local
+  ## 仮想マシン名
   # vm_gui: true
+  ## 仮想マシンのCPU
   # vm_cpu: 1
+  ## 仮想マシンのメモリ
   # vm_memory: 1024
+  ## ----------------------
+  ## ポートフォワーディングの設定
+  ## ----------------------
   forwarded_ports:
     - guest: 80
       host: 8080
@@ -14,14 +25,3 @@ vagrant:
   #     id: ssh
   #   - guest: 3306
   #   - guest: 5432
-  # plugin:
-  #   # vagrant-hostsupdater
-  #   # https://github.com/cogitatio/vagrant-hostsupdater
-  #   hostsupdater:
-  #     remove_on_suspend: true
-  #   # vagrant-hostmanager
-  #   # https://github.com/devopsgroup-io/vagrant-hostmanager
-  #   hostmanager:
-  #     enabled: true
-  #     manage_host: true
-  #     manage_guest: true
