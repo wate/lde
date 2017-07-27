@@ -133,6 +133,16 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:{{ mailcatcher_web_port }}/"
+  # rtail用のバーチャルホスト ( http://log.<ドメイン>/ )
+  # - name: 03-rtail
+  #   server_name: log.{{ domain }}
+  #   # リバースプロキシの設定
+  #   proxy_pass:
+  #     - from: /
+  #       to: "http://localhost:8888/"
+  #   proxy_pass_reverse:
+  #     - from: /
+  #       to: "http://localhost:8888/"
 
 # --------------
 # Apacheの設定
