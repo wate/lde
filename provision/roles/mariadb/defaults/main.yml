@@ -2,6 +2,8 @@
 mariadb_packages:
   - mariadb
   - mariadb-server
+  - mariadb-libs
+  - MySQL-python
 
 # mariadb_allow_host: "192.168.33.0/24"
 
@@ -9,6 +11,23 @@ mariadb_root_password: root_passW00rd
 
 mariadb_default_charset: utf8
 mariadb_default_collation: utf8_general_ci
+
+mariadb_databases: []
+  # - name: sample
+  #   encoding: utf8mb4
+  #   collation: utf8mb4_general_ci
+  #   import_data: /tmp/sample.sql.bz2
+  #   state: false
+
+mariadb_users: []
+  # - name: sample_user
+  #   password: sample_user_password
+  #   hosts:
+  #     - "127.0.0.1"
+  #     - "::1"
+  #     - localhost
+  #   priv: "sample.*:ALL"
+  #   state: false
 
 mariadb_max_connections: 100
 mariadb_max_table_use_in_query: 3
@@ -86,8 +105,13 @@ mariadb_cfg:
     # log_warnings: 0
     # slow_query_log_file: /var/log/mysql/slow_log
     ## Replication
-    # server-id: 1
+    # -----------------
+    # Replication
+    # -----------------
     # gtid_domain_id: 1
-    # log-bin: mysql-bin
+    # server_id: 1
+    # log_bin: mysql-bin
+    # binlog_format: ROW
     # expire_logs_days: 3
+    # read_only: yes
     # log_slave_updates: yes
