@@ -1,9 +1,87 @@
+# --------------
+# ドメイン名
+# ※以下の各設定項目に記載している「{{ domain }}」の値
+# --------------
 domain: example.com
 
-# mariadb_root_password: root_passW00rd
+# --------------
+# MariaDBのrootパスワード
+# --------------
+mariadb_root_password: r00tP@55w0rd
 
-php_version: 7.0
+# --------------
+# PHPのバージョン
+#
+# 指定可能な値は以下の通り
+# - 5.4
+# - 5.5
+# - 5.6
+# - 7.0
+# - 7.1
+# - 7.2
+# --------------
+php_version: 7.1
 
+# --------------
+# MariaDBの設定
+# --------------
+# デフォルトの文字コード
+mariadb_default_charset: utf8mb4
+# デフォルトの文字照合順序
+mariadb_default_collation: utf8mb4_general_ci
+
+# --------------
+# データベース
+# --------------
+mariadb_databases:
+  # 開発用データベース
+  - name: app_dev
+  # テスト用データベース
+  - name: app_test
+    # encoding: utf8                                      # 文字コード
+    # collation: utf8_general_ci                          # 文字照合順序
+    # import_data: /vagrant/tests/_data/test_data.sql   # インポートデータ
+  # ステージング用データベース
+  - name: app_staging
+  # 本番用データベース
+  - name: app_prod
+
+# --------------
+# データベースユーザー
+# --------------
+mariadb_users:
+  - name: app_dev_user
+    password: db_dev_p@55w0rd
+    hosts:
+      - "127.0.0.1"
+      - "::1"
+      - localhost
+    priv: "app_dev.*:ALL"
+  - name: app_test_user
+    password: db_test_p@55w0rd
+    hosts:
+      - "127.0.0.1"
+      - "::1"
+      - localhost
+    priv: "app_test.*:ALL"
+  - name: app_staging_user
+    password: db_staging_p@55w0rd
+    hosts:
+      - "127.0.0.1"
+      - "::1"
+      - localhost
+    priv: "app_staging.*:ALL"
+  - name: app_prod_user
+    password: db_prod_p@55w0rd
+    hosts:
+      - "127.0.0.1"
+      - "::1"
+      - localhost
+    priv: "app_prod.*:ALL"
+
+# --------------
+# インストールするPHPのパッケージ
+# --------------
 php_packages:
   - php
   - php-common
@@ -12,31 +90,43 @@ php_packages:
   - php-opcache
   - php-mbstring
   - php-mysqlnd
+  - php-intl
   - php-json
   - php-pdo
   - php-gd
   - php-xml
 
+# --------------
+# php.iniの初期値を上書きする項目
+# その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
+# --------------
 php_cfg:
   sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
 
+# --------------
+# Apacheのバーチャルホストの設定
+# --------------
 apache_vhosts:
+  # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
   - name: 00-default
-    server_name: www.{{ domain }}
-    document_root: /vagrant/source
-    server_alias: "{{ domain }}"
+    server_name: www.{{ domain }}                         # サーバー名
+    document_root: /vagrant/source                        # ドキュメントルート
+    server_alias: "{{ domain }}"                          # サーバー名の別名
+  # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   - name: 01-phpMyAdmin
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest }}"
-    options:
+    options:                                              # Optionsの設定値
       - "-Indexes"
       - "+FollowSymLinks"
-    allow_override: All
-    require:
+    allow_override: All                                   # AllowOverrideの設定値
+    require:                                              # Requireの設定値
       - type: ip
         value: 192.168.33
+  # MailCatcher用のバーチャルホスト ( http://mail.<ドメイン>/ )
   - name: 02-MailCatcher
     server_name: mail.{{ domain }}
+    # リバースプロキシの設定
     proxy_pass:
       - from: /
         to: "http://localhost:{{ mailcatcher_web_port }}/"
@@ -44,9 +134,15 @@ apache_vhosts:
       - from: /
         to: "http://localhost:{{ mailcatcher_web_port }}/"
 
+# --------------
+# Apacheの設定
+# その他の設定値は、「provision/roles/apache/defaults/main.yml」を参照
+# --------------
 apache_cfg:
+  # EnableSendfileをOffに変更(VirtualBoxの共有ディレクトリ機能用)
   enable_sendfile: no
 
+# 不要なモジュールを無効化
 apache_module_lua: no
 apache_module_dav:
   dav: no
@@ -61,5 +157,3 @@ apache_module_proxy:
   ajp: no
   balancer: no
   ftp: no
-
-# mailcatcher_web_ip: 0.0.0.0
