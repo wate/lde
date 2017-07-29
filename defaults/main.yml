@@ -7,11 +7,18 @@ apache_vhosts:
   - name: 00-default
     server_name: www.example.com
     document_root: /var/www/html
-    server_alias: example.com
-    # server_alias:
-    #   - example.com
-    #   - sub1.example.com
-    #   - sub2.example.com
+    server_alias:
+      - example.com
+    # directory_index:
+    #   - index.html
+    #   - index.php
+    # options:
+    #   - "-Indexes"
+    #   - "+FollowSymLinks"
+    # allow_override: None
+    # require:
+    #   - type: ip
+    #     value: "192.168.33.0/24"
     # custom_log:
     #   path: logs/access_log
     #   format: combined
@@ -21,6 +28,20 @@ apache_vhosts:
     # transfer_log:
     #   path: logs/transfer_log
     #   format: %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"'
+    # alias:
+    #   - from: /phpMyAdmin
+    #     to: /usr/share/phpMyAdmin
+    #   - from: /phpmyAdmin
+    #     to: /usr/share/phpMyAdmin
+    # proxy_pass:
+    #   - from: /
+    #     to: "http://127.0.0.1:8080/"
+    # proxy_pass_reverse:
+    #   - from: /
+    #     to: "http://127.0.0.1:8080/"
+    # proxy_pass_match:
+    #   - pattern: ^(.*\.php(/.*)?)$
+    #     to: unix:/path/to/socket.sock | fcgi://127.0.0.1:9000/path/to/your/documentroot/"
     # ssl:
     #   certificate_file: /path/to/signed_certificate_followed_by_intermediate_certs
     #   certificate_key_file: /path/to/private/key
@@ -47,6 +68,13 @@ apache_vhosts:
     #   stapling_return_responder_errors: no
     #   stapling_cache: "shmcb:/var/run/ocsp(128000)"
     #   hsts: "max-age=15768000"
+    # ip: 127.0.0.1
+    # port: 1080
+    # extra_param: |
+    #   <Location /server-status>
+    #     SetHandler server-status
+    #     Require ip 127.0.0.1
+    #   </Location>
 
 apache_secrity_cfg:
   trace_enable: no
@@ -59,6 +87,8 @@ apache_secrity_cfg:
 apache_cfg:
   server_admin: root@localhost
   enable_sendfile: yes
+  # extra_param: |
+  #   ExtendedStatus On
 
 # Apache MPM(Multi Processing Module)
 # Setting Value: prefork OR worker OR event

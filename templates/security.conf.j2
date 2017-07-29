@@ -1,4 +1,4 @@
-TraceEnable {{ 'On' if apache_secrity_cfg.trace_enable else 'Off' }}
+TraceEnable {{ 'on' if apache_secrity_cfg.trace_enable else 'off' }}
 ServerTokens {{ apache_secrity_cfg.server_tokens }}
 
 {% for name, value in apache_secrity_cfg.headers.iteritems() %}
