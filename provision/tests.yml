@@ -1,0 +1,14 @@
+- name: lamp
+  hosts: all
+  become: yes
+  roles:
+    - repo-epel
+    - common
+    - mariadb
+    - apache
+    - repo-remi
+    - php
+    - ruby
+    - mailcatcher
+    - phpmyadmin
+    - wp-cli

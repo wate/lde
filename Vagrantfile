@@ -68,6 +68,9 @@ Vagrant.configure("2") do |config|
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision/playbook.yml"
       ansible.config_file = "provision/ansible.cfg"
+      ansible.groups = {
+        "vagrant" => ["default"],
+      }
     end
   end
   # VirtualBox settings
