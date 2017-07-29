@@ -15,7 +15,7 @@ common_packages:
   - patch
   - git
   - yum-utils
-  - vim
+  - vim-enhanced
   - bash-completion
   - tig
 
@@ -36,8 +36,6 @@ users: []
   #   comment: sample acount
   #   uid: 1111
   #   state: yes
-
-
 
 fail2ban_jail_cfg:
   sshd:
