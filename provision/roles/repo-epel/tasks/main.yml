@@ -2,7 +2,7 @@
 - name: add epel repository
   yum:
     name: epel-release
-- name: change enable/disable repository
+- name: change repository status
   ini_file:
     path: /etc/yum.repos.d/epel.repo
     section: epel
