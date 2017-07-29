@@ -1,2 +1,9 @@
 ---
-# tasks file for phpmyadmin
+- name: install phpMyAdmin
+  yum:
+    name: phpMyAdmin
+    enablerepo: epel
+- name: remove phpMyAdmin default setting file
+  file:
+    path: /etc/httpd/conf.d/phpMyAdmin.conf
+    state: absent
