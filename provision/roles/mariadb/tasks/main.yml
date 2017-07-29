@@ -3,6 +3,9 @@
   yum:
     name: "{{ item }}"
   with_items: "{{ mariadb_packages }}"
+- name: install dependency packages
+  yum:
+    name: MySQL-python
 - name: create MariaDB setting files
   template:
     src: "{{ item }}.cnf.j2"

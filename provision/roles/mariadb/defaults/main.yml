@@ -3,7 +3,6 @@ mariadb_packages:
   - mariadb
   - mariadb-server
   - mariadb-libs
-  - MySQL-python
 
 # mariadb_allow_host: "192.168.33.0/24"
 
