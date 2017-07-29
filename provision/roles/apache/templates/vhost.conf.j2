@@ -42,7 +42,7 @@
   {% endif -%}
 
   {% if item.directory_index is defined -%}
-  DirectoryIndex {{ item.server_alias if item.directory_index is string else item.directory_index|join(' ') }}
+  DirectoryIndex {{ item.directory_index if item.directory_index is string else item.directory_index|join(' ') }}
   {% endif -%}
 
   {% if item.custom_log is defined -%}
@@ -75,7 +75,7 @@
 
   {% if item.proxy_pass_match is defined -%}
   {% for directive in item.proxy_pass_match -%}
-  ProxyPassMatch {{ directive.pattern }} {{ directive.pass }}
+  ProxyPassMatch {{ directive.pattern }} {{ directive.to }}
   {% endfor -%}
   {% endif -%}
 

@@ -7,8 +7,8 @@ apache_vhosts:
   - name: 00-default
     server_name: www.example.com
     document_root: /var/www/html
-    # server_alias:
-    #   - example.com
+    server_alias:
+      - example.com
     # directory_index:
     #   - index.html
     #   - index.php
