@@ -1,2 +1,2 @@
 ---
-# defaults file for repo-epel
+repo_epel_enabled: yes
