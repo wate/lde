@@ -3,6 +3,9 @@
   yum:
     name: "{{ item }}"
   with_items: "{{ mariadb_packages }}"
+- name: install dependency packages
+  yum:
+    name: MySQL-python
 - name: create MariaDB setting files
   template:
     src: "{{ item }}.cnf.j2"
@@ -53,7 +56,7 @@
     collation: "{{ item.collation|default(mariadb_default_collation) }}"
     state: "{{ 'present' if item.state|default(true) else 'absent' }}"
   with_items: "{{ mariadb_databases }}"
-- name: import databases
+- name: import data
   mysql_db:
     name: "{{ item.name }}"
     target: "{{ item.import_data }}"

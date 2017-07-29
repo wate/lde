@@ -3,11 +3,10 @@ mariadb_packages:
   - mariadb
   - mariadb-server
   - mariadb-libs
-  - MySQL-python
 
 # mariadb_allow_host: "192.168.33.0/24"
 
-mariadb_root_password: root_passW00rd
+mariadb_root_password: rootP@55w0rd
 
 mariadb_default_charset: utf8
 mariadb_default_collation: utf8_general_ci
