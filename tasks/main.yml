@@ -11,6 +11,10 @@
   yum:
     name: "{{ item }}"
   with_items: "{{ php_packages }}"
+- name: install composer
+  script: install_composer.sh
+  args:
+    creates: /usr/local/bin/composer
 - name: create php setting file
   template:
     src: php.ini.j2
