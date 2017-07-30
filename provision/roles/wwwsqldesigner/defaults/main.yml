@@ -64,37 +64,37 @@ wwwsqldesigner_cfg:
   XHR_PATH: ""
   DROPBOX_KEY: null
 
+wwwsqldesigner_backend_mysql_cfg:
+  save:
+    host: localhost
+    database: wwwsqldesigner
+    user: wwwsqldesigner
+    password: xxxx
+  import:
+    host: localhost
+    user: wwwsqldesigner
+    password: xxxx
+
+wwwsqldesigner_backend_postgresql_cfg:
+  save:
+    host: localhost
+    database: wwwsqldesigner
+    user: wwwsqldesigner
+    password: xxxx
+  import:
+    host: localhost
+    database: wwwsqldesigner
+    user: username
+    password: xxxx
+
 wwwsqldesigner_backend_pdo_cfg:
   save:
     type: mysql
     dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
     user: wwwsqldesigner
-    password: xxx
+    password: xxxx
   import:
     type: mysql
     dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
     user: wwwsqldesigner
-    password: xxx
-
-wwwsqldesigner_backend_mysql_cfg:
-  save:
-    host: localhost
-    database: home
-    user:
-    password:
-  import:
-    host: localhost
-    user:
-    password:
-
-wwwsqldesigner_backend_postgresql_cfg:
-  save:
-    host: localhost
-    database: wwwsqldesigner_save_pg
-    user: wwwsqldesigner_pg_save
-    password: wwwsqldesigner_save_p@55w0rd
-  import:
-    host: localhost
-    database: wwwsqldesigner_import_pg
-    user: wwwsqldesigner_import_pg
-    password: wwwsqldesigner_import_p@55w0rd
+    password: xxxx
