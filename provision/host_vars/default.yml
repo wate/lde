@@ -36,48 +36,36 @@ mariadb_default_collation: utf8mb4_general_ci
 mariadb_databases:
   # 開発用データベース
   - name: app_dev
+    password: app_dev_p@ssw0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
   # テスト用データベース
   - name: app_test
-    # encoding: utf8                                      # 文字コード
-    # collation: utf8_general_ci                          # 文字照合順序
-    # import_data: /vagrant/tests/_data/test_data.sql   # インポートデータ
+    import_data: /vagrant/source/test_data.sql
+    password: app_test_p@ssw0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
   # ステージング用データベース
   - name: app_staging
+    password: app_staging_p@ssw0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
   # 本番用データベース
   - name: app_prod
-
-# --------------
-# データベースユーザー
-# --------------
-mariadb_users:
-  - name: app_dev_user
-    password: db_dev_p@55w0rd
+    user: app_prod_user
+    password: app_prod_p@55w0rd
     hosts:
       - "127.0.0.1"
-      - "::1"
       - localhost
-    priv: "app_dev.*:ALL"
-  - name: app_test_user
-    password: db_test_p@55w0rd
+  # WWW SQL Designer用データベース
+  - name: wwwsqldesigner
+    password: wwwsqldesigner_p@ssw0rd
     hosts:
       - "127.0.0.1"
-      - "::1"
       - localhost
-    priv: "app_test.*:ALL"
-  - name: app_staging_user
-    password: db_staging_p@55w0rd
-    hosts:
-      - "127.0.0.1"
-      - "::1"
-      - localhost
-    priv: "app_staging.*:ALL"
-  - name: app_prod_user
-    password: db_prod_p@55w0rd
-    hosts:
-      - "127.0.0.1"
-      - "::1"
-      - localhost
-    priv: "app_prod.*:ALL"
 
 # --------------
 # インストールするPHPのパッケージ
