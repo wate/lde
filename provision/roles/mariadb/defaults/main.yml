@@ -13,10 +13,17 @@ mariadb_default_collation: utf8_general_ci
 
 mariadb_databases: []
   # - name: sample
+  #   ## optional database setting
   #   encoding: utf8mb4
   #   collation: utf8mb4_general_ci
   #   import_data: /tmp/sample.sql.bz2
   #   state: false
+  #   ## optional user setting
+  #   hosts:
+  #     - "127.0.0.1"
+  #     - localhost
+  #   user: sample_user
+  #   password: dsample_p@55w0rd
 
 mariadb_users: []
   # - name: sample_user
