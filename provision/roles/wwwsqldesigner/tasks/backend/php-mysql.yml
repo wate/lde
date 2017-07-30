@@ -41,3 +41,17 @@
           define("PASSWORD","{{ wwwsqldesigner_backend_mysql_cfg.import.password }}");
           define("DB","{{ wwwsqldesigner_backend_mysql_cfg.save.database|default('information_schema') }}");
       }
+- block:
+    - name: install dependency packages
+      yum:
+        name: MySQL-python
+    - name: create WWW SQL Designer database
+      mysql_db:
+        name: "{{ wwwsqldesigner_backend_mysql_cfg.save.database }}"
+      when: "wwwsqldesigner_backend_mysql_cfg.save.host == 'localhost'"
+    - name: Restore database
+      mysql_db:
+        name: "{{ wwwsqldesigner_backend_mysql_cfg.save.database }}"
+        state: import
+        target: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/database.sql"
+  when: "item in wwwsqldesigner_cfg.DEFAULT_BACKEND"
