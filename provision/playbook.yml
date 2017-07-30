@@ -9,6 +9,7 @@
     - mailcatcher
     - phpmyadmin
     - wp-cli
+    - wwwsqldesigner
   tasks:
     - name: restart service
       systemd:

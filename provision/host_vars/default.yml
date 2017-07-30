@@ -42,7 +42,7 @@ mariadb_databases:
       - localhost
   # テスト用データベース
   - name: app_test
-    import_data: /vagrant/source/test_data.sql
+    # import_data: /vagrant/source/test_data.sql
     password: app_test_p@ssw0rd
     hosts:
       - "127.0.0.1"
@@ -92,6 +92,21 @@ php_cfg:
   sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
 
 # --------------
+# WWW SQL Designerのバックエンドの設定
+# --------------
+wwwsqldesigner_backend_pdo_cfg:
+  save:
+    type: mysql
+    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
+    user: wwwsqldesigner
+    password: wwwsqldesigner_p@ssw0rd
+  import:
+    type: mysql
+    dsn: "mysql:dbname=information_schema;host=localhost"
+    user: root
+    password: r00tP@55w0rd
+
+# --------------
 # Apacheのバーチャルホストの設定
 # --------------
 apache_vhosts:
@@ -121,8 +136,19 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:{{ mailcatcher_web_port }}/"
+  # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
+  - name: 03-wwwsqldesigner
+    server_name: er.{{ domain }}
+    document_root: "{{ wwwsqldesigner_dest }}"
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    require:
+      - type: ip
+        value: 192.168.33
   # rtail用のバーチャルホスト ( http://log.<ドメイン>/ )
-  # - name: 03-rtail
+  # - name: 04-rtail
   #   server_name: log.{{ domain }}
   #   # リバースプロキシの設定
   #   proxy_pass:

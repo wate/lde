@@ -34,6 +34,8 @@ Vagrant.configure("2") do |config|
     'db.' + settings['domain'],
     # MailCatcher
     'mail.' + settings['domain'],
+    # WWW SQL Designer
+    'er.' + settings['domain'],
     # rtail(予定)
     'log.' + settings['domain'],
   ]
