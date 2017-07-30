@@ -1,46 +1,22 @@
-- name: add setup_saveloadlist function ansible management block(begin)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "function setup_saveloadlist\\(\\) \\{"
-    line: //BEGIN setup_saveloadlist function ANSIBLE MANAGED BLOCK
-- name: add setup_saveloadlist function ansible management block(end)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "function setup_import\\(\\) \\{"
-    line: //END setup_saveloadlist function ANSIBLE MANAGED BLOCK
-- name: replace setup_saveloadlist function
+- name: replace save action database setting
   blockinfile:
     path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    marker: //{mark} setup_saveloadlist function ANSIBLE MANAGED BLOCK
+    marker: "# {mark} saveloadlist ANSIBLE MANAGED BLOCK"
     block: |
-      function setup_saveloadlist() {
-          define("SERVER","{{ wwwsqldesigner_backend_mysql_cfg.save.host }}");
-          define("USER","{{ wwwsqldesigner_backend_mysql_cfg.save.user }}");
-          define("PASSWORD","{{ wwwsqldesigner_backend_mysql_cfg.save.password }}");
-          define("DB","{{ wwwsqldesigner_backend_mysql_cfg.save.database }}");
-          define("TABLE","{{ wwwsqldesigner_backend_mysql_cfg.save.table|default('wwwsqldesigner') }}");
-      }
-- name: add setup_import function ansible management block(begin)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "function setup_import\\(\\) \\{"
-    line: //BEGIN setup_import function ANSIBLE MANAGED BLOCK
-- name: add setup_import function ansible management block(end)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "class mysqlDB \\{"
-    line: //END setup_import function ANSIBLE MANAGED BLOCK
-- name: replace setup_import function
+      define("SERVER", "{{ wwwsqldesigner_backend_mysql_cfg.save.host }}");
+      define("USER", "{{ wwwsqldesigner_backend_mysql_cfg.save.user }}");
+      define("PASSWORD", "{{ wwwsqldesigner_backend_mysql_cfg.save.password }}");
+      define("DB", "{{ wwwsqldesigner_backend_mysql_cfg.save.database }}");
+      define("TABLE", "{{ wwwsqldesigner_backend_mysql_cfg.save.table|default('wwwsqldesigner') }}");
+- name: replace impoer action database setting
   blockinfile:
     path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    marker: //{mark} setup_import function ANSIBLE MANAGED BLOCK
+    marker: "# {mark} import ANSIBLE MANAGED BLOCK"
     block: |
-      function setup_import() {
-          define("SERVER","{{ wwwsqldesigner_backend_mysql_cfg.import.host }}");
-          define("USER","{{ wwwsqldesigner_backend_mysql_cfg.import.user }}");
-          define("PASSWORD","{{ wwwsqldesigner_backend_mysql_cfg.import.password }}");
-          define("DB","{{ wwwsqldesigner_backend_mysql_cfg.save.database|default('information_schema') }}");
-      }
+      define("SERVER","{{ wwwsqldesigner_backend_mysql_cfg.import.host }}");
+      define("USER","{{ wwwsqldesigner_backend_mysql_cfg.import.user }}");
+      define("PASSWORD","{{ wwwsqldesigner_backend_mysql_cfg.import.password }}");
+      define("DB","{{ wwwsqldesigner_backend_mysql_cfg.save.database|default('information_schema') }}");
 - block:
     - name: install dependency packages
       yum:

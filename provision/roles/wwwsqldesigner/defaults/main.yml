@@ -1,5 +1,5 @@
 ---
-wwwsqldesigner_repo: https://github.com/ondras/wwwsqldesigner.git
+wwwsqldesigner_repo: https://github.com/wate/wwwsqldesigner.git
 wwwsqldesigner_version: master
 
 wwwsqldesigner_cfg:
@@ -49,7 +49,7 @@ wwwsqldesigner_cfg:
     - asp-file
     - web2py
   DEFAULT_BACKEND:
-    - php-mysql
+    - php-pdo
   RELATION_THICKNESS: 2
   RELATION_SPACING: 15
   RELATION_COLORS:
@@ -64,6 +64,18 @@ wwwsqldesigner_cfg:
   XHR_PATH: ""
   DROPBOX_KEY: null
 
+wwwsqldesigner_backend_pdo_cfg:
+  save:
+    type: mysql
+    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
+    user: wwwsqldesigner
+    password: xxxx
+  import:
+    type: mysql
+    dsn: "mysql:dbname=information_schema;host=localhost"
+    user: username
+    password: xxxx
+
 wwwsqldesigner_backend_mysql_cfg:
   save:
     host: localhost
@@ -72,7 +84,8 @@ wwwsqldesigner_backend_mysql_cfg:
     password: xxxx
   import:
     host: localhost
-    user: wwwsqldesigner
+    database: information_schema
+    user: username
     password: xxxx
 
 wwwsqldesigner_backend_postgresql_cfg:
@@ -83,18 +96,6 @@ wwwsqldesigner_backend_postgresql_cfg:
     password: xxxx
   import:
     host: localhost
-    database: wwwsqldesigner
+    database: information_schema
     user: username
-    password: xxxx
-
-wwwsqldesigner_backend_pdo_cfg:
-  save:
-    type: mysql
-    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
-    user: wwwsqldesigner
-    password: xxxx
-  import:
-    type: mysql
-    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
-    user: wwwsqldesigner
     password: xxxx
