@@ -1,0 +1,17 @@
+---
+- name: install dependency packages
+  yum:
+    name: git
+- name: checkout source
+  git:
+    repo: "{{ wwwsqldesigner_repo }}"
+    version: "{{ wwwsqldesigner_version }}"
+    dest: "{{ wwwsqldesigner_dest }}"
+    force: yes
+- name: create WWW SQL Designer config file
+  template:
+    src: config.js.j2
+    dest: "{{ wwwsqldesigner_dest }}/js/config.js"
+- name: WWW SQL Designer backend provision
+  include: "backend/{{ item }}.yml"
+  with_items: "{{ wwwsqldesigner_cfg.AVAILABLE_BACKENDS }}"
