@@ -112,18 +112,24 @@ wwwsqldesigner_backend_pdo_cfg:
 apache_vhosts:
   # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
   - name: 00-default
-    server_name: www.{{ domain }}                         # サーバー名
-    document_root: /vagrant/source                        # ドキュメントルート
-    server_alias: "{{ domain }}"                          # サーバー名の別名
+    # サーバー名
+    server_name: www.{{ domain }}
+    # ドキュメントルート
+    document_root: /vagrant/source
+    # サーバー名の別名
+    server_alias: "{{ domain }}"
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   - name: 01-phpMyAdmin
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest }}"
-    options:                                              # Optionsの設定値
+    # Optionsの設定値
+    options:
       - "-Indexes"
       - "+FollowSymLinks"
-    allow_override: All                                   # AllowOverrideの設定値
-    require:                                              # Requireの設定値
+    # AllowOverrideの設定値
+    allow_override: All
+    # Requireの設定値
+    require:
       - type: ip
         value: 192.168.33
   # MailCatcher用のバーチャルホスト ( http://mail.<ドメイン>/ )
