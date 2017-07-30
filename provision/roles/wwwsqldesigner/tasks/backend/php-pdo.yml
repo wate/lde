@@ -17,3 +17,26 @@
       $dsn = '{{ wwwsqldesigner_backend_pdo_cfg.import.dsn }}';
       $user = '{{ wwwsqldesigner_backend_pdo_cfg.import.user }}';
       $password = '{{ wwwsqldesigner_backend_pdo_cfg.import.password }}';
+- block:
+    - name: install dependency packages
+      yum:
+        name: MySQL-python
+    - name: extract database name
+      set_fact:
+        save_database_name: "{{ wwwsqldesigner_backend_pdo_cfg.save.dsn|regex_replace('.+dbname=([^;]+).*','\\1') }}"
+    - name: create WWW SQL Designer database
+      mysql_db:
+        name: "{{ save_database_name }}"
+    - name: import WWW SQL Designer database
+      mysql_db:
+        name: "{{ save_database_name }}"
+        state: import
+        target: "{{ wwwsqldesigner_dest }}/backend/php-mysql/database.sql"
+  when: |
+    wwwsqldesigner_backend_pdo_cfg.save.type == 'mysql'
+    and
+    (
+      'host=localhost' in wwwsqldesigner_backend_pdo_cfg.save.dsn
+      or
+      'host=127.0.0.1' in wwwsqldesigner_backend_pdo_cfg.save.dsn
+    )
