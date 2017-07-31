@@ -40,19 +40,22 @@ mariadb_databases:
     hosts:
       - "127.0.0.1"
       - localhost
+      - "192.168.33.0/24"
   # テスト用データベース
   - name: app_test
-    # import_data: /vagrant/source/test_data.sql
+    import_data: /vagrant/source/test_data.sql
     password: app_test_p@ssw0rd
     hosts:
       - "127.0.0.1"
       - localhost
+      - "192.168.33.0/24"
   # ステージング用データベース
   - name: app_staging
     password: app_staging_p@ssw0rd
     hosts:
       - "127.0.0.1"
       - localhost
+      - "192.168.33.0/24"
   # 本番用データベース
   - name: app_prod
     user: app_prod_user
@@ -60,6 +63,7 @@ mariadb_databases:
     hosts:
       - "127.0.0.1"
       - localhost
+      - "192.168.33.0/24"
   # WWW SQL Designer用データベース
   - name: wwwsqldesigner
     password: wwwsqldesigner_p@ssw0rd
