@@ -37,7 +37,7 @@ connect_timeout = {{ mariadb_cfg.mysqld.connect_timeout }}
 {% if mariadb_cfg.mysqld.max_allowed_packet is defined -%}
 max_allowed_packet = {{ mariadb_cfg.mysqld.max_allowed_packet }}
 {% endif %}
-{% if mariadb_cfg.mysqld.skip_name_resolve is defined -%}
+{% if mariadb_cfg.mysqld.skip_name_resolve is defined and mariadb_cfg.mysqld.skip_name_resolve -%}
 skip_name_resolve
 {% endif %}
 {% if mariadb_cfg.mysqld.interactive_timeout is defined -%}

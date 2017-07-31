@@ -31,6 +31,11 @@ mariadb_default_charset: utf8mb4
 mariadb_default_collation: utf8mb4_general_ci
 
 # --------------
+# MariaDB用のfirewalld設定
+# --------------
+mariadb_allow_host: "192.168.33.0/24"
+
+# --------------
 # データベース
 # --------------
 mariadb_databases:
