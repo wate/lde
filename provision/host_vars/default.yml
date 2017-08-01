@@ -48,7 +48,7 @@ mariadb_databases:
       - "192.168.33.0/24"
   # テスト用データベース
   - name: app_test
-    import_data: /vagrant/source/test_data.sql
+    # import_data: /vagrant/source/test_data.sql
     password: app_test_p@ssw0rd
     hosts:
       - "127.0.0.1"
