@@ -56,6 +56,17 @@
     collation: "{{ item.collation|default(mariadb_default_collation) }}"
     state: "{{ 'present' if item.state|default(true) else 'absent' }}"
   with_items: "{{ mariadb_databases }}"
+- name: create MariaDB users
+  mysql_user:
+    name: "{{ item.0.user|default(item.0.name) }}"
+    password: "{{ item.0.password|default(omit) }}"
+    host: "{{ item.1 }}"
+    priv: "{{ item.0.name }}.*:ALL"
+  with_subelements:
+    - "{{ mariadb_databases }}"
+    - hosts
+    - flags:
+        skip_missing: true
 - name: import data
   mysql_db:
     name: "{{ item.name }}"
@@ -63,6 +74,7 @@
     state: import
   when: "item.import_data is defined and item.state|default(true)"
   with_items: "{{ mariadb_databases }}"
+
 - name: create/remove MariaDB users
   mysql_user:
     name: "{{ item.0.name }}"
@@ -76,7 +88,8 @@
 - name: allow MariaDB port
   firewalld:
     service: mysql
-    source: "{{ mariadb_allow_host|default('127.0.0.1') }}"
+    source: "{{ mariadb_allow_host }}"
     permanent: yes
     state: enabled
+  when: mariadb_allow_host is defined
   notify: restart firewalld
