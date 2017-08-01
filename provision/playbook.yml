@@ -10,6 +10,7 @@
     - phpmyadmin
     - wp-cli
     - wwwsqldesigner
+    - rtail
   tasks:
     - name: restart service
       systemd:

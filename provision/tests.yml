@@ -12,3 +12,5 @@
     - mailcatcher
     - phpmyadmin
     - wp-cli
+    - nodejs
+    - rtail

@@ -128,6 +128,7 @@ apache_vhosts:
     # サーバー名の別名
     server_alias: "{{ domain }}"
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
+  # https://www.phpmyadmin.net/
   - name: 01-phpMyAdmin
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest }}"
@@ -142,6 +143,7 @@ apache_vhosts:
       - type: ip
         value: 192.168.33
   # MailCatcher用のバーチャルホスト ( http://mail.<ドメイン>/ )
+  # https://mailcatcher.me/
   - name: 02-MailCatcher
     server_name: mail.{{ domain }}
     # リバースプロキシの設定
@@ -152,6 +154,7 @@ apache_vhosts:
       - from: /
         to: "http://localhost:{{ mailcatcher_web_port }}/"
   # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
+  # https://github.com/ondras/wwwsqldesigner
   - name: 03-wwwsqldesigner
     server_name: er.{{ domain }}
     document_root: "{{ wwwsqldesigner_dest }}"
@@ -163,15 +166,16 @@ apache_vhosts:
       - type: ip
         value: 192.168.33
   # rtail用のバーチャルホスト ( http://log.<ドメイン>/ )
-  # - name: 04-rtail
-  #   server_name: log.{{ domain }}
-  #   # リバースプロキシの設定
-  #   proxy_pass:
-  #     - from: /
-  #       to: "http://localhost:8888/"
-  #   proxy_pass_reverse:
-  #     - from: /
-  #       to: "http://localhost:8888/"
+  # https://github.com/kilianc/rtail
+  - name: 04-rtail
+    server_name: log.{{ domain }}
+    # リバースプロキシの設定
+    proxy_pass:
+      - from: /
+        to: "http://localhost:{{ rtail_web_port }}/"
+    proxy_pass_reverse:
+      - from: /
+        to: "http://localhost:{{ rtail_web_port }}/"
 
 # --------------
 # Apacheの設定
