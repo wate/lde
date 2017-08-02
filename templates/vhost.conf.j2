@@ -13,7 +13,11 @@
   {% if item.server_alias is defined -%}
   ServerAlias {{ item.server_alias if item.server_alias is string else item.server_alias|join(' ') }}
   {% endif -%}
-
+  {% if item.include is defined -%}
+  {% for include_file in item.include -%}
+  Include {{ include_file }}
+  {% endfor -%}
+  {% endif -%}
   {% if item.document_root is defined -%}
   DocumentRoot {{ item.document_root }}
   <Directory {{ item.document_root }}>
