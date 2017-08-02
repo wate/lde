@@ -4,6 +4,7 @@ dehydrated_version: v0.4.0
 dehydrated_cfg:
   # ip_version: 4 or 6
   # ca: https://acme-v01.api.letsencrypt.org/directory
+  # ca_terms: https://acme-v01.api.letsencrypt.org/terms
   # challengetype: http-01
   # wellknown: /var/www/dehydrated
   # keysize: 4096
@@ -16,7 +17,7 @@ dehydrated_cfg:
   # contact_email:
   # ocsp_must_staple: no
 
-dehydrated_comains: []
+dehydrated_domains: []
 
 dehydrated_hook_initialize: ""
 

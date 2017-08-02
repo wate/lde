@@ -17,6 +17,9 @@ describe 'role dehydrated' do
     if property['dehydrated_cfg'].has_key?('ca')
       its(:content) { should match /^CA="#{e(property['dehydrated_cfg']['ca'])}"/ }
     end
+    if property['dehydrated_cfg'].has_key?('ca_terms')
+      its(:content) { should match /^CA_TERMS="#{e(property['dehydrated_cfg']['ca_terms'])}"/ }
+    end
     if property['dehydrated_cfg'].has_key?('challengetype')
       its(:content) { should match /^CHALLENGETYPE="#{e(property['dehydrated_cfg']['challengetype'])}"/ }
     end

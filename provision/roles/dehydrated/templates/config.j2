@@ -26,6 +26,9 @@ CA="{{ dehydrated_cfg.ca }}"
 
 # Path to certificate authority license terms redirect (default: https://acme-v01.api.letsencrypt.org/terms)
 #CA_TERMS="https://acme-v01.api.letsencrypt.org/terms"
+{% if dehydrated_cfg.ca_terms is defined -%}
+CA_TERMS="{{ dehydrated_cfg.ca_terms }}"
+{% endif %}
 
 # Path to license agreement (default: <unset>)
 #LICENSE=""
