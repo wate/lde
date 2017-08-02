@@ -39,6 +39,16 @@
     src: extra.conf.j2
     dest: /etc/httpd/conf.d/extra.conf
   notify: reload apache
+- name: create snippet directory
+  file:
+    path: "{{ apache_snippet_dir }}"
+    state: directory
+- name: install snippet
+  copy:
+    src: "{{ item }}"
+    dest: "{{ apache_snippet_dir }}/{{ item|basename }}"
+  with_fileglob:
+    - "*.conf"
 - name: create virtualhost setting files
   template:
     src: vhost.conf.j2
