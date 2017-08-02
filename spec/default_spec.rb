@@ -36,7 +36,10 @@ describe 'role apache' do
     it { should exist }
     it { should be_directory }
   end
-
+  describe file(property['apache_snippet_dir']) do
+    it { should exist }
+    it { should be_directory }
+  end
   property['apache_vhosts'].each do |site|
     state = site.has_key?('state') ? site['state'] : true
     file_name = site.has_key?('name') ? site['name'] : site['server_name']
