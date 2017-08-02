@@ -18,6 +18,9 @@ dehydrated_cfg:
   # ocsp_must_staple: no
 
 dehydrated_domains: []
+  # - [example.com, www.example.com]
+  # - [example.net, www.example.net]
+  # - example.org
 
 dehydrated_hook_initialize: ""
 

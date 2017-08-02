@@ -58,6 +58,13 @@ describe 'role dehydrated' do
   describe file(property['dehydrated_config_dir'] + '/domains.txt') do
     it { should exist }
     it { should be_file }
+    property['dehydrated_domains'].each do |domain|
+      if domain.is_a?(String)
+        its(:content) { should match /^#{e(domain)}$/ }
+      elsif domain.is_a?(Array)
+        its(:content) { should match /^#{e(domain.join(' '))}$/ }
+      end
+    end
   end
   describe file(property['dehydrated_config_dir'] + '/hook.sh') do
     it { should exist }
