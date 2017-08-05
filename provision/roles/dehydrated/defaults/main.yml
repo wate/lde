@@ -17,6 +17,9 @@ dehydrated_cfg:
   # contact_email:
   # ocsp_must_staple: no
 
+# auto execute `dehydrated --cron`
+dehydrated_auto_execute: no
+
 dehydrated_domains: []
   # - [example.com, www.example.com]
   # - [example.net, www.example.net]
