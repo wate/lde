@@ -59,7 +59,7 @@ CONFIG_D="${BASEDIR}/conf.d"
 
 # Output directory for challenge-tokens to be served by webserver or deployed in HOOK (default: /var/www/dehydrated)
 #WELLKNOWN="/var/www/dehydrated"
-{% if dehydrated_cfg.challengetype is defined -%}
+{% if dehydrated_cfg.wellknown is defined -%}
 WELLKNOWN="{{ dehydrated_cfg.wellknown }}"
 {% endif %}
 
