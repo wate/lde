@@ -4,11 +4,13 @@
   roles:
     - common
     - mariadb
+    - lexicon
+    - dehydrated
     - apache
     - php
     - mailcatcher
-    - phpmyadmin
     - wp-cli
+    - phpmyadmin
     - wwwsqldesigner
     - rtail
   tasks:
