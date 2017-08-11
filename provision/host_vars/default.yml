@@ -5,6 +5,12 @@
 domain: example.com
 
 # --------------
+# CloudflareのAPI接続情報
+# --------------
+cloudflare_email: "{{ lookup('env','CLOUDFLARE_EMAIL') }}"
+cloudflare_token: "{{ lookup('env','CLOUDFLARE_TOKEN') }}"
+
+# --------------
 # MariaDBのrootパスワード
 # --------------
 mariadb_root_password: r00tP@55w0rd
@@ -259,8 +265,8 @@ dehydrated_cfg:
 
 dehydrated_hook_initialize: |
   export PROVIDER="cloudflare"
-  export LEXICON_CLOUDFLARE_USERNAME="{{ lookup('env','CLOUDFLARE_EMAIL') }}"
-  export LEXICON_CLOUDFLARE_TOKEN="{{ lookup('env','CLOUDFLARE_TOKEN') }}"
+  export LEXICON_CLOUDFLARE_USERNAME="{{ cloudflare_email }}"
+  export LEXICON_CLOUDFLARE_TOKEN="{{ cloudflare_token }}"
 
 dehydrated_hook_deploy_challenge: |
   lexicon $PROVIDER create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
