@@ -13,7 +13,8 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
     * 上記の独自ドメインがCloudflareに登録されている必要があります。
 * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
     * Vagrantのプラグインです
-    * インストールされていなくても動作しますが、その場合、hostsファイルの書き換えを手動で行う必要があります
+    * インストールしていなくても動作しますが、  
+      その場合はhostsファイルの書き換えを手動で行う必要があります
 
 
 セットアップされるローカル開発環境の内容
@@ -35,17 +36,17 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 ### provision/host_vars/default.yml
 
-Ansibleの各ロールで設定されている変数の初期値を上書きするための変数定義ファイルです。
-このファイルを設定内湯を変更することにより、
+Ansibleの各ロールで設定されている変数の初期値を上書きするための変数定義ファイルです。  
+このファイルを設定内湯を変更することにより、  
 ローカル開発環境のセットアップ内容を調整することができます。
 
 以下が、主な変更内容です
 
-1. 変数`domain`の内容を、自身の独自ドメインに変更します。
-2. 変数`cloudflare_email`の内容を、自身のCloudflareの登録メールアドレスに変更します。
-3. 変数`cloudflare_token`の内容を、自身のCloudflareのAPIトークンに変更します。
+1. 変数`domain`の内容を自身の独自ドメインに変更します。
+2. 変数`cloudflare_email`の内容を自身のCloudflareの登録メールアドレスに変更します。
+3. 変数`cloudflare_token`の内容を自身のCloudflareのAPIトークンに変更します。
 
-2と3の手順は、`CLOUDFLARE_EMAIL`と`CLOUDFLARE_TOKEN`の環境変数を設定することにより、
+2と3の手順は、`CLOUDFLARE_EMAIL`と`CLOUDFLARE_TOKEN`の環境変数を設定することにより、  
 省略することができます。
 
 #### 環境変数の設定方法
@@ -60,7 +61,8 @@ export CLOUDFLARE_TOKEN=abcdefghijklmnopqrstuvwxyz0123456789
 ### config.yml
 
 Vagrantで作成する可能マシンの設定ファイルです。
-このファイルの設定を書き換えることによりVagrantfileを変数することなく、
+
+このファイルの設定を書き換えることによりVagrantfileを変数することなく、  
 Vagrantで作成される仮想マシンの設定を変更することができます。
 
 Vagrantの設定を変更したい場合のみ、必要に応じてへ変更を行ってださい。
