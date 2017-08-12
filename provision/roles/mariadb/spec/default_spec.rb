@@ -112,7 +112,7 @@ describe 'role mariadb' do
       its(:content) { should match /^slow_query_log_file = #{e(property['mariadb_cfg']['mysqld']['slow_query_log_file'])}/ }
     end
     if property['mariadb_cfg']['mysqld'].has_key?('slow_query_log_file')
-      general_log = property['mariadb_cfg']['mysqld']['general_log'] ? 1 : 0
+      general_log = property['mariadb_cfg']['mysqld']['general_log'] ? "1" : "0"
       its(:content) { should match /^general_log = #{general_log}/ }
     end
     if property['mariadb_cfg']['mysqld'].has_key?('general_log_file')
@@ -128,7 +128,7 @@ describe 'role mariadb' do
       its(:content) { should match /^log_bin = #{e(property['mariadb_cfg']['mysqld']['log_bin'])}/ }
     end
     if property['mariadb_cfg']['mysqld'].has_key?('binlog_format')
-      its(:content) { should match /^log_bin = #{e(property['mariadb_cfg']['mysqld']['binlog_format'])}/ }
+      its(:content) { should match /^binlog_format = #{e(property['mariadb_cfg']['mysqld']['binlog_format'])}/ }
     end
     if property['mariadb_cfg']['mysqld'].has_key?('expire_logs_days')
       its(:content) { should match /^expire_logs_days = #{e(property['mariadb_cfg']['mysqld']['expire_logs_days'])}/ }
