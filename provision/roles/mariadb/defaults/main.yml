@@ -48,8 +48,6 @@ mariadb_cfg:
     # innodb_data_file_path: ibdata1:50M;ibdata2:50M:autoextend
     ## General
     sql_mode: "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
-    # max_allowed_packet: 16M
-    # read_only: true
     ## Network
     max_connections: "{{ mariadb_max_connections }}"
     # connect_timeout: 10
@@ -110,7 +108,6 @@ mariadb_cfg:
     # long_query_time: 2
     # log_warnings: 0
     # slow_query_log_file: /var/log/mysql/slow_log
-    ## Replication
     # -----------------
     # Replication
     # -----------------
