@@ -41,9 +41,9 @@ describe 'role mariadb' do
     if property['mariadb_cfg']['mysqld'].has_key?('innodb_data_file_path')
       its(:content) { should match /^innodb_data_file_path = #{e(property['mariadb_cfg']['mysqld']['innodb_data_file_path'])}/ }
     end
-    if property['mariadb_cfg']['mysqld'].has_key?('max_connections')
-      its(:content) { should match /^max_connections = #{property['mariadb_cfg']['mysqld']['max_connections']}/ }
-    end
+    # if property['mariadb_cfg']['mysqld'].has_key?('max_connections')
+    #   its(:content) { should match /^max_connections = #{property['mariadb_cfg']['mysqld']['max_connections']}/ }
+    # end
     if property['mariadb_cfg']['mysqld'].has_key?('connect_timeout')
       its(:content) { should match /^connect_timeout = #{property['mariadb_cfg']['mysqld']['connect_timeout']}/ }
     end
@@ -59,20 +59,21 @@ describe 'role mariadb' do
     if property['mariadb_cfg']['mysqld'].has_key?('wait_timeout')
       its(:content) { should match /^wait_timeout = #{property['mariadb_cfg']['mysqld']['wait_timeout']}/ }
     end
-    if property['mariadb_cfg']['mysqld'].has_key?('table_open_cache')
-      its(:content) { should match /^table_open_cache = #{property['mariadb_cfg']['mysqld']['table_open_cache']}/ }
-    end
-    if property['mariadb_cfg']['mysqld'].has_key?('thread_cache_size')
-      its(:content) { should match /^thread_cache_size = #{e(property['mariadb_cfg']['mysqld']['thread_cache_size'])}/ }
-    end
-    if property['mariadb_cfg']['mysqld'].has_key?('table_definition_cache')
-      its(:content) { should match /^table_definition_cache = #{e(property['mariadb_cfg']['mysqld']['table_definition_cache'])}/ }
-    end
+    # if property['mariadb_cfg']['mysqld'].has_key?('table_open_cache')
+    #   its(:content) { should match /^table_open_cache = #{property['mariadb_cfg']['mysqld']['table_open_cache']}/ }
+    # end
+    # if property['mariadb_cfg']['mysqld'].has_key?('thread_cache_size')
+    #   its(:content) { should match /^thread_cache_size = #{e(property['mariadb_cfg']['mysqld']['thread_cache_size'])}/ }
+    # end
+    # if property['mariadb_cfg']['mysqld'].has_key?('table_definition_cache')
+    #   its(:content) { should match /^table_definition_cache = #{e(property['mariadb_cfg']['mysqld']['table_definition_cache'])}/ }
+    # end
+    its(:content) { should match /^query_cache_limit = #{e(property['mariadb_cfg']['mysqld']['query_cache_limit'])}/ }
     its(:content) { should match /^query_cache_size = #{e(property['mariadb_cfg']['mysqld']['query_cache_size'])}/ }
     its(:content) { should match /^query_cache_type = #{e(property['mariadb_cfg']['mysqld']['query_cache_type'])}/ }
-    its(:content) { should match /^innodb_buffer_pool_size = #{e(property['mariadb_cfg']['mysqld']['innodb_buffer_pool_size'])}/ }
-    its(:content) { should match /^innodb_log_buffer_size = #{e(property['mariadb_cfg']['mysqld']['innodb_log_buffer_size'])}/ }
-    its(:content) { should match /^key_buffer_size = #{e(property['mariadb_cfg']['mysqld']['key_buffer_size'])}/ }
+    # its(:content) { should match /^innodb_buffer_pool_size = #{e(property['mariadb_cfg']['mysqld']['innodb_buffer_pool_size'])}/ }
+    # its(:content) { should match /^innodb_log_buffer_size = #{e(property['mariadb_cfg']['mysqld']['innodb_log_buffer_size'])}/ }
+    # its(:content) { should match /^key_buffer_size = #{e(property['mariadb_cfg']['mysqld']['key_buffer_size'])}/ }
     if property['mariadb_cfg']['mysqld'].has_key?('innodb_flush_log_at_trx_commit')
       its(:content) { should match /^innodb_flush_log_at_trx_commit = #{e(property['mariadb_cfg']['mysqld']['innodb_flush_log_at_trx_commit'])}/ }
     end
