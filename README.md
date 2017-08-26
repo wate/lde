@@ -21,15 +21,16 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ------------
 
 * www.<独自ドメイン>
-    * sourceディレクトリをドキュメントルートとして、URLでアクセスできるようにしています
+    * sourceディレクトリをドキュメントルートとしてアクセスできるようにしています。
 * mail.<独自ドメイン>
-    * MailCatcherを利用することができます
+    * MailCatcherを利用できます。
 * db.<独自ドメイン>
-    * phpMyAdminを利用することができます
+    * phpMyAdminを利用できます。
 * er.<独自ドメイン>
-    * WWW SQL Designerを利用することができます
+    * WWW SQL Designerを利用できます。
 * log.<独自ドメイン>
-    * rtailのWebインターフェースを利用することができます
+    * rtailのWebインターフェースを利用できます。
+
 
 設定方法
 ------------
@@ -38,7 +39,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 Ansibleの各ロールで設定されている変数の初期値を上書きするための変数定義ファイルです。  
 このファイルを設定内湯を変更することにより、  
-ローカル開発環境のセットアップ内容を調整することができます。
+ローカル開発環境のセットアップ内容を調整できます。
 
 以下が、主な変更内容です
 
@@ -46,8 +47,7 @@ Ansibleの各ロールで設定されている変数の初期値を上書きす�
 2. 変数`cloudflare_email`の内容を自身のCloudflareの登録メールアドレスに変更します。
 3. 変数`cloudflare_token`の内容を自身のCloudflareのAPIトークンに変更します。
 
-2と3の手順は、`CLOUDFLARE_EMAIL`と`CLOUDFLARE_TOKEN`の環境変数を設定することにより、  
-省略することができます。
+2と3の手順は、`CLOUDFLARE_EMAIL`と`CLOUDFLARE_TOKEN`の環境変数を設定することで省略できます。
 
 #### 環境変数の設定方法
 
@@ -60,13 +60,12 @@ export CLOUDFLARE_TOKEN=abcdefghijklmnopqrstuvwxyz0123456789
 
 ### config.yml
 
-Vagrantで作成する可能マシンの設定ファイルです。
+Vagrantが作成する可能マシンの設定ファイルです。
 
-このファイルの設定を書き換えることによりVagrantfileを変数することなく、  
-Vagrantで作成される仮想マシンの設定を変更することができます。
+このファイルの設定を書き換えることによりVagrantfileを変更することなく、  
+Vagrantによって作成した仮想マシンの設定を変更できます。
 
 Vagrantの設定を変更したい場合のみ、必要に応じてへ変更を行ってださい。
-
 
 License
 -------
