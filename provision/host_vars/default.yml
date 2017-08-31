@@ -5,10 +5,24 @@
 domain: example.com
 
 # --------------
+# lexiconプロバイダー
+# cloudflare / route53 / vultr
+# -------------
+lexicon_provider: cloudflare
+# --------------
 # CloudflareのAPI接続情報
 # --------------
 cloudflare_email: "{{ lookup('env','CLOUDFLARE_EMAIL') }}"
 cloudflare_token: "{{ lookup('env','CLOUDFLARE_TOKEN') }}"
+# --------------
+# AWS Route53のAPI接続情報
+# --------------
+aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+aws_access_secret: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+# --------------
+# VultrのAPI接続情報
+# --------------
+vultr_token: "{{ lookup('env','VULTR_TOKEN') }}"
 
 # --------------
 # MariaDBのrootパスワード
@@ -264,16 +278,22 @@ dehydrated_cfg:
   challengetype: dns-01
 
 dehydrated_hook_initialize: |
-  export PROVIDER="cloudflare"
+  export PROVIDER="{{ lexicon_provider }}"
+  # Cloudflare
   export LEXICON_CLOUDFLARE_USERNAME="{{ cloudflare_email }}"
   export LEXICON_CLOUDFLARE_TOKEN="{{ cloudflare_token }}"
+  # Route53
+  export LEXICON_ROUTE53_ACCESS_KEY="{{ aws_access_key }}"
+  export LEXICON_ROUTE53_ACCESS_SECRET="{{ aws_access_secret }}"
+  # Vultr
+  export LEXICON_VULTR_TOKEN="{{ vultr_token }}"
 
 dehydrated_hook_deploy_challenge: |
-  lexicon $PROVIDER create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
-  sleep 10
+  lexicon ${PROVIDER} create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+  sleep 30
 
 dehydrated_hook_clean_challenge: |
-  lexicon $PROVIDER delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+  lexicon ${PROVIDER} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
 
 dehydrated_domains:
   - ["{{ domain }}", "www.{{ domain }}", "db.{{ domain }}", "mail.{{ domain }}", "er.{{ domain }}", "log.{{ domain }}"]
