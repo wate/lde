@@ -148,6 +148,8 @@ apache_vhosts:
     document_root: /vagrant/source
     # サーバー名の別名
     server_alias: "{{ domain }}"
+    # AllowOverrideの設定値
+    allow_override: All
     # スニペットの読み込み
     include:
       - "{{ apache_snippet_dir }}/redirect_www.conf"
@@ -296,6 +298,13 @@ dehydrated_hook_clean_challenge: |
   lexicon ${PROVIDER} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
 
 dehydrated_domains:
-  - ["{{ domain }}", "www.{{ domain }}", "db.{{ domain }}", "mail.{{ domain }}", "er.{{ domain }}", "log.{{ domain }}"]
+  - [
+  "{{ domain }}",
+  "www.{{ domain }}",
+  "db.{{ domain }}",
+  "mail.{{ domain }}",
+  "er.{{ domain }}",
+  "log.{{ domain }}"
+  ]
 
 dehydrated_auto_execute: yes

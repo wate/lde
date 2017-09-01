@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     end
   end
   # synced folders
-  config.vm.synced_folder "./", "/vagrant", mount_options: ['dmode=777','fmode=755']
+  config.vm.synced_folder "./", "/vagrant", mount_options: ['dmode=777','fmode=666']
 
   vm_host_aliases = [
     settings['domain'],
