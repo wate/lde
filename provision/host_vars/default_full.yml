@@ -5,6 +5,26 @@
 domain: example.com
 
 # --------------
+# lexiconプロバイダー
+# cloudflare / route53 / vultr
+# -------------
+lexicon_provider: cloudflare
+# --------------
+# CloudflareのAPI接続情報
+# --------------
+cloudflare_email: "{{ lookup('env','CLOUDFLARE_EMAIL') }}"
+cloudflare_token: "{{ lookup('env','CLOUDFLARE_TOKEN') }}"
+# --------------
+# AWS Route53のAPI接続情報
+# --------------
+aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+aws_access_secret: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+# --------------
+# VultrのAPI接続情報
+# --------------
+vultr_token: "{{ lookup('env','VULTR_TOKEN') }}"
+
+# --------------
 # MariaDBのrootパスワード
 # --------------
 mariadb_root_password: r00tP@55w0rd
@@ -130,6 +150,22 @@ apache_vhosts:
     server_alias: "{{ domain }}"
     # AllowOverrideの設定値
     allow_override: All
+    # スニペットの読み込み
+    include:
+      - "{{ apache_snippet_dir }}/redirect_www.conf"
+    ssl:
+      certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
+      certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+      # HTTP Strict Transport Security
+      # hsts: "max-age=15768000"
+  - name: 00-default_http
+    server_name: www.{{ domain }}
+    document_root: /vagrant/source
+    server_alias: "{{ domain }}"
+    include:
+      - "{{ apache_snippet_dir }}/redirect_www.conf"
+      - "{{ apache_snippet_dir }}/redirect_https.conf"
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   # https://www.phpmyadmin.net/
   - name: 01-phpMyAdmin
@@ -145,6 +181,15 @@ apache_vhosts:
     require:
       - type: ip
         value: 192.168.33
+    ssl:
+      certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
+      certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+  - name: 01-phpMyAdmin_http
+    server_name: db.{{ domain }}
+    document_root: "{{ phpmyadmin_dest }}"
+    include:
+      - "{{ apache_snippet_dir }}/redirect_https.conf"
   # MailCatcher用のバーチャルホスト ( http://mail.<ドメイン>/ )
   # https://mailcatcher.me/
   - name: 02-MailCatcher
@@ -156,6 +201,14 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:{{ mailcatcher_web_port }}/"
+    ssl:
+      certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
+      certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+  - name: 02-MailCatcher_http
+    server_name: mail.{{ domain }}
+    include:
+      - "{{ apache_snippet_dir }}/redirect_https.conf"
   # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
   # https://github.com/ondras/wwwsqldesigner
   - name: 03-WWWSQLDesigner
@@ -168,6 +221,14 @@ apache_vhosts:
     require:
       - type: ip
         value: 192.168.33
+    ssl:
+      certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
+      certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+  - name: 03-_http
+    server_name: er.{{ domain }}
+    include:
+      - "{{ apache_snippet_dir }}/redirect_https.conf"
   # rtail用のバーチャルホスト ( http://log.<ドメイン>/ )
   # https://github.com/kilianc/rtail
   - name: 04-rtail
@@ -179,6 +240,14 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:{{ rtail_web_port }}/"
+    ssl:
+      certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
+      certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+  - name: 04-rtail_http
+    server_name: log.{{ domain }}
+    include:
+      - "{{ apache_snippet_dir }}/redirect_https.conf"
 
 # --------------
 # Apacheの設定
@@ -203,3 +272,39 @@ apache_module_proxy:
   ajp: no
   balancer: no
   ftp: no
+
+# --------------
+# dehydratedの各種設定
+# --------------
+dehydrated_cfg:
+  challengetype: dns-01
+
+dehydrated_hook_initialize: |
+  export PROVIDER="{{ lexicon_provider }}"
+  # Cloudflare
+  export LEXICON_CLOUDFLARE_USERNAME="{{ cloudflare_email }}"
+  export LEXICON_CLOUDFLARE_TOKEN="{{ cloudflare_token }}"
+  # Route53
+  export LEXICON_ROUTE53_ACCESS_KEY="{{ aws_access_key }}"
+  export LEXICON_ROUTE53_ACCESS_SECRET="{{ aws_access_secret }}"
+  # Vultr
+  export LEXICON_VULTR_TOKEN="{{ vultr_token }}"
+
+dehydrated_hook_deploy_challenge: |
+  lexicon ${PROVIDER} create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+  sleep 30
+
+dehydrated_hook_clean_challenge: |
+  lexicon ${PROVIDER} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+
+dehydrated_domains:
+  - [
+  "{{ domain }}",
+  "www.{{ domain }}",
+  "db.{{ domain }}",
+  "mail.{{ domain }}",
+  "er.{{ domain }}",
+  "log.{{ domain }}"
+  ]
+
+dehydrated_auto_execute: yes
