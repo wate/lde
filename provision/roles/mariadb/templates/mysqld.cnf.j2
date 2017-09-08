@@ -9,7 +9,7 @@ collation_server = {{ mariadb_default_collation }}
 # General
 # -----------------
 
-sql_mode = "{{ mariadb_cfg.mysqld.sql_mode }}"
+sql_mode = "{{ mariadb_cfg.mysqld.sql_mode if mariadb_cfg.mysqld.sql_mode is string else mariadb_cfg.mysqld.sql_mode|join(',') }}"
 
 {% if mariadb_cfg.mysqld.datadir is defined -%}
 datadir = {{ mariadb_cfg.mysqld.datadir }}
