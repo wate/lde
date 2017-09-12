@@ -23,3 +23,15 @@ vagrant:
     #   id: ssh
     # - guest: 3306
     # - guest: 5432
+  synced_folder:
+    path:
+      local: ./
+      remote: /vagrant
+    mount_options:
+      - dmode=777
+      - fmode=666
+    # type: rsync
+    # group: vagrant
+    # owner: vagrant
+    # create: no
+    # disabled: no
