@@ -24,16 +24,17 @@ Vagrant.configure("2") do |config|
         id: forwarded_port['id'] || nil
     end
   end
-  synced_folder = settings['vagrant']['synced_folder'];
+
   # synced folders
-  config.vm.synced_folder synced_folder['path']['local'], synced_folder['path']['remote'],
-    type: synced_folder['type'] || nil,
-    disabled: synced_folder['disabled'],
-    create: synced_folder['create'],
-    group: synced_folder['group'] || 'vagrant',
-    owner: synced_folder['owner'] || 'vagrant',
-    mount_options: synced_folder['mount_options'] || [],
-    id: synced_folder['id'] || nil
+  synced_folder_args = [
+    settings['vagrant']['synced_folder']['path']['local'],
+    settings['vagrant']['synced_folder']['path']['remote']
+  ]
+  settings['vagrant']['synced_folder'].delete('path')
+  unless settings['vagrant']['synced_folder'].empty?
+    synced_folder_args.push(settings['vagrant']['synced_folder'].map{|k,v| [k.to_sym, v] }.to_h)
+  end
+  config.vm.send(:synced_folder, *synced_folder_args)
 
   vm_host_aliases = [
     settings['domain'],
