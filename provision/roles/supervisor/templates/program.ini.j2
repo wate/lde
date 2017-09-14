@@ -1,0 +1,83 @@
+; {{ ansible_managed }}
+{% for program_cfg in supervisor_program_cfg %}
+[program:{{ program_cfg.name }}]
+command={{ program_cfg.command }}
+{% if program_cfg.process_name is defined -%}
+process_name={{ program_cfg.process_name }}
+{% endif %}
+{% if program_cfg.numprocs is defined -%}
+numprocs={{ program_cfg.numprocs }}
+{% endif %}
+{% if program_cfg.directory is defined -%}
+directory={{ program_cfg.directory }}
+{% endif %}
+{% if program_cfg.umask is defined -%}
+umask={{ program_cfg.umask }}
+{% endif %}
+{% if program_cfg.priority is defined -%}
+priority={{ program_cfg.priority }}
+{% endif %}
+{% if program_cfg.autostart is defined -%}
+autostart={{ 'true' if program_cfg.autostart else 'false' }}
+{% endif %}
+{% if program_cfg.autorestart is defined -%}
+autorestart={{ program_cfg.autorestart }}
+{% endif %}
+{% if program_cfg.startsecs is defined -%}
+startsecs={{ program_cfg.startsecs }}
+{% endif %}
+{% if program_cfg.startretries is defined -%}
+startretries={{ program_cfg.startretries }}
+{% endif %}
+{% if program_cfg.exitcodes is defined -%}
+exitcodes={{ program_cfg.exitcodes if program_cfg.exitcodes is string else program_cfg.exitcodes|join(',') }}
+{% endif %}
+{% if program_cfg.stopsignal is defined -%}
+stopsignal={{ program_cfg.stopsignal }}
+{% endif %}
+{% if program_cfg.stopwaitsecs is defined -%}
+stopwaitsecs={{ program_cfg.stopwaitsecs }}
+{% endif %}
+{% if program_cfg.user is defined -%}
+user={{ program_cfg.user }}
+{% endif %}
+{% if program_cfg.redirect_stderr is defined -%}
+redirect_stderr={{ 'true' if program_cfg.redirect_stderr else 'false' }}
+{% endif %}
+{% if program_cfg.stdout_logfile is defined -%}
+stdout_logfile={{ program_cfg.stdout_logfile }}
+{% endif %}
+{% if program_cfg.stdout_logfile_maxbytes is defined -%}
+stdout_logfile_maxbytes={{ program_cfg.stdout_logfile_maxbytes }}
+{% endif %}
+{% if program_cfg.stdout_logfile_backups is defined -%}
+stdout_logfile_backups={{ program_cfg.stdout_logfile_backups }}
+{% endif %}
+{% if program_cfg.stdout_capture_maxbytes is defined -%}
+stdout_capture_maxbytes={{ program_cfg.stdout_capture_maxbytes }}
+{% endif %}
+{% if program_cfg.stdout_events_enabled is defined -%}
+stdout_events_enabled={{ 'true' if program_cfg.stdout_events_enabled else 'false' }}
+{% endif %}
+{% if program_cfg.stderr_logfile is defined -%}
+stderr_logfile={{ program_cfg.stderr_logfile }}
+{% endif %}
+{% if program_cfg.stderr_logfile_maxbytes is defined -%}
+stderr_logfile_maxbytes={{ program_cfg.stderr_logfile_maxbytes }}
+{% endif %}
+{% if program_cfg.stderr_logfile_backups is defined -%}
+stderr_logfile_backups={{ program_cfg.stderr_logfile_backups }}
+{% endif %}
+{% if program_cfg.stderr_capture_maxbytes is defined -%}
+stderr_capture_maxbytes={{ program_cfg.stderr_capture_maxbytes }}
+{% endif %}
+{% if program_cfg.stderr_events_enabled is defined -%}
+stderr_events_enabled={{ 'true' if program_cfg.stderr_events_enabled else 'false' }}
+{% endif %}
+{% if program_cfg.environment is defined -%}
+environment={{ program_cfg.environment if program_cfg.environment is string else program_cfg.environment|join(',') }}
+{% endif %}
+{% if program_cfg.serverurl is defined -%}
+serverurl={{ program_cfg.serverurl }}
+{% endif %}
+{% endfor %}

@@ -1,0 +1,8 @@
+; {{ ansible_managed }}
+{% for group_cfg in supervisor_group_cfg %}
+[group:{{ group_cfg.name }}]
+programs={{ group_cfg.programs if group_cfg.programs is string else group_cfg.programs|join(',') }}
+{% if group_cfg.priority is defined -%}
+priority={{ group_cfg.priority }}
+{% endif %}
+{% endfor %}
