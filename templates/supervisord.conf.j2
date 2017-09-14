@@ -1,0 +1,130 @@
+; {{ ansible_managed }}
+{% if supervisor_unix_http_server_cfg is defined -%}
+[unix_http_server]
+; (the path to the socket file)
+file={{ supervisor_unix_http_server_cfg.file }}
+{% if supervisor_unix_http_server_cfg.chmod is defined -%}
+; sockef file mode (default 0700)
+chmod={{ supervisor_unix_http_server_cfg.chmod }}
+{% endif %}
+{% if supervisor_unix_http_server_cfg.chown is defined -%}
+; socket file uid:gid owner
+chown={{ supervisor_unix_http_server_cfg.chown }}
+{% endif %}
+{% if supervisor_unix_http_server_cfg.username is defined -%}
+; (default is no username (open server))
+username={{ supervisor_unix_http_server_cfg.username }}
+{% endif %}
+{% if supervisor_unix_http_server_cfg.password is defined -%}
+; (default is no password (open server))
+password={{ supervisor_unix_http_server_cfg.password }}
+{% endif %}
+{% endif %}
+
+{% if supervisor_inet_http_server_cfg is defined -%}
+[inet_http_server]         ; inet (TCP) server disabled by default
+; (ip_address:port specifier, *:port for all iface)
+port={{ supervisor_inet_http_server_cfg.port }}
+{% if supervisor_inet_http_server_cfg.username is defined -%}
+; (default is no username (open server))
+username={{ supervisor_inet_http_server_cfg.username }}
+{% endif %}
+{% if supervisor_inet_http_server_cfg.password is defined -%}
+; (default is no password (open server))
+password={{ supervisor_inet_http_server_cfg.password }}
+{% endif %}
+{% endif %}
+
+[supervisord]
+; (main log file;default $CWD/supervisord.log)
+logfile={{ supervisor_supervisord_cfg.logfile }}
+{% if supervisor_supervisord_cfg.password is defined -%}
+; (max main logfile bytes b4 rotation;default 50MB)
+logfile_maxbytes={{ supervisor_supervisord_cfg.logfile_maxbytes }}
+{% endif %}
+{% if supervisor_supervisord_cfg.password is defined -%}
+; (num of main logfile rotation backups;default 10)
+logfile_backups={{ supervisor_supervisord_cfg.logfile_backups }}
+{% endif %}
+{% if supervisor_supervisord_cfg.password is defined -%}
+; (log level;default info; others: debug,warn,trace)
+loglevel={{ supervisor_supervisord_cfg.loglevel }}
+{% endif %}
+{% if supervisor_supervisord_cfg.password is defined -%}
+; (supervisord pidfile;default supervisord.pid)
+pidfile={{ supervisor_supervisord_cfg.pidfile }}
+{% endif %}
+{% if supervisor_supervisord_cfg.password is defined -%}
+; (start in foreground if true;default false)
+nodaemon={{ 'true' if supervisor_supervisord_cfg.nodaemon else 'false' }}
+{% endif %}
+{% if supervisor_supervisord_cfg.password is defined -%}
+; (min. avail startup file descriptors;default 1024)
+minfds={{ supervisor_supervisord_cfg.minfds }}
+{% endif %}
+{% if supervisor_supervisord_cfg.password is defined -%}
+; (min. avail process descriptors;default 200)
+minprocs={{ supervisor_supervisord_cfg.minprocs }}
+{% endif %}
+{% if supervisor_supervisord_cfg.umask is defined -%}
+; (process file creation umask;default 022)
+umask={{ supervisor_supervisord_cfg.umask }}
+{% endif %}
+{% if supervisor_supervisord_cfg.user is defined -%}
+; (default is current user, required if root)
+user={{ supervisor_supervisord_cfg.user }}
+{% endif %}
+{% if supervisor_supervisord_cfg.identifier is defined -%}
+; (supervisord identifier, default is 'supervisor')
+identifier={{ supervisor_supervisord_cfg.identifier }}
+{% endif %}
+{% if supervisor_supervisord_cfg.directory is defined -%}
+; (default is not to cd during start)
+directory={{ supervisor_supervisord_cfg.directory }}
+{% endif %}
+{% if supervisor_supervisord_cfg.nocleanup is defined -%}
+; (don't clean up tempfiles at start;default false)
+nocleanup={{ 'true' if supervisor_supervisord_cfg.nocleanup else 'false' }}
+{% endif %}
+{% if supervisor_supervisord_cfg.childlogdir is defined -%}
+; ('AUTO' child log dir, default $TEMP)
+childlogdir={{ supervisor_supervisord_cfg.childlogdir }}
+{% endif %}
+{% if supervisor_supervisord_cfg.environment is defined -%}
+; (key value pairs to add to environment)
+environment={{ supervisor_supervisord_cfg.environment if supervisor_supervisord_cfg.environment is string else supervisor_supervisord_cfg.environment|join(',') }}
+{% endif %}
+{% if supervisor_supervisord_cfg.strip_ansi is defined -%}
+; (strip ansi escape codes in logs; def. false)
+strip_ansi={{ 'true' if supervisor_supervisord_cfg.strip_ansi else 'false' }}
+{% endif %}
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+{% if supervisor_supervisorctl_cfg is defined -%}
+[supervisorctl]
+; use a unix:// URL  for a unix socket
+;serverurl=http://127.0.0.1:9001
+;serverurl=unix:///var/run/supervisor/supervisor.sock
+serverurl={{ supervisor_supervisorctl_cfg.serverurl }}
+{% if supervisor_supervisorctl_cfg.username is defined -%}
+; should be same as http_username if set
+username={{ supervisor_supervisorctl_cfg.username }}
+{% endif %}
+{% if supervisor_supervisorctl_cfg.password is defined -%}
+; should be same as http_password if set
+password={{ supervisor_supervisorctl_cfg.password }}
+{% endif %}
+{% if supervisor_supervisorctl_cfg.prompt is defined -%}
+; cmd line prompt (default "supervisor")
+prompt={{ supervisor_supervisorctl_cfg.prompt }}
+{% endif %}
+{% if supervisor_supervisorctl_cfg.history_file is defined -%}
+; use readline history if available
+history_file={{ supervisor_supervisorctl_cfg.history_file }}
+{% endif %}
+{% endif %}
+
+[include]
+files = supervisord.d/*.ini

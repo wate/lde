@@ -1,0 +1,159 @@
+---
+supervisor_supervisord_cfg:
+  logfile: /var/log/supervisor/supervisord.log
+  logfile_maxbytes: 50MB
+  logfile_backups: 10
+  loglevel: info
+  pidfile: /var/run/supervisord.pid
+  nodaemon: no
+  minfds: 1024
+  minprocs: 200
+  # umask: 022
+  # user: chrism
+  # identifier: supervisor
+  # directory: /tmp
+  # nocleanup: yes
+  # childlogdir: /tmp
+  # environment: KEY=value
+  # strip_ansi: no
+
+supervisor_unix_http_server_cfg:
+  file: /var/run/supervisor/supervisor.sock
+  # chmod: 0700
+  # chown: nobody:nogroup
+  # username: user
+  # password: 123
+
+# supervisor_inet_http_server_cfg:
+#   port: 127.0.0.1:9001
+#   username: user
+#   password: 123
+
+
+supervisor_supervisorctl_cfg:
+  serverurl: "unix:///var/run/supervisor/supervisor.sock"
+  # username: chris
+  # password: 123
+  # prompt: mysupervisor
+  # history_file: ~/.sc_history
+
+supervisor_program_cfg: []
+  # - name: theprogramname
+  #   # the program (relative uses PATH, can take args)
+  #   command: /bin/cat
+  #   # process_name expr (default %(program_name)s)
+  #   process_name: "%(program_name)s"
+  #   # number of processes copies to start (def 1)
+  #   numprocs: 1
+  #   # directory to cwd to before exec (def no cwd)
+  #   directory:
+  #   # umask for process (default None)
+  #   umask:
+  #   # the relative start priority (default 999)
+  #   priority: 999
+  #   # start at supervisord start (default: true)
+  #   autostart: yes
+  #   # retstart at unexpected quit (default: true)
+  #   autorestart: yes
+  #   # number of secs prog must stay running (def. 1)
+  #   startsecs: 1
+  #   # max # of serial start failures (default 3)
+  #   startretries: 3
+  #   # 'expected' exit codes for process (default 0,2)
+  #   exitcodes: "0,2"
+  #   # signal used to kill process (default TERM)
+  #   stopsignal: TERM
+  #   # max num secs to wait b4 SIGKILL (default 10)
+  #   stopwaitsecs: 10
+  #   # setuid to this UNIX account to run the program
+  #   user: chrism
+  #   # redirect proc stderr to stdout (default false)
+  #   redirect_stderr: no
+  #   # stdout log path, NONE for none; default AUTO
+  #   stdout_logfile: AUTO
+  #   # max # logfile bytes b4 rotation (default 50MB)
+  #   stdout_logfile_maxbytes: 50MB
+  #   # # of stdout logfile backups (default 10)
+  #   stdout_logfile_backups: 10
+  #   # number of bytes in 'capturemode' (default 0)
+  #   stdout_capture_maxbytes: 0
+  #   # emit events on stdout writes (default false)
+  #   stdout_events_enabled: no
+  #   # stderr log path, NONE for none; default AUTO
+  #   stderr_logfile: AUTO
+  #   # max # logfile bytes b4 rotation (default 50MB)
+  #   stderr_logfile_maxbytes: 50MB
+  #   # # of stderr logfile backups (default 10)
+  #   stderr_logfile_backups: 10
+  #   # number of bytes in 'capturemode' (default 0)
+  #   stderr_capture_maxbytes: 0
+  #   # emit events on stderr writes (default false)
+  #   stderr_events_enabled: no
+  #   # process environment additions (def no adds)
+  #   environment: "A=1,B=2"
+  #   # override serverurl computation (childutils)
+  #   serverurl: AUTO
+
+supervisor_eventlistener_cfg: []
+  # - name: theeventlistenername
+  #   # the program (relative uses PATH, can take args)
+  #   command: /bin/eventlistener
+  #   # process_name expr (default %(program_name)s)
+  #   process_name: "%(program_name)s"
+  #   # number of processes copies to start (def 1)
+  #   numprocs: 1
+  #   # event notif. types to subscribe to (req'd)
+  #   events: EVENT
+  #   # event buffer queue size (default 10)
+  #   buffer_size: 10
+  #   # directory to cwd to before exec (def no cwd)
+  #   directory:
+  #   # umask for process (default None)
+  #   umask:
+  #   # the relative start priority (default -1)
+  #   priority: -1
+  #   # start at supervisord start (default: true)
+  #   autostart: yes
+  #   # restart at unexpected quit (default: unexpected)
+  #   autorestart: unexpected
+  #   # number of secs prog must stay running (def. 1)
+  #   startsecs: 1
+  #   # max # of serial start failures (default 3)
+  #   startretries: 3
+  #   # 'expected' exit codes for process (default 0,2)
+  #   exitcodes: "0,2"
+  #   # signal used to kill process (default TERM)
+  #   stopsignal: TERM
+  #   # max num secs to wait b4 SIGKILL (default 10)
+  #   stopwaitsecs: 10
+  #   # setuid to this UNIX account to run the program
+  #   user: chrism
+  #   # redirect proc stderr to stdout (default false)
+  #   redirect_stderr: no
+  #   # stdout log path, NONE for none; default AUTO
+  #   stdout_logfile: AUTO
+  #   # max # logfile bytes b4 rotation (default 50MB)
+  #   stdout_logfile_maxbytes: 50MB
+  #   # # of stdout logfile backups (default 10)
+  #   stdout_logfile_backups: 10
+  #   # emit events on stdout writes (default false)
+  #   stdout_events_enabled: no
+  #   # stderr log path, NONE for none; default AUTO
+  #   stderr_logfile: AUTO
+  #   # max # logfile bytes b4 rotation (default 50MB)
+  #   stderr_logfile_maxbytes: 50MB
+  #   # # of stderr logfile backups (default 10)
+  #   stderr_logfile_backups: 10
+  #   # emit events on stderr writes (default false)
+  #   stderr_events_enabled: no
+  #   # process environment additions
+  #   environment: "A=1,B=2"
+  #   # override serverurl computation (childutils)
+  #   serverurl: AUTO
+
+supervisor_group_cfg: []
+  # - name: thegroupname
+  #   programs:
+  #     - progname1
+  #     - progname2
+  #   priority: 999
