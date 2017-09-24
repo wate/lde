@@ -1,0 +1,13 @@
+---
+- name: add gpg key
+  rpm_key:
+    key: http://releases.usacloud.jp/usacloud/repos/GPG-KEY-usacloud
+- name: add repository
+  yum_repository:
+    name: usacloud
+    description: usacloud
+    baseurl: http://releases.usacloud.jp/usacloud/repos/centos/$basearch
+    gpgcheck: yes
+- name: install usacloud
+  yum:
+    name: usacloud
