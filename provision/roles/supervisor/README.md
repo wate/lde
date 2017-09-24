@@ -1,4 +1,4 @@
-Role Name
+supervisor
 =========
 
 Supervisorのインストールとセットアップを行います
