@@ -1,6 +1,0 @@
----
-- name: install python packages
-  yum:
-    name: "{{ item }}"
-    enablerepo: epel
-  with_items: "{{ python_packages }}"

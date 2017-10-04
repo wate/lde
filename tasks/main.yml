@@ -1,0 +1,98 @@
+---
+- name: install MariaDB packages
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ mariadb_packages }}"
+- name: install dependency packages
+  yum:
+    name: MySQL-python
+- name: create MariaDB setting files
+  template:
+    src: "{{ item }}.cnf.j2"
+    dest: /etc/my.cnf.d/{{ item }}.cnf
+  notify: restart mariadb
+  with_items:
+    - client
+    - mysql
+    - mysqld
+- name: MariaDB is active and enabled on system startup
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+- name: check root user connection setting
+  stat:
+    path: /root/.my.cnf
+  register: result
+- block:
+  - name: create mysql secure installation query file
+    template:
+      src: mysql_secure_installation.sql.j2
+      dest: /tmp/mysql_secure_installation.sql
+  - name: execute mysql secure installation
+    shell: mysql -u root mysql </tmp/mysql_secure_installation.sql
+  - name: remove mysql secure installation query file
+    file:
+      path: /tmp/mysql_secure_installation.sql
+      state: absent
+  when: not result.stat.exists
+- name: change root password
+  command: mysqladmin password "{{ mariadb_root_password }}" -u root
+  when: result.stat.exists
+- name: create root user connection setting
+  ini_file:
+    path: /root/.my.cnf
+    section: client
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0600"
+    create: yes
+  with_items:
+    - option: user
+      value: root
+    - option: password
+      value: "{{ mariadb_root_password }}"
+- name: create/remove databases
+  mysql_db:
+    name: "{{ item.name }}"
+    encoding: "{{ item.encoding|default(mariadb_default_charset) }}"
+    collation: "{{ item.collation|default(mariadb_default_collation) }}"
+    state: "{{ 'present' if item.state|default(true) else 'absent' }}"
+  with_items: "{{ mariadb_databases }}"
+- name: create MariaDB users
+  mysql_user:
+    name: "{{ item.0.user|default(item.0.name) }}"
+    password: "{{ item.0.password|default(omit) }}"
+    host: "{{ item.1 }}"
+    priv: "{{ item.0.name }}.*:ALL"
+  with_subelements:
+    - "{{ mariadb_databases }}"
+    - hosts
+    - flags:
+        skip_missing: true
+- name: import data
+  mysql_db:
+    name: "{{ item.name }}"
+    target: "{{ item.import_data }}"
+    state: import
+  when: "item.import_data is defined and item.state|default(true)"
+  with_items: "{{ mariadb_databases }}"
+
+- name: create/remove MariaDB users
+  mysql_user:
+    name: "{{ item.0.name }}"
+    password: "{{ item.0.password }}"
+    host: "{{ item.1 }}"
+    priv: "{{ item.0.priv }}"
+    state: "{{ 'present' if item.0.state|default(true) else 'absent' }}"
+  with_subelements:
+    - "{{ mariadb_users }}"
+    - hosts
+- name: allow MariaDB port
+  firewalld:
+    service: mysql
+    source: "{{ mariadb_allow_host }}"
+    permanent: yes
+    state: enabled
+  when: mariadb_allow_host is defined
+  notify: restart firewalld

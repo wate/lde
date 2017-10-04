@@ -1,9 +1,0 @@
-- name: restart rtail-server
-  systemd:
-    daemon_reload: yes
-    name: rtail-server
-    state: restarted
-- name: restart firewalld
-  systemd:
-    name: firewalld
-    state: restarted

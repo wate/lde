@@ -1,8 +1,17 @@
+
+# Created by https://www.gitignore.io/api/ansible
+
 ### Ansible ###
 # Ansible retry files
 *.retry
 
-### Vagrant ###
-.vagrant/
+# Test driven development on Ansible with Molecule, Testinfra and pytest
+.cache/
+.idea/
+.molecule/
+.tox/
+__pycache__/
+tests/roles
+*.pyc
 
-source/
+# End of https://www.gitignore.io/api/ansible

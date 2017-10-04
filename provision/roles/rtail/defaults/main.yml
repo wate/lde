@@ -1,9 +1,0 @@
----
-rtail_user: rtail
-rtail_udp_ip: 127.0.0.1
-rtail_udp_port: 9999
-rtail_web_ip: 127.0.0.1
-rtail_web_port: 8888
-
-# rtail_allow_web_host: "192.168.33.0/24"
-# rtail_allow_udp_host: "192.168.33.0/24"
