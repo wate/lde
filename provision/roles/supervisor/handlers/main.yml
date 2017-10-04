@@ -1,0 +1,5 @@
+---
+- name: restart supervisor
+  systemd:
+    name: supervisord
+    state: restarted

@@ -1,0 +1,208 @@
+# --------------
+# ドメイン名
+# ※以下の各設定項目に記載している「{{ domain }}」の値
+# --------------
+domain: example.com
+
+# --------------
+# MariaDBのrootパスワード
+# --------------
+mariadb_root_password: r00tP@55w0rd
+
+# --------------
+# PHPのバージョン
+#
+# 指定可能な値は以下の通り
+# - 5.4
+# - 5.5
+# - 5.6
+# - 7.0
+# - 7.1
+# - 7.2
+# --------------
+php_version: 7.1
+
+# --------------
+# MariaDBの設定
+# --------------
+# デフォルトの文字コード
+mariadb_default_charset: utf8mb4
+# デフォルトの文字照合順序
+mariadb_default_collation: utf8mb4_general_ci
+
+# --------------
+# MariaDB用のfirewalld設定
+# --------------
+mariadb_allow_host: "192.168.33.0/24"
+
+# --------------
+# データベース
+# --------------
+mariadb_databases:
+  # 開発用データベース
+  - name: app_dev
+    password: app_dev_p@ssw0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
+      - "192.168.33.%"
+  # テスト用データベース
+  - name: app_test
+    # import_data: /vagrant/source/test_data.sql
+    password: app_test_p@ssw0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
+      - "192.168.33.%"
+  # ステージング用データベース
+  - name: app_staging
+    password: app_staging_p@ssw0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
+      - "192.168.33.%"
+  # 本番用データベース
+  - name: app_prod
+    password: app_prod_p@55w0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
+      - "192.168.33.%"
+  # WWW SQL Designer用データベース
+  - name: wwwsqldesigner
+    password: wwwsqldesigner_p@ssw0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
+
+# --------------
+# インストールするPHPのパッケージ
+# --------------
+php_packages:
+  - php
+  - php-common
+  - php-cli
+  - php-devel
+  - php-opcache
+  - php-mbstring
+  - php-mysqlnd
+  - php-intl
+  - php-json
+  - php-pdo
+  - php-gd
+  - php-xml
+
+# --------------
+# php.iniの初期値を上書きする項目
+# その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
+# --------------
+php_cfg:
+  sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
+
+# --------------
+# WWW SQL Designerのバックエンドの設定
+# --------------
+wwwsqldesigner_backend_pdo_cfg:
+  save:
+    type: mysql
+    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
+    user: wwwsqldesigner
+    password: wwwsqldesigner_p@ssw0rd
+  import:
+    type: mysql
+    dsn: "mysql:dbname=information_schema;host=localhost"
+    user: root
+    password: r00tP@55w0rd
+
+
+# --------------
+# Apacheのバーチャルホストの設定
+# --------------
+apache_vhosts:
+  # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
+  - name: 00-default
+    # サーバー名
+    server_name: www.{{ domain }}
+    # ドキュメントルート
+    document_root: /vagrant/source
+    # サーバー名の別名
+    server_alias: "{{ domain }}"
+    # AllowOverrideの設定値
+    allow_override: All
+  # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
+  # https://www.phpmyadmin.net/
+  - name: 01-phpMyAdmin
+    state: "{{ true if phpmyadmin_dest is defined else false }}"
+    server_name: db.{{ domain }}
+    document_root: "{{ phpmyadmin_dest|default('/usr/share/phpMyAdmin') }}"
+    # Optionsの設定値
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    # AllowOverrideの設定値
+    allow_override: All
+    # Requireの設定値
+    require:
+      - type: ip
+        value: 192.168.33
+  # MailCatcher用のバーチャルホスト ( http://mail.<ドメイン>/ )
+  # https://mailcatcher.me/
+  - name: 02-MailCatcher
+    state: "{{ true if mailcatcher_web_port is defined else false }}"
+    server_name: mail.{{ domain }}
+    # リバースプロキシの設定
+    proxy_pass:
+      - from: /
+        to: "http://localhost:{{ mailcatcher_web_port|default(1080) }}/"
+    proxy_pass_reverse:
+      - from: /
+        to: "http://localhost:{{ mailcatcher_web_port|default(1080) }}/"
+  # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
+  # https://github.com/ondras/wwwsqldesigner
+  - name: 03-WWWSQLDesigner
+    state: "{{ true if wwwsqldesigner_dest is defined else false }}"
+    server_name: er.{{ domain }}
+    document_root: "{{ wwwsqldesigner_dest|default('/opt/wwwsqldesigner') }}"
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    require:
+      - type: ip
+        value: 192.168.33
+  # rtail用のバーチャルホスト ( http://log.<ドメイン>/ )
+  # https://github.com/kilianc/rtail
+  - name: 04-rtail
+    state: "{{ true if rtail_web_port is defined else false }}"
+    server_name: log.{{ domain }}
+    # リバースプロキシの設定
+    proxy_pass:
+      - from: /
+        to: "http://localhost:{{ rtail_web_port|default(8888) }}/"
+    proxy_pass_reverse:
+      - from: /
+        to: "http://localhost:{{ rtail_web_port|default(8888) }}/"
+
+# --------------
+# Apacheの設定
+# その他の設定値は、「provision/roles/apache/defaults/main.yml」を参照
+# --------------
+apache_cfg:
+  # EnableSendfileをOffに変更(VirtualBoxの共有ディレクトリ機能用)
+  enable_sendfile: no
+
+# 不要なモジュールを無効化
+apache_module_lua: no
+apache_module_dav:
+  dav: no
+  dav_fs: no
+  dav_lock: no
+apache_module_lbmethod:
+  bybusyness: no
+  byrequests: no
+  bytraffic: no
+  heartbeat: no
+apache_module_proxy:
+  ajp: no
+  balancer: no
+  ftp: no

@@ -1,0 +1,109 @@
+---
+redis_cfg:
+  ################################## NETWORK #####################################
+  bind: 127.0.0.1
+  protected_mode: yes
+  port: 6379
+  tcp_backlog: 511
+  # unixsocket: /tmp/redis.sock
+  # unixsocketperm: 700
+  timeout: 0
+  tcp_keepalive: 300
+  ################################# GENERAL #####################################
+  daemonize: no
+  supervised: "no"
+  pidfile: /var/run/redis_6379.pid
+  loglevel: notice
+  logfile: /var/log/redis/redis.log
+  syslog_enabled: no
+  syslog_ident: redis
+  syslog_facility: local0
+  databases: 16
+  ################################ SNAPSHOTTING  ################################
+  save:
+    - seconds: 900
+      changes: 1
+    - seconds: 300
+      changes: 10
+    - seconds: 60
+      changes: 10000
+  stop_writes_on_bgsave_error: yes
+  rdbcompression: yes
+  rdbchecksum: yes
+  dbfilename: dump.rdb
+  dir: /var/lib/redis
+  ################################# REPLICATION #################################
+  # slaveof:
+  #   ipaddr: <masterip>
+  #   port: <masterport>
+  # masterauth: <master-password>
+  slave_serve_stale_data: yes
+  slave_read_only: yes
+  repl_diskless_sync: no
+  repl_diskless_sync_delay: 5
+  # repl_ping_slave_period: 10
+  # repl_timeout: 60
+  repl_disable_tcp_nodelay: no
+  # repl_backlog_size: 1mb
+  # repl_backlog_ttl: 3600
+  slave_priority: 100
+  # min_slaves_to_write: 3
+  # min_slaves_max_lag: 10
+  # slave_announce_ip: 5.5.5.5
+  # slave_announce_port: 1234
+  ################################### LIMITS ####################################
+  # maxclients: 10000
+  # maxmemory: <bytes>
+  # maxmemory_policy: noeviction
+  # maxmemory_samples: 5
+  ############################## APPEND ONLY MODE ###############################
+  appendonly: no
+  appendfilename: appendonly.aof
+  appendfsync: everysec
+  no_appendfsync_on_rewrite: no
+  auto_aof_rewrite_percentage: 100
+  auto_aof_rewrite_min_size: 64mb
+  aof_load_truncated: yes
+  ################################ LUA SCRIPTING  ###############################
+  lua_time_limit: 5000
+  ################################ REDIS CLUSTER  ###############################
+  # cluster_enabled: yes
+  # cluster_config_file: nodes-6379.conf
+  # cluster_node_timeout: 15000
+  # cluster_slave_validity_factor: 10
+  # cluster_migration_barrier: 1
+  # cluster_require_full_coverage: yes
+  ################################## SLOW LOG ###################################
+  slowlog_log_slower_than: 10000
+  slowlog_max_len: 128
+  ################################ LATENCY MONITOR ##############################
+  latency_monitor_threshold: 0
+  ############################# EVENT NOTIFICATION ##############################
+  notify_keyspace_events: ""
+  ############################### ADVANCED CONFIG ###############################
+  hash_max_ziplist_entries: 512
+  hash_max_ziplist_value: 64
+  list_max_ziplist_size: -2
+  list_compress_depth: 0
+  set_max_intset_entries: 512
+  zset_max_ziplist_entries: 128
+  zset_max_ziplist_value: 64
+  hll_sparse_max_bytes: 3000
+  activerehashing: yes
+  client_output_buffer_limit:
+    - class: normal
+      hard_limit: 0
+      soft_limit: 0
+      soft_seconds: 0
+    - class: slave
+      hard_limit: 256mb
+      soft_limit: 64mb
+      soft_seconds: 60
+    - class: pubsub
+      hard_limit: 32mb
+      soft_limit: 8mb
+      soft_seconds: 60
+  hz: 10
+  aof_rewrite_incremental_fsync: yes
+
+# redis_allow_host: any

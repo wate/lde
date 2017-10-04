@@ -1,0 +1,37 @@
+vagrant:
+  ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
+  ## ※Ansibleがインストールできない/されていない人向け
+  # provisioner: ansible_local
+  ## ベースのイメージ
+  # box: wate/centos-7
+  ## 仮想マシンのIPアドレス
+  # ipaddress: 192.168.33.10
+  ## 仮想マシン名(初期値は「provision/host_vars/default.yml」の「domain」の値を利用)
+  # vm_name: dev.local
+  ## 仮想マシン名
+  # vm_gui: true
+  ## 仮想マシンのCPU
+  # vm_cpu: 1
+  ## 仮想マシンのメモリ
+  # vm_memory: 1024
+  ## ポートフォワーディングの設定
+  forwarded_ports:
+    - guest: 80
+      host: 8080
+    # - guest: 22
+    #   host: 2240
+    #   id: ssh
+    # - guest: 3306
+    # - guest: 5432
+  synced_folder:
+    path:
+      local: ./
+      remote: /vagrant
+    mount_options:
+      - dmode=777
+      - fmode=666
+    # type: rsync
+    # group: vagrant
+    # owner: vagrant
+    # create: no
+    # disabled: no

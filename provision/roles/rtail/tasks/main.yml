@@ -1,0 +1,35 @@
+---
+- name: add rtail user
+  user:
+    name: "{{ rtail_user }}"
+    system: yes
+- name: install rtail package
+  npm:
+    name: rtail
+    global: yes
+- name: create systemd unit file
+  template:
+    src: rtail-server.service.j2
+    dest: /usr/lib/systemd/system/rtail-server.service
+  notify: restart rtail-server
+- name: rtail-server is active and enabled on system startup
+  systemd:
+    name: rtail-server
+    state: started
+    enabled: yes
+- name: allow rtail udp port
+  firewalld:
+    port: "{{ rtail_udp_port }}/udp"
+    source: "{{ rtail_allow_udp_host }}"
+    permanent: yes
+    state: enabled
+  when: rtail_allow_udp_host is defined
+  notify: restart firewalld
+- name: allow rtail udp port
+  firewalld:
+    port: "{{ rtail_web_port }}/tcp"
+    source: "{{ rtail_allow_web_host }}"
+    permanent: yes
+    state: enabled
+  when: rtail_allow_web_host is defined
+  notify: restart firewalld
