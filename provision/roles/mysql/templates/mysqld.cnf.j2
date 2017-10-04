@@ -1,0 +1,162 @@
+[mysqld]
+# -----------------
+# Charset
+# -----------------
+character-set-server = {{ mysql_default_charset }}
+collation-server = {{ mysql_default_collation }}
+
+# -----------------
+# General
+# -----------------
+
+sql_mode = "{{ mysql_cfg.mysqld.sql_mode if mysql_cfg.mysqld.sql_mode is string else mysql_cfg.mysqld.sql_mode|join(',') }}"
+
+{% if mysql_cfg.mysqld.datadir is defined -%}
+datadir = {{ mysql_cfg.mysqld.datadir }}
+{% endif %}
+{% if mysql_cfg.mysqld.socket is defined -%}
+socket = {{ mysql_cfg.mysqld.socket }}
+{% endif %}
+{% if mysql_cfg.mysqld.innodb_data_home_dir is defined -%}
+innodb_data_home_dir = {{ mysql_cfg.mysqld.innodb_data_home_dir }}
+{% endif %}
+{% if mysql_cfg.mysqld.innodb_data_file_path is defined -%}
+innodb_data_file_path = {{ mysql_cfg.mysqld.innodb_data_file_path }}
+{% endif %}
+
+# -----------------
+# Network
+# -----------------
+
+{% if mysql_cfg.mysqld.max_connections is defined -%}
+max_connections = {{ mysql_cfg.mysqld.max_connections }}
+{% endif %}
+{% if mysql_cfg.mysqld.connect_timeout is defined -%}
+connect_timeout = {{ mysql_cfg.mysqld.connect_timeout }}
+{% endif %}
+{% if mysql_cfg.mysqld.max_allowed_packet is defined -%}
+max_allowed_packet = {{ mysql_cfg.mysqld.max_allowed_packet }}
+{% endif %}
+{% if mysql_cfg.mysqld.skip_name_resolve is defined and mysql_cfg.mysqld.skip_name_resolve -%}
+skip_name_resolve
+{% endif %}
+{% if mysql_cfg.mysqld.interactive_timeout is defined -%}
+interactive_timeout = {{ mysql_cfg.mysqld.interactive_timeout }}
+{% endif %}
+{% if mysql_cfg.mysqld.wait_timeout is defined -%}
+wait_timeout = {{ mysql_cfg.mysqld.wait_timeout }}
+{% endif %}
+
+{% if mysql_cfg.mysqld.table_open_cache is defined -%}
+table_open_cache = {{ mysql_cfg.mysqld.table_open_cache }}
+{% endif %}
+{% if mysql_cfg.mysqld.thread_cache_size is defined -%}
+thread_cache_size = {{ mysql_cfg.mysqld.thread_cache_size }}
+{% endif %}
+{% if mysql_cfg.mysqld.table_definition_cache is defined -%}
+table_definition_cache = {{ mysql_cfg.mysqld.table_definition_cache }}
+{% endif %}
+
+# -----------------
+# Global Buffers
+# -----------------
+
+## Cache
+query_cache_limit = {{ mysql_cfg.mysqld.query_cache_limit }}
+query_cache_size = {{ mysql_cfg.mysqld.query_cache_size }}
+query_cache_type = {{ mysql_cfg.mysqld.query_cache_type }}
+
+## InnoDB
+innodb_buffer_pool_size = {{ mysql_cfg.mysqld.innodb_buffer_pool_size}}
+innodb_log_buffer_size = {{ mysql_cfg.mysqld.innodb_log_buffer_size }}
+
+## MyISAM
+key_buffer_size = {{ mysql_cfg.mysqld.key_buffer_size }}
+
+{% if mysql_cfg.mysqld.innodb_flush_log_at_trx_commit is defined -%}
+innodb_flush_log_at_trx_commit = {{ mysql_cfg.mysqld.innodb_flush_log_at_trx_commit }}
+{% endif %}
+
+# -----------------
+# Thread Buffers
+# -----------------
+
+## InnoDB
+{% if mysql_cfg.mysqld.join_buffer_size is defined -%}
+join_buffer_size = {{ mysql_cfg.mysqld.join_buffer_size }}
+{% endif %}
+{% if mysql_cfg.mysqld.read_buffer_size is defined -%}
+read_buffer_size = {{ mysql_cfg.mysqld.read_buffer_size }}
+{% endif %}
+{% if mysql_cfg.mysqld.read_rnd_buffer_size is defined -%}
+read_rnd_buffer_size = {{ mysql_cfg.mysqld.read_rnd_buffer_size }}
+{% endif %}
+{% if mysql_cfg.mysqld.sort_buffer_size is defined -%}
+sort_buffer_size = {{ mysql_cfg.mysqld.sort_buffer_size }}
+{% endif %}
+
+## MyISAM
+{% if mysql_cfg.mysqld.myisam_sort_buffer_size is defined -%}
+myisam_sort_buffer_size = {{ mysql_cfg.mysqld.myisam_sort_buffer_size }}
+{% endif %}
+
+# -----------------
+# Temp Tables
+# -----------------
+{% if mysql_cfg.mysqld.max_heap_table_size is defined -%}
+max_heap_table_size = {{ mysql_cfg.mysqld.max_heap_table_size }}
+{% endif %}
+{% if mysql_cfg.mysqld.tmp_table_size is defined -%}
+tmp_table_size = {{ mysql_cfg.mysqld.tmp_table_size }}
+{% endif %}
+
+# -----------------
+# Logging
+# -----------------
+{% if mysql_cfg.mysqld.slow_query_log is defined -%}
+slow_query_log = {{ '1' if mysql_cfg.mysqld.slow_query_log else '0' }}
+{% endif %}
+{% if mysql_cfg.mysqld.log_warnings is defined -%}
+log_warnings = {{ mysql_cfg.mysqld.log_warnings }}
+{% endif %}
+{% if mysql_cfg.mysqld.long_query_time is defined -%}
+long_query_time = {{ mysql_cfg.mysqld.long_query_time }}
+{% endif %}
+{% if mysql_cfg.mysqld.slow_query_log_file is defined -%}
+slow_query_log_file = {{ mysql_cfg.mysqld.slow_query_log_file }}
+{% endif %}
+{% if mysql_cfg.mysqld.general_log is defined -%}
+general_log = {{ '1' if mysql_cfg.mysqld.general_log else '0' }}
+{% endif %}
+{% if mysql_cfg.mysqld.general_log_file is defined -%}
+general_log_file = {{ mysql_cfg.mysqld.general_log_file }}
+{% endif %}
+
+# -----------------
+# Replication
+# -----------------
+{% if mysql_cfg.mysqld.gtid_domain_id is defined -%}
+gtid_domain_id = {{ mysql_cfg.mysqld.gtid_domain_id }}
+{% endif %}
+{% if mysql_cfg.mysqld.server_id is defined -%}
+server_id = {{ mysql_cfg.mysqld.server_id }}
+{% endif %}
+{% if mysql_cfg.mysqld.log_bin is defined -%}
+log_bin = {{ mysql_cfg.mysqld.log_bin }}
+{% endif %}
+{% if mysql_cfg.mysqld.binlog_format is defined -%}
+binlog_format = {{ mysql_cfg.mysqld.binlog_format }}
+{% endif %}
+{% if mysql_cfg.mysqld.expire_logs_days is defined -%}
+expire_logs_days = {{ mysql_cfg.mysqld.expire_logs_days }}
+{% endif %}
+{% if mysql_cfg.mysqld.read_only is defined and mysql_cfg.mysqld.read_only -%}
+read_only
+{% endif %}
+{% if mysql_cfg.mysqld.log_slave_updates is defined and mysql_cfg.mysqld.log_slave_updates -%}
+log_slave_updates
+{% endif %}
+
+{% if mysql_cfg.mysqld.extra_parameters is defined -%}
+{{ mysql_cfg.mysqld.extra_parameters }}
+{% endif %}

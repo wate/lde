@@ -1,0 +1,129 @@
+---
+mysql_version: 5.7
+
+mysql_packages:
+  - mysql-community-client
+  - mysql-community-server
+  - mysql-community-libs
+
+# mysql_allow_host: "192.168.33.0/24"
+
+mysql_root_password: rootP@55w0rd
+
+mysql_default_charset: utf8mb4
+mysql_default_collation: utf8mb4_general_ci
+
+mysql_databases: []
+  # - name: sample
+  #   ## optional database setting
+  #   encoding: utf8mb4
+  #   collation: utf8mb4_general_ci
+  #   import_data: /tmp/sample.sql.bz2
+  #   state: false
+  #   ## optional user setting
+  #   hosts:
+  #     - "127.0.0.1"
+  #     - localhost
+  #   user: sample_user
+  #   password: dsample_p@55w0rd
+
+mysql_users: []
+  # - name: sample_user
+  #   password: sample_user_password
+  #   hosts:
+  #     - "127.0.0.1"
+  #     - "::1"
+  #     - localhost
+  #   priv: "sample.*:ALL"
+  #   state: false
+
+mysql_max_connections: 100
+mysql_max_table_use_in_query: 3
+mysql_innodb_baffer_pool_rate: 50
+mysql_myisam_key_baffer_rate: 15
+
+mysql_cfg:
+  mysqld:
+    # datadir: /var/lib/mysql
+    # socket: /var/lib/mysql/mysql.sock
+    # innodb_data_home_dir: /var/lib/mysql
+    # innodb_data_file_path: ibdata1:50M;ibdata2:50M:autoextend
+    ## General
+    sql_mode:
+      - ONLY_FULL_GROUP_BY
+      - STRICT_TRANS_TABLES
+      - NO_ZERO_IN_DATE
+      - NO_ZERO_DATE
+      - ERROR_FOR_DIVISION_BY_ZERO
+      - NO_AUTO_CREATE_USER
+      - NO_ENGINE_SUBSTITUTION
+    ## Network
+    max_connections: "{{ mysql_max_connections }}"
+    # connect_timeout: 10
+    # max_allowed_packet: 16M
+    # skip_name_resolve: null
+    # interactive_timeout: 3600
+    # wait_timeout: 600
+    table_open_cache: "{{ mysql_max_connections * mysql_max_table_use_in_query }}"
+    thread_cache_size: "{{ mysql_max_connections }}"
+    table_definition_cache: "{{ 400 + (mysql_max_connections * mysql_max_table_use_in_query / 2)|int }}"
+    ## Global Buffers
+    # Total Global Buffer Size =
+    #  + key_buffer_size
+    #  + innodb_buffer_pool_size
+    #  + innodb_log_buffer_size
+    #  + max_heap_table_size
+    #  + query_cache_size
+    ## Cache
+    query_cache_limit: 8M
+    query_cache_size: 64M
+    query_cache_type:  1
+    # ------------------
+    # InnoDB
+    # ------------------
+    ## InnoDB General
+    innodb_file_per_table: 1
+    innodb_flush_log_at_trx_commit: 1
+    innodb_buffer_pool_size: "{{ ((ansible_memtotal_mb * 1024 * 1024) * (mysql_innodb_baffer_pool_rate / 100))|int }}"
+    innodb_log_file_size: "{{ ((ansible_memtotal_mb * 1024 * 1024) * (mysql_innodb_baffer_pool_rate / 100))|int / 4 }}"
+    innodb_additional_mem_pool_size: 32M
+    innodb_log_buffer_size: 32M
+    innodb_log_files_in_group: 2
+    max_heap_table_size: 32M
+    tmp_tables_size: 32M
+    ## Thread Buffers
+    # Total Thread Buffer Size =
+    #  + sort_buffer_size
+    #  + read_rnd_buffer_size
+    #  + join_buffer_size
+    #  + read_buffer_size
+    #  + max_allowed_packet
+    #  + thread_stack
+    join_buffer_size: 512K
+    read_buffer_size: 512K
+    sort_buffer_size: 512K
+    read_rnd_buffer_size: 512K
+    # ------------------
+    # MyISAM
+    # ------------------
+    ## Global Buffers
+    key_buffer_size: "{{ ((ansible_memtotal_mb * 1024 * 1024) * (mysql_myisam_key_baffer_rate / 100))|int }}"
+    ## Thread Buffers
+    # myisam_sort_buffer_size: 64M
+    ## Logging
+    # general_log: no
+    # general_log_file: /var/log/mysql/general_log
+    slow_query_log: 0
+    # long_query_time: 2
+    # log_warnings: 0
+    # slow_query_log_file: /var/log/mysql/slow_log
+    # -----------------
+    # Replication
+    # -----------------
+    # gtid_domain_id: 1
+    # server_id: 1
+    # log_bin: mysql-bin
+    # binlog_format: ROW
+    # expire_logs_days: 3
+    # read_only: yes
+    # log_slave_updates: yes
