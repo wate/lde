@@ -36,6 +36,9 @@
       path: /tmp/mysql_secure_installation.sql
       state: absent
   when: not result.stat.exists
+- name: change root password
+  command: mysqladmin password "{{ mariadb_root_password }}" -u root
+  when: result.stat.exists
 - name: create root user connection setting
   ini_file:
     path: /root/.my.cnf

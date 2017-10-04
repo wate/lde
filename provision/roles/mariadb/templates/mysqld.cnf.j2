@@ -2,8 +2,8 @@
 # -----------------
 # Charset
 # -----------------
-character_set_server = {{ mariadb_default_charset }}
-collation_server = {{ mariadb_default_collation }}
+character-set-server = {{ mariadb_default_charset }}
+collation-server = {{ mariadb_default_collation }}
 
 # -----------------
 # General
@@ -125,9 +125,6 @@ long_query_time = {{ mariadb_cfg.mysqld.long_query_time }}
 {% if mariadb_cfg.mysqld.slow_query_log_file is defined -%}
 slow_query_log_file = {{ mariadb_cfg.mysqld.slow_query_log_file }}
 {% endif %}
-{% if mariadb_cfg.mysqld.extra_parameters is defined -%}
-{{ mariadb_cfg.mysqld.extra_parameters }}
-{% endif %}
 {% if mariadb_cfg.mysqld.general_log is defined -%}
 general_log = {{ '1' if mariadb_cfg.mysqld.general_log else '0' }}
 {% endif %}
@@ -158,4 +155,8 @@ read_only
 {% endif %}
 {% if mariadb_cfg.mysqld.log_slave_updates is defined and mariadb_cfg.mysqld.log_slave_updates -%}
 log_slave_updates
+{% endif %}
+
+{% if mariadb_cfg.mysqld.extra_parameters is defined -%}
+{{ mariadb_cfg.mysqld.extra_parameters }}
 {% endif %}
