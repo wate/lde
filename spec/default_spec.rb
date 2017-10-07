@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def e(value)
-  return Regexp.escape(value)
+  return Regexp.escape(value.is_a?(String) ? value : value.to_s)
 end
 
 describe 'role dehydrated' do
@@ -16,6 +16,9 @@ describe 'role dehydrated' do
     end
     if property['dehydrated_cfg'].has_key?('ca')
       its(:content) { should match /^CA="#{e(property['dehydrated_cfg']['ca'])}"/ }
+    end
+    if property['dehydrated_cfg'].has_key?('ca_terms')
+      its(:content) { should match /^CA_TERMS="#{e(property['dehydrated_cfg']['ca_terms'])}"/ }
     end
     if property['dehydrated_cfg'].has_key?('challengetype')
       its(:content) { should match /^CHALLENGETYPE="#{e(property['dehydrated_cfg']['challengetype'])}"/ }
@@ -55,6 +58,13 @@ describe 'role dehydrated' do
   describe file(property['dehydrated_config_dir'] + '/domains.txt') do
     it { should exist }
     it { should be_file }
+    property['dehydrated_domains'].each do |domain|
+      if domain.is_a?(String)
+        its(:content) { should match /^#{e(domain)}$/ }
+      elsif domain.is_a?(Array)
+        its(:content) { should match /^#{e(domain.join(' '))}$/ }
+      end
+    end
   end
   describe file(property['dehydrated_config_dir'] + '/hook.sh') do
     it { should exist }

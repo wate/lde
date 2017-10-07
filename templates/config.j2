@@ -26,6 +26,9 @@ CA="{{ dehydrated_cfg.ca }}"
 
 # Path to certificate authority license terms redirect (default: https://acme-v01.api.letsencrypt.org/terms)
 #CA_TERMS="https://acme-v01.api.letsencrypt.org/terms"
+{% if dehydrated_cfg.ca_terms is defined -%}
+CA_TERMS="{{ dehydrated_cfg.ca_terms }}"
+{% endif %}
 
 # Path to license agreement (default: <unset>)
 #LICENSE=""
@@ -56,7 +59,7 @@ CONFIG_D="${BASEDIR}/conf.d"
 
 # Output directory for challenge-tokens to be served by webserver or deployed in HOOK (default: /var/www/dehydrated)
 #WELLKNOWN="/var/www/dehydrated"
-{% if dehydrated_cfg.challengetype is defined -%}
+{% if dehydrated_cfg.wellknown is defined -%}
 WELLKNOWN="{{ dehydrated_cfg.wellknown }}"
 {% endif %}
 
