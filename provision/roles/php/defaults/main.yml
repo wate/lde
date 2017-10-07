@@ -30,13 +30,16 @@ php_cfg:
   precision: 14
   output_buffering: 4096
   # output_handler: ""
+  # url_rewriter:
+  #   tags: "form="
+  #   hosts:
   zlib:
     output_compression: false
     # output_compression_level: -1
     # output_handler: ""
   implicit_flush: false
   unserialize_callback_func: ""
-  serialize_precision: 17
+  serialize_precision: -1
   # open_basedir: ""
   disable_functions: ""
   disable_classes: ""
@@ -53,6 +56,7 @@ php_cfg:
     enable_gc: true
   #  multibyte: false
   #  script_encoding: ""
+    assertions: -1
   #################
   # Miscellaneous
   #################
@@ -62,22 +66,22 @@ php_cfg:
   #################
   max_execution_time: 30
   max_input_time: 60
-  max_input_nesting_level: 64
+  # max_input_nesting_level: 64
   # max_input_vars: 1000
   memory_limit: 128M
   #################
   # Error handling and logging
   #################
   error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-  display_errors: true
-  display_startup_errors: true
+  display_errors: false
+  display_startup_errors: false
   log_errors: true
   log_errors_max_len: 1024
   ignore_repeated_errors: false
   ignore_repeated_source: false
   report_memleaks: true
   # report_zend_debug: 0
-  track_errors: true
+  track_errors: false
   # xmlrpc_errors: 0
   # xmlrpc_error_number: 0
   html_errors: true
@@ -121,6 +125,8 @@ php_cfg:
   #   redirect_status_env: ""
   #   fix_pathinfo: 1
   #   rfc2616_headers: 0
+  #   discard_path: 1
+  #   check_shebang_line: 1
   # fastcgi:
   #   impersonate: 1
   #   logging: 0
@@ -165,9 +171,10 @@ php_cfg:
   #   assoc_case: 0
   # sqlite3:
   #   extension_dir: ""
-  # pcre:
+  pcre:
   #   backtrack_limit: 100000
   #   recursion_limit: 100000
+    jit: 0
   # pdo_odbc:
   #   connection_pooling: strict
   #   db2_instance_name: ""
@@ -236,19 +243,14 @@ php_cfg:
     reconnect: false
   mysqlnd:
     collect_statistics: true
-    collect_memory_statistics: true
+    collect_memory_statistics: false
     # net_cmd_buffer_size: 2048
     # net_read_buffer_size: 32768
-  # oci8:
-  #   privileged_connect: false
-  #   max_persistent: -1
-  #   persistent_timeout: -1
-  #   ping_interval: 60
-  #   connection_class: ""
-  #   events: false
-  #   statement_cache_size: 20
-  #   default_prefetch: 100
-  #   old_oci_close_semantics: false
+    # net_read_timeout: 31536000
+    # debug:
+    # log_mask: 0
+    # mempool_default_size: 16000
+    # sha256_server_public_key:
   pgsql:
     allow_persistent: true
     auto_reset_persistent: false
@@ -256,24 +258,13 @@ php_cfg:
     max_links: -1
     ignore_notice: 0
     log_notice: 0
-  sybct:
-    allow_persistent: true
-    max_persistent: -1
-    max_links: -1
-    min_server_severity: 10
-    min_client_severity: 10
-  #   timeout: ""
-  #   packet_size: ""
-  #   login_timeout: ""
-  #   hostname: ""
-  #   deadlock_retry_count: 0
   bcmath:
     scale: 0
   # browscap: extra/browscap.ini
   session:
     save_handler: files
-  # save_path: /tmp
-    use_strict_mode: true
+    # save_path: /tmp
+    use_strict_mode: no
     use_cookies: true
     cookie_secure: false
     use_only_cookies: true
@@ -289,12 +280,17 @@ php_cfg:
     gc_maxlifetime: 1440
     referer_check: ""
     entropy_length: 32
-  # entropy_file: /dev/urandom
+    entropy_file: /dev/urandom
     cache_limiter: nocache
     cache_expire: 180
     use_trans_sid: false
-    hash_function: 0
+    sid_length: 26
+    trans_sid_tags: "a=href,area=href,frame=src,form="
+    # trans_sid_hosts:
+    sid_bits_per_character: 5
     hash_bits_per_character: 5
+    hash_function: 0
+  #   lazy_write: On
   #   upload_progress:
   #     enabled: true
   #     cleanup: true
@@ -302,30 +298,13 @@ php_cfg:
   #     name: PHP_SESSION_UPLOAD_PROGRESS
   #     freq:  1%
   #     min_freq: 1
-  url_rewriter:
-    tags: "a=href,area=href,frame=src,input=src,form=fakeentry"
-  mssql:
-    allow_persistent: true
-    max_persistent: -1
-    max_links: -1
-    min_error_severity: 10
-    min_message_severity: 10
-    compatibility_mode: false
-  #   connect_timeout: 5
-  #   timeout: 60
-  #   textlimit: 4096
-  #   textsize: 4096
-  #   batchsize: 0
-  #   datetimeconvert: true
-    secure_connection: false
-  #   max_procs: -1
-  #   charset: ISO-8859-1
   # assert:
   #   active: true
   #   warning: true
   #   bail: false
   #   callback: 0
   #   quiet_eval: 0
+  #   exception: true
   # mbstring:
   #   language: Japanese
   #   internal_encoding: ""
@@ -338,7 +317,7 @@ php_cfg:
   #   strict_detection: true
   #   http_output_conv_mimetype: ""
   # gd:
-  #   jpeg_ignore_warning: false
+  #   jpeg_ignore_warning: true
   # exif:
   #   encode_unicode: ISO-8859-15
   #   decode_unicode_motorola: UCS-2BE

@@ -143,7 +143,11 @@
 ;   Development Value: 1000
 ;   Production Value: 1000
 
+{% if php_version|version_compare('7.1', '>=') -%}
+; session.sid_bits_per_character
+{% else -%}
 ; session.hash_bits_per_character
+{% endif %}
 ;   Default Value: 4
 ;   Development Value: 5
 ;   Production Value: 5
@@ -157,11 +161,6 @@
 ;   Default Value: Off
 ;   Development Value: On
 ;   Production Value: Off
-
-; url_rewriter.tags
-;   Default Value: "a=href,area=href,frame=src,form=,fieldset="
-;   Development Value: "a=href,area=href,frame=src,input=src,form=fakeentry"
-;   Production Value: "a=href,area=href,frame=src,input=src,form=fakeentry"
 
 ; variables_order
 ;   Default Value: "EGPCS"
@@ -204,9 +203,11 @@ engine = {{ 'On' if php_cfg.engine else 'Off' }}
 ; http://php.net/short-open-tag
 short_open_tag = {{ 'On' if php_cfg.short_open_tag else 'Off' }}
 
+{% if php_version|version_compare('7.0', '<') and php_cfg.asp_tags is defined -%}
 ; Allow ASP-style <% %> tags.
 ; http://php.net/asp-tags
 asp_tags = {{ 'On' if php_cfg.asp_tags else 'Off' }}
+{% endif %}
 
 ; The number of significant digits displayed in floating point numbers.
 ; http://php.net/precision
@@ -252,6 +253,29 @@ output_buffering = {{ php_cfg.output_buffering }}
 ;output_handler =
 {% if php_cfg.output_handler is defined -%}
 output_handler = {{ php_cfg.output_handler }}
+{% endif %}
+
+; URL rewriter function rewrites URL on the fly by using
+; output buffer. You can set target tags by this configuration.
+; "form" tag is special tag. It will add hidden input tag to pass values.
+; Refer to session.trans_sid_tags for usage.
+; Default Value: "form="
+; Development Value: "form="
+; Production Value: "form="
+;url_rewriter.tags="form="
+{% if php_cfg.url_rewriter is defined and php_cfg.url_rewriter.tags is defined -%}
+url_rewriter.tags = "{{ php_cfg.url_rewriter.tags }}"
+{% endif %}
+
+; URL rewriter will not rewrites absolute URL nor form by default. To enable
+; absolute URL rewrite, allowed hosts must be defined at RUNTIME.
+; Refer to session.trans_sid_hosts for more details.
+; Default Value: ""
+; Development Value: ""
+; Production Value: ""
+;url_rewriter.hosts=""
+{% if php_cfg.url_rewriter is defined and php_cfg.url_rewriter.hosts is defined -%}
+url_rewriter.hosts = "{{ php_cfg.url_rewriter.hosts }}"
 {% endif %}
 
 ; Transparent output compression using the zlib library
@@ -301,12 +325,14 @@ unserialize_callback_func = {{ php_cfg.unserialize_callback_func }}
 ; When floats & doubles are serialized store serialize_precision significant
 ; digits after the floating point. The default value ensures that when floats
 ; are decoded with unserialize, the data will remain the same.
+; The value is also used for json_encode when encoding double values.
+; If -1 is used, then dtoa mode 0 is used which automatically select the best
+; precision.
 serialize_precision = {{ php_cfg.serialize_precision }}
 
 ; open_basedir, if set, limits all file operations to the defined directory
 ; and below.  This directive makes most sense if used in a per-directory
-; or per-virtualhost web server configuration file. This directive is
-; *NOT* affected by whether Safe Mode is turned On or Off.
+; or per-virtualhost web server configuration file.
 ; http://php.net/open-basedir
 ;open_basedir =
 {% if php_cfg.open_basedir is defined -%}
@@ -314,14 +340,12 @@ open_basedir = {{ php_cfg.open_basedir }}
 {% endif %}
 
 ; This directive allows you to disable certain functions for security reasons.
-; It receives a comma-delimited list of function names. This directive is
-; *NOT* affected by whether Safe Mode is turned On or Off.
+; It receives a comma-delimited list of function names.
 ; http://php.net/disable-functions
 disable_functions = {{ php_cfg.disable_functions }}
 
 ; This directive allows you to disable certain classes for security reasons.
-; It receives a comma-delimited list of class names. This directive is
-; *NOT* affected by whether Safe Mode is turned On or Off.
+; It receives a comma-delimited list of class names.
 ; http://php.net/disable-classes
 disable_classes = {{ php_cfg.disable_classes }}
 
@@ -645,7 +669,7 @@ error_append_string = {{ php_cfg.error_append_string }}
 ; http://php.net/error-log
 ; Example:
 ;error_log = php_errors.log
-; Log errors to syslog (Event Log on Windows).
+; Log errors to syslog.
 ;error_log = syslog
 {% if php_cfg.error_log is defined -%}
 error_log = {{ php_cfg.error_log }}
@@ -690,20 +714,20 @@ arg_separator.input = {{ php_cfg.arg_separator.input }}
 ; Development Value: "GPCS"
 ; Production Value: "GPCS";
 ; http://php.net/variables-order
-variables_order = {{ php_cfg.variables_order }}
+variables_order = "{{ php_cfg.variables_order }}"
 
-; This directive determines which super global data (G,P,C,E & S) should
-; be registered into the super global array REQUEST. If so, it also determines
-; the order in which that data is registered. The values for this directive are
-; specified in the same manner as the variables_order directive, EXCEPT one.
-; Leaving this value empty will cause PHP to use the value set in the
-; variables_order directive. It does not mean it will leave the super globals
-; array REQUEST empty.
+; This directive determines which super global data (G,P & C) should be
+; registered into the super global array REQUEST. If so, it also determines
+; the order in which that data is registered. The values for this directive
+; are specified in the same manner as the variables_order directive,
+; EXCEPT one. Leaving this value empty will cause PHP to use the value set
+; in the variables_order directive. It does not mean it will leave the super
+; globals array REQUEST empty.
 ; Default Value: None
 ; Development Value: "GP"
 ; Production Value: "GP"
 ; http://php.net/request-order
-request_order = {{ php_cfg.request_order }}
+request_order = "{{ php_cfg.request_order }}"
 
 ; This directive determines whether PHP registers $argv & $argc each time it
 ; runs. $argv contains an array of all the arguments passed to PHP when a script
@@ -754,17 +778,16 @@ auto_prepend_file = {{ php_cfg.auto_prepend_file }}
 ; http://php.net/auto-append-file
 auto_append_file = {{ php_cfg.auto_append_file }}
 
-; By default, PHP will output a character encoding using
-; the Content-type: header.  To disable sending of the charset, simply
-; set it to be empty.
+; By default, PHP will output a media type using the Content-Type header. To
+; disable this, simply set it to be empty.
 ;
-; PHP's built-in default is text/html
+; PHP's built-in default media type is set to text/html.
 ; http://php.net/default-mimetype
-default_mimetype = {{ php_cfg.default_mimetype }}
+default_mimetype = "{{ php_cfg.default_mimetype }}"
 
 ; PHP's default character set is set to UTF-8.
 ; http://php.net/default-charset
-default_charset = {{ php_cfg.default_charset }}
+default_charset = "{{ php_cfg.default_charset }}"
 
 ; PHP internal character encoding is set to empty.
 ; If empty, default_charset is used.
@@ -775,6 +798,7 @@ internal_encoding = {{ php_cfg.internal_encoding }}
 {% endif %}
 
 ; PHP input character encoding is set to empty.
+; If empty, default_charset is used.
 ; http://php.net/input-encoding
 ;input_encoding =
 {% if php_cfg.internal_encoding is defined -%}
@@ -782,7 +806,7 @@ input_encoding = {{ php_cfg.input_encoding }}
 {% endif %}
 
 ; PHP output character encoding is set to empty.
-; mbstring or iconv output handler is used.
+; If empty, default_charset is used.
 ; See also output_buffer.
 ; http://php.net/output-encoding
 ;output_encoding =
@@ -790,6 +814,7 @@ input_encoding = {{ php_cfg.input_encoding }}
 output_encoding = {{ php_cfg.output_encoding }}
 {% endif %}
 
+{% if php_version|version_compare('7.0', '<')  -%}
 ; Always populate the $HTTP_RAW_POST_DATA variable. PHP's default behavior is
 ; to disable this feature and it will be removed in a future version.
 ; If post reading is disabled through enable_post_data_reading,
@@ -799,13 +824,14 @@ output_encoding = {{ php_cfg.output_encoding }}
 {% if php_cfg.always_populate_raw_post_data is defined -%}
 always_populate_raw_post_data = {{ php_cfg.always_populate_raw_post_data }}
 {% endif %}
+{% endif %}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Paths and Directories ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; UNIX: "/path1:/path2"
-;include_path = ".:/usr/share/php"
+;include_path = ".:/php/includes"
 ;
 ; Windows: "\path1;\path2"
 ;include_path = ".;c:\php\includes"
@@ -890,6 +916,14 @@ cgi.redirect_status_env = {{ php_cfg.cgi.redirect_status_env }}
 cgi.fix_pathinfo = {{ php_cfg.cgi.fix_pathinfo }}
 {% endif %}
 
+; if cgi.discard_path is enabled, the PHP CGI binary can safely be placed outside
+; of the web tree and people will not be able to circumvent .htaccess security.
+; http://php.net/cgi.dicard-path
+;cgi.discard_path=1
+{% if php_cfg.cgi is defined and php_cfg.cgi.discard_path is defined -%}
+cgi.discard_path = {{ php_cfg.cgi.discard_path }}
+{% endif %}
+
 ; FastCGI under IIS (on WINNT based OS) supports the ability to impersonate
 ; security tokens of the calling client.  This allows IIS to define the
 ; security context that the request runs under.  mod_fastcgi under Apache
@@ -917,6 +951,17 @@ fastcgi.logging = {{ php_cfg.fastcgi.logging }}
 ;cgi.rfc2616_headers = 0
 {% if php_cfg.cgi is defined and php_cfg.cgi.rfc2616_headers is defined -%}
 cgi.rfc2616_headers = {{ php_cfg.cgi.rfc2616_headers }}
+{% endif %}
+
+
+; cgi.check_shebang_line controls whether CGI PHP checks for line starting with #!
+; (shebang) at the top of the running script. This line might be needed if the
+; script support running both as stand-alone script and via PHP CGI<. PHP in CGI
+; mode skips this line and ignores its content if this directive is turned on.
+; http://php.net/cgi.check-shebang-line
+;cgi.check_shebang_line=1
+{% if php_cfg.cgi is defined and php_cfg.cgi.check_shebang_line is defined -%}
+cgi.check_shebang_line = {{ php_cfg.cgi.check_shebang_line }}
 {% endif %}
 
 ;;;;;;;;;;;;;;;;
@@ -1099,6 +1144,7 @@ intl.default_locale = {{ php_cfg.intl.default_locale }}
 ; happens within intl functions. The value is the level of the error produced.
 ; Default is 0, which does not produce any errors.
 ;intl.error_level = E_WARNING
+;intl.use_exceptions = 0
 {% if php_cfg.intl is defined and php_cfg.intl.error_level is defined -%}
 intl.error_level = {{ php_cfg.intl.error_level }}
 {% endif %}
@@ -1126,6 +1172,10 @@ pcre.backtrack_limit = {{ php_cfg.pcre.backtrack_limit }}
 {% if php_cfg.pcre is defined and php_cfg.pcre.recursion_limit is defined -%}
 pcre.recursion_limit = {{ php_cfg.pcre.recursion_limit }}
 {% endif %}
+
+;Enables or disables JIT compilation of patterns. This requires the PCRE
+;library to be compiled with JIT support.
+pcre.jit = {{ php_cfg.pcre.jit }}
 
 [Pdo]
 ; Whether to pool ODBC connections. Can be one of "strict", "relaxed" or "off"
@@ -1169,26 +1219,15 @@ phar.cache_list = {{ 'On' if php_cfg.php_cfg.phar.cache_list else 'Off' }}
 {% endif %}
 
 [mail function]
-; For Win32 only.
-; http://php.net/smtp
-SMTP = localhost
-; http://php.net/smtp-port
-smtp_port = 25
-
-; For Win32 only.
-; http://php.net/-from
-;sendmail_from = me@example.com
-
 ; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
 ; http://php.net/sendmail-path
-;sendmail_path =
 {% if php_cfg.sendmail_path is defined -%}
 sendmail_path = {{ php_cfg.sendmail_path }}
 {% endif %}
 
 ; Force the addition of the specified parameters to be passed as extra parameters
 ; to the sendmail binary. These parameters will always replace the value of
-; the 5th parameter to mail(), even in safe mode.
+; the 5th parameter to mail().
 ;mail.force_extra_parameters =
 {% if php_cfg.mail.force_extra_parameters is defined -%}
 mail.force_extra_parameters = {{ php_cfg.mail.force_extra_parameters }}
@@ -1303,14 +1342,15 @@ ibase.default_charset = {{ php_cfg.ibase.default_charset }}
 {% endif %}
 
 ; Default timestamp format.
-ibase.timestampformat = {{ php_cfg.ibase.timestampformat }}
+ibase.timestampformat = "{{ php_cfg.ibase.timestampformat }}"
 
 ; Default date format.
-ibase.dateformat = {{ php_cfg.ibase.dateformat }}
+ibase.dateformat = "{{ php_cfg.ibase.dateformat }}"
 
 ; Default time format.
-ibase.timeformat = {{ php_cfg.ibase.timeformat }}
+ibase.timeformat = "{{ php_cfg.ibase.timeformat }}"
 
+{% if php_version|version_compare('7.0', '<')  -%}
 [MySQL]
 ; Allow accessing, from PHP's perspective, local files with LOAD DATA statements
 ; http://php.net/mysql.allow_local_infile
@@ -1368,7 +1408,7 @@ mysql.connect_timeout = {{ php_cfg.mysql.connect_timeout }}
 ; SQL-Errors will be displayed.
 ; http://php.net/mysql.trace-mode
 mysql.trace_mode = {{ 'On' if php_cfg.mysql.trace_mode else 'Off' }}
-
+{% endif %}
 [MySQLi]
 
 ; Maximum number of persistent links.  -1 means no limit.
@@ -1436,6 +1476,28 @@ mysqlnd.collect_statistics = {{ 'On' if php_cfg.mysqlnd.collect_statistics else 
 ; http://php.net/mysqlnd.collect_memory_statistics
 mysqlnd.collect_memory_statistics = {{ 'On' if php_cfg.mysqlnd.collect_memory_statistics else 'Off' }}
 
+; Records communication from all extensions using mysqlnd to the specified log
+; file.
+; http://php.net/mysqlnd.debug
+;mysqlnd.debug =
+{% if php_cfg.mysqlnd.debug is defined -%}
+mysqlnd.debug ={{ 'On' if php_cfg.mysqlnd.debug else 'Off' }}
+{% endif %}
+
+; Defines which queries will be logged.
+; http://php.net/mysqlnd.log_mask
+;mysqlnd.log_mask = 0
+{% if php_cfg.mysqlnd.log_mask is defined -%}
+mysqlnd.log_mask = {{ php_cfg.mysqlnd.log_mask }}
+{% endif %}
+
+; Default size of the mysqlnd memory pool, which is used by result sets.
+; http://php.net/mysqlnd.mempool_default_size
+;mysqlnd.mempool_default_size = 16000
+{% if php_cfg.mysqlnd.mempool_default_size is defined -%}
+mysqlnd.mempool_default_size = {{ php_cfg.mysqlnd.mempool_default_size }}
+{% endif %}
+
 ; Size of a pre-allocated buffer used when sending commands to MySQL in bytes.
 ; http://php.net/mysqlnd.net_cmd_buffer_size
 ;mysqlnd.net_cmd_buffer_size = 2048
@@ -1451,84 +1513,19 @@ mysqlnd.net_cmd_buffer_size = {{ php_cfg.mysqlnd.net_cmd_buffer_size }}
 mysqlnd.net_read_buffer_size = {{ php_cfg.mysqlnd.net_read_buffer_size }}
 {% endif %}
 
-[OCI8]
-
-; Connection: Enables privileged connections using external
-; credentials (OCI_SYSOPER, OCI_SYSDBA)
-; http://php.net/oci8.privileged-connect
-;oci8.privileged_connect = Off
-{% if php_cfg.oci8 is defined and php_cfg.oci8.privileged_connect is defined -%}
-oci8.privileged_connect = {{ 'On' if php_cfg.oci8.privileged_connect else 'Off' }}
+; Timeout for network requests in seconds.
+; http://php.net/mysqlnd.net_read_timeout
+;mysqlnd.net_read_timeout = 31536000
+{% if php_cfg.mysqlnd.net_read_timeout is defined -%}
+mysqlnd.net_read_timeout = {{ php_cfg.mysqlnd.net_read_timeout }}
 {% endif %}
 
-; Connection: The maximum number of persistent OCI8 connections per
-; process. Using -1 means no limit.
-; http://php.net/oci8.max-persistent
-;oci8.max_persistent = -1
-{% if php_cfg.oci8 is defined and php_cfg.oci8.max_persistent is defined -%}
-oci8.max_persistent = {{ php_cfg.oci8.max_persistent }}
-{% endif %}
-
-; Connection: The maximum number of seconds a process is allowed to
-; maintain an idle persistent connection. Using -1 means idle
-; persistent connections will be maintained forever.
-; http://php.net/oci8.persistent-timeout
-;oci8.persistent_timeout = -1
-{% if php_cfg.oci8 is defined and php_cfg.oci8.persistent_timeout is defined -%}
-oci8.persistent_timeout = {{ php_cfg.oci8.persistent_timeout }}
-{% endif %}
-
-; Connection: The number of seconds that must pass before issuing a
-; ping during oci_pconnect() to check the connection validity. When
-; set to 0, each oci_pconnect() will cause a ping. Using -1 disables
-; pings completely.
-; http://php.net/oci8.ping-interval
-;oci8.ping_interval = 60
-{% if php_cfg.oci8 is defined and php_cfg.oci8.ping_interval is defined -%}
-oci8.ping_interval = {{ php_cfg.oci8.ping_interval }}
-{% endif %}
-
-; Connection: Set this to a user chosen connection class to be used
-; for all pooled server requests with Oracle 11g Database Resident
-; Connection Pooling (DRCP).  To use DRCP, this value should be set to
-; the same string for all web servers running the same application,
-; the database pool must be configured, and the connection string must
-; specify to use a pooled server.
-;oci8.connection_class =
-{% if php_cfg.oci8 is defined and php_cfg.oci8.connection_class is defined -%}
-oci8.connection_class = {{ php_cfg.oci8.connection_class }}
-{% endif %}
-
-; High Availability: Using On lets PHP receive Fast Application
-; Notification (FAN) events generated when a database node fails. The
-; database must also be configured to post FAN events.
-;oci8.events = Off
-{% if php_cfg.oci8 is defined and php_cfg.oci8.events is defined -%}
-oci8.events = {{ 'On' if php_cfg.oci8.events else 'Off' }}
-{% endif %}
-
-; Tuning: This option enables statement caching, and specifies how
-; many statements to cache. Using 0 disables statement caching.
-; http://php.net/oci8.statement-cache-size
-;oci8.statement_cache_size = 20
-{% if php_cfg.oci8 is defined and php_cfg.oci8.statement_cache_size is defined -%}
-oci8.statement_cache_size = {{ php_cfg.oci8.statement_cache_size }}
-{% endif %}
-
-; Tuning: Enables statement prefetching and sets the default number of
-; rows that will be fetched automatically after statement execution.
-; http://php.net/oci8.default-prefetch
-;oci8.default_prefetch = 100
-{% if php_cfg.oci8 is defined and php_cfg.oci8.default_prefetch is defined -%}
-oci8.default_prefetch = {{ php_cfg.oci8.default_prefetch }}
-{% endif %}
-
-; Compatibility. Using On means oci_close() will not close
-; oci_connect() and oci_new_connect() connections.
-; http://php.net/oci8.old-oci-close-semantics
-;oci8.old_oci_close_semantics = Off
-{% if php_cfg.oci8 is defined and php_cfg.oci8.old_oci_close_semantics is defined -%}
-oci8.old_oci_close_semantics = {{ 'On' if php_cfg.oci8.old_oci_close_semantics else 'Off' }}
+; SHA-256 Authentication Plugin related. File with the MySQL server public RSA
+; key.
+; http://php.net/mysqlnd.sha256_server_public_key
+;mysqlnd.sha256_server_public_key =
+{% if php_cfg.mysqlnd.sha256_server_public_key is defined -%}
+mysqlnd.sha256_server_public_key = {{ php_cfg.mysqlnd.sha256_server_public_key }}
 {% endif %}
 
 [PostgreSQL]
@@ -1558,60 +1555,6 @@ pgsql.ignore_notice = {{ php_cfg.pgsql.ignore_notice }}
 ; Unless pgsql.ignore_notice=0, module cannot log notice message.
 ; http://php.net/pgsql.log-notice
 pgsql.log_notice = {{ php_cfg.pgsql.log_notice }}
-
-[Sybase-CT]
-; Allow or prevent persistent links.
-; http://php.net/sybct.allow-persistent
-sybct.allow_persistent = {{ 'On' if php_cfg.sybct.allow_persistent else 'Off' }}
-
-; Maximum number of persistent links.  -1 means no limit.
-; http://php.net/sybct.max-persistent
-sybct.max_persistent = {{ php_cfg.sybct.max_persistent }}
-
-; Maximum number of links (persistent + non-persistent).  -1 means no limit.
-; http://php.net/sybct.max-links
-sybct.max_links = {{ php_cfg.sybct.max_links }}
-
-; Minimum server message severity to display.
-; http://php.net/sybct.min-server-severity
-sybct.min_server_severity = {{ php_cfg.sybct.min_server_severity }}
-
-; Minimum client message severity to display.
-; http://php.net/sybct.min-client-severity
-sybct.min_client_severity = {{ php_cfg.sybct.min_client_severity }}
-
-; Set per-context timeout
-; http://php.net/sybct.timeout
-;sybct.timeout=
-{% if php_cfg.sybct.timeout is defined -%}
-sybct.timeout = {{ php_cfg.sybct.timeout }}
-{% endif %}
-
-;sybct.packet_size
-{% if php_cfg.sybct.packet_size is defined -%}
-sybct.packet_size = {{ php_cfg.sybct.packet_size }}
-{% endif %}
-
-; The maximum time in seconds to wait for a connection attempt to succeed before returning failure.
-; Default: one minute
-;sybct.login_timeout=
-{% if php_cfg.sybct.login_timeout is defined -%}
-sybct.login_timeout = {{ php_cfg.sybct.login_timeout }}
-{% endif %}
-
-; The name of the host you claim to be connecting from, for display by sp_who.
-; Default: none
-;sybct.hostname=
-{% if php_cfg.sybct.hostname is defined -%}
-sybct.hostname = {{ php_cfg.sybct.hostname }}
-{% endif %}
-
-; Allows you to define how often deadlocks are to be retried. -1 means "forever".
-; Default: 0
-;sybct.deadlock_retry_count=
-{% if php_cfg.sybct.deadlock_retry_count is defined -%}
-sybct.deadlock_retry_count = {{ php_cfg.sybct.deadlock_retry_count }}
-{% endif %}
 
 [bcmath]
 ; Number of decimal digits for all bcmath functions.
@@ -1661,7 +1604,7 @@ session.save_handler = {{ php_cfg.session.save_handler }}
 ; RPM note : session directory must be owned by process owner
 ; for mod_php, see /etc/httpd/conf.d/php.conf
 ; for php-fpm, see /etc/php-fpm.d/*conf
-;session.save_path = "/var/lib/php5/sessions"
+;session.save_path = "/tmp"
 {% if php_cfg.session.save_path is defined -%}
 session.save_path = {{ php_cfg.session.save_path }}
 {% endif %}
@@ -1764,6 +1707,7 @@ session.gc_maxlifetime = {{ php_cfg.session.gc_maxlifetime }}
 ; http://php.net/session.referer-check
 session.referer_check = {{ php_cfg.session.referer_check }}
 
+{% if php_version|version_compare('7.1', '<') -%}
 ; How many bytes to read from the file.
 ; http://php.net/session.entropy-length
 ;session.entropy_length = 32
@@ -1781,6 +1725,7 @@ session.entropy_length = {{ php_cfg.session.entropy_length }}
 ;session.entropy_file = /dev/urandom
 {% if php_cfg.session.entropy_file is defined -%}
 session.entropy_file = {{ php_cfg.session.entropy_file }}
+{% endif %}
 {% endif %}
 
 ; Set to {nocache,private,public,} to determine HTTP caching aspects
@@ -1804,6 +1749,50 @@ session.cache_expire = {{ php_cfg.session.cache_expire }}
 ; http://php.net/session.use-trans-sid
 session.use_trans_sid = {{ 'On' if php_cfg.session.use_trans_sid else 'Off' }}
 
+{% if php_version|version_compare('7.1', '>=') -%}
+; Set session ID character length. This value could be between 22 to 256.
+; Shorter length than default is supported only for compatibility reason.
+; Users should use 32 or more chars.
+; http://php.net/session.sid_length
+; Default Value: 32
+; Development Value: 26
+; Production Value: 26
+{% if php_cfg.session.sid_length is defined -%}
+session.sid_length = {{ php_cfg.session.sid_length }}
+{% endif %}
+
+; The URL rewriter will look for URLs in a defined set of HTML tags.
+; <form> is special; if you include them here, the rewriter will
+; add a hidden <input> field with the info which is otherwise appended
+; to URLs. <form> tag's action attribute URL will not be modified
+; unless it is specified.
+; Note that all valid entries require a "=", even if no value follows.
+; Default Value: "a=href,area=href,frame=src,form="
+; Development Value: "a=href,area=href,frame=src,form="
+; Production Value: "a=href,area=href,frame=src,form="
+; http://php.net/url-rewriter.tags
+{% if php_cfg.session.trans_sid_tags is defined -%}
+session.trans_sid_tags = "{{ php_cfg.session.trans_sid_tags }}"
+{% endif %}
+
+; URL rewriter does not rewrite absolute URLs by default.
+; To enable rewrites for absolute pathes, target hosts must be specified
+; at RUNTIME. i.e. use ini_set()
+; <form> tags is special. PHP will check action attribute's URL regardless
+; of session.trans_sid_tags setting.
+; If no host is defined, HTTP_HOST will be used for allowed host.
+; Example value: php.net,www.php.net,wiki.php.net
+; Use "," for multiple hosts. No spaces are allowed.
+; Default Value: ""
+; Development Value: ""
+; Production Value: ""
+;session.trans_sid_hosts=""
+{% if php_cfg.session.trans_sid_hosts is defined -%}
+session.trans_sid_hosts = "{{ php_cfg.session.trans_sid_hosts }}"
+{% endif %}
+{% endif %}
+
+{% if php_version|version_compare('7.1', '<') and php_cfg.session.hash_function is defined -%}
 ; Select a hash function for use in generating session ids.
 ; Possible Values
 ;   0  (MD5 128 bits)
@@ -1813,6 +1802,8 @@ session.use_trans_sid = {{ 'On' if php_cfg.session.use_trans_sid else 'Off' }}
 ; function.
 ; http://php.net/session.hash-function
 session.hash_function = {{ php_cfg.session.hash_function }}
+{% endif %}
+
 
 ; Define how many bits are stored in each character when converting
 ; the binary hash data to something readable.
@@ -1824,18 +1815,12 @@ session.hash_function = {{ php_cfg.session.hash_function }}
 ; Development Value: 5
 ; Production Value: 5
 ; http://php.net/session.hash-bits-per-character
+{% if php_version|version_compare('7.1', '<') and php_cfg.session.hash_bits_per_character is defined -%}
 session.hash_bits_per_character = {{ php_cfg.session.hash_bits_per_character }}
-
-; The URL rewriter will look for URLs in a defined set of HTML tags.
-; form/fieldset are special; if you include them here, the rewriter will
-; add a hidden <input> field with the info which is otherwise appended
-; to URLs.  If you want XHTML conformity, remove the form entry.
-; Note that all valid entries require a "=", even if no value follows.
-; Default Value: "a=href,area=href,frame=src,form=,fieldset="
-; Development Value: "a=href,area=href,frame=src,input=src,form=fakeentry"
-; Production Value: "a=href,area=href,frame=src,input=src,form=fakeentry"
-; http://php.net/url-rewriter.tags
-url_rewriter.tags = "{{ php_cfg.url_rewriter.tags }}"
+{% endif %}
+{% if php_version|version_compare('7.1', '>=') and php_cfg.session.sid_bits_per_character is defined -%}
+session.sid_bits_per_character = {{ php_cfg.session.sid_bits_per_character }}
+{% endif %}
 
 ; Enable upload progress tracking in $_SESSION
 ; Default Value: On
@@ -1900,83 +1885,25 @@ session.upload_progress.freq = "{{ php_cfg.session.upload_progress.freq }}"
 session.upload_progress.min_freq = {{ php_cfg.session.upload_progress.min_freq }}
 {% endif %}
 
-[MSSQL]
-; Allow or prevent persistent links.
-mssql.allow_persistent = {{ 'On' if php_cfg.mssql.allow_persistent else 'Off' }}
-
-; Maximum number of persistent links.  -1 means no limit.
-mssql.max_persistent = {{ php_cfg.mssql.max_persistent }}
-
-; Maximum number of links (persistent+non persistent).  -1 means no limit.
-mssql.max_links = {{ php_cfg.mssql.max_links }}
-
-; Minimum error severity to display.
-mssql.min_error_severity = {{ php_cfg.mssql.min_error_severity }}
-
-; Minimum message severity to display.
-mssql.min_message_severity = {{ php_cfg.mssql.min_message_severity }}
-
-; Compatibility mode with old versions of PHP 3.0.
-mssql.compatibility_mode = {{ 'On' if php_cfg.mssql.compatibility_mode else 'Off' }}
-
-; Connect timeout
-;mssql.connect_timeout = 5
-{% if php_cfg.mssql.connect_timeout is defined -%}
-mssql.connect_timeout = {{ php_cfg.mssql.connect_timeout }}
-{% endif %}
-
-; Query timeout
-;mssql.timeout = 60
-{% if php_cfg.mssql.timeout is defined -%}
-mssql.timeout = {{ php_cfg.mssql.timeout }}
-{% endif %}
-
-; Valid range 0 - 2147483647.  Default = 4096.
-;mssql.textlimit = 4096
-{% if php_cfg.mssql.textlimit is defined -%}
-mssql.textlimit = {{ php_cfg.mssql.textlimit }}
-{% endif %}
-
-; Valid range 0 - 2147483647.  Default = 4096.
-;mssql.textsize = 4096
-{% if php_cfg.mssql.textsize is defined -%}
-mssql.textsize = {{ php_cfg.mssql.textsize }}
-{% endif %}
-
-; Limits the number of records in each batch.  0 = all records in one batch.
-;mssql.batchsize = 0
-{% if php_cfg.mssql.batchsize is defined -%}
-mssql.batchsize = {{ php_cfg.mssql.batchsize }}
-{% endif %}
-
-; Specify how datetime and datetim4 columns are returned
-; On => Returns data converted to SQL server settings
-; Off => Returns values as YYYY-MM-DD hh:mm:ss
-;mssql.datetimeconvert = On
-{% if php_cfg.mssql.batchsize is defined -%}
-mssql.datetimeconvert = {{ 'On' if php_cfg.mssql.datetimeconvert else 'Off' }}
-{% endif %}
-
-; Use NT authentication when connecting to the server
-mssql.secure_connection = {{ 'On' if php_cfg.mssql.secure_connection else 'Off' }}
-
-; Specify max number of processes. -1 = library default
-; msdlib defaults to 25
-; FreeTDS defaults to 4096
-;mssql.max_procs = -1
-{% if php_cfg.mssql.max_procs is defined -%}
-mssql.max_procs = {{ php_cfg.mssql.max_procs }}
-{% endif %}
-
-; Specify client character set.
-; If empty or not set the client charset from freetds.conf is used
-; This is only used when compiled with FreeTDS
-;mssql.charset = "ISO-8859-1"
-{% if php_cfg.mssql.charset is defined -%}
-mssql.charset = "{{ php_cfg.mssql.charset }}"
+; Only write session data when session data is changed. Enabled by default.
+; http://php.net/session.lazy-write
+;session.lazy_write = On
+{% if php_cfg.session.lazy_write is defined -%}
+session.lazy_write = {{ 'On' if php_cfg.session.lazy_write else 'Off' }}
 {% endif %}
 
 [Assertion]
+; Switch whether to compile assertions at all (to have no overhead at run-time)
+; -1: Do not compile at all
+;  0: Jump over assertion at run-time
+;  1: Execute assertions
+; Changing from or to a negative value is only possible in php.ini! (For turning assertions on and off at run-time, see assert.active, when zend.assertions = 1)
+; Default Value: 1
+; Development Value: 1
+; Production Value: -1
+; http://php.net/zend.assertions
+zend.assertions = {{ php_cfg.zend.assertions }}
+
 ; Assert(expr); active by default.
 ; http://php.net/assert.active
 ;assert.active = On
@@ -1984,7 +1911,14 @@ mssql.charset = "{{ php_cfg.mssql.charset }}"
 assert.active = {{ 'On' if php_cfg.assert.active else 'Off' }}
 {% endif %}
 
-; Issue a PHP warning for each failed assertion.
+; Throw an AssertationException on failed assertions
+; http://php.net/assert.exception
+;assert.exception = On
+{% if php_cfg.assert is defined and php_cfg.assert.exception is defined -%}
+assert.exception = {{ 'On' if php_cfg.assert.exception else 'Off' }}
+{% endif %}
+
+; Issue a PHP warning for each failed assertion. (Overridden by assert.exception if active)
 ; http://php.net/assert.warning
 ;assert.warning = On
 {% if php_cfg.assert is defined and php_cfg.assert.warning is defined -%}
@@ -2013,34 +1947,9 @@ assert.callback = {{ php_cfg.assert.callback }}
 assert.quiet_eval = {{ php_cfg.assert.quiet_eval }}
 {% endif %}
 
-[COM]
-; path to a file containing GUIDs, IIDs or filenames of files with TypeLibs
-; http://php.net/com.typelib-file
-;com.typelib_file =
-
-; allow Distributed-COM calls
-; http://php.net/com.allow-dcom
-;com.allow_dcom = true
-
-; autoregister constants of a components typlib on com_load()
-; http://php.net/com.autoregister-typelib
-;com.autoregister_typelib = true
-
-; register constants casesensitive
-; http://php.net/com.autoregister-casesensitive
-;com.autoregister_casesensitive = false
-
-; show warnings on duplicate constant registrations
-; http://php.net/com.autoregister-verbose
-;com.autoregister_verbose = true
-
-; The default character set code-page to use when passing strings to and from COM objects.
-; Default: system ANSI code page
-;com.code_page=
-
 [mbstring]
 ; language for internal character representation.
-; This affects mb_send_mail() and mbstrig.detect_order.
+; This affects mb_send_mail() and mbstring.detect_order.
 ; http://php.net/mbstring.language
 ;mbstring.language = Japanese
 {% if php_cfg.mbstring is defined and php_cfg.mbstring.language is defined -%}
@@ -2075,6 +1984,7 @@ mbstring.http_input = {{ php_cfg.mbstring.http_input }}
 ; The precedence is: default_charset < output_encoding < mbstring.http_output
 ; To use an output encoding conversion, mbstring's output handler must be set
 ; otherwise output encoding conversion cannot be performed.
+; http://php.net/mbstring.http-output
 ;mbstring.http_output =
 {% if php_cfg.mbstring is defined and php_cfg.mbstring.http_output is defined -%}
 mbstring.http_output = {{ php_cfg.mbstring.http_output }}
@@ -2092,7 +2002,7 @@ mbstring.encoding_translation = {{ 'On' if php_cfg.mbstring.encoding_translation
 {% endif %}
 
 ; automatic encoding detection order.
-; "auto" detect order is changed accoding to mbstring.language
+; "auto" detect order is changed according to mbstring.language
 ; http://php.net/mbstring.detect-order
 ;mbstring.detect_order = auto
 {% if php_cfg.mbstring is defined and php_cfg.mbstring.detect_order is defined -%}
@@ -2141,7 +2051,7 @@ mbstring.http_output_conv_mimetype = {{ php_cfg.mbstring.http_output_conv_mimety
 ; a gd image. The warning will then be displayed as notices
 ; disabled by default
 ; http://php.net/gd.jpeg-ignore-warning
-;gd.jpeg_ignore_warning = 0
+;gd.jpeg_ignore_warning = 1
 {% if php_cfg.gd is defined and php_cfg.gd.jpeg_ignore_warning is defined -%}
 gd.jpeg_ignore_warning = {{ 'On' if php_cfg.gd.jpeg_ignore_warning else 'Off' }}
 {% endif %}
@@ -2213,7 +2123,7 @@ soap.wsdl_cache_enabled = {{ php_cfg.soap.wsdl_cache_enabled }}
 ; RPM note : cache directory must be owned by process owner
 ; for mod_php, see /etc/httpd/conf.d/php.conf
 ; for php-fpm, see /etc/php-fpm.d/*conf
-soap.wsdl_cache_dir = {{ php_cfg.soap.wsdl_cache_dir }}
+soap.wsdl_cache_dir = "{{ php_cfg.soap.wsdl_cache_dir }}"
 
 ; (time to live) Sets the number of second while cached file will be used
 ; instead of original one.
@@ -2470,9 +2380,9 @@ openssl.capath = {{ php_cfg.openssl.capath }}
 {% endif %}
 
 {% if php_cfg.extra_parameters is defined -%}
-{% for section, options in php_cfg.extra_parameters.iteritems() -%}
+{% for section, options in php_cfg.extra_parameters.items() -%}
 [{{ section }}]
-{% for option_name, option_value in options.iteritems() -%}
+{% for option_name, option_value in options.items() -%}
 {{ section }}.{{ option_name }} = {{ option_value }}
 {% endfor %}
 
