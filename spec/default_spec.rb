@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def e(value)
-  return Regexp.escape(value)
+  return Regexp.escape(value.is_a?(String) ? value : value.to_s)
 end
 
 def get_ini_value(value)
