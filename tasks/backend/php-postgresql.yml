@@ -1,45 +1,19 @@
-- name: add setup_saveloadlist function ansible management block(begin)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "function setup_saveloadlist\\(\\) \\{"
-    line: //BEGIN setup_saveloadlist function ANSIBLE MANAGED BLOCK
-- name: add setup_saveloadlist function ansible management block(end)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "function setup_import\\(\\) \\{"
-    line: //END setup_saveloadlist function ANSIBLE MANAGED BLOCK
-- name: replace setup_saveloadlist function
+- name: replace save action database setting
   blockinfile:
     path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    marker: //{mark} setup_saveloadlist function ANSIBLE MANAGED BLOCK
+    marker: "# {mark} saveloadlist ANSIBLE MANAGED BLOCK"
     block: |
-      function setup_saveloadlist() {
-          define("HOST_ADDR", "{{ wwwsqldesigner_backend_postgresql_cfg.save.host }}");
-          define("PORT_NO", "{{ wwwsqldesigner_backend_postgresql_cfg.save.port|default(5432) }}");
-          define("DATABASE_NAME", "{{ wwwsqldesigner_backend_postgresql_cfg.save.database }}");
-          define("USER_NAME", "{{ wwwsqldesigner_backend_postgresql_cfg.save.user }}");
-          define("PASSWORD", "{{ wwwsqldesigner_backend_postgresql_cfg.save.password }}");
-          define("TABLE", "{{ wwwsqldesigner_backend_postgresql_cfg.save.table|default('wwwsqldesigner') }}");
-      }
-- name: add setup_import function ansible management block(begin)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "function setup_import\\(\\) \\{"
-    line: //BEGIN setup_import function ANSIBLE MANAGED BLOCK
-- name: add setup_import function ansible management block(end)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "function connect\\(\\) \\{"
-    line: //END setup_import function ANSIBLE MANAGED BLOCK
-- name: replace setup_import function
+      define("SERVER", "localhost");
+      define("USER", "");
+      define("PASSWORD", "");
+      define("DB", "home");
+      define("TABLE", "wwwsqldesigner");
+- name: replace impoer action database setting
   blockinfile:
     path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    marker: //{mark} setup_import function ANSIBLE MANAGED BLOCK
+    marker: "# {mark} import ANSIBLE MANAGED BLOCK"
     block: |
-      function setup_import() {
-          define("HOST_ADDR", "{{ wwwsqldesigner_backend_postgresql_cfg.import.host }}");
-          define("PORT_NO", "{{ wwwsqldesigner_backend_postgresql_cfg.import.port|default(5432) }}");
-          define("DATABASE_NAME", "{{ wwwsqldesigner_backend_postgresql_cfg.import.database }}");
-          define("USER_NAME", "{{ wwwsqldesigner_backend_postgresql_cfg.import.user }}");
-          define("PASSWORD", "{{ wwwsqldesigner_backend_postgresql_cfg.import.password }}");
-      }
+      define("SERVER","{{ wwwsqldesigner_backend_mysql_cfg.import.host }}");
+      define("USER","{{ wwwsqldesigner_backend_mysql_cfg.import.user }}");
+      define("PASSWORD","{{ wwwsqldesigner_backend_mysql_cfg.import.password }}");
+      define("DB","{{ wwwsqldesigner_backend_mysql_cfg.save.database|default('information_schema') }}");

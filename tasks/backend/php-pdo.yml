@@ -1,34 +1,42 @@
-- name: add getConfig method ansible management block(begin)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "public static function getConfig\\(\\$id\\)"
-    line: //BEGIN getConfig method ANSIBLE MANAGED BLOCK
-- name: add getConfig method ansible management block(end)
-  lineinfile:
-    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    insertbefore: "public \\$what = '';"
-    line: //END getConfig method ANSIBLE MANAGED BLOCK
-- name: replace getConfig method
+- name: replace save action database setting
   blockinfile:
     path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
-    marker: //{mark} getConfig method ANSIBLE MANAGED BLOCK
+    marker: "# {mark} saveloadlist ANSIBLE MANAGED BLOCK"
     block: |
-      public static function getConfig($id)
-      {
-          switch($id)
-          {
-              case 'saveloadlist':
-                  $type = '{{ wwwsqldesigner_backend_pdo_cfg.save.type }}';
-                  $dsn = '{{ wwwsqldesigner_backend_pdo_cfg.save.dsn }}';
-                  $user = '{{ wwwsqldesigner_backend_pdo_cfg.save.user }}';
-                  $password = '{{ wwwsqldesigner_backend_pdo_cfg.save.password }}';
-                  $table = '{{ wwwsqldesigner_backend_pdo_cfg.save.table|default('wwwsqldesigner') }}';
-                  return array($type, $dsn, $user, $password, $table);
-              case 'import':
-                  $type = '{{ wwwsqldesigner_backend_pdo_cfg.import.type }}';
-                  $dsn = '{{ wwwsqldesigner_backend_pdo_cfg.import.dsn }}';
-                  $user = '{{ wwwsqldesigner_backend_pdo_cfg.import.user }}';
-                  $password = '{{ wwwsqldesigner_backend_pdo_cfg.import.password }}';
-                  return array($type, $dsn, $user, $password);
-          }
-      }
+      $type = '{{ wwwsqldesigner_backend_pdo_cfg.save.type }}';
+      $dsn = '{{ wwwsqldesigner_backend_pdo_cfg.save.dsn }}';
+      $user = '{{ wwwsqldesigner_backend_pdo_cfg.save.user }}';
+      $password = '{{ wwwsqldesigner_backend_pdo_cfg.save.password }}';
+      $table = '{{ wwwsqldesigner_backend_pdo_cfg.save.table|default('wwwsqldesigner') }}';
+- name: replace import action database setting
+  blockinfile:
+    path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
+    marker: "# {mark} import ANSIBLE MANAGED BLOCK"
+    block: |
+      $type = '{{ wwwsqldesigner_backend_pdo_cfg.import.type }}';
+      $dsn = '{{ wwwsqldesigner_backend_pdo_cfg.import.dsn }}';
+      $user = '{{ wwwsqldesigner_backend_pdo_cfg.import.user }}';
+      $password = '{{ wwwsqldesigner_backend_pdo_cfg.import.password }}';
+- block:
+    - name: install dependency packages
+      yum:
+        name: MySQL-python
+    - name: extract database name
+      set_fact:
+        save_database_name: "{{ wwwsqldesigner_backend_pdo_cfg.save.dsn|regex_replace('.+dbname=([^;]+).*','\\1') }}"
+    - name: create WWW SQL Designer database
+      mysql_db:
+        name: "{{ save_database_name }}"
+    - name: import WWW SQL Designer database
+      mysql_db:
+        name: "{{ save_database_name }}"
+        state: import
+        target: "{{ wwwsqldesigner_dest }}/backend/php-mysql/database.sql"
+  when: |
+    wwwsqldesigner_backend_pdo_cfg.save.type == 'mysql'
+    and
+    (
+      'host=localhost' in wwwsqldesigner_backend_pdo_cfg.save.dsn
+      or
+      'host=127.0.0.1' in wwwsqldesigner_backend_pdo_cfg.save.dsn
+    )

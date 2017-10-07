@@ -1,5 +1,5 @@
 ---
-wwwsqldesigner_repo: https://github.com/ondras/wwwsqldesigner.git
+wwwsqldesigner_repo: https://github.com/wate/wwwsqldesigner.git
 wwwsqldesigner_version: master
 
 wwwsqldesigner_cfg:
@@ -49,7 +49,7 @@ wwwsqldesigner_cfg:
     - asp-file
     - web2py
   DEFAULT_BACKEND:
-    - php-mysql
+    - php-pdo
   RELATION_THICKNESS: 2
   RELATION_SPACING: 15
   RELATION_COLORS:
@@ -69,32 +69,33 @@ wwwsqldesigner_backend_pdo_cfg:
     type: mysql
     dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
     user: wwwsqldesigner
-    password: xxx
+    password: xxxx
   import:
     type: mysql
-    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
-    user: wwwsqldesigner
-    password: xxx
+    dsn: "mysql:dbname=information_schema;host=localhost"
+    user: username
+    password: xxxx
 
 wwwsqldesigner_backend_mysql_cfg:
   save:
     host: localhost
-    database: home
-    user:
-    password:
+    database: wwwsqldesigner
+    user: wwwsqldesigner
+    password: xxxx
   import:
     host: localhost
-    user:
-    password:
+    database: information_schema
+    user: username
+    password: xxxx
 
 wwwsqldesigner_backend_postgresql_cfg:
   save:
     host: localhost
-    database: wwwsqldesigner_save_pg
-    user: wwwsqldesigner_pg_save
-    password: wwwsqldesigner_save_p@55w0rd
+    database: wwwsqldesigner
+    user: wwwsqldesigner
+    password: xxxx
   import:
     host: localhost
-    database: wwwsqldesigner_import_pg
-    user: wwwsqldesigner_import_pg
-    password: wwwsqldesigner_import_p@55w0rd
+    database: information_schema
+    user: username
+    password: xxxx
