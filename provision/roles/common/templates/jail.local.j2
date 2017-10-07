@@ -1,6 +1,6 @@
-{% for section_name,overwrite_settings in fail2ban_jail_cfg.iteritems() %}
+{% for section_name,overwrite_settings in fail2ban_jail_cfg.items() %}
 [{{ section_name }}]
-{% for option_name, option_value in overwrite_settings.iteritems() %}
+{% for option_name, option_value in overwrite_settings.items() %}
 {{ option_name }} = {{ option_value }}
 {% endfor %}
 {% endfor %}
