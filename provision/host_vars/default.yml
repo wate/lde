@@ -5,10 +5,10 @@
 domain: example.com
 
 # --------------
-# MariaDBのrootパスワード
+# MariaDB/MySQLのrootパスワード
 # --------------
-mariadb_root_password: r00tP@55w0rd
-
+mariadb_root_password: &db_root_password r00tP@55w0rd
+mysql_root_password: *db_root_password
 # --------------
 # PHPのバージョン
 #
@@ -23,25 +23,29 @@ mariadb_root_password: r00tP@55w0rd
 php_version: 7.1
 
 # --------------
-# MariaDBの設定
+# MariaDB/MySQLの設定
 # --------------
 # デフォルトの文字コード
-mariadb_default_charset: utf8mb4
+mariadb_default_charset: &db_default_charset utf8mb4
+mysql_default_charset: *db_default_charset
+
 # デフォルトの文字照合順序
-mariadb_default_collation: utf8mb4_general_ci
+mariadb_default_collation: &db_default_collation utf8mb4_general_ci
+mysql_default_collation: *db_default_collation
 
 # --------------
-# MariaDB用のfirewalld設定
+# MariaDB/MySQL用のfirewalld設定
 # --------------
-mariadb_allow_host: "192.168.33.0/24"
+mariadb_allow_host: &db_allow_host "192.168.33.0/24"
+mysql_allow_host: *db_allow_host
 
 # --------------
 # データベース
 # --------------
-mariadb_databases:
+mariadb_databases: &db_databases
   # 開発用データベース
   - name: app_dev
-    password: app_dev_p@ssw0rd
+    password: app_dev_P@ssw0rd
     hosts:
       - "127.0.0.1"
       - localhost
@@ -49,31 +53,33 @@ mariadb_databases:
   # テスト用データベース
   - name: app_test
     # import_data: /vagrant/source/test_data.sql
-    password: app_test_p@ssw0rd
+    password: app_test_P@ssw0rd
     hosts:
       - "127.0.0.1"
       - localhost
       - "192.168.33.%"
   # ステージング用データベース
   - name: app_staging
-    password: app_staging_p@ssw0rd
+    password: app_staging_P@ssw0rd
     hosts:
       - "127.0.0.1"
       - localhost
       - "192.168.33.%"
   # 本番用データベース
   - name: app_prod
-    password: app_prod_p@55w0rd
+    password: app_prod_P@55w0rd
     hosts:
       - "127.0.0.1"
       - localhost
       - "192.168.33.%"
   # WWW SQL Designer用データベース
   - name: wwwsqldesigner
-    password: wwwsqldesigner_p@ssw0rd
+    password: &wwwsqldesigner_db_password wwwsqldesigner_P@ssw0rd
     hosts:
       - "127.0.0.1"
       - localhost
+
+mysql_databases: *db_databases
 
 # --------------
 # インストールするPHPのパッケージ
@@ -107,12 +113,12 @@ wwwsqldesigner_backend_pdo_cfg:
     type: mysql
     dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
     user: wwwsqldesigner
-    password: wwwsqldesigner_p@ssw0rd
+    password: *wwwsqldesigner_db_password
   import:
     type: mysql
     dsn: "mysql:dbname=information_schema;host=localhost"
     user: root
-    password: r00tP@55w0rd
+    password: *db_root_password
 
 
 # --------------
@@ -124,7 +130,7 @@ apache_vhosts:
     # サーバー名
     server_name: www.{{ domain }}
     # ドキュメントルート
-    document_root: /vagrant/source
+    document_root: /var/www/html
     # サーバー名の別名
     server_alias: "{{ domain }}"
     # AllowOverrideの設定値
