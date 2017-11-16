@@ -7,17 +7,17 @@
     path: "{{ apache_virtualhost_conf_dir }}"
     state: directory
 - name: update load base module
-  include: module/base.yml
+  import_tasks: module/base.yml
 - name: update load lua module
-  include: module/lua.yml
+  import_tasks: module/lua.yml
 - name: update load WebDAV module
-  include: module/dav.yml
+  import_tasks: module/dav.yml
 - name: update load MPM module
-  include: module/mpm.yml
+  import_tasks: module/mpm.yml
 - name: update load load balancing method module
-  include: module/lbmethod.yml
+  import_tasks: module/lbmethod.yml
 - name: update load proxy module
-  include: module/proxy.yml
+  import_tasks: module/proxy.yml
 - name: create base setting file
   template:
     src: httpd.conf.j2
