@@ -5,6 +5,7 @@
     enablerepo: epel
   with_items:
     - python-requests
+    - python-babel
     - python2-boto3
     - python2-future
     - python-idna
