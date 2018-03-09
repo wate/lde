@@ -1,3 +1,4 @@
+app_type: default
 vagrant:
   ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
   ## ※Ansibleがインストールできない/されていない人向け
@@ -24,15 +25,16 @@ vagrant:
     # - guest: 3306
     # - guest: 5432
   synced_folder:
-    path:
-      local: ./source
-      remote: /var/www/html
-    # path:
-    #   local: ./source
-    #   remote: /var/www/html/wp-contents/plugins/source
-    # path:
-    #   local: ./source
-    #   remote: /var/www/html/wp-contents/themes/source
+    type:
+      default:
+        local: ./source
+        remote: /var/www/html
+      wordpress_plugin:
+        local: ./source
+        remote: /var/www/html/wp-contents/plugins/source
+      wordpress_theme:
+        local: ./source
+        remote: /var/www/html/wp-contents/themes/source
     mount_options:
       - dmode=777
       - fmode=666

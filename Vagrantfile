@@ -24,13 +24,13 @@ Vagrant.configure("2") do |config|
         id: forwarded_port['id'] || nil
     end
   end
-
   # synced folders
+  app_type = settings['app_type']
   synced_folder_args = [
-    settings['vagrant']['synced_folder']['path']['local'],
-    settings['vagrant']['synced_folder']['path']['remote']
+    settings['vagrant']['synced_folder']['type'][app_type]['local'],
+    settings['vagrant']['synced_folder']['type'][app_type]['remote']
   ]
-  settings['vagrant']['synced_folder'].delete('path')
+  settings['vagrant']['synced_folder'].delete('type')
   unless settings['vagrant']['synced_folder'].empty?
     synced_folder_args.push(settings['vagrant']['synced_folder'].map{|k,v| [k.to_sym, v] }.to_h)
   end
