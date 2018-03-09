@@ -25,20 +25,20 @@ php_version: 7.1
 # MariaDB/MySQLの設定
 # --------------
 # デフォルトの文字コード
-mariadb_default_charset: &db_default_charset utf8mb4
+mariadb_default_charset:  utf8mb4
 
 # デフォルトの文字照合順序
-mariadb_default_collation: &db_default_collation utf8mb4_general_ci
+mariadb_default_collation: utf8mb4_general_ci
 
 # --------------
 # MariaDB/MySQL用のfirewalld設定
 # --------------
-mariadb_allow_host: &db_allow_host "192.168.33.0/24"
+mariadb_allow_host: "192.168.33.0/24"
 
 # --------------
 # データベース
 # --------------
-mariadb_databases: &db_databases
+mariadb_databases:
   # 開発用データベース
   - name: app_dev
     password: app_dev_P@ssw0rd
@@ -86,7 +86,6 @@ php_packages:
   - php-opcache
   - php-mbstring
   - php-mysqlnd
-  - php-intl
   - php-json
   - php-pdo
   - php-gd
