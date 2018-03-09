@@ -25,8 +25,14 @@ vagrant:
     # - guest: 5432
   synced_folder:
     path:
-      local: ./
-      remote: /vagrant
+      local: ./source
+      remote: /var/www/html
+    # path:
+    #   local: ./source
+    #   remote: /var/www/html/wp-contents/plugins/source
+    # path:
+    #   local: ./source
+    #   remote: /var/www/html/wp-contents/themes/source
     mount_options:
       - dmode=777
       - fmode=666
