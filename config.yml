@@ -43,10 +43,10 @@ vagrant:
         remote: /var/www/html
       wordpress_plugin:
         local: ./source
-        remote: /var/www/html/wp-contents/plugins/source
+        remote: /var/www/html/wp-content/plugins/source
       wordpress_theme:
         local: ./source
-        remote: /var/www/html/wp-contents/themes/source
+        remote: /var/www/html/wp-content/themes/source
     mount_options:
       - dmode=777
       - fmode=666
