@@ -45,8 +45,6 @@ Vagrant.configure("2") do |config|
     'mail.' + settings['domain'],
     # WWW SQL Designer
     'er.' + settings['domain'],
-    # rtail(予定)
-    'log.' + settings['domain'],
   ]
   # vagrant-hostsupdater
   plugin_setting = {}

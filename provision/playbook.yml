@@ -12,8 +12,14 @@
     - wp-cli
     - phpmyadmin
     - wwwsqldesigner
-    - rtail
   tasks:
+    - name: change group
+      file:
+        path: /var/www/html
+        recurse: yes
+        owner: vagrant
+        group: vagrant
+        state: directory
     - name: install pip
       yum:
         name: python2-pip
