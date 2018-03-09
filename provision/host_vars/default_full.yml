@@ -1,10 +1,4 @@
 # --------------
-# ドメイン名
-# ※以下の各設定項目に記載している「{{ domain }}」の値
-# --------------
-domain: example.com
-
-# --------------
 # lexiconプロバイダー
 # cloudflare / route53 / vultr
 # -------------
@@ -142,16 +136,13 @@ apache_vhosts:
   # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
   - name: 00-default
     # サーバー名
-    server_name: www.{{ domain }}
+    server_name: "{{ domain }}"
     # ドキュメントルート
-    document_root: /vagrant/source
+    document_root: /var/www/html
     # サーバー名の別名
-    server_alias: "{{ domain }}"
+    server_alias: "www.{{ domain }}"
     # AllowOverrideの設定値
     allow_override: All
-    # スニペットの読み込み
-    include:
-      - "{{ apache_snippet_dir }}/redirect_www.conf"
     ssl:
       certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
       certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"

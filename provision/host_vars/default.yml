@@ -1,13 +1,8 @@
 # --------------
-# ドメイン名
-# ※以下の各設定項目に記載している「{{ domain }}」の値
-# --------------
-domain: example.com
-
-# --------------
 # MariaDB/MySQLのrootパスワード
 # --------------
 mariadb_root_password: &db_root_password r00tP@55w0rd
+
 # --------------
 # PHPのバージョン
 #
@@ -121,11 +116,11 @@ apache_vhosts:
   # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
   - name: 00-default
     # サーバー名
-    server_name: www.{{ domain }}
+    server_name: "{{ domain }}"
     # ドキュメントルート
     document_root: /var/www/html
     # サーバー名の別名
-    server_alias: "{{ domain }}"
+    server_alias: "www.{{ domain }}"
     # AllowOverrideの設定値
     allow_override: All
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )

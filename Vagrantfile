@@ -4,12 +4,12 @@
 require 'yaml'
 
 Vagrant.configure("2") do |config|
-  # Load Vagrant config file
-  vagrant_setting_file = File.expand_path(File.join(File.dirname(__FILE__), 'config.yml'))
-  settings = YAML.load_file(vagrant_setting_file)
-  # Merge Ansiblle host variables
+  # Load Ansiblle host variable file
   ansible_vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'provision','host_vars', 'default.yml'))
-  settings.merge!(YAML.load_file(ansible_vars_file));
+  settings = YAML.load_file(ansible_vars_file)
+  # Merge Vagrant config file
+  vagrant_setting_file = File.expand_path(File.join(File.dirname(__FILE__), 'config.yml'))
+  settings.merge!(YAML.load_file(vagrant_setting_file));
 
   config.vm.box = settings['vagrant']['box'] || 'wate/centos-7'
 
@@ -68,15 +68,22 @@ Vagrant.configure("2") do |config|
   end
 
   # Provisioning
+  ansible_extra_vars = {
+    app_type: app_type,
+    domain: settings['domain'],
+    wordpress: settings['wordpress']
+  }
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
     config.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"
       ansible.provisioning_path = "/vagrant/provision"
+      ansible.extra_vars = ansible_extra_vars
     end
   else
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision/playbook.yml"
       ansible.config_file = "provision/ansible.cfg"
+      ansible.extra_vars = ansible_extra_vars
       ansible.groups = {
         "vagrant" => ["default"],
       }

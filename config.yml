@@ -1,4 +1,16 @@
+# default / wordpress_plugin / wordpress_theme
 app_type: default
+domain: example.com
+wordpress:
+  download_locale: ja
+  title: Example
+  admin_user: supervisor
+  admin_password: str0ngp@55w0rd
+  admin_email: info@example.com
+  extra_config: define( 'WP_DEBUG', true );
+  plugins:
+    - ssh-sftp-updater-support
+  themes: []
 vagrant:
   ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
   ## ※Ansibleがインストールできない/されていない人向け

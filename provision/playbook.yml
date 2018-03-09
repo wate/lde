@@ -20,6 +20,9 @@
         owner: vagrant
         group: vagrant
         state: directory
+    - name: setup WordPress
+      import_tasks: wordpress.yml
+      when: app_type.startswith('wordpress_')
     - name: install pip
       yum:
         name: python2-pip
