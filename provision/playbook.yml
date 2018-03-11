@@ -67,6 +67,7 @@
             less_chatty: yes
             multi_line: no
             syntax_style: monokai
+          become: no
         - name: create mycli connection setting file
           ini_file:
             path: ~/.myclirc
@@ -81,7 +82,7 @@
             password: "{{ mariadb_databases[0].user|default(mariadb_databases[0].password) }}"
             default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
             skip_pager: on
-      become: no
+          become: no
       tags: mycli
     - name: restart service
       systemd:
