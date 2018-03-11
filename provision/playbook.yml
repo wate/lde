@@ -2,16 +2,26 @@
   hosts: all
   become: yes
   roles:
-    - common
-    - mariadb
-    - lexicon
-    - dehydrated
-    - apache
-    - php
-    - mailcatcher
-    - wp-cli
-    - phpmyadmin
-    - wwwsqldesigner
+    - role: common
+      tags: role_common
+    - role: mariadb
+      tags: role_mariadb
+    - role: lexicon
+      tags: role_lexicon
+    - role: dehydrated
+      tags: role_dehydrated
+    - role: apache
+      tags: role_apache
+    - role: php
+      tags: role_php
+    - role: mailcatcher
+      tags: role_mailcatcher
+    - role: wp-cli
+      tags: role_wp-cli
+    - role: phpmyadmin
+      tags: role_phpmyadmin
+    - role: wwwsqldesigner
+      tags: role_wwwsqldesigner
   tasks:
     - name: change group
       file:
@@ -23,12 +33,7 @@
     - name: setup WordPress
       import_tasks: wordpress.yml
       when: app_type.startswith('wordpress_')
-    - name: install pip
-      yum:
-        name: python2-pip
-    - name: install mycli
-      pip:
-        name: mycli
+      tags: wordpress
     - name: create mysql connection file
       ini_file:
         path: ~/.my.cnf
@@ -43,33 +48,41 @@
         password: "{{ mariadb_databases[0].password|default(mariadb_databases[0].user) }}"
         default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
       become: no
-    - name: create mycli main setting file
-      ini_file:
-        path: ~/.myclirc
-        create: yes
-        section: main
-        option: "{{ item.key }}"
-        value: "{{ item.value }}"
-      with_dict:
-        less_chatty: yes
-        multi_line: no
-        syntax_style: monokai
+      tags: my.cnf
+    - block:
+        - name: install pip
+          yum:
+            name: python2-pip
+        - name: install mycli
+          pip:
+            name: mycli
+        - name: create mycli main setting file
+          ini_file:
+            path: ~/.myclirc
+            create: yes
+            section: main
+            option: "{{ item.key }}"
+            value: "{{ item.value }}"
+          with_dict:
+            less_chatty: yes
+            multi_line: no
+            syntax_style: monokai
+        - name: create mycli connection setting file
+          ini_file:
+            path: ~/.myclirc
+            create: yes
+            section: client
+            option: "{{ item.key|replace('_', '-') }}"
+            value: "{{ item.value }}"
+          with_dict:
+            host: localhost
+            database: "{{ mariadb_databases[0].name }}"
+            user: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
+            password: "{{ mariadb_databases[0].user|default(mariadb_databases[0].password) }}"
+            default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
+            skip_pager: on
       become: no
-    - name: create mycli connection setting file
-      ini_file:
-        path: ~/.myclirc
-        create: yes
-        section: client
-        option: "{{ item.key|replace('_', '-') }}"
-        value: "{{ item.value }}"
-      with_dict:
-        host: localhost
-        database: "{{ mariadb_databases[0].name }}"
-        user: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
-        password: "{{ mariadb_databases[0].user|default(mariadb_databases[0].password) }}"
-        default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
-        skip_pager: on
-      become: no
+      tags: mycli
     - name: restart service
       systemd:
         name: "{{ item }}"
