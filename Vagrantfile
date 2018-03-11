@@ -79,6 +79,9 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "playbook.yml"
       ansible.provisioning_path = "/vagrant/provision"
       ansible.extra_vars = ansible_extra_vars
+      if settings['vagrant'].key?('provision_only_tags')
+        ansible.tags = settings['vagrant']['provision_only_tags']
+      end
     end
   else
     config.vm.provision "ansible" do |ansible|
@@ -88,6 +91,9 @@ Vagrant.configure("2") do |config|
       ansible.groups = {
         "vagrant" => ["default"],
       }
+      if settings['vagrant'].key?('provision_only_tags')
+        ansible.tags = settings['vagrant']['provision_only_tags']
+      end
     end
   end
   # VirtualBox settings
