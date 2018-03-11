@@ -71,7 +71,8 @@ Vagrant.configure("2") do |config|
   ansible_extra_vars = {
     app_type: app_type,
     domain: settings['domain'],
-    wordpress: settings['wordpress']
+    wordpress: settings['wordpress'],
+    php_version: settings['php_version']
   }
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
     config.vm.provision "ansible_local" do |ansible|
