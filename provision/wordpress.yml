@@ -1,6 +1,7 @@
 - name: set wp-cli config vars
   set_fact:
     wp_cli_cfg:
+      path: "{{ apache_vhosts[0].document_root }}"
       core download:
         locale: "{{ wordpress.download_locale|default('en_US') }}"
       config create:
@@ -16,6 +17,9 @@
           admin_user: "{{ wordpress.admin_user }}"
           admin_password: "{{ wordpress.admin_password }}"
           admin_email: "{{ wordpress.admin_email }}"
+      export:
+        dir: /vagrant
+        max_file_size: -1
 - name: create wp-cli config file
   blockinfile:
     path: /tmp/wp-cli.yml
@@ -25,42 +29,74 @@
     - name: download WordPress
       command: /usr/local/bin/wp core download
       args:
-        chdir: "{{ apache_vhosts[0].document_root }}"
         creates: "{{ apache_vhosts[0].document_root }}/wp-config-sample.php"
     - name: create WordPress config file
       command: /usr/local/bin/wp config create
       args:
-        chdir: "{{ apache_vhosts[0].document_root }}"
         creates: "{{ apache_vhosts[0].document_root }}/wp-config.php"
     - name: check WordPress installed
       command: /usr/local/bin/wp core is-installed
-      args:
-        chdir: "{{ apache_vhosts[0].document_root }}"
       ignore_errors: yes
       changed_when: no
       register: result
     - name: install WordPress
       command: /usr/local/bin/wp core install
-      args:
-        chdir: "{{ apache_vhosts[0].document_root }}"
       when: result.rc > 0
+    - name: create .htaccess
+      blockinfile:
+        path: "{{ apache_vhosts[0].document_root }}/.htaccess"
+        create: yes
+        block: |
+          <IfModule mod_rewrite.c>
+          RewriteEngine On
+          RewriteBase /
+          RewriteRule ^index\.php$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule . /index.php [L]
+          </IfModule>
     - name: activate WP Multibyte Patch plugin
       command: /usr/local/bin/wp plugin activate wp-multibyte-patch
-      args:
-        chdir: "{{ apache_vhosts[0].document_root }}"
       when: wp_cli_cfg['core download'].locale is defined and wp_cli_cfg['core download'].locale == 'ja'
     - name: install WordPress plugins
       command: /usr/local/bin/wp plugin install {{ item }} --activate
       args:
-        chdir: "{{ apache_vhosts[0].document_root }}"
         creates: "{{ apache_vhosts[0].document_root }}//wp-content/plugins/{{ item }}"
       with_items: "{{ wordpress.plugins }}"
     - name: install WordPress themes
       command: /usr/local/bin/wp theme install {{ item }}
       args:
-        chdir: "{{ apache_vhosts[0].document_root }}"
         creates: "{{ apache_vhosts[0].document_root }}//wp-content/themes/{{ item }}"
       with_items: "{{ wordpress.themes }}"
+    - name: set WordPress rewrite rules
+      block:
+        - name: update permalink structure
+          command: /usr/local/bin/wp rewrite structure '{{ wordpress.rewrite_structure }}'
+        - name: flush rewrite rules
+          command: /usr/local/bin/wp rewrite flush
+      when: wordpress.rewrite_structure is defined
+    - name: import WordPress data
+      block:
+        - name: install wordpress-importer plugin
+          command: /usr/local/bin/wp plugin install wordpress-importer --activate
+        - name: download import data
+          get_url:
+            url: "{{ wordpress.import.file }}"
+            dest: /tmp/worepress_import_data.xml
+          when: wordpress.import.file.startswith('http://') or wordpress.import.file.startswith('https://')
+        - name: upload import data
+          copy:
+            src: "{{ wordpress.import.file }}"
+            dest: /tmp/worepress_import_data.xml
+          when: not wordpress.import.file.startswith('http://') and not wordpress.import.file.startswith('https://')
+        - name: upload user mapping file
+          copy:
+            src: "{{ wordpress.import.file }}"
+            dest: /tmp/worepress_user_mapping.csv
+          when: not wordpress.import.authors in ['create', 'skip']
+        - name: import data
+          command: /usr/local/bin/wp import /tmp/worepress_import_data.xml --authors={{ wordpress.import.authors if wordpress.import.authors in ['create', 'skip'] else '/tmp/worepress_user_mapping.csv'  }}
+      when: wordpress.import is defined
   become: no
   environment:
     WP_CLI_CONFIG_PATH: /tmp/wp-cli.yml

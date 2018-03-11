@@ -1,17 +1,31 @@
-# default / wordpress_plugin / wordpress_theme
+## アプリケーション種別：default / wordpress_plugin / wordpress_theme
 app_type: default
+## ドメイン
 domain: example.com
-# 5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2
+## PHPのバージョン：5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2
 php_version: 7.1
 wordpress:
   download_locale: ja
+  ## サイトのタイトル
   title: Example
+  ## 管理者名
   admin_user: supervisor
+  ## 管理者パスワード
   admin_password: str0ngp@55w0rd
+  ## 管理者メールアドレス
   admin_email: info@example.com
+  ## WordPressの拡張設定の内容
   extra_config: define( 'WP_DEBUG', true );
+  # ## WordPressのパーマリンク設定の設定値
+  # rewrite_structure: /%year%/%monthnum%/%postname%
+  # ## WordPressにインポートデータの設定
+  # import:
+  #   file: https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml
+  #   authors: create
+  ## インストールするプラグイン
   plugins:
     - ssh-sftp-updater-support
+  ## インストールするテーマ
   themes: []
 vagrant:
   ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
@@ -29,6 +43,8 @@ vagrant:
   # vm_cpu: 1
   ## 仮想マシンのメモリ
   # vm_memory: 1024
+  ## プロビジョニング実行時のタグ指定(実行部の指定)
+  # provision_only_tags:
   ## ポートフォワーディングの設定
   forwarded_ports:
     - guest: 80
