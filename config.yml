@@ -9,13 +9,17 @@ wordpress:
   ## サイトのタイトル
   title: Example
   ## 管理者名
-  admin_user: supervisor
+  admin_user: admin
   ## 管理者パスワード
   admin_password: str0ngp@55w0rd
   ## 管理者メールアドレス
   admin_email: info@example.com
   ## WordPressの拡張設定の内容
-  extra_config: define( 'WP_DEBUG', true );
+  extra_config: |
+    define('WP_DEBUG', true);
+    define('WP_DEBUG_DISPLAY', true);
+    define('WP_POST_REVISIONS', false);
+    define('DISALLOW_FILE_EDIT', true);
   # ## WordPressのパーマリンク設定の設定値
   # rewrite_structure: /%year%/%monthnum%/%postname%
   # ## WordPressにインポートデータの設定
@@ -45,6 +49,10 @@ vagrant:
   # vm_memory: 1024
   ## プロビジョニング実行時のタグ指定(実行部の指定)
   # provision_only_tags:
+  #   - role_mariadb
+  #   - role_apache
+  #   - role_php
+  #   - wordpress
   ## ポートフォワーディングの設定
   forwarded_ports:
     - guest: 80
