@@ -91,6 +91,7 @@ php_packages:
 # その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
 # --------------
 php_cfg:
+  display_errors: yes
   sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
 
 # --------------
@@ -123,12 +124,20 @@ apache_vhosts:
     server_alias: "www.{{ domain }}"
     # AllowOverrideの設定値
     allow_override: All
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   # https://www.phpmyadmin.net/
   - name: 01-phpMyAdmin
     state: "{{ true if phpmyadmin_dest is defined else false }}"
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest|default('/usr/share/phpMyAdmin') }}"
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
     # Optionsの設定値
     options:
       - "-Indexes"
@@ -157,6 +166,10 @@ apache_vhosts:
     state: "{{ true if wwwsqldesigner_dest is defined else false }}"
     server_name: er.{{ domain }}
     document_root: "{{ wwwsqldesigner_dest|default('/opt/wwwsqldesigner') }}"
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
     options:
       - "-Indexes"
       - "+FollowSymLinks"
