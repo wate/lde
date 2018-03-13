@@ -1,2 +1,12 @@
+galaxy_info:
+  author: yoshiaki tanaka
+  description: setup php
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  galaxy_tags: []
+
 dependencies:
   - repo-remi

@@ -2379,14 +2379,8 @@ openssl.cafile = {{ php_cfg.openssl.cafile }}
 openssl.capath = {{ php_cfg.openssl.capath }}
 {% endif %}
 
-{% if php_cfg.extra_parameters is defined -%}
-{% for section, options in php_cfg.extra_parameters.items() -%}
-[{{ section }}]
-{% for option_name, option_value in options.items() -%}
-{{ section }}.{{ option_name }} = {{ option_value }}
-{% endfor %}
-
-{% endfor -%}
+{% if php_cfg.extra_setting is defined -%}
+{{ php_cfg.extra_setting }}
 {% endif %}
 
 ; Local Variables:
