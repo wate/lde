@@ -6,7 +6,30 @@ mailcatcher
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### mailcatcher_smtp_ip
+
+```yaml
+mailcatcher_smtp_ip: 127.0.0.1
+```
+
+### mailcatcher_smtp_port
+
+```yaml
+mailcatcher_smtp_port: 1025
+```
+
+### mailcatcher_web_ip
+
+```yaml
+mailcatcher_web_ip: 127.0.0.1
+```
+
+
+### mailcatcher_web_port
+
+```yaml
+mailcatcher_web_port: 1080
+```
 
 Dependencies
 ------------
@@ -16,9 +39,11 @@ Dependencies
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-         - { role: mailcatcher }
+```yaml
+- hosts: servers
+  roles:
+     - { role: mailcatcher }
+```
 
 License
 -------
