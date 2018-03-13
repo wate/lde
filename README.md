@@ -6,14 +6,25 @@ Pythonの基本パッケージをインストールします
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### python_packages
+
+インストールするパッケージを指定します
+
+```yaml
+python_packages:
+  - python-setuptools
+  - python2-pip
+  - python-devel
+```
 
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-         - { role: python }
+```yaml
+- hosts: servers
+  roles:
+     - { role: python }
+```
 
 License
 -------
