@@ -12,9 +12,11 @@ Dependencies
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-         - { role: phpmyadmin }
+```yaml
+- hosts: servers
+  roles:
+     - { role: phpmyadmin }
+```
 
 License
 -------
