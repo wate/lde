@@ -13,3 +13,4 @@
   pip:
     name: dns-lexicon
     state: latest
+  tags: skip_ansible_lint
