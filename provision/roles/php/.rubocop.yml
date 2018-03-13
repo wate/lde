@@ -1,0 +1,16 @@
+Metrics/LineLength:
+  Max: 140
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
+  IgnoreCopDirectives: false
+  IgnoredPatterns: []
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Style/ConditionalAssignment:
+  Enabled: false
