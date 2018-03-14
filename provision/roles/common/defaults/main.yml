@@ -19,24 +19,27 @@ common_packages:
   - bash-completion
   - tig
 
-users: []
-  # - name: sample_user
-  #   # Optional
-  #   password: "{{ 'password'|password_hash('sha512') }}"
-  #   groups:
-  #     - group1
-  #     - group2
-  #   authorized_keys:
-  #     - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-  #     - https://github.com/ghuser.keys
-  #   shell: /bin/sh
-  #   home: /home/sample
-  #   system: no
-  #   group: primary_group
-  #   comment: sample acount
-  #   uid: 1111
-  #   state: yes
+common_groups:
+  - name: group1
+  - name: group2
+    remove: yes
+
+common_users:
+  - name: sample_user
+    # Optional
+    password: "{{ 'password'|password_hash('sha512') }}"
+    groups:
+      - group1
+      # - group2
+    authorized_keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - https://github.com/wate.keys
+  #   shell: /bin/nologin
+  #   admin: no
+  #   remove: yes
 
 fail2ban_jail_cfg:
   sshd:
     enabled: yes
+
+sudo_require_password: no
