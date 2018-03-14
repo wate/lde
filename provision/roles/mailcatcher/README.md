@@ -31,11 +31,6 @@ mailcatcher_web_ip: 127.0.0.1
 mailcatcher_web_port: 1080
 ```
 
-Dependencies
-------------
-
-* [ruby](https://github.com/wate/ansible-role-ruby)
-
 Example Playbook
 ----------------
 
