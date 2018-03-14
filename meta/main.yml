@@ -8,4 +8,5 @@ galaxy_info:
         - 7
 
 dependencies:
+  - repo-epel
   - python
