@@ -1,16 +1,4 @@
 ---
-ansible:
-  group_vars:
-    all:
-      mackerel_agent_apikey: role_test_api_key
-      mackerel_agent_active_and_enabled_on_system_startup: no
-  host_vars:
-    agent-plugin-installed:
-      mackerel_agent_install_agent_plugins: yes
-      mackerel_agent_install_check_plugins: no
-    check-plugin-installed:
-      mackerel_agent_install_agent_plugins: no
-      mackerel_agent_install_check_plugins: yes
 dependency:
   name: galaxy
 driver:
