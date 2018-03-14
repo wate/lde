@@ -36,11 +36,6 @@ php_packages:
 
 php.iniの内容を定義します
 
-Dependencies
-------------
-
-* [repo-remi](https://github.com/wate/ansible-role-repo-remi)
-
 Example Playbook
 ----------------
 
