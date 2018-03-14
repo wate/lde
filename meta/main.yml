@@ -1,2 +1,10 @@
+galaxy_info:
+  author: yoshiaki tanaka
+  description: setup redis
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - 7
 dependencies:
   - repo-epel
