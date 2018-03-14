@@ -14,4 +14,10 @@ __pycache__/
 tests/roles
 *.pyc
 
-# End of https://www.gitignore.io/api/ansible
+### Vagrant ###
+.vagrant/
+*.box
+
+# End of https://www.gitignore.io/api/vagrant
+
+Gemfile.lock
