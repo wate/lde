@@ -1,2 +1,10 @@
+galaxy_info:
+  author: yoshiaki tanaka
+  description: install wp-cli
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - 7
 dependencies:
   - php
