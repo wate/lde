@@ -3,7 +3,8 @@
     wp_cli_cfg:
       path: "{{ apache_vhosts[0].document_root }}"
       core download:
-        locale: "{{ wordpress.download_locale|default('en_US') }}"
+        locale: "{{ wordpress.locale|default('ja') }}"
+        version: "{{ wordpress.version|default('latest') }}"
       config create:
         dbname: "{{ mariadb_databases[0].name }}"
         dbuser: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
@@ -40,7 +41,7 @@
         insertafter: "\\$table_prefix ="
         block: "{{ wordpress.extra_config }}"
     - name: check WordPress installed
-      command: /usr/local/bin/wp core is-installed
+      shell: /usr/local/bin/wp core is-installed &> /dev/null
       ignore_errors: yes
       changed_when: no
       register: result
@@ -64,14 +65,14 @@
       command: /usr/local/bin/wp plugin activate wp-multibyte-patch
       when: wp_cli_cfg['core download'].locale is defined and wp_cli_cfg['core download'].locale == 'ja'
     - name: install WordPress plugins
-      command: /usr/local/bin/wp plugin install {{ item }} --activate
+      command: /usr/local/bin/wp plugin install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
-        creates: "{{ apache_vhosts[0].document_root }}//wp-content/plugins/{{ item }}"
+        creates: "{{ apache_vhosts[0].document_root }}//wp-content/plugins/{{ item.name }}"
       with_items: "{{ wordpress.plugins }}"
     - name: install WordPress themes
-      command: /usr/local/bin/wp theme install {{ item }}
+      command: /usr/local/bin/wp theme install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
-        creates: "{{ apache_vhosts[0].document_root }}//wp-content/themes/{{ item }}"
+        creates: "{{ apache_vhosts[0].document_root }}//wp-content/themes/{{ item.name }}"
       with_items: "{{ wordpress.themes }}"
     - name: set WordPress rewrite rules
       block:

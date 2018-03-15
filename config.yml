@@ -5,7 +5,8 @@ domain: example.com
 ## PHPのバージョン：5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2
 php_version: 7.1
 wordpress:
-  download_locale: ja
+  version: latest
+  locale: ja
   ## サイトのタイトル
   title: Example
   ## 管理者名
@@ -28,9 +29,15 @@ wordpress:
   #   authors: create
   ## インストールするプラグイン
   plugins:
-    - ssh-sftp-updater-support
+    - name: ssh-sftp-updater-support
+      activate: yes
+    # - name: jwt-authentication-for-wp-rest-api
   ## インストールするテーマ
   themes: []
+    # - name: twentyseventeen
+    # - name: twentyfifteen
+    # - name: twentysixteen
+    #   active: yes
 vagrant:
   ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
   ## ※Ansibleがインストールできない/されていない人向け
