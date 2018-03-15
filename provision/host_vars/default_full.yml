@@ -155,7 +155,7 @@ apache_vhosts:
       # hsts: "max-age=15768000"
   - name: 00-default_http
     server_name: www.{{ domain }}
-    document_root: /vagrant/source
+    document_root: /var/www/html
     server_alias: "{{ domain }}"
     directory_index:
       - index.html
