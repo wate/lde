@@ -74,8 +74,8 @@ Vagrant.configure("2") do |config|
     wordpress: settings['wordpress'],
     php_version: settings['php_version']
   }
-  # Merge Ansible Custom Extra Variable file
-  ansible_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'ansible_vars.yml'))
+  # Merge Ansible Extra Variable file
+  ansible_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'extra_vars.yml'))
   if File.exists?(ansible_var_file)
     ansible_custom_vars = YAML.load_file(ansible_var_file)
     if ansible_custom_vars.is_a?(Hash)
@@ -108,11 +108,11 @@ Vagrant.configure("2") do |config|
     end
   end
   # provision custom task
-  ansible_custom_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'ansible_task.yml'))
+  ansible_custom_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'post_task.yml'))
   if File.exists?(ansible_custom_task_file)
     if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
       config.vm.provision "ansible_local" do |ansible|
-        ansible.playbook = "ansible_task.yml"
+        ansible.playbook = "post_task.yml"
         ansible.provisioning_path = "/vagrant"
         ansible.compatibility_mode = "2.0"
         ansible.extra_vars = ansible_extra_vars
@@ -122,7 +122,7 @@ Vagrant.configure("2") do |config|
       end
     else
       config.vm.provision "ansible" do |ansible|
-        ansible.playbook = "ansible_task.yml"
+        ansible.playbook = "post_task.yml"
         ansible.config_file = "provision/ansible.cfg"
         ansible.compatibility_mode = "2.0"
         ansible.extra_vars = ansible_extra_vars
