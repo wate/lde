@@ -82,6 +82,7 @@ Vagrant.configure("2") do |config|
       ansible_extra_vars.merge!(ansible_custom_vars);
     end
   end
+
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
     config.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"
@@ -103,6 +104,34 @@ Vagrant.configure("2") do |config|
       }
       if settings['vagrant'].key?('provision_only_tags')
         ansible.tags = settings['vagrant']['provision_only_tags']
+      end
+    end
+  end
+  # provision custom task
+  ansible_custom_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'ansible_task.yml'))
+  if File.exists?(ansible_custom_task_file)
+    if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
+      config.vm.provision "ansible_local" do |ansible|
+        ansible.playbook = "ansible_task.yml"
+        ansible.provisioning_path = "/vagrant"
+        ansible.compatibility_mode = "2.0"
+        ansible.extra_vars = ansible_extra_vars
+        if settings['vagrant'].key?('provision_only_tags')
+          ansible.tags = settings['vagrant']['provision_only_tags']
+        end
+      end
+    else
+      config.vm.provision "ansible" do |ansible|
+        ansible.playbook = "ansible_task.yml"
+        ansible.config_file = "provision/ansible.cfg"
+        ansible.compatibility_mode = "2.0"
+        ansible.extra_vars = ansible_extra_vars
+        ansible.groups = {
+          "vagrant" => ["default"],
+        }
+        if settings['vagrant'].key?('provision_only_tags')
+          ansible.tags = settings['vagrant']['provision_only_tags']
+        end
       end
     end
   end
