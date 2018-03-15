@@ -17,16 +17,15 @@ mariadb_root_password: &db_root_password r00tP@55w0rd
 php_version: 7.1
 
 # --------------
-# MariaDB/MySQLの設定
+# MariaDBの設定
 # --------------
 # デフォルトの文字コード
-mariadb_default_charset:  utf8mb4
-
+mariadb_default_charset: utf8mb4
 # デフォルトの文字照合順序
 mariadb_default_collation: utf8mb4_general_ci
 
 # --------------
-# MariaDB/MySQL用のfirewalld設定
+# MariaDB用のfirewalld設定
 # --------------
 mariadb_allow_host: "192.168.33.0/24"
 
