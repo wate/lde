@@ -138,6 +138,10 @@ apache_vhosts:
     # サーバー名
     server_name: "{{ domain }}"
     # ドキュメントルート
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
     document_root: /var/www/html
     # サーバー名の別名
     server_alias: "www.{{ domain }}"
@@ -153,6 +157,10 @@ apache_vhosts:
     server_name: www.{{ domain }}
     document_root: /vagrant/source
     server_alias: "{{ domain }}"
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
     include:
       - "{{ apache_snippet_dir }}/redirect_www.conf"
       - "{{ apache_snippet_dir }}/redirect_https.conf"
@@ -162,6 +170,10 @@ apache_vhosts:
     state: "{{ true if phpmyadmin_dest is defined else false }}"
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest|default('/usr/share/phpMyAdmin') }}"
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
     # Optionsの設定値
     options:
       - "-Indexes"
@@ -180,6 +192,10 @@ apache_vhosts:
     state: "{{ true if phpmyadmin_dest is defined else false }}"
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest|default('/usr/share/phpMyAdmin') }}"
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
     include:
       - "{{ apache_snippet_dir }}/redirect_https.conf"
   # MailCatcher用のバーチャルホスト ( http://mail.<ドメイン>/ )
