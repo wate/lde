@@ -19,21 +19,21 @@ common_packages:
   - bash-completion
   - tig
 
-common_groups:
-  - name: group1
-  - name: group2
-    remove: yes
+common_groups: []
+  # - name: group1
+  # - name: group2
+  #   remove: yes
 
-common_users:
-  - name: sample_user
-    # Optional
-    password: "{{ 'password'|password_hash('sha512') }}"
-    groups:
-      - group1
-      # - group2
-    authorized_keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      - https://github.com/wate.keys
+common_users: []
+  # - name: sample_user
+  #   # Optional
+  #   password: "{{ 'password'|password_hash('sha512') }}"
+  #   groups:
+  #     - group1
+  #     - group2
+  #   authorized_keys:
+  #     - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  #     - https://github.com/wate.keys
   #   shell: /bin/nologin
   #   admin: no
   #   remove: yes
