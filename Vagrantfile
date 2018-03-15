@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: settings['vagrant']['ipaddress'] || '192.168.33.10'
 
   # port Forwarding
-  if settings['vagrant'].has_key?('forwarded_ports')
+  if settings['vagrant'].key?('forwarded_ports')
     settings['vagrant']['forwarded_ports'].each do |forwarded_port|
       config.vm.network "forwarded_port",
         guest: forwarded_port['guest'] ,
@@ -48,22 +48,22 @@ Vagrant.configure("2") do |config|
   ]
   # vagrant-hostsupdater
   plugin_setting = {}
-  if settings['vagrant'].has_key?('plugin') and settings['vagrant']['plugin'].has_key?('hostsupdater')
+  if settings['vagrant'].key?('plugin') and settings['vagrant']['plugin'].key?('hostsupdater')
     plugin_setting = config['vagrant']['plugin']['hostsupdater']
   end
   if Vagrant.has_plugin?('vagrant-hostsupdater')
-    config.hostsupdater.remove_on_suspend = plugin_setting.has_key?('remove_on_suspend') ? plugin_setting['remove_on_suspend'] : true
+    config.hostsupdater.remove_on_suspend = plugin_setting.key?('remove_on_suspend') ? plugin_setting['remove_on_suspend'] : true
     config.hostsupdater.aliases = vm_host_aliases
   end
   # plugin vagrant-hostmanager
   plugin_setting = {}
-  if settings['vagrant'].has_key?('plugin') and settings['vagrant']['plugin'].has_key?('hostmanager')
+  if settings['vagrant'].key?('plugin') and settings['vagrant']['plugin'].key?('hostmanager')
     plugin_setting = config['plugin']['hostmanager']
   end
   if Vagrant.has_plugin?('vagrant-hostmanager')
-    config.hostmanager.enabled = plugin_setting.has_key?('enabled') ? plugin_setting['enabled'] : false
-    config.hostmanager.manage_host = plugin_setting.has_key?('manage_host') ? plugin_setting['manage_host'] : true
-    config.hostmanager.manage_guest = plugin_setting.has_key?('manage_guest') ? plugin_setting['manage_guest'] : true
+    config.hostmanager.enabled = plugin_setting.key?('enabled') ? plugin_setting['enabled'] : false
+    config.hostmanager.manage_host = plugin_setting.key?('manage_host') ? plugin_setting['manage_host'] : true
+    config.hostmanager.manage_guest = plugin_setting.key?('manage_guest') ? plugin_setting['manage_guest'] : true
     config.hostmanager.aliases = vm_host_aliases
   end
 
@@ -74,10 +74,19 @@ Vagrant.configure("2") do |config|
     wordpress: settings['wordpress'],
     php_version: settings['php_version']
   }
+  # Merge Ansible Custom Extra Variable file
+  ansible_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'ansible_vars.yml'))
+  if File.exists?(ansible_var_file)
+    ansible_custom_vars = YAML.load_file(ansible_var_file)
+    if ansible_custom_vars.is_a?(Hash)
+      ansible_extra_vars.merge!(ansible_custom_vars);
+    end
+  end
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
     config.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"
       ansible.provisioning_path = "/vagrant/provision"
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
       if settings['vagrant'].key?('provision_only_tags')
         ansible.tags = settings['vagrant']['provision_only_tags']
@@ -87,6 +96,7 @@ Vagrant.configure("2") do |config|
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision/playbook.yml"
       ansible.config_file = "provision/ansible.cfg"
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
       ansible.groups = {
         "vagrant" => ["default"],
