@@ -1,5 +1,5 @@
 # --------------
-# MariaDB/MySQLのrootパスワード
+# MariaDBのrootパスワード
 # --------------
 mariadb_root_password: &db_root_password r00tP@55w0rd
 
