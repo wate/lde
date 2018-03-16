@@ -95,8 +95,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 `app_type`に`wordpress_theme`または`wordpress_plugin`を設定している場合に、
 インストールするWordPressの情報を設定します。
 
-
-**後で書く**
+設定可能な項目に関しては`config.yml`内にコメントで記載しています。
 
 ### extra_vars.yml
 
