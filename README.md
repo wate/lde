@@ -1,4 +1,4 @@
-lde(Local Development Environments)
+lde(Local Development Environment)
 =========
 
 Ansibleを使ってローカル開発環境(LAMP)を構築します。
