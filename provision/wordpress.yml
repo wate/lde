@@ -39,7 +39,7 @@
         marker: "// {mark} ANSIBLE MANAGED BLOCK"
         path: "{{ apache_vhosts[0].document_root }}/wp-config.php"
         insertafter: "\\$table_prefix ="
-        block: "{{ wordpress.extra_config }}"
+        block: "{{ wordpress.extra_setting }}"
     - name: check WordPress installed
       shell: /usr/local/bin/wp core is-installed &> /dev/null
       ignore_errors: yes
@@ -52,15 +52,7 @@
       blockinfile:
         path: "{{ apache_vhosts[0].document_root }}/.htaccess"
         create: yes
-        block: |
-          <IfModule mod_rewrite.c>
-          RewriteEngine On
-          RewriteBase /
-          RewriteRule ^index\.php$ - [L]
-          RewriteCond %{REQUEST_FILENAME} !-f
-          RewriteCond %{REQUEST_FILENAME} !-d
-          RewriteRule . /index.php [L]
-          </IfModule>
+        block: "{{ wordpress.htaccess }}"
     - name: activate WP Multibyte Patch plugin
       command: /usr/local/bin/wp plugin activate wp-multibyte-patch
       when: wp_cli_cfg['core download'].locale is defined and wp_cli_cfg['core download'].locale == 'ja'

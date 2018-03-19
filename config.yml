@@ -18,7 +18,7 @@ wordpress:
   ## 管理者メールアドレス
   admin_email: info@example.com
   ## wp-config.phpに追記するWordPressの拡張設定の内容
-  extra_config: |
+  extra_setting: |
     define('WP_DEBUG', true);
     define('WP_DEBUG_DISPLAY', true);
     define('WP_POST_REVISIONS', false);
@@ -41,6 +41,15 @@ wordpress:
     # - name: some-theme-name
     #   version: 1.2.3 (optional)
     #   active: yes (optional)
+  htaccess: |
+    <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+    </IfModule>
 vagrant:
   ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
   ## ※Ansibleがインストールできない/されていない人向け
