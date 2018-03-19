@@ -103,6 +103,12 @@
         - name: import data
           command: /usr/local/bin/wp import /tmp/worepress_import_data.xml --authors={{ wordpress.import.authors if wordpress.import.authors in ['create', 'skip'] else '/tmp/worepress_user_mapping.csv'  }}
       when: wordpress.import is defined
+    - name: change permission for uploads directory
+      file:
+        path: "{{ apache_vhosts[0].document_root }}/wp-content/uploads"
+        state: directory
+        recurse: yes
+        mode: "0707"
   become: no
   environment:
     WP_CLI_CONFIG_PATH: /tmp/wp-cli.yml
