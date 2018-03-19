@@ -24,7 +24,7 @@ wordpress:
     define('WP_POST_REVISIONS', false);
     define('DISALLOW_FILE_EDIT', true);
   # ## WordPressのパーマリンク設定の内容
-  # rewrite_structure: /%year%/%monthnum%/%postname%
+  # rewrite_structure: /%category%/%postname%/
   # ## WordPressにインポートデータの設定
   # import:
   #   file: https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml
