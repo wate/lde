@@ -21,14 +21,14 @@
 - name: create skeleton user web directory
   file:
     path: /etc/skel/public
-    mode: 0755
+    mode: "0755"
     state: directory
   tags:
     - skeleton
 - name: create skeleton user web directory
   file:
     path: /home
-    mode: 0755
+    mode: "0755"
     state: directory
 - name: manage users
   user:
