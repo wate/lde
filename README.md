@@ -221,6 +221,22 @@ yum install -y --enablerepo=epel jq
 仮想マシンの`/var/www/html/wp-content/plugins/source`として割り当てています。
 
 
+WordPress用開発環境について
+------------
+
+### プラグインやテーマのアップデート方法
+
+インストール済みのWordPress本体やプラグインなどの更新を行う場合、  
+表示されるダイアログに以下の情報を入力するとアップデートすることができます。
+
+* ホスト名：localhost
+* FTP/SSH ユーザー名：vagrant
+* FTP/SSH パスワード：vagrant
+* 接続形式：ssh2
+
+※「SSH Authentication Keys」の設定は不要です
+
+
 License
 -------
 
