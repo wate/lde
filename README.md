@@ -152,7 +152,7 @@ mariadb_cfg:
 ### post_task.yml
 
 このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
-記載方法は[Ansible](https://www.ansible.com/)のplaybook形式で記載する必要があります。
+記載方法は[Ansible](https://www.ansible.com/)のplaybook形式で記載します。
 
 #### サンプル
 
@@ -170,7 +170,7 @@ mariadb_cfg:
 ### post_task.sh
 
 このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
-記載方法はシェルスクリプトと同じです。
+処理内容はシェルスクリプトで記載します。
 
 #### サンプル
 
@@ -178,6 +178,48 @@ mariadb_cfg:
 #!/bin/bash
 yum install -y --enablerepo=epel jq
 ```
+
+
+ローカル開発環境のサーバー情報
+------------
+
+### データベース情報
+
+ローカル開発環境では以下の4つのデータベースが利用できます。
+
+| データベース名 | データベースユーザー名 | データベースパスワード |
+| -------------- | ---------------------- | ---------------------- |
+| app_dev        | app_dev                | app_dev_P@ssw0rd       |
+| app_test       | app_test               | app_test_P@ssw0rd      |
+| app_staging    | app_staging            | app_staging_P@ssw0rd   |
+| app_prod       | app_prod               | app_prod_P@55w0rd      |
+
+※`app_type`に`wordpress_theme`または`wordpress_plugin`が設定されている場合、  
+**app_dev** に接続するように設定されています。
+
+### Webサーバー
+
+ドキュメントルートに`/var/www/html`を設定しています。
+
+### 共有ディレクトリの割当先について
+
+ローカル開発環境全体を仮想マシンの`/vagrant`に割り当てています。
+
+また、`app_type`の設定に応じて`source`ディレクトリを  
+仮想マシンのディレクトリとして割り当てています。
+
+#### `default`が設定されている場合
+
+仮想マシンの`/var/www/html`として割り当てています。
+
+#### `wordpress_theme`が設定されている場合
+
+仮想マシンの`/var/www/html/wp-content/themes/source`として割り当てています。
+
+#### `wordpress_plugin`が設定されている場合
+
+仮想マシンの`/var/www/html/wp-content/plugins/source`として割り当てています。
+
 
 License
 -------
