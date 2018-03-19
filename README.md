@@ -138,16 +138,25 @@ mariadb_cfg:
 
 ### post_task.yml
 
-このファイルを作成し以下の内容でplaybookを記載すると、
-セットアップ時に自動で呼び出されます。
+このファイルを作成し、Ansibleのplaybook形式を記載するとセットアップ時に自動で呼び出されます。
 
 ```yaml
-- hosts: all
+- name: post task
+  hosts: all
   become: yes
   tasks:
-    # 以下に実行する追加タスクを記載する
-    - debug:
-        msg: "some post task"
+    - name: install The Silver Searcher
+      yum:
+        name: the_silver_searcher
+```
+
+### post_task.sh
+
+このファイルを作成し、シェルスクリプトを記載するとセットアップ時に自動で呼び出されます。
+
+```sh
+#!/bin/bash
+yum install -y --enablerepo=epel jq
 ```
 
 License
