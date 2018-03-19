@@ -10,7 +10,15 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * [VirtualBox](https://www.virtualbox.org/)
 * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
     * Vagrantのプラグインです。
-    * インストールしていなくても動作しますが、その場合はhostsファイルの書き換えを手動で行う必要があります。
+    * インストールしていなくても動作しますが、  
+    その場合はhostsファイルを手動書き換える必要があります。
+
+その他、関連アプリ
+------------
+
+* [Vagrant Manager](http://vagrantmanager.com/)
+    * 作成済みのローカル開発環境をGUI上から操作することができます。
+    * 黒い画面が苦手な人にお勧めです。
 
 ディレクトリ構成
 ------------
@@ -70,7 +78,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 #### domain
 
-ローカル開発環境に設定するドメインを設定します。
+ローカル開発環境に設定するドメインを設定します。  
 設定内容に応じて、以下のURLでローカル開発環境にアクセスすることができます。
 
 * www.<独自ドメイン>：ローカル開発環境の確認用URLです。
@@ -80,7 +88,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 #### php_version
 
-インストールするPHPのバージョンを指定します。
+インストールするPHPのバージョンを指定します。  
 設定可能なバージョンは以下の通りです。
 
 * 5.4
@@ -92,19 +100,24 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 #### wordpress
 
-`app_type`に`wordpress_theme`または`wordpress_plugin`を設定している場合に、
+`app_type`に`wordpress_theme`または`wordpress_plugin`を設定している場合に、  
 インストールするWordPressの情報を設定します。
 
 設定可能な項目に関しては`config.yml`内にコメントで記載しています。
 
 ### extra_vars.yml
 
-このファイルを作成し変数を定義すると、
-セットアップ時に利用する変数の内容を上書きすることができます。
+このファイルが存在する場合セットアップ時に読み込まれます。  
+ファイル内に記載された内容はセットアップ用変数として、セットアップ処理に渡すことができます。
+
+また、既に定義されているセットアップ用変数と同じ変数を定義すれば、  
+セットアップ用変数を上書きすることができます。
+
+#### サンプル
 
 ```yaml
 # --------------
-# インストールするPHPのパッケージを指定する
+# インストールするPHPのパッケージの変更する
 # --------------
 php_packages:
   - php
@@ -138,13 +151,17 @@ mariadb_cfg:
 
 ### post_task.yml
 
-このファイルを作成し、Ansibleのplaybook形式を記載するとセットアップ時に自動で呼び出されます。
+このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
+記載方法は[Ansible](https://www.ansible.com/)のplaybook形式で記載します。
+
+#### サンプル
 
 ```yaml
 - name: post task
   hosts: all
   become: yes
   tasks:
+    ## ここ以下に追加の処理を記載していきます
     - name: install The Silver Searcher
       yum:
         name: the_silver_searcher
@@ -152,12 +169,57 @@ mariadb_cfg:
 
 ### post_task.sh
 
-このファイルを作成し、シェルスクリプトを記載するとセットアップ時に自動で呼び出されます。
+このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
+処理内容はシェルスクリプトで記載します。
+
+#### サンプル
 
 ```sh
 #!/bin/bash
 yum install -y --enablerepo=epel jq
 ```
+
+
+ローカル開発環境のサーバー情報
+------------
+
+### データベース情報
+
+ローカル開発環境では以下の4つのデータベースが利用できます。
+
+| データベース名 | データベースユーザー名 | データベースパスワード |
+| -------------- | ---------------------- | ---------------------- |
+| app_dev        | app_dev                | app_dev_P@ssw0rd       |
+| app_test       | app_test               | app_test_P@ssw0rd      |
+| app_staging    | app_staging            | app_staging_P@ssw0rd   |
+| app_prod       | app_prod               | app_prod_P@55w0rd      |
+
+※`app_type`に`wordpress_theme`または`wordpress_plugin`が設定されている場合、  
+**app_dev** に接続するように設定されています。
+
+### Webサーバー
+
+ドキュメントルートに`/var/www/html`を設定しています。
+
+### 共有ディレクトリの割当先について
+
+ローカル開発環境全体を仮想マシンの`/vagrant`に割り当てています。
+
+また、`app_type`の設定に応じて`source`ディレクトリを  
+仮想マシンのディレクトリとして割り当てています。
+
+#### `default`が設定されている場合
+
+仮想マシンの`/var/www/html`として割り当てています。
+
+#### `wordpress_theme`が設定されている場合
+
+仮想マシンの`/var/www/html/wp-content/themes/source`として割り当てています。
+
+#### `wordpress_plugin`が設定されている場合
+
+仮想マシンの`/var/www/html/wp-content/plugins/source`として割り当てています。
+
 
 License
 -------
