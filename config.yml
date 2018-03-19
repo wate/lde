@@ -25,7 +25,7 @@ wordpress:
     define('DISALLOW_FILE_EDIT', true);
   # ## WordPressのパーマリンク設定の内容
   # rewrite_structure: /%category%/%postname%/
-  # ## WordPressにインポートデータの設定
+  # ## WordPressにインポートするデータの設定
   # import:
   #   file: https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml
   #   authors: create
@@ -41,6 +41,7 @@ wordpress:
     # - name: some-theme-name
     #   version: 1.2.3 (optional)
     #   active: yes (optional)
+  ## .htaccessに記述する内容
   htaccess: |
     <IfModule mod_rewrite.c>
     RewriteEngine On
