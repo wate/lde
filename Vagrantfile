@@ -107,13 +107,13 @@ Vagrant.configure("2") do |config|
       end
     end
   end
-  # provision custom task
-  ansible_custom_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'post_task.yml'))
-  if File.exists?(ansible_custom_task_file)
+  # post task playbook
+  ansible_post_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'post_task.yml'))
+  if File.exists?(ansible_post_task_file)
     if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
       config.vm.provision "ansible_local" do |ansible|
-        ansible.playbook = "post_task.yml"
-        ansible.provisioning_path = "/vagrant"
+        ansible.playbook = "../post_task.yml"
+        ansible.provisioning_path = "/vagrant/provision"
         ansible.compatibility_mode = "2.0"
         ansible.extra_vars = ansible_extra_vars
         if settings['vagrant'].key?('provision_only_tags')
@@ -134,6 +134,10 @@ Vagrant.configure("2") do |config|
         end
       end
     end
+  end
+  ansible_post_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'post_task.sh'))
+  if File.exists?(ansible_post_task_file)
+    config.vm.provision "shell", path: "post_task.sh"
   end
   # VirtualBox settings
   config.vm.provider "virtualbox" do |vm|

@@ -4,6 +4,12 @@
   roles:
     - role: common
       tags: role_common
+    - role: python
+      tags: role_python
+    - role: ruby
+      tags: role_ruby
+    - role: nodejs
+      tags: role_nodejs
     - role: mariadb
       tags: role_mariadb
     - role: lexicon
