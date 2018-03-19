@@ -1,4 +1,4 @@
-- name: set wp-cli config vars
+- name: set wp-cli config variable
   set_fact:
     wp_cli_cfg:
       path: "{{ apache_vhosts[0].document_root }}"
@@ -98,6 +98,41 @@
         state: directory
         recurse: yes
         mode: "0707"
+    - name: get boilerplate
+      block:
+        - name: check index file
+          stat:
+            path: /vagrant/source/index.php
+          register: result
+        - block:
+            - name: generate request param
+              set_fact:
+                request_params:
+                  - underscoresme_generate=1
+                  - underscoresme_slug={{ wordpress.boilerplate.slug|urlencode }}
+                  - underscoresme_name={{ wordpress.boilerplate.name|urlencode }}
+                  - underscoresme_author={{ wordpress.boilerplate.author|default('', true)|urlencode }}
+                  - underscoresme_author_uri={{ wordpress.boilerplate.author_uri|default('', true)|urlencode }}
+                  - underscoresme_description={{ wordpress.boilerplate.description|default('', true)|urlencode }}
+            - name: add WooCommerce param
+              set_fact:
+                request_params: "{{ request_params }} + [ 'underscoresme_woocommerce=1' ]"
+              when: wordpress.boilerplate.woocommerce is defined and wordpress.boilerplate.woocommerce
+            - name: add sassify param
+              set_fact:
+                request_params: "{{ request_params }} + [ 'underscoresme_sass=1' ]"
+              when: wordpress.boilerplate.sassify is defined and wordpress.boilerplate.sassify
+            - name: unarchive boilerplate file
+              unarchive:
+                src: https://underscores.me/?{{ request_params|join('&') }}
+                dest: /tmp
+                remote_src: yes
+            - name: move boilerplate files to shared directory
+              shell: mv * /vagrant/source/
+              args:
+                chdir: "/tmp/{{ wordpress.boilerplate.slug }}"
+          when: not result.stat.exists
+      when: app_type == 'wordpress_theme' and wordpress.use_boilerplate
   become: no
   environment:
     WP_CLI_CONFIG_PATH: /tmp/wp-cli.yml
