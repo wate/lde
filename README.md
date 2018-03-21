@@ -140,12 +140,30 @@ php_cfg:
   display_errors: yes
   sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
 
-# --------------
-# MariaDBのSQLモードを変更する
-# --------------
-mariadb_cfg:
-  mysqld:
-    sql_mode: NO_ENGINE_SUBSTITUTION
+# ----------
+# 各PHPフレームワーク毎の設定例
+# ----------
+# ※「php_project_skeleton」は「post_task.yml」側で利用している変数
+
+## CakePHP
+doc_root_suffix: /webroot
+php_project_skeleton: cakephp/app
+
+## Laravel
+# doc_root_suffix: /public
+# php_project_skeleton: laravel/laravel
+
+## Symfony
+# doc_root_suffix: /public
+# php_project_skeleton: symfony/website-skeleton
+
+# FuelPHP
+# doc_root_suffix: /public
+# php_project_skeleton: fuel/fuel
+
+## Slim
+# doc_root_suffix: /public
+# php_project_skeleton: slim/slim-skeleton
 ```
 
 
@@ -161,10 +179,36 @@ mariadb_cfg:
   hosts: all
   become: yes
   tasks:
-    ## ここ以下に追加の処理を記載していきます
-    - name: install The Silver Searcher
-      yum:
-        name: the_silver_searcher
+    - name: check composer.json
+      stat:
+        path: /var/www/html/composer.json
+      register: result
+    - name: create project
+      block:
+          - name: install oil command
+            get_url:
+              url: https://get.fuelphp.com/installer.sh
+              dest: /usr/local/bin/oil
+              mode: +x
+            when: php_project_skeleton is defined and php_project_skeleton == 'fuel/fuel'
+          - block:
+              - name: remove .gitkeep
+                file:
+                  path: /var/www/html/.gitkeep
+                  state: absent
+              - name: create project
+                composer:
+                  command: create-project
+                  arguments: "{{ php_project_skeleton }} ."
+                  no_dev: no
+                  prefer_dist: yes
+                  working_dir: /var/www/html
+              - name: recreate .gitkeep
+                file:
+                  path: /var/www/html/.gitkeep
+                  state: touch
+            become: no
+      when: not result.stat.exists and php_project_skeleton is defined
 ```
 
 ### post_task.sh
