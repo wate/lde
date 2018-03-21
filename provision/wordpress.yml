@@ -56,12 +56,12 @@
     - name: install WordPress plugins
       command: /usr/local/bin/wp plugin install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
-        creates: "{{ apache_vhosts[0].document_root }}//wp-content/plugins/{{ item.name }}"
+        creates: "{{ apache_vhosts[0].document_root }}/wp-content/plugins/{{ item.name }}"
       with_items: "{{ wordpress.plugins }}"
     - name: install WordPress themes
       command: /usr/local/bin/wp theme install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
-        creates: "{{ apache_vhosts[0].document_root }}//wp-content/themes/{{ item.name }}"
+        creates: "{{ apache_vhosts[0].document_root }}/wp-content/themes/{{ item.name }}"
       with_items: "{{ wordpress.themes }}"
     - name: set WordPress rewrite rules
       block:
