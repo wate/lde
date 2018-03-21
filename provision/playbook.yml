@@ -29,6 +29,19 @@
     - role: wwwsqldesigner
       tags: role_wwwsqldesigner
   tasks:
+    - name: install prestissimo(composer plugin) for vagrant
+      composer:
+        command: require
+        global_command: yes
+        arguments: hirak/prestissimo
+      become: no
+      tags: prestissimo
+    - name: install prestissimo(composer plugin) for root
+      composer:
+        command: require
+        global_command: yes
+        arguments: hirak/prestissimo
+      tags: prestissimo
     - name: change group
       file:
         path: /var/www/html
