@@ -75,6 +75,11 @@ wordpress:
     sassify: no
     # WooCommerceのボイラープレートを生成するか否か
     woocommerce: no
+# Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
+# 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
+# ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
+# 「/var/www/html」よりも下に割り当てたい場合に設定します。
+doc_root_suffix:
 vagrant:
   ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
   ## ※Ansibleがインストールできない/されていない人向け
