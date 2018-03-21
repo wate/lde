@@ -71,8 +71,9 @@ Vagrant.configure("2") do |config|
   ansible_extra_vars = {
     app_type: app_type,
     domain: settings['domain'],
+    php_version: settings['php_version'],
+    doc_root_suffix: settings['doc_root_suffix'],
     wordpress: settings['wordpress'],
-    php_version: settings['php_version']
   }
   # Merge Ansible Extra Variable file
   ansible_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'extra_vars.yml'))

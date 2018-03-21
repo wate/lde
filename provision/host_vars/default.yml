@@ -118,7 +118,7 @@ apache_vhosts:
     # サーバー名
     server_name: "{{ domain }}"
     # ドキュメントルート
-    document_root: /var/www/html
+    document_root: /var/www/html{{ doc_root_suffix|default('', true) }}
     # サーバー名の別名
     server_alias: "www.{{ domain }}"
     # AllowOverrideの設定値
