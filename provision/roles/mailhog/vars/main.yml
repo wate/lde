@@ -1,0 +1,2 @@
+mailhog_smtp_port: 1025
+mailhog_http_port: 8025
