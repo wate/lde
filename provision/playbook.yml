@@ -20,8 +20,8 @@
       tags: role_apache
     - role: php
       tags: role_php
-    - role: mailcatcher
-      tags: role_mailcatcher
+    - role: mailhog
+      tags: role_mailhog
     - role: wp-cli
       tags: role_wp-cli
     - role: phpmyadmin

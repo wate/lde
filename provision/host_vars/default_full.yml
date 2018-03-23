@@ -111,7 +111,8 @@ php_packages:
 # その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
 # --------------
 php_cfg:
-  sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
+  display_errors: yes
+  sendmail_path: /usr/local/bin/mhsendmail
 
 # --------------
 # WWW SQL Designerのバックエンドの設定
@@ -198,10 +199,10 @@ apache_vhosts:
       - index.php
     include:
       - "{{ apache_snippet_dir }}/redirect_https.conf"
-  # MailCatcher用のバーチャルホスト ( http://mail.<ドメイン>/ )
-  # https://mailcatcher.me/
-  - name: 02-MailCatcher
-    state: "{{ true if mailcatcher_web_port is defined else false }}"
+  # MailHog用のバーチャルホスト ( http://mail.<ドメイン>/ )
+  # https://github.com/mailhog/MailHog
+  - name: 02-MailHog
+    state: "{{ true if mailhog_http_port is defined else false }}"
     server_name: mail.{{ domain }}
     # リバースプロキシの設定
     proxy_pass:
@@ -214,8 +215,8 @@ apache_vhosts:
       certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
       certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
       certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
-  - name: 02-MailCatcher_http
-    state: "{{ true if mailcatcher_web_port is defined else false }}"
+  - name: 02-MailHog_http
+    state: "{{ true if mailhog_http_port is defined else false }}"
     server_name: mail.{{ domain }}
     include:
       - "{{ apache_snippet_dir }}/redirect_https.conf"
