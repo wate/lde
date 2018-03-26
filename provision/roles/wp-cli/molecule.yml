@@ -16,6 +16,6 @@ vagrant:
   instances:
     - name: wp-cli
       ansible_groups:
-        - default
+        - molecule
 verifier:
   name: serverspec
