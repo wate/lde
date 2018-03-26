@@ -33,6 +33,6 @@ vagrant:
   instances:
     - name: redis
       ansible_groups:
-        - default
+        - molecule
 verifier:
   name: serverspec
