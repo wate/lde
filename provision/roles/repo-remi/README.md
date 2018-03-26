@@ -11,7 +11,7 @@ Role Variables
 
 インストール後にリポジトリを有効化するか否かを指定します。
 
-```
+```yaml
 repo_remi_enabled: yes
 ```
 
