@@ -5,12 +5,8 @@
     enablerepo: epel
 - name: create config file
   template:
-    src: config.j2
-    dest: "{{ dehydrated_config_dir }}/config"
-- name: create dehydrated wellknown directory
-  file:
-    path: "{{ dehydrated_cfg.wellknown|default('/var/www/dehydrated') }}"
-    state: directory
+    src: local.sh.j2
+    dest: "{{ dehydrated_config_dir }}//conf.d/local.sh"
 - name: create domain file
   template:
     src: domains.txt.j2
@@ -21,12 +17,13 @@
     dest: "{{ dehydrated_config_dir }}/hook.sh"
     mode: "0750"
 - name: check registered
-  command: ls {{ dehydrated_account_dir }}
-  changed_when: false
+  find:
+    paths: "{{ dehydrated_account_dir }}"
+    file_type: directory
   register: result
 - name: register account key
   command: dehydrated --register --accept-terms
-  when: result.stdout|length == 0
+  when: result.files|length == 0
 - name: sign/renew non-existent/changed/expiring certificates
   command: dehydrated --cron
   when: dehydrated_auto_execute

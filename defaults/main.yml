@@ -1,21 +1,25 @@
 ---
-dehydrated_version: v0.4.0
-
 dehydrated_cfg:
+  # user:
+  # group:
   # ip_version: 4 or 6
   # ca: https://acme-v01.api.letsencrypt.org/directory
-  # ca_terms: https://acme-v01.api.letsencrypt.org/terms
   # challengetype: http-01
   # wellknown: /var/www/dehydrated
-  # keysize: 4096
-  hook: "{{ dehydrated_config_dir }}/hook.sh"
+  openssl: openssl
+  # curl_opts: ""
+  keysize: 4096
   # hook_chain: no
-  # renew_days: 30
-  private_key_renew: no
+  renew_days: 30
+  # private_key_renew: no
   # private_key_rollover: no
-  # key_algo: rsa
+  key_algo: rsa
   # contact_email:
   # ocsp_must_staple: no
+  # oscp_fetch: no
+  # chaincache: ${BASEDIR}/chains
+  # auto_clanup: no
+  # api: auto
 
 # auto execute `dehydrated --cron`
 dehydrated_auto_execute: no
@@ -129,6 +133,34 @@ dehydrated_hook_invalid_challenge: ""
 #   The kind of request that was made (GET, POST...)
 
 dehydrated_hook_request_failure: ""
+
+
+# -----------------------
+# generate_csr hook parameters
+# -----------------------
+# This hook is called before any certificate signing operation takes place.
+# It can be used to generate or fetch a certificate signing request with external
+# tools.
+# The output should be just the cerificate signing request formatted as PEM.
+#
+# Parameters:
+# - DOMAIN
+#   The primary domain as specified in domains.txt. This does not need to
+#   match with the domains in the CSR, it's basically just the directory name.
+# - CERTDIR
+#   Certificate output directory for this particular certificate. Can be used
+#   for storing additional files.
+# - ALTNAMES
+#   All domain names for the current certificate as specified in domains.txt.
+#   Again, this doesn't need to match with the CSR, it's just there for convenience.
+dehydrated_hook_generate_csr: ""
+
+# -----------------------
+# startup_hook hook parameters
+# -----------------------
+# This hook is called before the cron command to do some initial tasks
+# (e.g. starting a webserver).
+dehydrated_hook_startup_hook: ""
 
 # -----------------------
 # exit_hook hook parameters

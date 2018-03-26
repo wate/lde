@@ -1,2 +1,11 @@
+galaxy_info:
+  author: yoshiaki tanaka
+  description: setup dehydrated
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - 7
+
 dependencies:
   - repo-epel
