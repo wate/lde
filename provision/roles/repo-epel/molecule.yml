@@ -22,9 +22,9 @@ vagrant:
   instances:
     - name: enabled
       ansible_groups:
-        - default
+        - molecule
     - name: disabled
       ansible_groups:
-        - default
+        - molecule
 verifier:
   name: serverspec

@@ -14,11 +14,6 @@ Role Variables
 nodejs_major_version: 8
 ```
 
-Dependencies
-------------
-
-* [repo-epel](https://github.com/wate/ansible-role-repo-epel)
-
 Example Playbook
 ----------------
 

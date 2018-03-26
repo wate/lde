@@ -12,9 +12,11 @@ A description of the settable variables for this role should go here, including 
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-         - { role: apache }
+```yaml
+- hosts: servers
+  roles:
+     - { role: apache }
+```
 
 License
 -------

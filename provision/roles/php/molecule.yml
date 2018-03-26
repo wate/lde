@@ -33,12 +33,12 @@ vagrant:
   instances:
     - name: php
       ansible_groups:
-        - default
+        - molecule
     - name: change-version
       ansible_groups:
-        - default
+        - molecule
     - name: in-php-fpm
       ansible_groups:
-        - default
+        - molecule
 verifier:
   name: serverspec

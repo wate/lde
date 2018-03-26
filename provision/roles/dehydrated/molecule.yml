@@ -14,7 +14,7 @@ vagrant:
         memory: 512
         cpus: 1
   instances:
-    - name: mariadb
+    - name: dehydrated
       ansible_groups:
         - molecule
 verifier:
