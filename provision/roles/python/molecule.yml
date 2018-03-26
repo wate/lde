@@ -16,6 +16,6 @@ vagrant:
   instances:
     - name: python
       ansible_groups:
-        - default
+        - molecule
 verifier:
   name: serverspec
