@@ -16,6 +16,6 @@ vagrant:
   instances:
     - name: mailhog
       ansible_groups:
-        - default
+        - molecule
 verifier:
   name: serverspec
