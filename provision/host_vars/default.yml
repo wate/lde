@@ -176,6 +176,10 @@ apache_vhosts:
     require:
       - type: ip
         value: 192.168.33
+  - name: 04-BootstrapPageGenerator
+    state: "{{ true if pagegenerator_dest is defined else false }}"
+    server_name: pagegenerator.{{ domain }}
+    document_root: "{{ pagegenerator_dest|default('/opt/BootstrapPageGenerator') }}"
 
 # --------------
 # Apacheの設定
