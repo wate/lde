@@ -85,6 +85,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * mail.<独自ドメイン>：[MailCatcher](https://mailcatcher.me/)用のURLです。
 * db.<独自ドメイン>：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
 * er.<独自ドメイン>：[WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)用のURLです。
+* pagegenerator.<独自ドメイン>：[Bootstrap Page Generator](https://github.com/Vegetam/BootstrapPageGenerator)用のURLです。
 
 #### php_version
 

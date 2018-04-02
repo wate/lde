@@ -28,6 +28,8 @@
       tags: role_phpmyadmin
     - role: wwwsqldesigner
       tags: role_wwwsqldesigner
+    - role: pagegenerator
+      tags: role_pagegenerator
   tasks:
     - name: install prestissimo(composer plugin) for vagrant
       composer:
