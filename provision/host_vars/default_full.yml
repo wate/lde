@@ -242,6 +242,19 @@ apache_vhosts:
     server_name: er.{{ domain }}
     include:
       - "{{ apache_snippet_dir }}/redirect_https.conf"
+  - name: 04-BootstrapPageGenerator
+    state: "{{ true if pagegenerator_dest is defined else false }}"
+    server_name: mock.{{ domain }}
+    document_root: "{{ pagegenerator_dest|default('/opt/BootstrapPageGenerator') }}"
+    ssl:
+      certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
+      certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+  - name: 04-BootstrapPageGenerator_http
+    state: "{{ true if pagegenerator_dest is defined else false }}"
+    server_name: mock.{{ domain }}
+    include:
+      - "{{ apache_snippet_dir }}/redirect_https.conf"
 
 # --------------
 # Apacheの設定
@@ -297,7 +310,8 @@ dehydrated_domains:
   "www.{{ domain }}",
   "db.{{ domain }}",
   "mail.{{ domain }}",
-  "er.{{ domain }}"
+  "er.{{ domain }}",
+  "mock..{{ domain }}"
   ]
 
 dehydrated_auto_execute: yes

@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
     # WWW SQL Designer
     'er.' + settings['domain'],
     # Bootstrap Page Generator
-    'pagegenerator.' + settings['domain'],
+    'mock.' + settings['domain'],
   ]
   # vagrant-hostsupdater
   plugin_setting = {}
