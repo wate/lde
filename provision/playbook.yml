@@ -1,6 +1,11 @@
 - name: setup local development environment
   hosts: all
   become: yes
+  vars:
+    direnv:
+      version: "v2.15.2"
+      os: "linux"
+      arch: "amd64"
   roles:
     - role: common
       tags: role_common
@@ -31,18 +36,35 @@
     - role: pagegenerator
       tags: role_pagegenerator
   tasks:
-    - name: install prestissimo(composer plugin) for vagrant
-      composer:
-        command: require
-        global_command: yes
-        arguments: hirak/prestissimo
+    - debug:
+        var: vars.ansible_facts
+    - name: install direnv
+      get_url:
+        url: "https://github.com/direnv/direnv/releases/download/{{ direnv.version }}/direnv.{{ direnv.os }}-{{ direnv.arch }}"
+        dest: /usr/local/bin/direnv
+        mode: "0755"
+    - name: setup direnv
+      lineinfile:
+        path: ~/.bashrc
+        line: eval "$(direnv hook bash)"
       become: no
-      tags: prestissimo
-    - name: install prestissimo(composer plugin) for root
-      composer:
-        command: require
-        global_command: yes
-        arguments: hirak/prestissimo
+    - block:
+      - name: check global composer setting
+        stat:
+          path: ~/.config/composer/composer.json
+        register: result
+      - name: install prestissimo(composer plugin) for vagrant
+        composer:
+          command: require
+          global_command: yes
+          arguments: hirak/prestissimo
+        when: not result.stat.exists
+      - name: update global composer packages
+        composer:
+          command: update
+          global_command: yes
+        when: result.stat.exists
+      become: no
       tags: prestissimo
     - name: change group
       file:
