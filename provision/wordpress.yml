@@ -1,7 +1,7 @@
 - name: set wp-cli config variable
   set_fact:
     wp_cli_cfg:
-      path: "{{ apache_vhosts[0].document_root }}"
+      path: /var/www/html
       core download:
         locale: "{{ wordpress.locale|default('ja') }}"
         version: "{{ wordpress.version|default('latest') }}"
@@ -26,15 +26,15 @@
     - name: download WordPress
       command: /usr/local/bin/wp core download
       args:
-        creates: "{{ apache_vhosts[0].document_root }}/wp-config-sample.php"
+        creates: "/var/www/html/wp-config-sample.php"
     - name: create WordPress config file
       command: /usr/local/bin/wp config create
       args:
-        creates: "{{ apache_vhosts[0].document_root }}/wp-config.php"
+        creates: "/var/www/html/wp-config.php"
     - name: add WordPress extra config
       blockinfile:
         marker: "// {mark} ANSIBLE MANAGED BLOCK"
-        path: "{{ apache_vhosts[0].document_root }}/wp-config.php"
+        path: "/var/www/html/wp-config.php"
         insertafter: "\\$table_prefix ="
         block: "{{ wordpress.extra_setting }}"
     - name: check WordPress installed
@@ -47,7 +47,7 @@
       when: result.rc > 0
     - name: create .htaccess
       blockinfile:
-        path: "{{ apache_vhosts[0].document_root }}/.htaccess"
+        path: "/var/www/html/.htaccess"
         create: yes
         block: "{{ wordpress.htaccess }}"
     - name: activate WP Multibyte Patch plugin
@@ -56,12 +56,12 @@
     - name: install WordPress plugins
       command: /usr/local/bin/wp plugin install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
-        creates: "{{ apache_vhosts[0].document_root }}/wp-content/plugins/{{ item.name }}"
+        creates: "/var/www/html/wp-content/plugins/{{ item.name }}"
       with_items: "{{ wordpress.plugins }}"
     - name: install WordPress themes
       command: /usr/local/bin/wp theme install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
-        creates: "{{ apache_vhosts[0].document_root }}/wp-content/themes/{{ item.name }}"
+        creates: "/var/www/html/wp-content/themes/{{ item.name }}"
       with_items: "{{ wordpress.themes }}"
     - name: set WordPress rewrite rules
       block:
@@ -94,7 +94,7 @@
       when: wordpress.import is defined
     - name: change permission for uploads directory
       file:
-        path: "{{ apache_vhosts[0].document_root }}/wp-content/uploads"
+        path: "/var/www/html/wp-content/uploads"
         state: directory
         recurse: yes
         mode: "0707"

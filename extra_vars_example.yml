@@ -21,3 +21,8 @@ php_project_skeleton: laravel/laravel
 ## Slim
 # doc_root_suffix: /public
 # php_project_skeleton: slim/slim-skeleton
+
+# ----------
+# EC-CUBEの設定
+# ----------
+# doc_root_suffix: /html
