@@ -36,8 +36,6 @@
     - role: pagegenerator
       tags: role_pagegenerator
   tasks:
-    - debug:
-        var: vars.ansible_facts
     - name: install direnv
       get_url:
         url: "https://github.com/direnv/direnv/releases/download/{{ direnv.version }}/direnv.{{ direnv.os }}-{{ direnv.arch }}"
