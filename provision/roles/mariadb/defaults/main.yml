@@ -8,8 +8,8 @@ mariadb_packages:
 
 mariadb_root_password: rootP@55w0rd
 
-mariadb_default_charset: utf8mb4
-mariadb_default_collation: utf8mb4_general_ci
+mariadb_default_charset: utf8
+mariadb_default_collation: utf8_general_ci
 
 mariadb_databases: []
   # - name: sample
@@ -51,7 +51,7 @@ mariadb_cfg:
       - ERROR_FOR_DIVISION_BY_ZERO
       - NO_AUTO_CREATE_USER
       - NO_ENGINE_SUBSTITUTION
-    bind_address: 127.0.0.1
+    # bind_address: 127.0.0.1
     # datadir: /var/lib/mysql
     # socket: /var/run/mysqld/mysqld.sock
     # innodb_data_home_dir: /var/lib/mysql
