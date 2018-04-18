@@ -103,14 +103,14 @@ vagrant:
   #   - role_php
   #   - wordpress
   ## ポートフォワーディングの設定
-  # forwarded_ports:
-  #   - guest: 80
-  #     host: 8080
+  forwarded_ports:
+    - guest: 3306
+    - guest: 80
+      host: 8080
+  #   - guest: 5432
   #   - guest: 22
   #     host: 2240
   #     id: ssh
-  #   - guest: 3306
-  #   - guest: 5432
   synced_folder:
     type:
       default:
