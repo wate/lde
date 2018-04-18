@@ -34,7 +34,9 @@ describe file('/etc/my.cnf.d/custom.cnf') do
   mysqld_setting = property['mariadb_cfg']['mysqld']
   sql_mode = mysqld_setting['sql_mode'].is_a?(Array) ? mysqld_setting['sql_mode'].join(',') : mysqld_setting['sql_mode']
   its(:content) { should match(/^sql_mode = "#{e(sql_mode)}"/) }
-  its(:content) { should match(/^bind-address = #{e(mysqld_setting['bind_address'])}/) }
+  if mysqld_setting.key?('bind_address')
+    its(:content) { should match(/^bind-address = #{e(mysqld_setting['bind_address'])}/) }
+  end
   its(:content) { should match(/^datadir = #{e(mysqld_setting['datadir'])}/) } if mysqld_setting.key?('datadir')
   its(:content) { should match(/^socket = #{e(mysqld_setting['socket'])}/) } if mysqld_setting.key?('socket')
   if mysqld_setting.key?('innodb_data_home_dir')
