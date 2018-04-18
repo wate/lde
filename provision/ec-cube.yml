@@ -1,0 +1,21 @@
+- name: download EC-CUBE
+  unarchive:
+    repo: https://github.com/EC-CUBE/ec-cube/archive/3.0.15.zip
+    dest: /var/www/html
+    remote_src: yes
+- block:
+    - name: install EC-CUBE
+      command: /usr/bin/php eccube_install.php mysql --skip-createdb
+      args:
+        chdir: /var/www/html
+      environment:
+        DBNAME: "{{ mariadb_databases[0].name }}"
+        DBUSER: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
+        DBPASS: "{{ mariadb_databases[0].password }}"
+        SHOP_NAME: EC-CUBE SHOP
+        ADMIN_MAIL: admin@example.com
+        ADMIN_USER: admin
+        ADMIN_PASS: password
+        MAIL_BACKEND: smtp
+        ADMIN_ROUTE: admin
+  become: no
