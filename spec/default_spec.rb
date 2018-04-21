@@ -76,8 +76,6 @@ describe file('/etc/my.cnf.d/custom.cnf') do
     its(:content) { should match(/^table_definition_cache = #{e(mysqld_setting['table_definition_cache'])}/) }
   end
   # InnoDB
-  innodb_large_prefix_value = mysqld_setting['innodb_large_prefix'] ? 'ON' : 'OFF'
-  its(:content) { should match(/^innodb_large_prefix = #{innodb_large_prefix_value}/) }
 
   innodb_flush_log_at_trx_commit_value = mysqld_setting['innodb_flush_log_at_trx_commit']
   its(:content) { should match(/^innodb_flush_log_at_trx_commit = #{e(innodb_flush_log_at_trx_commit_value)}/) }
@@ -90,8 +88,17 @@ describe file('/etc/my.cnf.d/custom.cnf') do
   if mysqld_setting.key?('innodb_log_files_in_group')
     its(:content) { should match(/^innodb_log_files_in_group = #{e(mysqld_setting['innodb_log_files_in_group'])}/) }
   end
-  its(:content) { should match(/^innodb_file_format = #{e(mysqld_setting['innodb_file_format'])}/) }
-  its(:content) { should match(/^innodb_file_format_max = #{e(mysqld_setting['innodb_file_format_max'])}/) }
+  if mysqld_setting.key?('innodb_strict_mode')
+    innodb_strict_mode_value = mysqld_setting['innodb_strict_mode'] ? 'ON' : 'OFF'
+    its(:content) { should match(/^innodb_strict_mode = #{innodb_strict_mode_value}/) }
+  end
+  if mysqld_setting.key?('innodb_large_prefix')
+    innodb_large_prefix_value = mysqld_setting['innodb_large_prefix'] ? 'ON' : 'OFF'
+    its(:content) { should match(/^innodb_large_prefix = #{innodb_large_prefix_value}/) }
+  end
+  if mysqld_setting.key?('innodb_file_format')
+    its(:content) { should match(/^innodb_file_format = #{e(mysqld_setting['innodb_file_format'])}/) }
+  end
 
   ## Global Buffer
   its(:content) { should match(/^innodb_buffer_pool_size = #{e(mysqld_setting['innodb_buffer_pool_size'])}/) }

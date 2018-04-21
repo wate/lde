@@ -83,9 +83,16 @@ innodb_log_file_size = {{ mariadb_cfg.mysqld.innodb_log_file_size }}
 {% if mariadb_cfg.mysqld.innodb_log_files_in_group is defined -%}
 innodb_log_files_in_group = {{ mariadb_cfg.mysqld.innodb_log_files_in_group }}
 {% endif %}
+
+{% if mariadb_cfg.mysqld.innodb_strict_mode is defined -%}
+innodb_strict_mode = {{ 'ON' if  mariadb_cfg.mysqld.innodb_strict_mode else 'OFF' }}
+{% endif %}
+{% if mariadb_cfg.mysqld.innodb_large_prefix is defined -%}
 innodb_large_prefix = {{ 'ON' if  mariadb_cfg.mysqld.innodb_large_prefix else 'OFF' }}
+{% endif %}
+{% if mariadb_cfg.mysqld.innodb_file_format is defined -%}
 innodb_file_format = {{ mariadb_cfg.mysqld.innodb_file_format }}
-innodb_file_format_max = {{ mariadb_cfg.mysqld.innodb_file_format_max }}
+{% endif %}
 
 ## Global Buffer
 innodb_buffer_pool_size = {{ mariadb_cfg.mysqld.innodb_buffer_pool_size}}
