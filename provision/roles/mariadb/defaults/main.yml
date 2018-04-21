@@ -53,7 +53,7 @@ mariadb_cfg:
       - NO_ENGINE_SUBSTITUTION
     # bind_address: 127.0.0.1
     # datadir: /var/lib/mysql
-    # socket: /var/run/mysqld/mysqld.sock
+    # socket: /var/lib/mysql/mysql.sock
     # innodb_data_home_dir: /var/lib/mysql
     ## Network
     max_connections: "{{ mariadb_max_connections }}"
@@ -83,13 +83,13 @@ mariadb_cfg:
     innodb_file_per_table: yes
     innodb_flush_log_at_trx_commit: 1
     innodb_buffer_pool_size: "{{ ((ansible_memtotal_mb * 1024 * 1024) * (mariadb_innodb_baffer_pool_rate / 100))|int }}"
-    innodb_log_file_size: "{{ (((ansible_memtotal_mb * 1024 * 1024) * (mariadb_innodb_baffer_pool_rate / 100)) / 4)|int }}"
-    innodb_log_files_in_group: 2
+    # innodb_log_file_size: "{{ (((ansible_memtotal_mb * 1024 * 1024) * (mariadb_innodb_baffer_pool_rate / 100)) / 4)|int }}"
+    # innodb_log_files_in_group: 2
     innodb_additional_mem_pool_size: 32M
     innodb_log_buffer_size: 32M
-    innodb_large_prefix: yes
-    innodb_file_format: Barracuda
-    innodb_file_format_max: Barracuda
+    # innodb_strict_mode: no
+    # innodb_large_prefix: yes
+    # innodb_file_format: Antelope
     max_heap_table_size: 32M
     tmp_table_size: 32M
     ## Thread Buffer
