@@ -17,6 +17,8 @@
           admin_user: "{{ wordpress.admin_user }}"
           admin_password: "{{ wordpress.admin_password }}"
           admin_email: "{{ wordpress.admin_email }}"
+      core update:
+        locale: "{{ wordpress.locale|default('ja') }}"
 - name: create wp-cli config file
   blockinfile:
     path: /tmp/wp-cli.yml
@@ -53,6 +55,11 @@
     - name: activate WP Multibyte Patch plugin
       command: /usr/local/bin/wp plugin activate wp-multibyte-patch
       when: wp_cli_cfg['core download'].locale is defined and wp_cli_cfg['core download'].locale == 'ja'
+    - name: set WordPress site setting
+      command: /usr/local/bin/wp option update {{ item }} 'http://{{ apache_vhosts[0].server_name }}'
+      with_items:
+        - siteurl
+        - home
     - name: install WordPress plugins
       command: /usr/local/bin/wp plugin install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
