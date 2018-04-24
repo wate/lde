@@ -26,9 +26,9 @@ wordpress:
   # ## WordPressのパーマリンク設定の内容
   # rewrite_structure: /%category%/%postname%/
   # ## WordPressにインポートするデータの設定
-  import:
-    file: https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml
-    authors: create
+  # import:
+  #   file: https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml
+  #   authors: create
   ## インストールするプラグイン
   plugins:
     - name: "ssh-sftp-updater-support"
