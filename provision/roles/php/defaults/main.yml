@@ -41,7 +41,7 @@ php_cfg:
   unserialize_callback_func: ""
   serialize_precision: -1
   # open_basedir: ""
-  disable_functions: ""
+  disable_functions: []
   disable_classes: ""
   # highlight:
   #   string: #DD0000
