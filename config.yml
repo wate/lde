@@ -111,10 +111,10 @@ vagrant:
     - guest: 3306
     - guest: 80
       host: 8080
-  #   - guest: 5432
-  #   - guest: 22
-  #     host: 2240
-  #     id: ssh
+    # - guest: 5432
+    # - guest: 22
+    #   host: 2240
+    #   id: ssh
   synced_folder:
     type:
       default:
