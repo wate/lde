@@ -101,8 +101,6 @@ Vagrant.configure("2") do |config|
     ansible_extra_vars.merge!(ansible_custom_vars);
   end
 
-  puts ansible_extra_vars
-
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
     config.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"
