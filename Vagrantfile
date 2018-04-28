@@ -82,6 +82,10 @@ Vagrant.configure("2") do |config|
   if File.exists?(ansible_var_file)
     ansible_custom_vars = YAML.load_file(ansible_var_file)
     if ansible_custom_vars.is_a?(Hash)
+      if ansible_custom_vars.key?('wordpress')
+        ansible_extra_vars[:wordpress].merge!(ansible_custom_vars['wordpress']);
+        ansible_custom_vars.delete('wordpress')
+      end
       ansible_extra_vars.merge!(ansible_custom_vars);
     end
   end
