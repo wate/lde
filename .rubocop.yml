@@ -1,5 +1,21 @@
+Style/ClassAndModuleChildren:
+  Exclude:
+    - spec/spec_helper.rb
+Style/ConditionalAssignment:
+  Enabled: false
+
+Performance/RedundantBlockCall:
+  Exclude:
+    - spec/spec_helper.rb
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/CaseEquality:
+  Enabled: false
+
 Metrics/LineLength:
-  Max: 140
+  Max: 120
   AllowHeredoc: true
   AllowURI: true
   URISchemes:
@@ -12,5 +28,5 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
 
-Style/ConditionalAssignment:
-  Enabled: false
+Metrics/BlockNesting:
+  Max: 4
