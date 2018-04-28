@@ -24,8 +24,24 @@ Vagrant.configure("2") do |config|
         id: forwarded_port['id'] || nil
     end
   end
+
+  # Merge Ansible Extra Variable file
+  extra_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'extra_vars.yml'))
+  ansible_custom_vars = {}
+  if File.exists?(extra_var_file)
+    extra_vars = YAML.load_file(extra_var_file)
+    if extra_vars.is_a?(Hash)
+      ansible_custom_vars = extra_vars
+    end
+  end
+  settings['domain'] = ansible_custom_vars['domain'] if ansible_custom_vars.key?('domain')
+  settings['app_type'] = ansible_custom_vars['app_type'] if ansible_custom_vars.key?('app_type')
+
   # synced folders
-  app_type = settings['app_type']
+  app_type = 'default'
+  if settings['vagrant']['synced_folder']['type'].key?(settings['app_type'])
+    app_type = settings['app_type']
+  end
   synced_folder_args = [
     settings['vagrant']['synced_folder']['type'][app_type]['local'],
     settings['vagrant']['synced_folder']['type'][app_type]['remote']
@@ -77,13 +93,12 @@ Vagrant.configure("2") do |config|
     doc_root_suffix: settings['doc_root_suffix'],
     wordpress: settings['wordpress'],
   }
-  # Merge Ansible Extra Variable file
-  ansible_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'extra_vars.yml'))
-  if File.exists?(ansible_var_file)
-    ansible_custom_vars = YAML.load_file(ansible_var_file)
-    if ansible_custom_vars.is_a?(Hash)
-      ansible_extra_vars.merge!(ansible_custom_vars);
+  unless ansible_custom_vars.empty?()
+    if ansible_custom_vars.key?('wordpress')
+      ansible_extra_vars[:wordpress].merge!(ansible_custom_vars['wordpress']);
+      ansible_custom_vars.delete('wordpress')
     end
+    ansible_extra_vars.merge!(ansible_custom_vars);
   end
 
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
