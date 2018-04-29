@@ -1,15 +1,15 @@
 require 'rake'
 require 'rspec/core/rake_task'
-require 'yaml'
 
 task :spec    => 'spec:all'
 task :default => :spec
 
 namespace :spec do
   targets = []
-  inventory = YAML.load(`ansible-inventory --list -i ../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory`)
-  inventory['_meta']['hostvars'].keys.each do |host|
-    target = "_#{target}" if host == "default"
+  Dir.glob('./spec/*').each do |dir|
+    next unless File.directory?(dir)
+    target = File.basename(dir)
+    target = "_#{target}" if target == "default"
     targets << target
   end
 
