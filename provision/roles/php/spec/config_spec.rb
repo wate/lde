@@ -1,743 +1,795 @@
 require 'spec_helper'
 
-describe file('/etc/php.ini') do
-  php_cfg = property['php_cfg']
-  # Core
-  if php_cfg.key?('user_ini')
-    if php_cfg['user_ini'].key?('filename')
-      its(:content) { should match(/^user_ini.filename = #{e(php_cfg['user_ini']['filename'])}$/) }
-    end
-    if php_cfg['user_ini'].key?('cache_ttl')
-      its(:content) { should match(/^user_ini.cache_ttl = #{e(php_cfg['user_ini']['cache_ttl'])}$/) }
-    end
+def to_ini_value(value)
+  return '' if value.nil?
+  if !!value === value
+    return value ? 'On' : 'Off'
   end
-  its(:content) { should match(/^engine = #{e(php_cfg['engine'])}$/) }
-  its(:content) { should match(/^short_open_tag = #{e(php_cfg['short_open_tag'])}$/) }
-  if Gem::Version.new(property['php_version'].to_s) < Gem::Version.new('7') && php_cfg.key?('asp_tags')
-    its(:content) { should match(/^asp_tags = #{e(php_cfg['asp_tags'])}$/) }
-  end
-  its(:content) { should match(/^precision = #{e(php_cfg['precision'])}$/) }
-  its(:content) { should match(/^output_buffering = #{e(php_cfg['output_buffering'])}$/) }
-  if php_cfg.key?('output_handler')
-    its(:content) { should match(/^output_handler = #{e(php_cfg['output_handler'])}$/) }
-  end
-  its(:content) { should match(/^implicit_flush = #{e(php_cfg['implicit_flush'])}$/) }
-  its(:content) { should match(/^unserialize_callback_func = #{e(php_cfg['unserialize_callback_func'])}$/) }
-  its(:content) { should match(/^serialize_precision = #{e(php_cfg['serialize_precision'])}$/) }
-  if php_cfg.key?('open_basedir')
-    its(:content) { should match(/^open_basedir = #{e(php_cfg['open_basedir'])}$/) }
-  end
-  its(:content) { should match(/^disable_functions = #{e(php_cfg['disable_functions'])}$/) }
-  its(:content) { should match(/^disable_classes = #{e(php_cfg['disable_classes'])}$/) }
-  if php_cfg.key?('ignore_user_abort')
-    its(:content) { should match(/^ignore_user_abort = #{e(php_cfg['ignore_user_abort'])}$/) }
-  end
-  if php_cfg.key?('realpath_cache_size')
-    its(:content) { should match(/^realpath_cache_size = #{e(php_cfg['realpath_cache_size'])}$/) }
-  end
-  if php_cfg.key?('realpath_cache_ttl')
-    its(:content) { should match(/^realpath_cache_ttl = #{e(php_cfg['realpath_cache_ttl'])}$/) }
-  end
-  its(:content) { should match(/^expose_php = #{e(php_cfg['expose_php'])}$/) }
-  its(:content) { should match(/^max_execution_time = #{e(php_cfg['max_execution_time'])}$/) }
-  its(:content) { should match(/^max_input_time = #{e(php_cfg['max_input_time'])}$/) }
-  if php_cfg.key?('max_input_nesting_level')
-    its(:content) { should match(/^max_input_nesting_level = #{e(php_cfg['max_input_nesting_level'])}$/) }
-  end
-  if php_cfg.key?('max_input_vars')
-    its(:content) { should match(/^max_input_vars = #{e(php_cfg['max_input_vars'])}$/) }
-  end
-  its(:content) { should match(/^memory_limit = #{e(php_cfg['memory_limit'])}$/) }
-  its(:content) { should match(/^error_reporting = #{e(php_cfg['error_reporting'])}$/) }
-  its(:content) { should match(/^display_errors = #{e(php_cfg['display_errors'])}$/) }
-  its(:content) { should match(/^display_startup_errors = #{e(php_cfg['display_startup_errors'])}$/) }
-  its(:content) { should match(/^log_errors = #{e(php_cfg['log_errors'])}$/) }
-  its(:content) { should match(/^log_errors_max_len = #{e(php_cfg['log_errors_max_len'])}$/) }
-  its(:content) { should match(/^ignore_repeated_errors = #{e(php_cfg['ignore_repeated_errors'])}$/) }
-  its(:content) { should match(/^ignore_repeated_source = #{e(php_cfg['ignore_repeated_source'])}$/) }
-  its(:content) { should match(/^report_memleaks = #{e(php_cfg['report_memleaks'])}$/) }
-  if php_cfg.key?('report_zend_debug')
-    its(:content) { should match(/^report_zend_debug = #{e(php_cfg['report_zend_debug'])}$/) }
-  end
-  its(:content) { should match(/^track_errors = #{e(php_cfg['track_errors'])}$/) }
-  if php_cfg.key?('xmlrpc_errors')
-    its(:content) { should match(/^xmlrpc_errors = #{e(php_cfg['xmlrpc_errors'])}$/) }
-  end
-  if php_cfg.key?('xmlrpc_error_number')
-    its(:content) { should match(/^xmlrpc_error_number = #{e(php_cfg['xmlrpc_error_number'])}$/) }
-  end
-  its(:content) { should match(/^html_errors = #{e(php_cfg['html_errors'])}$/) }
-  if php_cfg.key?('docref_root')
-    its(:content) { should match(/^docref_root = #{e(php_cfg['docref_root'])}$/) }
-  end
-  if php_cfg.key?('docref_ext')
-    its(:content) { should match(/^docref_ext = #{e(php_cfg['docref_ext'])}$/) }
-  end
-  if php_cfg.key?('error_prepend_string')
-    its(:content) { should match(/^error_prepend_string = #{e(php_cfg['error_prepend_string'])}$/) }
-  end
-  if php_cfg.key?('error_append_string')
-    its(:content) { should match(/^error_append_string = #{e(php_cfg['error_append_string'])}$/) }
-  end
-  if php_cfg.key?('error_log')
-    its(:content) { should match(/^error_log = #{e(php_cfg['error_log'])}$/) }
-  end
-  its(:content) { should match(/^variables_order = "#{e(php_cfg['variables_order'])}"$/) }
-  its(:content) { should match(/^request_order = "#{e(php_cfg['request_order'])}"$/) }
-  its(:content) { should match(/^register_argc_argv = #{e(php_cfg['register_argc_argv'])}$/) }
-  its(:content) { should match(/^auto_globals_jit = #{e(php_cfg['auto_globals_jit'])}$/) }
-  if php_cfg.key?('enable_post_data_reading')
-    its(:content) { should match(/^enable_post_data_reading = #{e(php_cfg['enable_post_data_reading'])}$/) }
-  end
-  its(:content) { should match(/^post_max_size = #{e(php_cfg['post_max_size'])}$/) }
-  its(:content) { should match(/^auto_prepend_file = #{e(php_cfg['auto_prepend_file'])}$/) }
-  its(:content) { should match(/^auto_append_file = #{e(php_cfg['auto_append_file'])}$/) }
-  its(:content) { should match(/^default_mimetype = "#{e(php_cfg['default_mimetype'])}"$/) }
-  its(:content) { should match(/^default_charset = "#{e(php_cfg['default_charset'])}"$/) }
-  if php_cfg.key?('internal_encoding')
-    its(:content) { should match(/^internal_encoding = #{e(php_cfg['internal_encoding'])}$/) }
-  end
-  if php_cfg.key?('input_encoding')
-    its(:content) { should match(/^input_encoding = #{e(php_cfg['input_encoding'])}$/) }
-  end
-  if php_cfg.key?('output_encoding')
-    its(:content) { should match(/^output_encoding = #{e(php_cfg['output_encoding'])}$/) }
-  end
-  if php_cfg.key?('always_populate_raw_post_data')
-    its(:content) { should match(/^always_populate_raw_post_data = #{e(php_cfg['always_populate_raw_post_data'])}$/) }
-  end
-  if php_cfg.key?('include_path')
-    its(:content) { should match(/^include_path = #{e(php_cfg['include_path'])}$/) }
-  end
-  its(:content) { should match(/^doc_root = #{e(php_cfg['doc_root'])}$/) }
-  its(:content) { should match(/^user_dir = #{e(php_cfg['user_dir'])}$/) }
-  if php_cfg.key?('extension_dir')
-    its(:content) { should match(/^extension_dir = #{e(php_cfg['extension_dir'])}$/) }
-  end
-  if php_cfg.key?('sys_temp_dir')
-    its(:content) { should match(/^sys_temp_dir = #{e(php_cfg['sys_temp_dir'])}$/) }
-  end
-  its(:content) { should match(/^enable_dl = #{e(php_cfg['enable_dl'])}$/) }
-  its(:content) { should match(/^file_uploads = #{e(php_cfg['file_uploads'])}$/) }
-  if php_cfg.key?('upload_tmp_dir')
-    its(:content) { should match(/^upload_tmp_dir = #{e(php_cfg['upload_tmp_dir'])}$/) }
-  end
-  its(:content) { should match(/^upload_max_filesize = #{e(php_cfg['upload_max_filesize'])}$/) }
-  its(:content) { should match(/^max_file_uploads = #{e(php_cfg['max_file_uploads'])}$/) }
-  its(:content) { should match(/^allow_url_fopen = #{e(php_cfg['allow_url_fopen'])}$/) }
-  its(:content) { should match(/^allow_url_include = #{e(php_cfg['allow_url_include'])}$/) }
-  if php_cfg.key?('from')
-    its(:content) { should match(/^from = #{e(php_cfg['from'])}$/) }
-  end
-  if php_cfg.key?('user_agent')
-    its(:content) { should match(/^user_agent = #{e(php_cfg['user_agent'])}$/) }
-  end
-  its(:content) { should match(/^default_socket_timeout = #{e(php_cfg['default_socket_timeout'])}$/) }
-  if php_cfg.key?('auto_detect_line_endings')
-    its(:content) { should match(/^auto_detect_line_endings = #{e(php_cfg['auto_detect_line_endings'])}$/) }
-  end
-  if php_cfg.key?('sendmail_path')
-    its(:content) { should match(/^sendmail_path = #{e(php_cfg['sendmail_path'])}$/) }
-  end
-  if php_cfg.key?('browscap')
-    its(:content) { should match(/^browscap = #{e(php_cfg['browscap'])}$/) }
-  end
-  its(:content) { should match(/^cli_server.color = #{e(php_cfg['cli_server']['color'])}$/) }
+  escape_value = value.is_a?(String) ? value : value.to_s
+  Regexp.escape(escape_value)
+end
 
-  if php_cfg.key?('url_rewriter')
-    if php_cfg['url_rewriter'].key?('tags')
-      its(:content) { should match(/^url_rewriter.tags = "#{e(php_cfg['url_rewriter']['tags'])}"$/) }
+describe file('/etc/php.ini') do
+  php_ini = property['php_cfg']
+  # Core
+  if php_ini.key?('user_ini')
+    if php_ini['user_ini'].key?('filename')
+      its(:content) { should match(/^user_ini.filename = #{to_ini_value(php_ini['user_ini']['filename'])}$/) }
     end
-    if php_cfg['url_rewriter'].key?('hosts')
-      its(:content) { should match(/^url_rewriter.hosts = "#{e(php_cfg['url_rewriter']['hosts'])}"$/) }
-    end
-  end
-  if php_cfg['mail'].key?('force_extra_parameters')
-    its(:content) { should match(/^mail.force_extra_parameters = #{e(php_cfg['mail']['force_extra_parameters'])}$/) }
-  end
-  its(:content) { should match(/^mail.add_x_header = #{e(php_cfg['mail']['add_x_header'])}$/) }
-  if php_cfg['mail'].key?('log')
-    its(:content) { should match(/^mail.log = #{e(php_cfg['mail']['log'])}$/) }
-  end
-  if php_cfg.key?('arg_separator')
-    if php_cfg['arg_separator'].key?('output')
-      its(:content) { should match(/^arg_separator.output = #{e(php_cfg['arg_separator']['output'])}$/) }
-    end
-    if php_cfg['arg_separator'].key?('input')
-      its(:content) { should match(/^arg_separator.input = #{e(php_cfg['arg_separator']['input'])}$/) }
+    if php_ini['user_ini'].key?('cache_ttl')
+      its(:content) { should match(/^user_ini.cache_ttl = #{to_ini_value(php_ini['user_ini']['cache_ttl'])}$/) }
     end
   end
-  if php_cfg.key?('birdstep') && php_cfg['birdstep'].key?('max_links')
-    its(:content) { should match(/^birdstep.max_links = #{e(php_cfg['birdstep']['max_links'])}$/) }
+  its(:content) { should match(/^engine = #{to_ini_value(php_ini['engine'])}$/) }
+  its(:content) { should match(/^short_open_tag = #{to_ini_value(php_ini['short_open_tag'])}$/) }
+  its(:content) { should match(/^precision = #{to_ini_value(php_ini['precision'])}$/) }
+  its(:content) { should match(/^output_buffering = #{to_ini_value(php_ini['output_buffering'])}$/) }
+  if php_ini.key?('output_handler')
+    its(:content) { should match(/^output_handler = #{to_ini_value(php_ini['output_handler'])}$/) }
   end
-  if php_cfg.key?('highlight')
-    php_highlight_cfg = php_cfg['highlight']
-    if php_highlight_cfg.key?('string')
-      its(:content) { should match(/^highlight.string = #{e(php_highlight_cfg['string'])}$/) }
+  its(:content) { should match(/^implicit_flush = #{to_ini_value(php_ini['implicit_flush'])}$/) }
+  unserialize_callback_func = to_ini_value(php_ini['unserialize_callback_func'])
+  its(:content) { should match(/^unserialize_callback_func = #{unserialize_callback_func}$/) }
+  its(:content) { should match(/^serialize_precision = #{to_ini_value(php_ini['serialize_precision'])}$/) }
+  if php_ini.key?('open_basedir')
+    its(:content) { should match(/^open_basedir = #{to_ini_value(php_ini['open_basedir'])}$/) }
+  end
+  its(:content) { should match(/^disable_functions = #{to_ini_value(php_ini['disable_functions'].join(','))}$/) }
+  its(:content) { should match(/^disable_classes = #{to_ini_value(php_ini['disable_classes'])}$/) }
+  if php_ini.key?('ignore_user_abort')
+    its(:content) { should match(/^ignore_user_abort = #{to_ini_value(php_ini['ignore_user_abort'])}$/) }
+  end
+  if php_ini.key?('realpath_cache_size')
+    its(:content) { should match(/^realpath_cache_size = #{to_ini_value(php_ini['realpath_cache_size'])}$/) }
+  end
+  if php_ini.key?('realpath_cache_ttl')
+    its(:content) { should match(/^realpath_cache_ttl = #{to_ini_value(php_ini['realpath_cache_ttl'])}$/) }
+  end
+  its(:content) { should match(/^expose_php = #{to_ini_value(php_ini['expose_php'])}$/) }
+  its(:content) { should match(/^max_execution_time = #{to_ini_value(php_ini['max_execution_time'])}$/) }
+  its(:content) { should match(/^max_input_time = #{to_ini_value(php_ini['max_input_time'])}$/) }
+  if php_ini.key?('max_input_nesting_level')
+    its(:content) { should match(/^max_input_nesting_level = #{to_ini_value(php_ini['max_input_nesting_level'])}$/) }
+  end
+  if php_ini.key?('max_input_vars')
+    its(:content) { should match(/^max_input_vars = #{to_ini_value(php_ini['max_input_vars'])}$/) }
+  end
+  its(:content) { should match(/^memory_limit = #{to_ini_value(php_ini['memory_limit'])}$/) }
+  its(:content) { should match(/^error_reporting = #{to_ini_value(php_ini['error_reporting'])}$/) }
+  its(:content) { should match(/^display_errors = #{to_ini_value(php_ini['display_errors'])}$/) }
+  its(:content) { should match(/^display_startup_errors = #{to_ini_value(php_ini['display_startup_errors'])}$/) }
+  its(:content) { should match(/^log_errors = #{to_ini_value(php_ini['log_errors'])}$/) }
+  its(:content) { should match(/^log_errors_max_len = #{to_ini_value(php_ini['log_errors_max_len'])}$/) }
+  its(:content) { should match(/^ignore_repeated_errors = #{to_ini_value(php_ini['ignore_repeated_errors'])}$/) }
+  its(:content) { should match(/^ignore_repeated_source = #{to_ini_value(php_ini['ignore_repeated_source'])}$/) }
+  its(:content) { should match(/^report_memleaks = #{to_ini_value(php_ini['report_memleaks'])}$/) }
+  if php_ini.key?('report_zend_debug')
+    its(:content) { should match(/^report_zend_debug = #{to_ini_value(php_ini['report_zend_debug'])}$/) }
+  end
+  its(:content) { should match(/^track_errors = #{to_ini_value(php_ini['track_errors'])}$/) }
+  if php_ini.key?('xmlrpc_errors')
+    its(:content) { should match(/^xmlrpc_errors = #{to_ini_value(php_ini['xmlrpc_errors'])}$/) }
+  end
+  if php_ini.key?('xmlrpc_error_number')
+    its(:content) { should match(/^xmlrpc_error_number = #{to_ini_value(php_ini['xmlrpc_error_number'])}$/) }
+  end
+  its(:content) { should match(/^html_errors = #{to_ini_value(php_ini['html_errors'])}$/) }
+  if php_ini.key?('docref_root')
+    its(:content) { should match(/^docref_root = #{to_ini_value(php_ini['docref_root'])}$/) }
+  end
+
+  its(:content) { should match(/^docref_ext = #{to_ini_value(php_ini['docref_ext'])}$/) } if php_ini.key?('docref_ext')
+  if php_ini.key?('error_prepend_string')
+    its(:content) { should match(/^error_prepend_string = #{to_ini_value(php_ini['error_prepend_string'])}$/) }
+  end
+  if php_ini.key?('error_append_string')
+    its(:content) { should match(/^error_append_string = #{to_ini_value(php_ini['error_append_string'])}$/) }
+  end
+  its(:content) { should match(/^error_log = #{to_ini_value(php_ini['error_log'])}$/) } if php_ini.key?('error_log')
+  its(:content) { should match(/^variables_order = "#{to_ini_value(php_ini['variables_order'])}"$/) }
+  its(:content) { should match(/^request_order = "#{to_ini_value(php_ini['request_order'])}"$/) }
+  its(:content) { should match(/^register_argc_argv = #{to_ini_value(php_ini['register_argc_argv'])}$/) }
+  its(:content) { should match(/^auto_globals_jit = #{to_ini_value(php_ini['auto_globals_jit'])}$/) }
+  if php_ini.key?('enable_post_data_reading')
+    enable_post_data_reading = to_ini_value(php_ini['enable_post_data_reading'])
+    its(:content) { should match(/^enable_post_data_reading = #{enable_post_data_reading}$/) }
+  end
+  its(:content) { should match(/^post_max_size = #{to_ini_value(php_ini['post_max_size'])}$/) }
+  its(:content) { should match(/^auto_prepend_file = #{to_ini_value(php_ini['auto_prepend_file'])}$/) }
+  its(:content) { should match(/^auto_append_file = #{to_ini_value(php_ini['auto_append_file'])}$/) }
+  its(:content) { should match(/^default_mimetype = "#{to_ini_value(php_ini['default_mimetype'])}"$/) }
+  its(:content) { should match(/^default_charset = "#{to_ini_value(php_ini['default_charset'])}"$/) }
+  if php_ini.key?('internal_encoding')
+    its(:content) { should match(/^internal_encoding = #{to_ini_value(php_ini['internal_encoding'])}$/) }
+  end
+  if php_ini.key?('input_encoding')
+    its(:content) { should match(/^input_encoding = #{to_ini_value(php_ini['input_encoding'])}$/) }
+  end
+  if php_ini.key?('output_encoding')
+    its(:content) { should match(/^output_encoding = #{to_ini_value(php_ini['output_encoding'])}$/) }
+  end
+  if php_ini.key?('include_path')
+    its(:content) { should match(/^include_path = #{to_ini_value(php_ini['include_path'])}$/) }
+  end
+  its(:content) { should match(/^doc_root = #{to_ini_value(php_ini['doc_root'])}$/) }
+  its(:content) { should match(/^user_dir = #{to_ini_value(php_ini['user_dir'])}$/) }
+  if php_ini.key?('extension_dir')
+    its(:content) { should match(/^extension_dir = #{to_ini_value(php_ini['extension_dir'])}$/) }
+  end
+  if php_ini.key?('sys_temp_dir')
+    its(:content) { should match(/^sys_temp_dir = #{to_ini_value(php_ini['sys_temp_dir'])}$/) }
+  end
+  its(:content) { should match(/^enable_dl = #{to_ini_value(php_ini['enable_dl'])}$/) }
+  its(:content) { should match(/^file_uploads = #{to_ini_value(php_ini['file_uploads'])}$/) }
+  if php_ini.key?('upload_tmp_dir')
+    its(:content) { should match(/^upload_tmp_dir = #{to_ini_value(php_ini['upload_tmp_dir'])}$/) }
+  end
+  its(:content) { should match(/^upload_max_filesize = #{to_ini_value(php_ini['upload_max_filesize'])}$/) }
+  its(:content) { should match(/^max_file_uploads = #{to_ini_value(php_ini['max_file_uploads'])}$/) }
+  its(:content) { should match(/^allow_url_fopen = #{to_ini_value(php_ini['allow_url_fopen'])}$/) }
+  its(:content) { should match(/^allow_url_include = #{to_ini_value(php_ini['allow_url_include'])}$/) }
+  its(:content) { should match(/^from = #{to_ini_value(php_ini['from'])}$/) } if php_ini.key?('from')
+
+  its(:content) { should match(/^user_agent = #{to_ini_value(php_ini['user_agent'])}$/) } if php_ini.key?('user_agent')
+  its(:content) { should match(/^default_socket_timeout = #{to_ini_value(php_ini['default_socket_timeout'])}$/) }
+  if php_ini.key?('auto_detect_line_endings')
+    auto_detect_line_endings = to_ini_value(php_ini['auto_detect_line_endings'])
+    its(:content) { should match(/^auto_detect_line_endings = #{auto_detect_line_endings}$/) }
+  end
+  if php_ini.key?('sendmail_path')
+    its(:content) { should match(/^sendmail_path = #{to_ini_value(php_ini['sendmail_path'])}$/) }
+  end
+  its(:content) { should match(/^browscap = #{to_ini_value(php_ini['browscap'])}$/) } if php_ini.key?('browscap')
+  its(:content) { should match(/^cli_server.color = #{to_ini_value(php_ini['cli_server']['color'])}$/) }
+  if php_ini.key?('url_rewriter') && php_ini['url_rewriter'].key?('tags')
+    its(:content) { should match(/^url_rewriter.tags = "#{to_ini_value(php_ini['url_rewriter']['tags'])}"$/) }
+  end
+
+  if php_ini['mail'].key?('force_extra_parameters')
+    force_extra_parameters = to_ini_value(php_ini['mail']['force_extra_parameters'])
+    its(:content) { should match(/^mail.force_extra_parameters = #{force_extra_parameters}$/) }
+  end
+  its(:content) { should match(/^mail.add_x_header = #{to_ini_value(php_ini['mail']['add_x_header'])}$/) }
+  its(:content) { should match(/^mail.log = #{to_ini_value(php_ini['mail']['log'])}$/) } if php_ini['mail'].key?('log')
+  if php_ini.key?('arg_separator')
+    if php_ini['arg_separator'].key?('output')
+      its(:content) { should match(/^arg_separator.output = #{to_ini_value(php_ini['arg_separator']['output'])}$/) }
     end
-    if php_highlight_cfg.key?('comment')
-      its(:content) { should match(/^highlight.comment = #{e(php_highlight_cfg['comment'])}$/) }
-    end
-    if php_highlight_cfg.key?('keyword')
-      its(:content) { should match(/^highlight.keyword = #{e(php_highlight_cfg['keyword'])}$/) }
-    end
-    if php_highlight_cfg.key?('default')
-      its(:content) { should match(/^highlight.default = #{e(php_highlight_cfg['default'])}$/) }
-    end
-    if php_highlight_cfg.key?('html')
-      its(:content) { should match(/^highlight.html = #{e(php_highlight_cfg['html'])}$/) }
+    if php_ini['arg_separator'].key?('input')
+      its(:content) { should match(/^arg_separator.input = #{to_ini_value(php_ini['arg_separator']['input'])}$/) }
     end
   end
-  if php_cfg.key?('sysvshm') && php_cfg['sysvshm'].key?('init_mem')
-    its(:content) { should match(/^sysvshm.init_mem = #{e(php_cfg['sysvshm']['init_mem'])}$/) }
+  if php_ini.key?('birdstep') && php_ini['birdstep'].key?('max_links')
+    its(:content) { should match(/^birdstep.max_links = #{to_ini_value(php_ini['birdstep']['max_links'])}$/) }
+  end
+  if php_ini.key?('highlight')
+    ini_highlight = php_ini['highlight']
+    if ini_highlight.key?('string')
+      its(:content) { should match(/^highlight.string = #{to_ini_value(ini_highlight['string'])}$/) }
+    end
+    if ini_highlight.key?('comment')
+      its(:content) { should match(/^highlight.comment = #{to_ini_value(ini_highlight['comment'])}$/) }
+    end
+    if ini_highlight.key?('keyword')
+      its(:content) { should match(/^highlight.keyword = #{to_ini_value(ini_highlight['keyword'])}$/) }
+    end
+    if ini_highlight.key?('default')
+      its(:content) { should match(/^highlight.default = #{to_ini_value(ini_highlight['default'])}$/) }
+    end
+    if ini_highlight.key?('html')
+      its(:content) { should match(/^highlight.html = #{to_ini_value(ini_highlight['html'])}$/) }
+    end
+  end
+  if php_ini.key?('sysvshm') && php_ini['sysvshm'].key?('init_mem')
+    its(:content) { should match(/^sysvshm.init_mem = #{to_ini_value(php_ini['sysvshm']['init_mem'])}$/) }
   end
   # bcmath
-  its(:content) { should match(/^bcmath.scale = #{e(php_cfg['bcmath']['scale'])}$/) }
+  its(:content) { should match(/^bcmath.scale = #{to_ini_value(php_ini['bcmath']['scale'])}$/) }
   # curl
-  if php_cfg.key?('curl') && php_cfg['curl'].key?('cainfo')
-    its(:content) { should match(/^curl.cainfo = #{e(php_cfg['curl']['cainfo'])}$/) }
+  if php_ini.key?('curl') && php_ini['curl'].key?('cainfo')
+    its(:content) { should match(/^curl.cainfo = #{to_ini_value(php_ini['curl']['cainfo'])}$/) }
   end
   # Session
-  php_session_cfg = php_cfg['session']
-  its(:content) { should match(/^session.save_handler = #{e(php_session_cfg['save_handler'])}$/) }
-  if php_session_cfg.key?('save_path')
-    its(:content) { should match(/^session.save_path = #{e(php_session_cfg['save_path'])}$/) }
+  its(:content) { should match(/^session.save_handler = #{to_ini_value(php_ini['session']['save_handler'])}$/) }
+  if php_ini['session'].key?('save_path')
+    its(:content) { should match(/^session.save_path = #{to_ini_value(php_ini['session']['save_path'])}$/) }
   end
-  its(:content) { should match(/^session.use_strict_mode = #{e(php_session_cfg['use_strict_mode'])}$/) }
-  its(:content) { should match(/^session.use_cookies = #{e(php_session_cfg['use_cookies'])}$/) }
-  if php_session_cfg.key?('cookie_secure')
-    its(:content) { should match(/^session.cookie_secure = #{e(php_session_cfg['cookie_secure'])}$/) }
+  its(:content) { should match(/^session.use_strict_mode = #{to_ini_value(php_ini['session']['use_strict_mode'])}$/) }
+  its(:content) { should match(/^session.use_cookies = #{to_ini_value(php_ini['session']['use_cookies'])}$/) }
+  if php_ini['session'].key?('cookie_secure')
+    its(:content) { should match(/^session.cookie_secure = #{to_ini_value(php_ini['session']['cookie_secure'])}$/) }
   end
-  its(:content) { should match(/^session.use_only_cookies = #{e(php_session_cfg['use_only_cookies'])}$/) }
-  its(:content) { should match(/^session.name = #{e(php_session_cfg['name'])}$/) }
-  its(:content) { should match(/^session.auto_start = #{e(php_session_cfg['auto_start'])}$/) }
-  its(:content) { should match(/^session.cookie_lifetime = #{e(php_session_cfg['cookie_lifetime'])}$/) }
-  its(:content) { should match(/^session.cookie_path = #{e(php_session_cfg['cookie_path'])}$/) }
-  its(:content) { should match(/^session.cookie_domain = #{e(php_session_cfg['cookie_domain'])}$/) }
-  its(:content) { should match(/^session.cookie_httponly = #{e(php_session_cfg['cookie_httponly'])}$/) }
-  its(:content) { should match(/^session.serialize_handler = #{e(php_session_cfg['serialize_handler'])}$/) }
-  its(:content) { should match(/^session.gc_probability = #{e(php_session_cfg['gc_probability'])}$/) }
-  its(:content) { should match(/^session.gc_divisor = #{e(php_session_cfg['gc_divisor'])}$/) }
-  its(:content) { should match(/^session.gc_maxlifetime = #{e(php_session_cfg['gc_maxlifetime'])}$/) }
-  its(:content) { should match(/^session.referer_check = #{e(php_session_cfg['referer_check'])}$/) }
+  use_only_cookies = to_ini_value(php_ini['session']['use_only_cookies'])
+  its(:content) { should match(/^session.use_only_cookies = #{use_only_cookies}$/) }
+  its(:content) { should match(/^session.name = #{to_ini_value(php_ini['session']['name'])}$/) }
+  its(:content) { should match(/^session.auto_start = #{to_ini_value(php_ini['session']['auto_start'])}$/) }
+  its(:content) { should match(/^session.cookie_lifetime = #{to_ini_value(php_ini['session']['cookie_lifetime'])}$/) }
+  its(:content) { should match(/^session.cookie_path = #{to_ini_value(php_ini['session']['cookie_path'])}$/) }
+  its(:content) { should match(/^session.cookie_domain = #{to_ini_value(php_ini['session']['cookie_domain'])}$/) }
+  its(:content) { should match(/^session.cookie_httponly = #{to_ini_value(php_ini['session']['cookie_httponly'])}$/) }
+  serialize_handler = to_ini_value(php_ini['session']['serialize_handler'])
+  its(:content) { should match(/^session.serialize_handler = #{serialize_handler}$/) }
+  its(:content) { should match(/^session.gc_probability = #{to_ini_value(php_ini['session']['gc_probability'])}$/) }
+  its(:content) { should match(/^session.gc_divisor = #{to_ini_value(php_ini['session']['gc_divisor'])}$/) }
+  its(:content) { should match(/^session.gc_maxlifetime = #{to_ini_value(php_ini['session']['gc_maxlifetime'])}$/) }
+  its(:content) { should match(/^session.referer_check = #{to_ini_value(php_ini['session']['referer_check'])}$/) }
+  if property['php_version'] < 7.1
+    if php_ini['session'].key?('entropy_length')
+      its(:content) { should match(/^session.entropy_length = #{to_ini_value(php_ini['session']['entropy_length'])}$/) }
+    end
+    if php_ini['session'].key?('entropy_file')
+      its(:content) { should match(/^session.entropy_file = #{to_ini_value(php_ini['session']['entropy_file'])}$/) }
+    end
+  end
+  its(:content) { should match(/^session.cache_limiter = #{to_ini_value(php_ini['session']['cache_limiter'])}$/) }
+  its(:content) { should match(/^session.cache_expire = #{to_ini_value(php_ini['session']['cache_expire'])}$/) }
+  its(:content) { should match(/^session.use_trans_sid = #{to_ini_value(php_ini['session']['use_trans_sid'])}$/) }
+  if property['php_version'] < 7.1
+    its(:content) { should match(/^session.hash_function = #{to_ini_value(php_ini['session']['hash_function'])}$/) }
+    hash_bits_per_character = to_ini_value(php_ini['session']['hash_bits_per_character'])
+    its(:content) { should match(/^session.hash_bits_per_character = #{hash_bits_per_character}$/) }
+  end
 
-  if php_session_cfg.key?('entropy_length') && Gem::Version.new(property['php_version'].to_s) < Gem::Version.new('7.1')
-    its(:content) { should match(/^session.entropy_length = #{e(php_session_cfg['entropy_length'])}$/) }
-  end
-  if php_session_cfg.key?('entropy_file') && Gem::Version.new(property['php_version'].to_s) < Gem::Version.new('7.1')
-    its(:content) { should match(/^session.entropy_file = #{e(php_session_cfg['entropy_file'])}$/) }
-  end
-  its(:content) { should match(/^session.cache_limiter = #{e(php_session_cfg['cache_limiter'])}$/) }
-  its(:content) { should match(/^session.cache_expire = #{e(php_session_cfg['cache_expire'])}$/) }
-  its(:content) { should match(/^session.use_trans_sid = #{e(php_session_cfg['use_trans_sid'])}$/) }
-  if Gem::Version.new(property['php_version'].to_s) >= Gem::Version.new('7.1')
-    if php_session_cfg.key?('sid_length')
-      its(:content) { should match(/^session.sid_length = #{e(php_session_cfg['sid_length'])}$/) }
+  if php_ini['session'].key?('upload_progress')
+    ini_up_progress = php_ini['session']['upload_progress']
+    if ini_up_progress.key?('enabled')
+      up_progress_enabled = to_ini_value(ini_up_progress['enabled'])
+      its(:content) { should match(/^session.upload_progress.enabled = #{up_progress_enabled}$/) }
     end
-    if php_session_cfg.key?('trans_sid_tags')
-      its(:content) { should match(/^session.trans_sid_tags = "#{e(php_session_cfg['trans_sid_tags'])}"$/) }
+    if ini_up_progress.key?('cleanup')
+      up_progress_cleanup = to_ini_value(ini_up_progress['cleanup'])
+      its(:content) { should match(/^session.upload_progress.cleanup = #{up_progress_cleanup}$/) }
     end
-    if php_session_cfg.key?('trans_sid_hosts')
-      its(:content) { should match(/^session.trans_sid_hosts = #{e(php_session_cfg['trans_sid_hosts'])}$/) }
+    if ini_up_progress.key?('prefix')
+      up_progress_prefix = to_ini_value(ini_up_progress['prefix'])
+      its(:content) { should match(/^session.upload_progress.prefix = #{up_progress_prefix}$/) }
     end
-    if php_session_cfg.key?('sid_bits_per_character')
-      its(:content) { should match(/^session.sid_bits_per_character = #{e(php_session_cfg['sid_bits_per_character'])}$/) }
+    if ini_up_progress.key?('name')
+      its(:content) { should match(/^session.upload_progress.name = #{to_ini_value(ini_up_progress['name'])}$/) }
     end
-  else
-    if php_session_cfg.key?('hash_bits_per_character')
-      its(:content) { should match(/^session.hash_bits_per_character = #{e(php_session_cfg['hash_bits_per_character'])}$/) }
+    if ini_up_progress.key?('freq')
+      its(:content) { should match(/^session.upload_progress.freq = #{to_ini_value(ini_up_progress['freq'])}$/) }
     end
-    if php_session_cfg.key?('hash_function')
-      its(:content) { should match(/^session.hash_function = #{e(php_session_cfg['hash_function'])}$/) }
+    if ini_up_progress.key?('min_freq')
+      min_freq = to_ini_value(ini_up_progress['min_freq'])
+      its(:content) { should match(/^session.upload_progress.min_freq = #{min_freq}$/) }
     end
   end
-  if php_session_cfg.key?('upload_progress')
-    if php_session_cfg['upload_progress'].key?('enabled')
-      its(:content) { should match(/^session.upload_progress.enabled = #{e(php_session_cfg['upload_progress'])}$/) }
-    end
-    if php_session_cfg['upload_progress'].key?('cleanup')
-      its(:content) { should match(/^session.upload_progress.cleanup = #{e(php_session_cfg['upload_progress'])}$/) }
-    end
-    if php_session_cfg['upload_progress'].key?('prefix')
-      its(:content) { should match(/^session.upload_progress.prefix = #{e(php_session_cfg['upload_progress'])}$/) }
-    end
-    if php_session_cfg['upload_progress'].key?('name')
-      its(:content) { should match(/^session.upload_progress.name = #{e(php_session_cfg['upload_progress'])}$/) }
-    end
-    if php_session_cfg['upload_progress'].key?('freq')
-      its(:content) { should match(/^session.upload_progress.freq = #{e(php_session_cfg['upload_progress'])}$/) }
-    end
-    if php_session_cfg['upload_progress'].key?('min_freq')
-      its(:content) { should match(/^session.upload_progress.min_freq = #{e(php_session_cfg['upload_progress'])}$/) }
-    end
+  if php_ini['session'].key?('lazy_write')
+    its(:content) { should match(/^session.lazy_write = #{to_ini_value(php_ini['session']['lazy_write'])}$/) }
   end
-  if php_session_cfg.key?('lazy_write')
-    its(:content) { should match(/^session.lazy_write = #{e(php_session_cfg['lazy_write'])}$/) }
-  end
-  its(:content) { should match(/^sql.safe_mode = #{e(php_cfg['sql']['safe_mode'])}$/) }
+  its(:content) { should match(/^sql.safe_mode = #{to_ini_value(php_ini['sql']['safe_mode'])}$/) }
   # Date
-  php_date_cfg = php_cfg['date']
-  its(:content) { should match(/^date.timezone = #{e(php_date_cfg['timezone'])}$/) }
-  if php_date_cfg.key?('default_latitude')
-    its(:content) { should match(/^date.default_latitude = #{e(php_date_cfg['default_latitude'])}$/) }
+  its(:content) { should match(/^date.timezone = #{to_ini_value(php_ini['date']['timezone'])}$/) }
+  if php_ini['date'].key?('default_latitude')
+    its(:content) { should match(/^date.default_latitude = #{to_ini_value(php_ini['date']['default_latitude'])}$/) }
   end
-  if php_date_cfg.key?('default_longitude')
-    its(:content) { should match(/^date.default_longitude = #{e(php_date_cfg['default_longitude'])}$/) }
+  if php_ini['date'].key?('default_longitude')
+    its(:content) { should match(/^date.default_longitude = #{to_ini_value(php_ini['date']['default_longitude'])}$/) }
   end
-  if php_date_cfg.key?('sunrise_zenith')
-    its(:content) { should match(/^date.sunrise_zenith = #{e(php_date_cfg['sunrise_zenith'])}$/) }
+  if php_ini['date'].key?('sunrise_zenith')
+    its(:content) { should match(/^date.sunrise_zenith = #{to_ini_value(php_ini['date']['sunrise_zenith'])}$/) }
   end
-  if php_date_cfg.key?('sunset_zenith')
-    its(:content) { should match(/^date.sunset_zenith = #{e(php_date_cfg['sunset_zenith'])}$/) }
+  if php_ini['date'].key?('sunset_zenith')
+    its(:content) { should match(/^date.sunset_zenith = #{to_ini_value(php_ini['date']['sunset_zenith'])}$/) }
   end
   # zend
-  its(:content) { should match(/^zend.enable_gc = #{e(php_cfg['zend']['enable_gc'])}$/) }
-  if php_cfg['zend'].key?('multibyte')
-    its(:content) { should match(/^zend.multibyte = #{e(php_cfg['zend']['multibyte'])}$/) }
+  its(:content) { should match(/^zend.enable_gc = #{to_ini_value(php_ini['zend']['enable_gc'])}$/) }
+  if php_ini['zend'].key?('multibyte')
+    its(:content) { should match(/^zend.multibyte = #{to_ini_value(php_ini['zend']['multibyte'])}$/) }
   end
-  if php_cfg['zend'].key?('script_encoding')
-    its(:content) { should match(/^zend.script_encoding = #{e(php_cfg['zend']['script_encoding'])}$/) }
+  if php_ini['zend'].key?('script_encoding')
+    its(:content) { should match(/^zend.script_encoding = #{to_ini_value(php_ini['zend']['script_encoding'])}$/) }
   end
-  if php_cfg['zend'].key?('assertions')
-    its(:content) { should match(/^zend.assertions = #{e(php_cfg['zend']['assertions'])}$/) }
-  end
+  its(:content) { should match(/^zend.assertions = #{to_ini_value(php_ini['zend']['assertions'])}$/) }
   # DBA
-  if php_cfg.key?('dba') && php_cfg['dba'].key?('default_handler')
-    its(:content) { should match(/^dba.default_handler = #{e(php_cfg['dba']['default_handler'])}$/) }
+  if php_ini.key?('dba') && php_ini['dba'].key?('default_handler')
+    its(:content) { should match(/^dba.default_handler = #{to_ini_value(php_ini['dba']['default_handler'])}$/) }
   end
   # CGI
-  if php_cfg.key?('cgi')
-    php_cgi_cfg = php_cfg['cgi']
-    if php_cgi_cfg.key?('force_redirect')
-      its(:content) { should match(/^cgi.force_redirect = #{e(php_cgi_cfg['force_redirect'])}$/) }
+  if php_ini.key?('cgi')
+    ini_cgi = php_ini['cgi']
+    if ini_cgi.key?('force_redirect')
+      its(:content) { should match(/^cgi.force_redirect = #{to_ini_value(ini_cgi['force_redirect'])}$/) }
     end
-    if php_cgi_cfg.key?('nph')
-      its(:content) { should match(/^cgi.nph = #{e(php_cgi_cfg['nph'])}$/) }
+    its(:content) { should match(/^cgi.nph = #{to_ini_value(ini_cgi['nph'])}$/) } if ini_cgi.key?('nph')
+    if ini_cgi.key?('redirect_status_env')
+      its(:content) { should match(/^cgi.redirect_status_env = #{to_ini_value(ini_cgi['redirect_status_env'])}$/) }
     end
-    if php_cgi_cfg.key?('redirect_status_env')
-      its(:content) { should match(/^cgi.redirect_status_env = #{e(php_cgi_cfg['redirect_status_env'])}$/) }
+    if ini_cgi.key?('fix_pathinfo')
+      its(:content) { should match(/^cgi.fix_pathinfo = #{to_ini_value(ini_cgi['fix_pathinfo'])}$/) }
     end
-    if php_cgi_cfg.key?('fix_pathinfo')
-      its(:content) { should match(/^cgi.fix_pathinfo = #{e(php_cgi_cfg['fix_pathinfo'])}$/) }
+    if ini_cgi.key?('discard_path')
+      its(:content) { should match(/^cgi.discard_path = #{to_ini_value(ini_cgi['discard_path'])}$/) }
     end
-    if php_cgi_cfg.key?('discard_path')
-      its(:content) { should match(/^cgi.discard_path = #{e(php_cgi_cfg['discard_path'])}$/) }
+    if ini_cgi.key?('rfc2616_headers')
+      its(:content) { should match(/^cgi.rfc2616_headers = #{to_ini_value(ini_cgi['rfc2616_headers'])}$/) }
     end
-    if php_cgi_cfg.key?('rfc2616_headers')
-      its(:content) { should match(/^cgi.rfc2616_headers = #{e(php_cgi_cfg['rfc2616_headers'])}$/) }
-    end
-    if php_cgi_cfg.key?('check_shebang_line')
-      its(:content) { should match(/^cgi.check_shebang_line = #{e(php_cgi_cfg['check_shebang_line'])}$/) }
+    if ini_cgi.key?('check_shebang_line')
+      its(:content) { should match(/^cgi.check_shebang_line = #{to_ini_value(ini_cgi['check_shebang_line'])}$/) }
     end
   end
   # fastcgi
-  if php_cfg.key?('fastcgi')
-    if php_cfg['fastcgi'].key?('impersonate')
-      its(:content) { should match(/^fastcgi.impersonate = #{e(php_cfg['fastcgi']['impersonate'])}$/) }
+  if php_ini.key?('fastcgi')
+    if php_ini['fastcgi'].key?('impersonate')
+      its(:content) { should match(/^fastcgi.impersonate = #{to_ini_value(php_ini['fastcgi']['impersonate'])}$/) }
     end
-    if php_cfg['fastcgi'].key?('logging')
-      its(:content) { should match(/^fastcgi.logging = #{e(php_cfg['fastcgi']['logging'])}$/) }
+    if php_ini['fastcgi'].key?('logging')
+      its(:content) { should match(/^fastcgi.logging = #{to_ini_value(php_ini['fastcgi']['logging'])}$/) }
     end
   end
   # ibase
-  its(:content) { should match(/^ibase.allow_persistent = #{e(php_cfg['ibase']['allow_persistent'])}$/) }
-  its(:content) { should match(/^ibase.max_persistent = #{e(php_cfg['ibase']['max_persistent'])}$/) }
-  its(:content) { should match(/^ibase.max_links = #{e(php_cfg['ibase']['max_links'])}$/) }
-  if php_cfg['ibase'].key?('default_db')
-    its(:content) { should match(/^ibase.default_db = #{e(php_cfg['ibase']['default_db'])}$/) }
+  ini_ibase = php_ini['ibase']
+  its(:content) { should match(/^ibase.allow_persistent = #{to_ini_value(ini_ibase['allow_persistent'])}$/) }
+  its(:content) { should match(/^ibase.max_persistent = #{to_ini_value(ini_ibase['max_persistent'])}$/) }
+  its(:content) { should match(/^ibase.max_links = #{to_ini_value(ini_ibase['max_links'])}$/) }
+  if ini_ibase.key?('default_db')
+    its(:content) { should match(/^ibase.default_db = #{to_ini_value(ini_ibase['default_db'])}$/) }
   end
-  if php_cfg['ibase'].key?('default_user')
-    its(:content) { should match(/^ibase.default_user = #{e(php_cfg['ibase']['default_user'])}$/) }
+  if ini_ibase.key?('default_user')
+    its(:content) { should match(/^ibase.default_user = #{to_ini_value(ini_ibase['default_user'])}$/) }
   end
-  if php_cfg['ibase'].key?('default_password')
-    its(:content) { should match(/^ibase.default_password = #{e(php_cfg['ibase']['default_password'])}$/) }
+  if ini_ibase.key?('default_password')
+    its(:content) { should match(/^ibase.default_password = #{to_ini_value(ini_ibase['default_password'])}$/) }
   end
-  if php_cfg['ibase'].key?('default_charset')
-    its(:content) { should match(/^ibase.default_charset = #{e(php_cfg['ibase']['default_charset'])}$/) }
+  if ini_ibase.key?('default_charset')
+    its(:content) { should match(/^ibase.default_charset = #{to_ini_value(ini_ibase['default_charset'])}$/) }
   end
-  its(:content) { should match(/^ibase.timestampformat = "#{e(php_cfg['ibase']['timestampformat'])}"$/) }
-  its(:content) { should match(/^ibase.dateformat = "#{e(php_cfg['ibase']['dateformat'])}"$/) }
-  its(:content) { should match(/^ibase.timeformat = "#{e(php_cfg['ibase']['timeformat'])}"$/) }
+  its(:content) { should match(/^ibase.timestampformat = "#{to_ini_value(ini_ibase['timestampformat'])}"$/) }
+  its(:content) { should match(/^ibase.dateformat = "#{to_ini_value(ini_ibase['dateformat'])}"$/) }
+  its(:content) { should match(/^ibase.timeformat = "#{to_ini_value(ini_ibase['timeformat'])}"$/) }
   # ODBC
-  if php_cfg['odbc'].key?('default_db')
-    its(:content) { should match(/^odbc.default_db = #{e(php_cfg['odbc']['default_db'])}$/) }
+  ini_odbc = php_ini['odbc']
+  if ini_odbc.key?('default_db')
+    its(:content) { should match(/^odbc.default_db = #{to_ini_value(ini_odbc['default_db'])}$/) }
   end
-  if php_cfg['odbc'].key?('default_user')
-    its(:content) { should match(/^odbc.default_user = #{e(php_cfg['odbc']['default_user'])}$/) }
+  if ini_odbc.key?('default_user')
+    its(:content) { should match(/^odbc.default_user = #{to_ini_value(ini_odbc['default_user'])}$/) }
   end
-  if php_cfg['odbc'].key?('default_pw')
-    its(:content) { should match(/^odbc.default_pw = #{e(php_cfg['odbc']['default_pw'])}$/) }
+  if ini_odbc.key?('default_pw')
+    its(:content) { should match(/^odbc.default_pw = #{to_ini_value(ini_odbc['default_pw'])}$/) }
   end
-  if php_cfg['odbc'].key?('default_cursortype')
-    its(:content) { should match(/^odbc.default_cursortype = #{e(php_cfg['odbc']['default_cursortype'])}$/) }
+  if ini_odbc.key?('default_cursortype')
+    its(:content) { should match(/^odbc.default_cursortype = #{to_ini_value(ini_odbc['default_cursortype'])}$/) }
   end
-  its(:content) { should match(/^odbc.allow_persistent = #{e(php_cfg['odbc']['allow_persistent'])}$/) }
-  its(:content) { should match(/^odbc.check_persistent = #{e(php_cfg['odbc']['check_persistent'])}$/) }
-  its(:content) { should match(/^odbc.max_persistent = #{e(php_cfg['odbc']['max_persistent'])}$/) }
-  its(:content) { should match(/^odbc.max_links = #{e(php_cfg['odbc']['max_links'])}$/) }
-  its(:content) { should match(/^odbc.defaultlrl = #{e(php_cfg['odbc']['defaultlrl'])}$/) }
-  its(:content) { should match(/^odbc.defaultbinmode = #{e(php_cfg['odbc']['defaultbinmode'])}$/) }
+  its(:content) { should match(/^odbc.allow_persistent = #{to_ini_value(ini_odbc['allow_persistent'])}$/) }
+  its(:content) { should match(/^odbc.check_persistent = #{to_ini_value(ini_odbc['check_persistent'])}$/) }
+  its(:content) { should match(/^odbc.max_persistent = #{to_ini_value(ini_odbc['max_persistent'])}$/) }
+  its(:content) { should match(/^odbc.max_links = #{to_ini_value(ini_odbc['max_links'])}$/) }
+  its(:content) { should match(/^odbc.defaultlrl = #{to_ini_value(ini_odbc['defaultlrl'])}$/) }
+  its(:content) { should match(/^odbc.defaultbinmode = #{to_ini_value(ini_odbc['defaultbinmode'])}$/) }
   # OpenSSL
-  if php_cfg.key?('openssl')
-    if php_cfg['openssl'].key?('cafile')
-      its(:content) { should match(/^openssl.cafile = #{e(php_cfg['openssl']['cafile'])}$/) }
+  if php_ini.key?('openssl')
+    if php_ini['openssl'].key?('cafile')
+      its(:content) { should match(/^openssl.cafile = #{to_ini_value(php_ini['openssl']['cafile'])}$/) }
     end
-    if php_cfg['openssl'].key?('capath')
-      its(:content) { should match(/^openssl.capath = #{e(php_cfg['openssl']['capath'])}$/) }
+    if php_ini['openssl'].key?('capath')
+      its(:content) { should match(/^openssl.capath = #{to_ini_value(php_ini['openssl']['capath'])}$/) }
     end
   end
   # PDO(MySQL)
-  its(:content) { should match(/^pdo_mysql.cache_size = #{e(php_cfg['pdo_mysql']['cache_size'])}$/) }
-  its(:content) { should match(/^pdo_mysql.default_socket = #{e(php_cfg['pdo_mysql']['default_socket'])}$/) }
+  its(:content) { should match(/^pdo_mysql.cache_size = #{to_ini_value(php_ini['pdo_mysql']['cache_size'])}$/) }
+  pdo_mysql_default_socket = to_ini_value(php_ini['pdo_mysql']['default_socket'])
+  its(:content) { should match(/^pdo_mysql.default_socket = #{pdo_mysql_default_socket}$/) }
   # PDO(ODBC)
-  if php_cfg.key?('pdo_odbc')
-    if php_cfg['pdo_odbc'].key?('connection_pooling')
-      its(:content) { should match(/^pdo_odbc.connection_pooling = #{e(php_cfg['pdo_odbc']['connection_pooling'])}$/) }
+  if php_ini.key?('pdo_odbc')
+    ini_pdo_odbc = php_ini['pdo_odbc']
+    if ini_pdo_odbc.key?('connection_pooling')
+      connection_pooling = to_ini_value(ini_pdo_odbc['connection_pooling'])
+      its(:content) { should match(/^pdo_odbc.connection_pooling = #{connection_pooling}$/) }
     end
-    if php_cfg['pdo_odbc'].key?('db2_instance_name')
-      its(:content) { should match(/^pdo_odbc.db2_instance_name = #{e(php_cfg['pdo_odbc']['db2_instance_name'])}$/) }
+    if ini_pdo_odbc.key?('db2_instance_name')
+      db2_instance_name = to_ini_value(ini_pdo_odbc['db2_instance_name'])
+      its(:content) { should match(/^pdo_odbc.db2_instance_name = #{db2_instance_name}$/) }
     end
   end
   # PCRE
-  if php_cfg.key?('pcre')
-    if php_cfg['pcre'].key?('backtrack_limit')
-      its(:content) { should match(/^pcre.backtrack_limit = #{e(php_cfg['pcre']['backtrack_limit'])}$/) }
+  if php_ini.key?('pcre')
+    ini_pcre = php_ini['pcre']
+    if ini_pcre.key?('backtrack_limit')
+      its(:content) { should match(/^pcre.backtrack_limit = #{to_ini_value(ini_pcre['backtrack_limit'])}$/) }
     end
-    if php_cfg['pcre'].key?('recursion_limit')
-      its(:content) { should match(/^pcre.recursion_limit = #{e(php_cfg['pcre']['recursion_limit'])}$/) }
+    if ini_pcre.key?('recursion_limit')
+      its(:content) { should match(/^pcre.recursion_limit = #{to_ini_value(ini_pcre['recursion_limit'])}$/) }
     end
-    if php_cfg['pcre'].key?('jit')
-      its(:content) { should match(/^pcre.jit = #{e(php_cfg['pcre']['jit'])}$/) }
-    end
+    its(:content) { should match(/^pcre.jit = #{to_ini_value(ini_pcre['jit'])}$/) } if ini_pcre.key?('jit')
   end
   # Phar
-  if php_cfg.key?('phar')
-    if php_cfg['phar'].key?('readonly')
-      its(:content) { should match(/^phar.readonly = #{e(php_cfg['phar']['readonly'])}$/) }
+  if php_ini.key?('phar')
+    ini_phar = php_ini['phar']
+    if ini_phar.key?('readonly')
+      its(:content) { should match(/^phar.readonly = #{to_ini_value(ini_phar['readonly'])}$/) }
     end
-    if php_cfg['phar'].key?('require_hash')
-      its(:content) { should match(/^phar.require_hash = #{e(php_cfg['phar']['require_hash'])}$/) }
+    if ini_phar.key?('require_hash')
+      its(:content) { should match(/^phar.require_hash = #{to_ini_value(ini_phar['require_hash'])}$/) }
     end
-    if php_cfg['phar'].key?('cache_list')
-      its(:content) { should match(/^phar.cache_list = #{e(php_cfg['phar']['cache_list'])}$/) }
+    if ini_phar.key?('cache_list')
+      its(:content) { should match(/^phar.cache_list = #{to_ini_value(ini_phar['cache_list'])}$/) }
     end
   end
   # zlib
-  its(:content) { should match(/^zlib.output_compression = #{e(php_cfg['zlib']['output_compression'])}$/) }
-  if php_cfg['zlib'].key?('output_compression_level')
-    its(:content) { should match(/^zlib.output_compression_level = #{e(php_cfg['zlib']['output_compression_level'])}$/) }
+  its(:content) { should match(/^zlib.output_compression = #{to_ini_value(php_ini['zlib']['output_compression'])}$/) }
+  if php_ini['zlib'].key?('output_compression_level')
+    output_compression_level = to_ini_value(php_ini['zlib']['output_compression_level'])
+    its(:content) { should match(/^zlib.output_compression_level = #{output_compression_level}$/) }
   end
-  if php_cfg['zlib'].key?('output_handler')
-    its(:content) { should match(/^zlib.output_handler = #{e(php_cfg['zlib']['output_handler'])}$/) }
+  if php_ini['zlib'].key?('output_handler')
+    its(:content) { should match(/^zlib.output_handler = #{to_ini_value(php_ini['zlib']['output_handler'])}$/) }
   end
   # SQLite3
-  if php_cfg.key?('sqlite3') && php_cfg['sqlite3'].key?('extension_dir')
-    its(:content) { should match(/^sqlite3.extension_dir = #{e(php_cfg['sqlite3']['extension_dir'])}$/) }
+  if php_ini.key?('sqlite3') && php_ini['sqlite3'].key?('extension_dir')
+    its(:content) { should match(/^sqlite3.extension_dir = #{to_ini_value(php_ini['sqlite3']['extension_dir'])}$/) }
   end
   # intl
-  if php_cfg.key?('intl')
-    if php_cfg['intl'].key?('default_locale')
-      its(:content) { should match(/^intl.default_locale = #{e(php_cfg['intl']['default_locale'])}$/) }
+  if php_ini.key?('intl')
+    ini_intl = php_ini['intl']
+    if ini_intl.key?('default_locale')
+      its(:content) { should match(/^intl.default_locale = #{to_ini_value(ini_intl['default_locale'])}$/) }
     end
-    if php_cfg['intl'].key?('error_level')
-      its(:content) { should match(/^intl.error_level = #{e(php_cfg['intl']['error_level'])}$/) }
+    if ini_intl.key?('error_level')
+      its(:content) { should match(/^intl.error_level = #{to_ini_value(ini_intl['error_level'])}$/) }
     end
-    if php_cfg['intl'].key?('use_exceptions')
-      its(:content) { should match(/^intl.use_exceptions = #{e(php_cfg['intl']['use_exceptions'])}$/) }
+    if ini_intl.key?('use_exceptions')
+      its(:content) { should match(/^intl.use_exceptions = #{to_ini_value(ini_intl['use_exceptions'])}$/) }
     end
   end
   # MySQLi
-  its(:content) { should match(/^mysqli.max_persistent = #{e(php_cfg['mysqli']['max_persistent'])}$/) }
-  if php_cfg['mysqli'].key?('allow_local_infile')
-    its(:content) { should match(/^mysqli.allow_local_infile = #{e(php_cfg['mysqli']['allow_local_infile'])}$/) }
+  its(:content) { should match(/^mysqli.max_persistent = #{to_ini_value(php_ini['mysqli']['max_persistent'])}$/) }
+  if php_ini['mysqli'].key?('allow_local_infile')
+    allow_local_infile = to_ini_value(php_ini['mysqli']['allow_local_infile'])
+    its(:content) { should match(/^mysqli.allow_local_infile = #{allow_local_infile}$/) }
   end
-  its(:content) { should match(/^mysqli.allow_persistent = #{e(php_cfg['mysqli']['allow_persistent'])}$/) }
-  its(:content) { should match(/^mysqli.max_links = #{e(php_cfg['mysqli']['max_links'])}$/) }
-  its(:content) { should match(/^mysqli.cache_size = #{e(php_cfg['mysqli']['cache_size'])}$/) }
-  its(:content) { should match(/^mysqli.default_port = #{e(php_cfg['mysqli']['default_port'])}$/) }
-  its(:content) { should match(/^mysqli.default_socket = #{e(php_cfg['mysqli']['default_socket'])}$/) }
-  its(:content) { should match(/^mysqli.default_host = #{e(php_cfg['mysqli']['default_host'])}$/) }
-  its(:content) { should match(/^mysqli.default_user = #{e(php_cfg['mysqli']['default_user'])}$/) }
-  its(:content) { should match(/^mysqli.default_pw = #{e(php_cfg['mysqli']['default_pw'])}$/) }
-  its(:content) { should match(/^mysqli.reconnect = #{e(php_cfg['mysqli']['reconnect'])}$/) }
+  its(:content) { should match(/^mysqli.allow_persistent = #{to_ini_value(php_ini['mysqli']['allow_persistent'])}$/) }
+  its(:content) { should match(/^mysqli.max_links = #{to_ini_value(php_ini['mysqli']['max_links'])}$/) }
+  its(:content) { should match(/^mysqli.cache_size = #{to_ini_value(php_ini['mysqli']['cache_size'])}$/) }
+  its(:content) { should match(/^mysqli.default_port = #{to_ini_value(php_ini['mysqli']['default_port'])}$/) }
+  its(:content) { should match(/^mysqli.default_socket = #{to_ini_value(php_ini['mysqli']['default_socket'])}$/) }
+  its(:content) { should match(/^mysqli.default_host = #{to_ini_value(php_ini['mysqli']['default_host'])}$/) }
+  its(:content) { should match(/^mysqli.default_user = #{to_ini_value(php_ini['mysqli']['default_user'])}$/) }
+  its(:content) { should match(/^mysqli.default_pw = #{to_ini_value(php_ini['mysqli']['default_pw'])}$/) }
+  its(:content) { should match(/^mysqli.reconnect = #{to_ini_value(php_ini['mysqli']['reconnect'])}$/) }
   # MySQL Native Driver
-  php_mysqlnd_cfg = php_cfg['mysqlnd']
-  its(:content) { should match(/^mysqlnd.collect_statistics = #{e(php_mysqlnd_cfg['collect_statistics'])}$/) }
-  its(:content) { should match(/^mysqlnd.collect_memory_statistics = #{e(php_mysqlnd_cfg['collect_memory_statistics'])}$/) }
-  if php_mysqlnd_cfg.key?('debug')
-    its(:content) { should match(/^mysqlnd.debug = #{e(php_mysqlnd_cfg['debug'])}$/) }
+  ini_mysqlnd = php_ini['mysqlnd']
+  its(:content) { should match(/^mysqlnd.collect_statistics = #{to_ini_value(ini_mysqlnd['collect_statistics'])}$/) }
+  collect_memory_statistics = to_ini_value(ini_mysqlnd['collect_memory_statistics'])
+  its(:content) { should match(/^mysqlnd.collect_memory_statistics = #{collect_memory_statistics}$/) }
+  its(:content) { should match(/^mysqlnd.debug = #{to_ini_value(ini_mysqlnd['debug'])}$/) } if ini_mysqlnd.key?('debug')
+  if ini_mysqlnd.key?('log_mask')
+    its(:content) { should match(/^mysqlnd.log_mask = #{to_ini_value(ini_mysqlnd['log_mask'])}$/) }
   end
-  if php_mysqlnd_cfg.key?('log_mask')
-    its(:content) { should match(/^mysqlnd.log_mask = #{e(php_mysqlnd_cfg['log_mask'])}$/) }
+  if ini_mysqlnd.key?('mempool_default_size')
+    mempool_default_size = to_ini_value(ini_mysqlnd['mempool_default_size'])
+    its(:content) { should match(/^mysqlnd.mempool_default_size = #{mempool_default_size}$/) }
   end
-  if php_mysqlnd_cfg.key?('mempool_default_size')
-    its(:content) { should match(/^mysqlnd.mempool_default_size = #{e(php_mysqlnd_cfg['mempool_default_size'])}$/) }
+  if ini_mysqlnd.key?('net_cmd_buffer_size')
+    net_cmd_buffer_size = to_ini_value(ini_mysqlnd['net_cmd_buffer_size'])
+    its(:content) { should match(/^mysqlnd.net_cmd_buffer_size = #{net_cmd_buffer_size}$/) }
   end
-  if php_mysqlnd_cfg.key?('net_cmd_buffer_size')
-    its(:content) { should match(/^mysqlnd.net_cmd_buffer_size = #{e(php_mysqlnd_cfg['net_cmd_buffer_size'])}$/) }
+  if ini_mysqlnd.key?('net_read_buffer_size')
+    net_read_buffer_size = to_ini_value(ini_mysqlnd['net_read_buffer_size'])
+    its(:content) { should match(/^mysqlnd.net_read_buffer_size = #{net_read_buffer_size}$/) }
   end
-  if php_mysqlnd_cfg.key?('net_read_buffer_size')
-    its(:content) { should match(/^mysqlnd.net_read_buffer_size = #{e(php_mysqlnd_cfg['net_read_buffer_size'])}$/) }
+  if ini_mysqlnd.key?('net_read_timeout')
+    its(:content) { should match(/^mysqlnd.net_read_timeout = #{to_ini_value(ini_mysqlnd['net_read_timeout'])}$/) }
   end
-  if php_mysqlnd_cfg.key?('net_read_timeout')
-    its(:content) { should match(/^mysqlnd.net_read_timeout = #{e(php_mysqlnd_cfg['net_read_timeout'])}$/) }
+  if ini_mysqlnd.key?('sha256_server_public_key')
+    sha256_server_public_key = to_ini_value(ini_mysqlnd['sha256_server_public_key'])
+    its(:content) { should match(/^mysqlnd.sha256_server_public_key = #{sha256_server_public_key}$/) }
   end
-  if php_mysqlnd_cfg.key?('sha256_server_public_key')
-    its(:content) { should match(/^mysqlnd.sha256_server_public_key = #{e(php_mysqlnd_cfg['sha256_server_public_key'])}$/) }
-  end
+
   # mcrypt
-  if php_cfg.key?('mcrypt')
-    if php_cfg['mcrypt'].key?('algorithms_dir')
-      its(:content) { should match(/^mcrypt.algorithms_dir = #{e(php_cfg['mcrypt']['algorithms_dir'])}$/) }
+  if php_ini.key?('mcrypt')
+    ini_mcrypt = php_ini['mcrypt']
+    if ini_mcrypt.key?('algorithms_dir')
+      its(:content) { should match(/^mcrypt.algorithms_dir = #{to_ini_value(ini_mcrypt['algorithms_dir'])}$/) }
     end
-    if php_cfg['mcrypt'].key?('modes_dir')
-      its(:content) { should match(/^mcrypt.modes_dir = #{e(php_cfg['mcrypt']['modes_dir'])}$/) }
+    if ini_mcrypt.key?('modes_dir')
+      its(:content) { should match(/^mcrypt.modes_dir = #{to_ini_value(ini_mcrypt['modes_dir'])}$/) }
     end
   end
   # filter
-  if php_cfg.key?('filter')
-    if php_cfg['filter'].key?('default')
-      its(:content) { should match(/^filter.default = #{e(php_cfg['filter']['default'])}$/) }
+  if php_ini.key?('filter')
+    ini_filter = php_ini['filter']
+    if ini_filter.key?('default')
+      its(:content) { should match(/^filter.default = #{to_ini_value(ini_filter['default'])}$/) }
     end
-    if php_cfg['filter'].key?('default_flags')
-      its(:content) { should match(/^filter.default_flags = #{e(php_cfg['filter']['default_flags'])}$/) }
+    if ini_filter.key?('default_flags')
+      its(:content) { should match(/^filter.default_flags = #{to_ini_value(ini_filter['default_flags'])}$/) }
     end
   end
   # pgsql
-  its(:content) { should match(/^pgsql.allow_persistent = #{e(php_cfg['pgsql']['allow_persistent'])}$/) }
-  its(:content) { should match(/^pgsql.auto_reset_persistent = #{e(php_cfg['pgsql']['auto_reset_persistent'])}$/) }
-  its(:content) { should match(/^pgsql.max_persistent = #{e(php_cfg['pgsql']['max_persistent'])}$/) }
-  its(:content) { should match(/^pgsql.max_links = #{e(php_cfg['pgsql']['max_links'])}$/) }
-  its(:content) { should match(/^pgsql.ignore_notice = #{e(php_cfg['pgsql']['ignore_notice'])}$/) }
-  its(:content) { should match(/^pgsql.log_notice = #{e(php_cfg['pgsql']['log_notice'])}$/) }
+  its(:content) { should match(/^pgsql.allow_persistent = #{to_ini_value(php_ini['pgsql']['allow_persistent'])}$/) }
+  auto_reset_persistent = to_ini_value(php_ini['pgsql']['auto_reset_persistent'])
+  its(:content) { should match(/^pgsql.auto_reset_persistent = #{auto_reset_persistent}$/) }
+  its(:content) { should match(/^pgsql.max_persistent = #{to_ini_value(php_ini['pgsql']['max_persistent'])}$/) }
+  its(:content) { should match(/^pgsql.max_links = #{to_ini_value(php_ini['pgsql']['max_links'])}$/) }
+  its(:content) { should match(/^pgsql.ignore_notice = #{to_ini_value(php_ini['pgsql']['ignore_notice'])}$/) }
+  its(:content) { should match(/^pgsql.log_notice = #{to_ini_value(php_ini['pgsql']['log_notice'])}$/) }
   # GD
-  if php_cfg.key?('gd') && php_cfg['gd'].key?('jpeg_ignore_warning')
-    its(:content) { should match(/^gd.jpeg_ignore_warning = #{e(php_cfg['gd']['jpeg_ignore_warning'])}$/) }
+  if php_ini.key?('gd') && php_ini['gd'].key?('jpeg_ignore_warning')
+    its(:content) { should match(/^gd.jpeg_ignore_warning = #{to_ini_value(php_ini['gd']['jpeg_ignore_warning'])}$/) }
   end
   # exif
-  if php_cfg.key?('exif')
-    php_exif_cfg = php_cfg['exif']
-    if php_exif_cfg.key?('encode_unicode')
-      its(:content) { should match(/^exif.encode_unicode = #{e(php_exif_cfg['encode_unicode'])}$/) }
+  if php_ini.key?('exif')
+    ini_exif = php_ini['exif']
+    if ini_exif.key?('encode_unicode')
+      its(:content) { should match(/^exif.encode_unicode = #{to_ini_value(ini_exif['encode_unicode'])}$/) }
     end
-    if php_exif_cfg.key?('decode_unicode_motorola')
-      its(:content) { should match(/^exif.decode_unicode_motorola = #{e(php_exif_cfg['decode_unicode_motorola'])}$/) }
+    if ini_exif.key?('decode_unicode_motorola')
+      decode_unicode_motorola = to_ini_value(ini_exif['decode_unicode_motorola'])
+      its(:content) { should match(/^exif.decode_unicode_motorola = #{decode_unicode_motorola}$/) }
     end
-    if php_exif_cfg.key?('decode_unicode_intel')
-      its(:content) { should match(/^exif.decode_unicode_intel = #{e(php_exif_cfg['decode_unicode_intel'])}$/) }
+    if ini_exif.key?('decode_unicode_intel')
+      decode_unicode_intel = to_ini_value(ini_exif['decode_unicode_intel'])
+      its(:content) { should match(/^exif.decode_unicode_intel = #{decode_unicode_intel}$/) }
     end
-    if php_exif_cfg.key?('encode_jis')
-      its(:content) { should match(/^exif.encode_jis = #{e(php_exif_cfg['encode_jis'])}$/) }
+    if ini_exif.key?('encode_jis')
+      its(:content) { should match(/^exif.encode_jis = #{to_ini_value(ini_exif['encode_jis'])}$/) }
     end
-    if php_exif_cfg.key?('decode_jis_motorola')
-      its(:content) { should match(/^exif.decode_jis_motorola = #{e(php_exif_cfg['decode_jis_motorola'])}$/) }
+    if ini_exif.key?('decode_jis_motorola')
+      its(:content) { should match(/^exif.decode_jis_motorola = #{to_ini_value(ini_exif['decode_jis_motorola'])}$/) }
     end
-    if php_exif_cfg.key?('decode_jis_intel')
-      its(:content) { should match(/^exif.decode_jis_intel = #{e(php_exif_cfg['decode_jis_intel'])}$/) }
+    if ini_exif.key?('decode_jis_intel')
+      its(:content) { should match(/^exif.decode_jis_intel = #{to_ini_value(ini_exif['decode_jis_intel'])}$/) }
     end
   end
   # tidy
-  if php_cfg['tidy'].key?('default_config')
-    its(:content) { should match(/^tidy.default_config = #{e(php_cfg['tidy']['default_config'])}$/) }
+  if php_ini['tidy'].key?('default_config')
+    its(:content) { should match(/^tidy.default_config = #{to_ini_value(php_ini['tidy']['default_config'])}$/) }
   end
-  its(:content) { should match(/^tidy.clean_output = #{e(php_cfg['tidy']['clean_output'])}$/) }
+  its(:content) { should match(/^tidy.clean_output = #{to_ini_value(php_ini['tidy']['clean_output'])}$/) }
   # iconv
-  if php_cfg.key?('iconv')
-    if php_cfg['iconv'].key?('input_encoding')
-      its(:content) { should match(/^iconv.input_encoding = #{e(php_cfg['iconv']['input_encoding'])}$/) }
+  if php_ini.key?('iconv')
+    ini_iconv = php_ini['iconv']
+    if ini_iconv.key?('input_encoding')
+      its(:content) { should match(/^iconv.input_encoding = #{to_ini_value(ini_iconv['input_encoding'])}$/) }
     end
-    if php_cfg['iconv'].key?('internal_encoding')
-      its(:content) { should match(/^iconv.internal_encoding = #{e(php_cfg['iconv']['internal_encoding'])}$/) }
+    if ini_iconv.key?('internal_encoding')
+      its(:content) { should match(/^iconv.internal_encoding = #{to_ini_value(ini_iconv['internal_encoding'])}$/) }
     end
-    if php_cfg['iconv'].key?('output_encoding')
-      its(:content) { should match(/^iconv.output_encoding = #{e(php_cfg['iconv']['output_encoding'])}$/) }
+    if ini_iconv.key?('output_encoding')
+      its(:content) { should match(/^iconv.output_encoding = #{to_ini_value(ini_iconv['output_encoding'])}$/) }
     end
   end
   # imagick
-  if php_cfg.key?('imagick')
-    if php_cfg['imagick'].key?('locale_fix')
-      its(:content) { should match(/^extra_parameters.imagick.locale_fix = #{e(php_cfg['imagick']['locale_fix'])}$/) }
+  if php_ini.key?('imagick')
+    ini_imagick = php_ini['imagick']
+    if ini_imagick.key?('locale_fix')
+      locale_fix = to_ini_value(ini_imagick['locale_fix'])
+      its(:content) { should match(/^extra_parameters.imagick.locale_fix = #{locale_fix}$/) }
     end
-    if php_cfg['imagick'].key?('progress_monitor')
-      its(:content) { should match(/^extra_parameters.imagick.progress_monitor = #{e(php_cfg['imagick']['progress_monitor'])}$/) }
+    if ini_imagick.key?('progress_monitor')
+      progress_monitor = to_ini_value(ini_imagick['progress_monitor'])
+      its(:content) { should match(/^extra_parameters.imagick.progress_monitor = #{progress_monitor}$/) }
     end
-    if php_cfg['imagick'].key?('skip_version_check')
-      its(:content) { should match(/^extra_parameters.imagick.skip_version_check = #{e(php_cfg['imagick']['skip_version_check'])}$/) }
+    if ini_imagick.key?('skip_version_check')
+      skip_version_check = to_ini_value(ini_imagick['skip_version_check'])
+      its(:content) { should match(/^extra_parameters.imagick.skip_version_check = #{skip_version_check}$/) }
     end
   end
   # mbstring
-  if php_cfg.key?('mbstring')
-    php_mbstring_cfg = php_cfg['mbstring']
-    if php_mbstring_cfg.key?('language')
-      its(:content) { should match(/^mbstring.language = #{e(php_mbstring_cfg['language'])}$/) }
+  if php_ini.key?('mbstring')
+    ini_mbstring = php_ini['mbstring']
+    if ini_mbstring.key?('language')
+      its(:content) { should match(/^mbstring.language = #{to_ini_value(ini_mbstring['language'])}$/) }
     end
-    if php_mbstring_cfg.key?('internal_encoding')
-      its(:content) { should match(/^mbstring.internal_encoding = #{e(php_mbstring_cfg['internal_encoding'])}$/) }
+    if ini_mbstring.key?('internal_encoding')
+      internal_encoding = to_ini_value(ini_mbstring['internal_encoding'])
+      its(:content) { should match(/^mbstring.internal_encoding = #{internal_encoding}$/) }
     end
-    if php_mbstring_cfg.key?('http_input')
-      its(:content) { should match(/^mbstring.http_input = #{e(php_mbstring_cfg['http_input'])}$/) }
+    if ini_mbstring.key?('http_input')
+      its(:content) { should match(/^mbstring.http_input = #{to_ini_value(ini_mbstring['http_input'])}$/) }
     end
-    if php_mbstring_cfg.key?('http_output')
-      its(:content) { should match(/^mbstring.http_output = #{e(php_mbstring_cfg['http_output'])}$/) }
+    if ini_mbstring.key?('http_output')
+      its(:content) { should match(/^mbstring.http_output = #{to_ini_value(ini_mbstring['http_output'])}$/) }
     end
-    if php_mbstring_cfg.key?('encoding_translation')
-      its(:content) { should match(/^mbstring.encoding_translation = #{e(php_mbstring_cfg['encoding_translation'])}$/) }
+    if ini_mbstring.key?('encoding_translation')
+      encoding_translation = to_ini_value(ini_mbstring['encoding_translation'])
+      its(:content) { should match(/^mbstring.encoding_translation = #{encoding_translation}$/) }
     end
-    if php_mbstring_cfg.key?('detect_order')
-      its(:content) { should match(/^mbstring.detect_order = #{e(php_mbstring_cfg['detect_order'])}$/) }
+    if ini_mbstring.key?('detect_order')
+      its(:content) { should match(/^mbstring.detect_order = #{to_ini_value(ini_mbstring['detect_order'])}$/) }
     end
-    if php_mbstring_cfg.key?('substitute_character')
-      its(:content) { should match(/^mbstring.substitute_character = #{e(php_mbstring_cfg['substitute_character'])}$/) }
+    if ini_mbstring.key?('substitute_character')
+      substitute_character = to_ini_value(ini_mbstring['substitute_character'])
+      its(:content) { should match(/^mbstring.substitute_character = #{substitute_character}$/) }
     end
-    if php_mbstring_cfg.key?('func_overload')
-      its(:content) { should match(/^mbstring.func_overload = #{e(php_mbstring_cfg['func_overload'])}$/) }
+    if ini_mbstring.key?('func_overload')
+      its(:content) { should match(/^mbstring.func_overload = #{to_ini_value(ini_mbstring['func_overload'])}$/) }
     end
-    if php_mbstring_cfg.key?('strict_detection')
-      its(:content) { should match(/^mbstring.strict_detection = #{e(php_mbstring_cfg['strict_detection'])}$/) }
+    if ini_mbstring.key?('strict_detection')
+      strict_detection = to_ini_value(ini_mbstring['strict_detection'])
+      its(:content) { should match(/^mbstring.strict_detection = #{strict_detection}$/) }
     end
-    if php_mbstring_cfg.key?('http_output_conv_mimetype')
-      its(:content) { should match(/^mbstring.http_output_conv_mimetype = #{e(php_mbstring_cfg['http_output_conv_mimetype'])}$/) }
+    if ini_mbstring.key?('http_output_conv_mimetype')
+      http_output_conv_mimetype = to_ini_value(ini_mbstring['http_output_conv_mimetype'])
+      its(:content) { should match(/^mbstring.http_output_conv_mimetype = #{http_output_conv_mimetype}$/) }
     end
   end
   # soap
-  its(:content) { should match(/^soap.wsdl_cache_enabled = #{e(php_cfg['soap']['wsdl_cache_enabled'])}$/) }
-  its(:content) { should match(/^soap.wsdl_cache_dir = "#{e(php_cfg['soap']['wsdl_cache_dir'])}"$/) }
-  its(:content) { should match(/^soap.wsdl_cache_ttl = #{e(php_cfg['soap']['wsdl_cache_ttl'])}$/) }
-  its(:content) { should match(/^soap.wsdl_cache_limit = #{e(php_cfg['soap']['wsdl_cache_limit'])}$/) }
+  its(:content) { should match(/^soap.wsdl_cache_enabled = #{to_ini_value(php_ini['soap']['wsdl_cache_enabled'])}$/) }
+  its(:content) { should match(/^soap.wsdl_cache_dir = "#{to_ini_value(php_ini['soap']['wsdl_cache_dir'])}"$/) }
+  its(:content) { should match(/^soap.wsdl_cache_ttl = #{to_ini_value(php_ini['soap']['wsdl_cache_ttl'])}$/) }
+  its(:content) { should match(/^soap.wsdl_cache_limit = #{to_ini_value(php_ini['soap']['wsdl_cache_limit'])}$/) }
   # LDAP
-  its(:content) { should match(/^ldap.max_links = #{e(php_cfg['ldap']['max_links'])}$/) }
+  its(:content) { should match(/^ldap.max_links = #{to_ini_value(php_ini['ldap']['max_links'])}$/) }
   # Assert
-  if php_cfg.key?('assert')
-    if php_cfg['assert'].key?('active')
-      its(:content) { should match(/^assert.active = #{e(php_cfg['assert']['active'])}$/) }
+  if php_ini.key?('assert')
+    ini_assert = php_ini['assert']
+    if ini_assert.key?('active')
+      its(:content) { should match(/^assert.active = #{to_ini_value(ini_assert['active'])}$/) }
     end
-    if php_cfg['assert'].key?('exception')
-      its(:content) { should match(/^assert.exception = #{e(php_cfg['assert']['exception'])}$/) }
+    if ini_assert.key?('exception')
+      its(:content) { should match(/^assert.exception = #{to_ini_value(ini_assert['exception'])}$/) }
     end
-    if php_cfg['assert'].key?('warning')
-      its(:content) { should match(/^assert.warning = #{e(php_cfg['assert']['warning'])}$/) }
+    if ini_assert.key?('warning')
+      its(:content) { should match(/^assert.warning = #{to_ini_value(ini_assert['warning'])}$/) }
     end
-    if php_cfg['assert'].key?('bail')
-      its(:content) { should match(/^assert.bail = #{e(php_cfg['assert']['bail'])}$/) }
+    its(:content) { should match(/^assert.bail = #{to_ini_value(ini_assert['bail'])}$/) } if ini_assert.key?('bail')
+    if ini_assert.key?('callback')
+      its(:content) { should match(/^assert.callback = #{to_ini_value(ini_assert['callback'])}$/) }
     end
-    if php_cfg['assert'].key?('callback')
-      its(:content) { should match(/^assert.callback = #{e(php_cfg['assert']['callback'])}$/) }
+    if ini_assert.key?('quiet_eval')
+      its(:content) { should match(/^assert.quiet_eval = #{to_ini_value(ini_assert['quiet_eval'])}$/) }
     end
-    if php_cfg['assert'].key?('quiet_eval')
-      its(:content) { should match(/^assert.quiet_eval = #{e(php_cfg['assert']['quiet_eval'])}$/) }
+  end
+  # oci8
+  if php_ini.key?('oci8')
+    ini_oci8 = php_ini['oci8']
+    if ini_oci8.key?('privileged_connect')
+      its(:content) { should match(/^oci8.privileged_connect = #{to_ini_value(ini_oci8['privileged_connect'])}$/) }
+    end
+    if ini_oci8.key?('max_persistent')
+      its(:content) { should match(/^oci8.max_persistent = #{to_ini_value(ini_oci8['max_persistent'])}$/) }
+    end
+    if ini_oci8.key?('persistent_timeout')
+      its(:content) { should match(/^oci8.persistent_timeout = #{to_ini_value(ini_oci8['persistent_timeout'])}$/) }
+    end
+    if ini_oci8.key?('ping_interval')
+      its(:content) { should match(/^oci8.ping_interval = #{to_ini_value(ini_oci8['ping_interval'])}$/) }
+    end
+    if ini_oci8.key?('connection_class')
+      its(:content) { should match(/^oci8.connection_class = #{to_ini_value(ini_oci8['connection_class'])}$/) }
+    end
+    its(:content) { should match(/^oci8.events = #{to_ini_value(ini_oci8['events'])}$/) } if ini_oci8.key?('events')
+    if ini_oci8.key?('statement_cache_size')
+      statement_cache_size = to_ini_value(ini_oci8['statement_cache_size'])
+      its(:content) { should match(/^oci8.statement_cache_size = #{statement_cache_size}$/) }
+    end
+    if ini_oci8.key?('default_prefetch')
+      its(:content) { should match(/^oci8.default_prefetch = #{to_ini_value(ini_oci8['default_prefetch'])}$/) }
+    end
+    if ini_oci8.key?('old_oci_close_semantics')
+      old_oci_close_semantics = to_ini_value(ini_oci8['old_oci_close_semantics'])
+      its(:content) { should match(/^oci8.old_oci_close_semantics = #{old_oci_close_semantics}$/) }
     end
   end
   # Opcache
-  if php_cfg.key?('opcache')
-    php_opcache_cfg = php_cfg['opcache']
-    if php_opcache_cfg.key?('enable')
-      its(:content) { should match(/^opcache.enable = #{e(php_opcache_cfg['enable'])}$/) }
+  if php_ini.key?('opcache')
+    ini_opcache = php_ini['opcache']
+    if ini_opcache.key?('enable')
+      its(:content) { should match(/^opcache.enable = #{to_ini_value(ini_opcache['enable'])}$/) }
     end
-    if php_opcache_cfg.key?('enable_cli')
-      its(:content) { should match(/^opcache.enable_cli = #{e(php_opcache_cfg['enable_cli'])}$/) }
+    if ini_opcache.key?('enable_cli')
+      its(:content) { should match(/^opcache.enable_cli = #{to_ini_value(ini_opcache['enable_cli'])}$/) }
     end
-    if php_opcache_cfg.key?('memory_consumption')
-      its(:content) { should match(/^opcache.memory_consumption = #{e(php_opcache_cfg['memory_consumption'])}$/) }
+    if ini_opcache.key?('memory_consumption')
+      memory_consumption = to_ini_value(ini_opcache['memory_consumption'])
+      its(:content) { should match(/^opcache.memory_consumption = #{memory_consumption}$/) }
     end
-    if php_opcache_cfg.key?('interned_strings_buffer')
-      its(:content) { should match(/^opcache.interned_strings_buffer = #{e(php_opcache_cfg['interned_strings_buffer'])}$/) }
+    if ini_opcache.key?('interned_strings_buffer')
+      interned_strings_buffer = to_ini_value(ini_opcache['interned_strings_buffer'])
+      its(:content) { should match(/^opcache.interned_strings_buffer = #{interned_strings_buffer}$/) }
     end
-    if php_opcache_cfg.key?('max_accelerated_files')
-      its(:content) { should match(/^opcache.max_accelerated_files = #{e(php_opcache_cfg['max_accelerated_files'])}$/) }
+    if ini_opcache.key?('max_accelerated_files')
+      max_accelerated_files = to_ini_value(ini_opcache['max_accelerated_files'])
+      its(:content) { should match(/^opcache.max_accelerated_files = #{max_accelerated_files}$/) }
     end
-    if php_opcache_cfg.key?('max_wasted_percentage')
-      its(:content) { should match(/^opcache.max_wasted_percentage = #{e(php_opcache_cfg['max_wasted_percentage'])}$/) }
+    if ini_opcache.key?('max_wasted_percentage')
+      max_wasted_percentage = to_ini_value(ini_opcache['max_wasted_percentage'])
+      its(:content) { should match(/^opcache.max_wasted_percentage = #{max_wasted_percentage}$/) }
     end
-    if php_opcache_cfg.key?('use_cwd')
-      its(:content) { should match(/^opcache.use_cwd = #{e(php_opcache_cfg['use_cwd'])}$/) }
+    if ini_opcache.key?('use_cwd')
+      its(:content) { should match(/^opcache.use_cwd = #{to_ini_value(ini_opcache['use_cwd'])}$/) }
     end
-    if php_opcache_cfg.key?('validate_timestamps')
-      its(:content) { should match(/^opcache.validate_timestamps = #{e(php_opcache_cfg['validate_timestamps'])}$/) }
+    if ini_opcache.key?('validate_timestamps')
+      validate_timestamps = to_ini_value(ini_opcache['validate_timestamps'])
+      its(:content) { should match(/^opcache.validate_timestamps = #{validate_timestamps}$/) }
     end
-    if php_opcache_cfg.key?('revalidate_freq')
-      its(:content) { should match(/^opcache.revalidate_freq = #{e(php_opcache_cfg['revalidate_freq'])}$/) }
+    if ini_opcache.key?('revalidate_freq')
+      its(:content) { should match(/^opcache.revalidate_freq = #{to_ini_value(ini_opcache['revalidate_freq'])}$/) }
     end
-    if php_opcache_cfg.key?('revalidate_path')
-      its(:content) { should match(/^opcache.revalidate_path = #{e(php_opcache_cfg['revalidate_path'])}$/) }
+    if ini_opcache.key?('revalidate_path')
+      its(:content) { should match(/^opcache.revalidate_path = #{to_ini_value(ini_opcache['revalidate_path'])}$/) }
     end
-    if php_opcache_cfg.key?('save_comments')
-      its(:content) { should match(/^opcache.save_comments = #{e(php_opcache_cfg['save_comments'])}$/) }
+    if ini_opcache.key?('save_comments')
+      its(:content) { should match(/^opcache.save_comments = #{to_ini_value(ini_opcache['save_comments'])}$/) }
     end
-    if php_opcache_cfg.key?('fast_shutdown')
-      its(:content) { should match(/^opcache.fast_shutdown = #{e(php_opcache_cfg['fast_shutdown'])}$/) }
+    if ini_opcache.key?('fast_shutdown')
+      its(:content) { should match(/^opcache.fast_shutdown = #{to_ini_value(ini_opcache['fast_shutdown'])}$/) }
     end
-    if php_opcache_cfg.key?('enable_file_override')
-      its(:content) { should match(/^opcache.enable_file_override = #{e(php_opcache_cfg['enable_file_override'])}$/) }
+    if ini_opcache.key?('enable_file_override')
+      enable_file_override = to_ini_value(ini_opcache['enable_file_override'])
+      its(:content) { should match(/^opcache.enable_file_override = #{enable_file_override}$/) }
     end
-    if php_opcache_cfg.key?('optimization_level')
-      its(:content) { should match(/^opcache.optimization_level = #{e(php_opcache_cfg['optimization_level'])}$/) }
+    if ini_opcache.key?('optimization_level')
+      optimization_level = to_ini_value(ini_opcache['optimization_level'])
+      its(:content) { should match(/^opcache.optimization_level = #{optimization_level}$/) }
     end
-    if php_opcache_cfg.key?('inherited_hack')
-      its(:content) { should match(/^opcache.inherited_hack = #{e(php_opcache_cfg['inherited_hack'])}$/) }
+    if ini_opcache.key?('inherited_hack')
+      inherited_hack = to_ini_value(ini_opcache['inherited_hack'])
+      its(:content) { should match(/^opcache.inherited_hack = #{inherited_hack}$/) }
     end
-    if php_opcache_cfg.key?('dups_fix')
-      its(:content) { should match(/^opcache.dups_fix = #{e(php_opcache_cfg['dups_fix'])}$/) }
+    if ini_opcache.key?('dups_fix')
+      its(:content) { should match(/^opcache.dups_fix = #{to_ini_value(ini_opcache['dups_fix'])}$/) }
     end
-    if php_opcache_cfg.key?('blacklist_filename')
-      its(:content) { should match(/^opcache.blacklist_filename = #{e(php_opcache_cfg['blacklist_filename'])}$/) }
+    if ini_opcache.key?('blacklist_filename')
+      blacklist_filename = to_ini_value(ini_opcache['blacklist_filename'])
+      its(:content) { should match(/^opcache.blacklist_filename = #{blacklist_filename}$/) }
     end
-    if php_opcache_cfg.key?('max_file_size')
-      its(:content) { should match(/^opcache.max_file_size = #{e(php_opcache_cfg['max_file_size'])}$/) }
+    if ini_opcache.key?('max_file_size')
+      max_file_size = to_ini_value(ini_opcache['max_file_size'])
+      its(:content) { should match(/^opcache.max_file_size = #{max_file_size}$/) }
     end
-    if php_opcache_cfg.key?('consistency_checks')
-      its(:content) { should match(/^opcache.consistency_checks = #{e(php_opcache_cfg['consistency_checks'])}$/) }
+    if ini_opcache.key?('consistency_checks')
+      consistency_checks = to_ini_value(ini_opcache['consistency_checks'])
+      its(:content) { should match(/^opcache.consistency_checks = #{consistency_checks}$/) }
     end
-    if php_opcache_cfg.key?('force_restart_timeout')
-      its(:content) { should match(/^opcache.force_restart_timeout = #{e(php_opcache_cfg['force_restart_timeout'])}$/) }
+    if ini_opcache.key?('force_restart_timeout')
+      force_restart_timeout = to_ini_value(ini_opcache['force_restart_timeout'])
+      its(:content) { should match(/^opcache.force_restart_timeout = #{force_restart_timeout}$/) }
     end
-    if php_opcache_cfg.key?('error_log')
-      its(:content) { should match(/^opcache.error_log = #{e(php_opcache_cfg['error_log'])}$/) }
+    if ini_opcache.key?('error_log')
+      its(:content) { should match(/^opcache.error_log = #{to_ini_value(ini_opcache['error_log'])}$/) }
     end
-    if php_opcache_cfg.key?('log_verbosity_level')
-      its(:content) { should match(/^opcache.log_verbosity_level = #{e(php_opcache_cfg['log_verbosity_level'])}$/) }
+    if ini_opcache.key?('log_verbosity_level')
+      log_verbosity_level = to_ini_value(ini_opcache['log_verbosity_level'])
+      its(:content) { should match(/^opcache.log_verbosity_level = #{log_verbosity_level}$/) }
     end
-    if php_opcache_cfg.key?('preferred_memory_model')
-      its(:content) { should match(/^opcache.preferred_memory_model = #{e(php_opcache_cfg['preferred_memory_model'])}$/) }
+    if ini_opcache.key?('preferred_memory_model')
+      preferred_memory_model = to_ini_value(ini_opcache['preferred_memory_model'])
+      its(:content) { should match(/^opcache.preferred_memory_model = #{preferred_memory_model}$/) }
     end
-    if php_opcache_cfg.key?('protect_memory')
-      its(:content) { should match(/^opcache.protect_memory = #{e(php_opcache_cfg['protect_memory'])}$/) }
+    if ini_opcache.key?('protect_memory')
+      protect_memory = to_ini_value(ini_opcache['protect_memory'])
+      its(:content) { should match(/^opcache.protect_memory = #{protect_memory}$/) }
     end
-    if php_opcache_cfg.key?('file_update_protection')
-      its(:content) { should match(/^opcache.file_update_protection = #{e(php_opcache_cfg['file_update_protection'])}$/) }
+    if ini_opcache.key?('file_update_protection')
+      file_update_protection = to_ini_value(ini_opcache['file_update_protection'])
+      its(:content) { should match(/^opcache.file_update_protection = #{file_update_protection}$/) }
     end
-    if php_opcache_cfg.key?('restrict_api')
-      its(:content) { should match(/^opcache.restrict_api = #{e(php_opcache_cfg['restrict_api'])}$/) }
+    if ini_opcache.key?('restrict_api')
+      its(:content) { should match(/^opcache.restrict_api = #{to_ini_value(ini_opcache['restrict_api'])}$/) }
     end
-    if php_opcache_cfg.key?('mmap_base')
-      its(:content) { should match(/^opcache.mmap_base = #{e(php_opcache_cfg['mmap_base'])}$/) }
+    if ini_opcache.key?('mmap_base')
+      its(:content) { should match(/^opcache.mmap_base = #{to_ini_value(ini_opcache['mmap_base'])}$/) }
     end
-    if php_opcache_cfg.key?('file_cache')
-      its(:content) { should match(/^opcache.file_cache = #{e(php_opcache_cfg['file_cache'])}$/) }
+    if ini_opcache.key?('file_cache')
+      its(:content) { should match(/^opcache.file_cache = #{to_ini_value(ini_opcache['file_cache'])}$/) }
     end
-    if php_opcache_cfg.key?('file_cache_only')
-      its(:content) { should match(/^opcache.file_cache_only = #{e(php_opcache_cfg['file_cache_only'])}$/) }
+    if ini_opcache.key?('file_cache_only')
+      file_cache_only = to_ini_value(ini_opcache['file_cache_only'])
+      its(:content) { should match(/^opcache.file_cache_only = #{file_cache_only}$/) }
     end
-    if php_opcache_cfg.key?('file_cache_consistency_checks')
-      its(:content) { should match(/^opcache.file_cache_consistency_checks = #{e(php_opcache_cfg['file_cache_consistency_checks'])}$/) }
+    if ini_opcache.key?('file_cache_consistency_checks')
+      file_cache_consistency_checks = to_ini_value(ini_opcache['file_cache_consistency_checks'])
+      its(:content) { should match(/^opcache.file_cache_consistency_checks = #{file_cache_consistency_checks}$/) }
     end
-    if php_opcache_cfg.key?('file_cache_fallback')
-      its(:content) { should match(/^opcache.file_cache_fallback = #{e(php_opcache_cfg['file_cache_fallback'])}$/) }
+    if ini_opcache.key?('file_cache_fallback')
+      file_cache_fallback = to_ini_value(ini_opcache['file_cache_fallback'])
+      its(:content) { should match(/^opcache.file_cache_fallback = #{file_cache_fallback}$/) }
     end
-    if php_opcache_cfg.key?('huge_code_pages')
-      its(:content) { should match(/^opcache.huge_code_pages = #{e(php_opcache_cfg['huge_code_pages'])}$/) }
+    if ini_opcache.key?('huge_code_pages')
+      huge_code_pages = to_ini_value(ini_opcache['huge_code_pages'])
+      its(:content) { should match(/^opcache.huge_code_pages = #{huge_code_pages}$/) }
     end
-    if php_opcache_cfg.key?('validate_permission')
-      its(:content) { should match(/^opcache.validate_permission = #{e(php_opcache_cfg['validate_permission'])}$/) }
+    if ini_opcache.key?('validate_permission')
+      validate_permission = to_ini_value(ini_opcache['validate_permission'])
+      its(:content) { should match(/^opcache.validate_permission = #{validate_permission}$/) }
     end
-    if php_opcache_cfg.key?('validate_root')
-      its(:content) { should match(/^opcache.validate_root = #{e(php_opcache_cfg['validate_root'])}$/) }
-    end
-  end
-  if php_cfg.key?('extra_setting')
-    php_cfg['extra_parameters'].each do |section, settings|
-      settings.each do |setting_name, setting_value|
-        its(:content) { should match(/^#{section}.#{setting_name} = #{e(setting_value)}$/) }
-      end
+    if ini_opcache.key?('validate_root')
+      validate_root = to_ini_value(ini_opcache['validate_root'])
+      its(:content) { should match(/^opcache.validate_root = #{validate_root}$/) }
     end
   end
 end

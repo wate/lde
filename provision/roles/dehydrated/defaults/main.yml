@@ -1,170 +1,46 @@
 ---
 dehydrated_cfg:
-  # user:
-  # group:
-  # ip_version: 4 or 6
-  # ca: https://acme-v01.api.letsencrypt.org/directory
-  # challengetype: http-01
-  # wellknown: /var/www/dehydrated
-  openssl: openssl
-  # curl_opts: ""
+  user: ""
+  group: ""
+  ca: https://acme-v02.api.letsencrypt.org/directory
+  oldca: ""
+  challengetype: http-01
   keysize: 4096
-  # hook_chain: no
+  openssl_cnf: ""
+  openssl: openssl
+  curl_opts: ""
+  hook_chain: no
   renew_days: 30
-  # private_key_renew: no
-  # private_key_rollover: no
+  private_key_renew: yes
+  private_key_rollover: no
   key_algo: rsa
-  # contact_email:
-  # ocsp_must_staple: no
-  # oscp_fetch: no
-  # chaincache: ${BASEDIR}/chains
-  # auto_clanup: no
-  # api: auto
-
-# auto execute `dehydrated --cron`
-dehydrated_auto_execute: no
+  contact_email: ""
+  ocsp_must_staple: no
+  ocsp_fetch: no
+  auto_cleanup: no
+  api: auto
 
 dehydrated_domains: []
-  # - [example.com, www.example.com]
-  # - [example.net, www.example.net]
-  # - example.org
+  # - name: example.com
+  #   domains:
+  #     - example.com
+  #     - www.example.com
+  # - name: example.net
+  #   domains: example.net
+
+dehydrated_auto_execute: no
+
+dehydrated_cron:
+  hour: 4
+  minute: 5
 
 dehydrated_hook_initialize: ""
-
-# -----------------------
-# deploy_challenge hook
-# -----------------------
-#
-## Parameters
-# - DOMAIN
-#   The domain name (CN or subject alternative name) being validated.
-# - TOKEN_FILENAME
-#   The name of the file containing the token to be served for HTTP validation.
-#   Should be served by your web server as /.well-known/acme-challenge/${TOKEN_FILENAME}.
-# - TOKEN_VALUE
-#   The token value that needs to be served for validation.
-#   For DNS validation, this is what you want to put in the _acme-challenge TXT record.
-#   For HTTP validation it is the value that is expected be found in the $TOKEN_FILENAME file.
 dehydrated_hook_deploy_challenge: ""
-
-# -----------------------
-# clean_challenge hook
-# -----------------------
-# This hook is called after attempting to validate each domain,
-# whether or not validation was successful. Here you can delete
-# files or DNS records that are no longer needed.
-#
-# The parameters are the same as for deploy_challenge.
-#
-## Parameters
-# - DOMAIN
-# - TOKEN_FILENAME
-# - TOKEN_VALUE
 dehydrated_hook_clean_challenge: ""
-
-# -----------------------
-# deploy_cert hook
-# -----------------------
-# This hook is called once for each certificate that has been
-# produced. Here you might, for instance, copy your new certificates
-# to service-specific locations and reload the service.
-#
-## Parameters
-# - DOMAIN
-#   The primary domain name, i.e. the certificate common name (CN).
-# - KEYFILE
-#   The path of the file containing the private key.
-# - CERTFILE
-#   The path of the file containing the signed certificate.
-# - FULLCHAINFILE
-#   The path of the file containing the full certificate chain.
-# - CHAINFILE
-#   The path of the file containing the intermediate certificate(s).
-# - TIMESTAMP
-#   Timestamp when the specified certificate was created.
 dehydrated_hook_deploy_cert: ""
-
-# -----------------------
-# unchanged_cert hook
-# -----------------------
-# This hook is called once for each certificate that is still
-# valid and therefore wasn't reissued.
-#
-## Parameters
-# - DOMAIN
-#   The primary domain name, i.e. the certificate common name (CN).
-# - KEYFILE
-#   The path of the file containing the private key.
-# - CERTFILE
-#   The path of the file containing the signed certificate.
-# - FULLCHAINFILE
-#   The path of the file containing the full certificate chain.
-# - CHAINFILE
-#   The path of the file containing the intermediate certificate(s).
 dehydrated_hook_unchanged_cert: ""
-
-# -----------------------
-# invalid_challenge hook
-# -----------------------
-# This hook is called if the challenge response has failed, so domain
-# owners can be aware and act accordingly.
-#
-## Parameters
-# - DOMAIN
-#   The primary domain name, i.e. the certificate common name (CN).
-# - RESPONSE
-#   The response that the verification server returned
 dehydrated_hook_invalid_challenge: ""
-
-# -----------------------
-# request_failure hook parameters
-# -----------------------
-# This hook is called when a HTTP request fails (e.g., when the ACME
-# server is busy, returns an error, etc). It will be called upon any
-# response code that does not start with '2'. Useful to alert admins
-# about problems with requests.
-#
-## Parameters
-# - STATUSCODE
-#   The HTML status code that originated the error.
-# - REASON
-#   The specified reason for the error.
-# - REQTYPE
-#   The kind of request that was made (GET, POST...)
-
 dehydrated_hook_request_failure: ""
-
-
-# -----------------------
-# generate_csr hook parameters
-# -----------------------
-# This hook is called before any certificate signing operation takes place.
-# It can be used to generate or fetch a certificate signing request with external
-# tools.
-# The output should be just the cerificate signing request formatted as PEM.
-#
-# Parameters:
-# - DOMAIN
-#   The primary domain as specified in domains.txt. This does not need to
-#   match with the domains in the CSR, it's basically just the directory name.
-# - CERTDIR
-#   Certificate output directory for this particular certificate. Can be used
-#   for storing additional files.
-# - ALTNAMES
-#   All domain names for the current certificate as specified in domains.txt.
-#   Again, this doesn't need to match with the CSR, it's just there for convenience.
 dehydrated_hook_generate_csr: ""
-
-# -----------------------
-# startup_hook hook parameters
-# -----------------------
-# This hook is called before the cron command to do some initial tasks
-# (e.g. starting a webserver).
 dehydrated_hook_startup_hook: ""
-
-# -----------------------
-# exit_hook hook parameters
-# -----------------------
-# This hook is called at the end of a dehydrated command and can be used
-# to do some final (cleanup or other) tasks.
 dehydrated_hook_exit_hook: ""

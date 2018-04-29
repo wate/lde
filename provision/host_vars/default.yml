@@ -76,6 +76,7 @@ php_packages:
   - php-pdo
   - php-gd
   - php-xml
+  - php-pecl-xdebug
 
 # --------------
 # php.iniの初期値を上書きする項目
