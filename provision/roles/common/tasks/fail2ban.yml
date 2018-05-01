@@ -1,0 +1,14 @@
+- name: install fail2ban
+  yum:
+    name: fail2ban
+    enablerepo: epel
+- name: create fail2ban setting
+  template:
+    src: local.conf.j2
+    dest: /etc/fail2ban/jail.d/local.conf
+  notify: restart fail2ban
+- name: fail2ban is active and enabled on system startup
+  systemd:
+    name: fail2ban
+    state: started
+    enabled: yes
