@@ -1,0 +1,34 @@
+---
+- name: check swapfile exist
+  stat:
+    path: "{{ swap_dest }}"
+  register: result
+- name: create swapfile
+  block:
+    - name: create swapfile directory
+      file:
+        path: "{{ swap_dest|dirname }}"
+        state: directory
+    - name: create swapfile
+      file:
+        path: "{{ swap_dest }}"
+        owner: root
+        group: root
+        mode: 0600
+        state: touch
+    - name: initilize swapfile
+      command: "dd if=/dev/zero of={{ swap_dest }} bs=1M count={{ swap_size * 1024 }}"
+    - name: create swap
+      command: "mkswap {{ swap_dest }}"
+  when: not result.stat.exists
+- name: Ensure mounted swap
+  mount:
+    path: none
+    src: "{{ swap_dest }}"
+    fstype: swap
+    opts: default
+    state: present
+- name: enable swap
+  command: swapon
+  tags:
+    - skip_ansible_lint
