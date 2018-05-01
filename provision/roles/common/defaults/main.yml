@@ -38,8 +38,24 @@ common_users: []
   #   admin: no
   #   remove: yes
 
+common_hostname: "{{ inventory_hostname }}"
+
+common_ssh_port: 22
+common_ssh_use_geoip_filter: yes
+common_ssh_allow_countries:
+  - JP
+
+common_cron_geoip_update:
+  hour: 4
+  minute: 0
+
+common_root_lock: no
+
 fail2ban_jail_cfg:
   sshd:
     enabled: yes
 
 sudo_require_password: no
+
+common_swap_dest: /var/spool/swap/swapfile
+common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000)|round(1, 'floor')|float * 2)|int }}"

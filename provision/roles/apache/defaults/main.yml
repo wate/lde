@@ -72,7 +72,7 @@ apache_vhosts:
     #   hsts: "max-age=15768000"
     # ip: 127.0.0.1
     # port: 1080
-    # extra_param: |
+    # extra_setting: |
     #   <Location /server-status>
     #     SetHandler server-status
     #     Require ip 127.0.0.1
