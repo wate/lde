@@ -320,8 +320,7 @@ AddDefaultCharset UTF-8
 # filesystems or if support for these functions is otherwise
 # broken on your system.
 # Defaults if commented: EnableMMAP On, EnableSendfile Off
-#
-#EnableMMAP off
+EnableMMAP {{ 'on' if apache_cfg.enable_mmap else 'off' }}
 EnableSendfile {{ 'on' if apache_cfg.enable_sendfile else 'off' }}
 
 # Supplemental configuration
