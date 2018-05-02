@@ -89,7 +89,7 @@ apache_secrity_cfg:
 apache_cfg:
   server_admin: root@localhost
   enable_sendfile: yes
-  # extra_param: |
+  # extra_setting: |
   #   ExtendedStatus On
 
 # Apache MPM(Multi Processing Module)
