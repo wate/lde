@@ -179,7 +179,7 @@ apache_vhosts:
 # その他の設定値は、「provision/roles/apache/defaults/main.yml」を参照
 # --------------
 apache_cfg:
-  # EnableSendfileをOffに変更(VirtualBoxの共有ディレクトリ機能用)
+  enable_mmap: no
   enable_sendfile: no
 
 # 不要なモジュールを無効化

@@ -10,6 +10,8 @@ describe file('/etc/httpd/conf/httpd.conf') do
   it { should be_file }
   include_path = e(property['apache_virtualhost_conf_dir'] + '/*.conf')
   its(:content) { should match(/^Include #{include_path}/) }
+  enable_mmap = property['apache_cfg']['enable_mmap'] ? 'on' : 'off'
+  its(:content) { should match(/^EnableMMAP #{enable_mmap}/) }
   enable_sendfile = property['apache_cfg']['enable_sendfile'] ? 'on' : 'off'
   its(:content) { should match(/^EnableSendfile #{enable_sendfile}/) }
 end
