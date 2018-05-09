@@ -63,6 +63,14 @@
   when: not item.state|default(true)
   with_items: "{{ apache_vhosts }}"
   notify: reload apache
+- name: create virtualhost directory
+  file:
+    path: "{{ item.document_root }}"
+    owner: "{{ item.owner|default(omit) }}"
+    group: "{{ item.group|default(omit) }}"
+    mode: "{{ item.mode|default('0755') }}"
+    state: directory
+  with_items: "{{ apache_vhosts | selectattr('document_root', 'defined') | selectattr('create', 'defined') | selectattr('create', 'equalto', true) | list }}"
 - name: allow http port
   firewalld:
     service: http
