@@ -7,13 +7,6 @@
     name: "{{ common_hostname }}"
   tags:
     - hostname
-- name: create skeleton user web directory
-  file:
-    path: /etc/skel/public
-    mode: "0755"
-    state: directory
-  tags:
-    - skeleton
 - name: change home directory permission
   file:
     path: /home
