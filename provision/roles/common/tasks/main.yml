@@ -16,6 +16,9 @@
   yum:
     name: "{{ item }}"
   with_items: "{{ common_packages }}"
+- name: manage user skeleton directory
+  import_tasks: skeleton.yml
+  tags: skeleton
 - name: manage user
   import_tasks: user.yml
   tags: user

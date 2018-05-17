@@ -11,6 +11,11 @@ ansible:
       common_groups:
         - name: group_one
         - name: group_two
+        - name: system_group
+          system: yes
+        - name: system_group_with_id
+          id: 200
+          system: yes
         - name: absent_group
           remove: yes
       common_users:
@@ -26,16 +31,26 @@ ansible:
           groups:
             - group_one
           shell: /bin/zsh
+        - name: system_user
+          system: yes
+        - name: system_user_with_id
+          id: 10000
+          home: /var/system_user_with_id
+          system: yes
         - name: absent_user
           groups:
             - group_one
             - group_two
           remove: yes
     enable_all:
+      postfix_cfg:
+        home_mailbox: "Maildir/"
       common_root_lock: yes
       common_requre_sudo_password: yes
       common_ssh_use_geoip_filter: yes
     disable_all:
+      postfix_cfg:
+        home_mailbox: Mailbox
       common_root_lock: no
       common_requre_sudo_password: no
       common_ssh_use_geoip_filter: no
