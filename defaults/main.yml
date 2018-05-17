@@ -23,6 +23,11 @@ common_groups: []
   # - name: group1
   # - name: group2
   #   remove: yes
+  # - name: system_group
+  #   system: yes
+  # - name: system_group_with_id
+  #   id: 1000
+  #   system: yes
 
 common_users: []
   # - name: sample_user
@@ -35,6 +40,8 @@ common_users: []
   #     - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
   #     - https://github.com/wate.keys
   #   shell: /bin/nologin
+  #   id: 100000
+  #   system: yes
   #   admin: no
   #   remove: yes
 

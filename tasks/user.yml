@@ -1,6 +1,8 @@
 - name: manage groups
   group:
     name: "{{ item.name }}"
+    gid: "{{ item.id|default(omit) }}"
+    system: "{{ item.system|default(omit) }}"
     state: "{{ 'absent' if item.remove|default(false) else 'present' }}"
   with_items: "{{ common_groups }}"
 - name: manage users
@@ -9,6 +11,9 @@
     password: "{{ item.password|default(omit) }}"
     shell: "{{ item.shell|default('/bin/bash') }}"
     groups: "{{ item.groups|default(omit) }}"
+    uid: "{{ item.id|default(omit) }}"
+    system: "{{ item.system|default(omit) }}"
+    home: "{{ item.home|default(omit) }}"
     state: "{{ 'absent' if item.remove|default(false) else 'present' }}"
     # `userdel` command `--remove` option
     remove: "{{ item.remove|default(false) }}"
