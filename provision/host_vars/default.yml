@@ -126,6 +126,10 @@ apache_vhosts:
     state: "{{ true if phpmyadmin_dest is defined else false }}"
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest|default('/usr/share/phpMyAdmin') }}"
+    custom_log:
+      path: /dev/null
+      format: combine
+      env: 0
     directory_index:
       - index.html
       - index.htm
@@ -145,6 +149,10 @@ apache_vhosts:
   - name: 02-MailHog
     state: "{{ true if mailhog_http_port is defined else false }}"
     server_name: mail.{{ domain }}
+    custom_log:
+      path: /dev/null
+      format: combine
+      env: 0
     # リバースプロキシの設定
     proxy_pass:
       - from: /
@@ -158,6 +166,10 @@ apache_vhosts:
     state: "{{ true if wwwsqldesigner_dest is defined else false }}"
     server_name: er.{{ domain }}
     document_root: "{{ wwwsqldesigner_dest|default('/opt/wwwsqldesigner') }}"
+    custom_log:
+      path: /dev/null
+      format: combine
+      env: 0
     directory_index:
       - index.html
       - index.htm
@@ -173,6 +185,10 @@ apache_vhosts:
     state: "{{ true if pagegenerator_dest is defined else false }}"
     server_name: mock.{{ domain }}
     document_root: "{{ pagegenerator_dest|default('/opt/BootstrapPageGenerator') }}"
+    custom_log:
+      path: /dev/null
+      format: combine
+      env: 0
 
 # --------------
 # Apacheの設定
@@ -197,3 +213,15 @@ apache_module_proxy:
   ajp: no
   balancer: no
   ftp: no
+
+mariadb_cfg:
+  mysqld:
+    slow_query_log: yes
+    long_query_time: 1
+    # log_warnings: 0
+    # min_examined_row_limit: 0
+    # log_queries_not_using_indexes: no
+    # log_slow_admin_statements: no
+    slow_query_log_file: /var/log/mariadb/slow_query.log
+    general_log: yes
+    general_log_file: /var/log/mariadb/general.log

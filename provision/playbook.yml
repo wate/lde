@@ -1,11 +1,6 @@
 - name: setup local development environment
   hosts: all
   become: yes
-  vars:
-    direnv:
-      version: "v2.15.2"
-      os: "linux"
-      arch: "amd64"
   roles:
     - role: common
       tags: role_common
@@ -36,16 +31,6 @@
     - role: pagegenerator
       tags: role_pagegenerator
   tasks:
-    - name: install direnv
-      get_url:
-        url: "https://github.com/direnv/direnv/releases/download/{{ direnv.version }}/direnv.{{ direnv.os }}-{{ direnv.arch }}"
-        dest: /usr/local/bin/direnv
-        mode: "0755"
-    - name: setup direnv
-      lineinfile:
-        path: ~/.bashrc
-        line: eval "$(direnv hook bash)"
-      become: no
     - block:
       - name: check global composer setting
         stat:

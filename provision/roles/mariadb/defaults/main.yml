@@ -120,9 +120,9 @@ mariadb_cfg:
     # min_examined_row_limit: 0
     # log_queries_not_using_indexes: no
     # log_slow_admin_statements: no
-    slow_query_log_file: /var/log/mysql/slow_query.log
+    slow_query_log_file: /var/log/mariadb/slow_query.log
     # general_log: no
-    # general_log_file: /var/log/mysql/general.log
+    # general_log_file: /var/log/mariadb/general.log
     # -----------------
     # Replication
     # -----------------
