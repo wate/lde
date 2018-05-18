@@ -1,8 +1,5 @@
-{% set vhost_ip = '*' -%}
-{% if item.ip is defined -%}
-{% set vhost_ip = item.ip -%}
-{% endif -%}
-{% set vhost_port = '443' if item.ssl is defined else '80' -%}
+{% set vhost_ip = item.ip if item.ip is defined else '*' -%}
+{% set vhost_port = 443 if item.ssl is defined else 80 -%}
 {% if item.port is defined -%}
 {% set vhost_port = item.port -%}
 {% endif -%}
@@ -50,7 +47,7 @@
   {% endif -%}
 
   {% if item.custom_log is defined -%}
-  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }}
+  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }}{% if item.custom_log.env is defined %} env={{ item.custom_log.env }}{% endif %}
   {% endif -%}
 
   {% if item.error_log is defined -%}
