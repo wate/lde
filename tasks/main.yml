@@ -1,0 +1,19 @@
+---
+- name: install ngircd
+  yum:
+    name: ngircd
+- name: create ngIRCd configration file
+  template:
+    src: ngircd.conf.j2
+    dest: /etc/ngircd.conf
+  notify: restart ngircd
+- name: create ngIRCd message of the day file
+  template:
+    src: ngircd.motd.j2
+    dest: /etc/ngircd.motd
+  notify: restart ngircd
+- name: ngircd is active and enabled on system startup
+  systemd:
+    name: ngircd
+    state: started
+    enabled: yes
