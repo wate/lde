@@ -1,0 +1,55 @@
+####
+# Output descriptions
+####
+
+## match tag=debug.** and dump to console
+<match debug.**>
+  @type stdout
+  @id output_stdout
+</match>
+
+{% for match_cfg in fluentd_match_cfg -%}
+<match {{ match_cfg.pattern }}>
+  @type {{ match_cfg.type }}
+  {% if match_cfg.id is defined -%}
+  @id {{ match_cfg.id }}
+  {% endif -%}
+  {{ match_cfg.content|default('')|indent(2) }}
+</match>
+{% endfor %}
+
+####
+# Source descriptions:
+####
+
+## live debugging agent
+<source>
+  @type debug_agent
+  @id input_debug_agent
+  bind 127.0.0.1
+  port 24230
+</source>
+
+{% for source_cfg in fluentd_source_cfg -%}
+<source>
+  @type {{ source_cfg.type }}
+  {% if source_cfg.id is defined -%}
+  @id {{ source_cfg.id }}
+  {% endif -%}
+  {{ source_cfg.content|default('')|indent(2) }}
+</source>
+{% endfor %}
+
+####
+# Filter descriptions:
+####
+
+{% for filter_cfg in fluentd_filter_cfg %}
+<filter {{ filter_cfg.pattern }}>
+  @type {{ filter_cfg.type }}
+  {% if filter_cfg.id is defined -%}
+  @id {{ filter_cfg.id }}
+  {% endif -%}
+  {{ filter_cfg.content|default('')|indent(2) }}
+</filter>
+{% endfor %}

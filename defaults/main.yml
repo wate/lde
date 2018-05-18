@@ -1,0 +1,84 @@
+---
+fluentd_plugins: []
+  # - fluent-plugin-elasticsearch
+  # - fluent-plugin-influxdb
+  # - fluent-plugin-rewrite
+
+fluentd_source_cfg:
+  - type: forward
+    id: input_forward
+  # - type: http
+  #   id: input_http
+  #   content: |
+  #     port 8888
+  # - type: tail
+  #   id: input_tail
+  #   content: |
+  #     <parse>
+  #       @type apache2
+  #     </parse>
+  #     path /var/log/httpd-access.log
+  #     tag apache.access
+  # - type: tail
+  #   content: |
+  #     <parse>
+  #       @type nginx
+  #     </parse>
+  #     path /var/log/nginx/access.log
+  #     tag nginx.access
+
+fluentd_match_cfg: []
+  # - pattern: td.*.*
+  #   type: tdlog
+  #   id: output_td
+  #   content: |
+  #     apikey YOUR_API_KEY
+  #     path /var/log/td-agent/access
+  #     <buffer>
+  #       @type file
+  #       path /var/log/td-agent/buffer/td
+  #     </buffer>
+  #     <secondary>
+  #       @type file
+  #       path /var/log/td-agent/failed_records
+  #     </secondary>
+  # - pattern: local.**
+  #   type: file
+  #   id: output_file
+  #   content: |
+  #     path /var/log/td-agent/access
+  # - pattern: obj.*
+  #   type: s3
+  #   content: |
+  #     s3_bucket {{ lookup('env','SACLOUD_OJS_ACCESS_KEY_ID') }}
+  #     s3_endpoint https://b.sakurastorage.jp
+  #     aws_key_id {{ lookup('env','SACLOUD_OJS_ACCESS_KEY_ID') }}
+  #     aws_sec_key {{ lookup('env','SACLOUD_OJS_SECRET_ACCESS_KEY') }}
+  #     s3_object_key_format %{path}%{hostname}/%{time_slice}_%{index}.%{file_extension}
+  #     signature_version s3
+  #     buffer_path /var/log/td-agent/buffer/s3
+  #     path logs/
+  #     time_slice_format %Y%m%d%H
+  #     time_slice_wait 10m
+  #     buffer_chunk_limit 256m
+  #     check_apikey_on_start false
+
+fluentd_filter_cfg: []
+  # - pattern: foo.bar
+  #   type: grep
+  #   id: filter_grep
+  #   content: |
+  #     <regexp>
+  #       key message
+  #       pattern cool
+  #     </regexp>
+  #     <regexp>
+  #       key hostname
+  #       pattern ^web\d+\.example\.com$
+  #     </regexp>
+  #     <exclude>
+  #       key message
+  #       pattern uncool
+  #     </exclude>
+  # - pattern: pattern
+  #   type: stdout

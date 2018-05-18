@@ -1,0 +1,9 @@
+---
+- name: restart td-agent
+  systemd:
+    name: td-agent
+    state: restarted
+- name: reload td-agent
+  systemd:
+    name: td-agent
+    state: reloaded
