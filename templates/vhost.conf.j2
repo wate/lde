@@ -47,7 +47,11 @@
   {% endif -%}
 
   {% if item.custom_log is defined -%}
-  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }}{% if item.custom_log.env is defined %} env={{ item.custom_log.env }}{% endif %}
+  {% if item.custom_log.env is defined %}
+  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }} env={{ item.custom_log.env }}
+  {% else -%}
+  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }}
+  {% endif -%}
   {% endif -%}
 
   {% if item.error_log is defined -%}
