@@ -1,5 +1,5 @@
 ---
-- name: install ngircd
+- name: install ngIRCd
   yum:
     name: ngircd
 - name: create ngIRCd configration file
@@ -17,3 +17,9 @@
     name: ngircd
     state: started
     enabled: yes
+- name: allow IRC port
+  firewalld:
+    port: 6667/tcp
+    permanent: yes
+    state: enabled
+  notify: restart firewalld
