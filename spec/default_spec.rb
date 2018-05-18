@@ -90,9 +90,11 @@ property['apache_vhosts'].each do |site|
         its(:content) { should match(/^\s+DirectoryIndex #{e(directive)}/) }
       end
       if site.key?('custom_log')
-        custom_log_path = site['custom_log']['path']
-        custom_log_format = site['custom_log']['format']
-        its(:content) { should match(/^\s+CustomLog #{e(custom_log_path)} #{e(custom_log_format)}/) }
+        custom_log_value = site['custom_log']['path'] + ' ' + site['custom_log']['format']
+        if site['custom_log'].key?('env')
+          custom_log_value << ' env=' + site['custom_log']['env']
+        end
+        its(:content) { should match(/^\s+CustomLog #{e(custom_log_value)}/) }
       end
       if site.key?('error_log')
         its(:content) { should match(/^\s+ErrorLog #{e(site['error_log']['path'])}/) }
