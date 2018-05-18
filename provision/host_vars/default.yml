@@ -213,3 +213,15 @@ apache_module_proxy:
   ajp: no
   balancer: no
   ftp: no
+
+mariadb_cfg:
+  mysqld:
+    slow_query_log: yes
+    long_query_time: 1
+    # log_warnings: 0
+    # min_examined_row_limit: 0
+    # log_queries_not_using_indexes: no
+    # log_slow_admin_statements: no
+    slow_query_log_file: /var/log/mariadb/slow_query.log
+    general_log: yes
+    general_log_file: /var/log/mariadb/general.log
