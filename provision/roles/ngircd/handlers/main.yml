@@ -1,0 +1,9 @@
+---
+- name: restart ngircd
+  systemd:
+    name: ngircd
+    state: restarted
+- name: restart firewalld
+  systemd:
+    name: firewalld
+    state: restarted
