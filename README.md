@@ -82,7 +82,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 設定内容に応じて、以下のURLでローカル開発環境にアクセスすることができます。
 
 * `http://<設定したドメイン>/`：ローカル開発環境の確認用URLです。
-* `http://mail.<設定したドメイン>/`：[MailCatcher](https://mailcatcher.me/)用のURLです。
+* `http://mail.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
 * `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
 * `http://er.<設定したドメイン>/`：[WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)用のURLです。
 * `http://mock.<設定したドメイン>/`：[Bootstrap Page Generator](https://github.com/Vegetam/BootstrapPageGenerator)用のURLです。
