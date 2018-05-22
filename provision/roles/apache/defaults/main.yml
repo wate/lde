@@ -97,6 +97,36 @@ apache_cfg:
 # Setting Value: prefork OR worker OR event
 apache_module_mpm: prefork
 
+apache_performance_cfg:
+  timeout: 60
+  keep_alive: yes
+  max_keep_alive_requests: 100
+  keep_alive_timeout: 5
+  max_connections_per_child: 0
+  prefork:
+    start_servers: 5
+    min_spare_servers: 5
+    max_spare_servers: 10
+    max_request_workers: 256
+    server_limit: 256
+  worker:
+    start_servers: 3
+    min_spare_threads: 75
+    max_spare_threads: 250
+    max_request_workers: 400
+    threads_per_child: 25
+    thread_limit: 64
+    server_limit: 16
+  event:
+    start_servers: 3
+    min_spare_threads: 75
+    max_spare_threads: 250
+    max_request_workers: 400
+    threads_per_child: 25
+    thread_limit: 64
+    server_limit: 16
+    async_request_worker_factor: 2
+
 apache_ssl_cfg:
   protocol:
     - all
