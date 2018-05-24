@@ -68,7 +68,7 @@ wordpress:
     # テーマのスラッグ(必須)
     slug: "your_theme_slug"
     # テーマ名(必須)
-    name: "テーマ名をここに入力してください"
+    name: "テーマ名"
     # 作者 (任意)
     author: ""
     # 作者のURL (任意)

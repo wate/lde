@@ -10,6 +10,8 @@ describe file('/etc/httpd/conf/httpd.conf') do
   it { should be_file }
   include_path = e(property['apache_virtualhost_conf_dir'] + '/*.conf')
   its(:content) { should match(/^Include #{include_path}/) }
+  enable_mmap = property['apache_cfg']['enable_mmap'] ? 'on' : 'off'
+  its(:content) { should match(/^EnableMMAP #{enable_mmap}/) }
   enable_sendfile = property['apache_cfg']['enable_sendfile'] ? 'on' : 'off'
   its(:content) { should match(/^EnableSendfile #{enable_sendfile}/) }
 end
@@ -23,6 +25,87 @@ describe file('/etc/httpd/conf.d/security.conf') do
   property['apache_secrity_cfg']['headers'].each do |name, value|
     its(:content) { should match(/^Header set #{e(name)} #{e(value)}/) }
   end
+end
+
+describe file('/etc/httpd/conf.d/performance.conf') do
+  it { should exist }
+  it { should be_file }
+  apache_performance_cfg = property['apache_performance_cfg']
+
+  it { should contain "Timeout #{apache_performance_cfg['timeout']}" }
+  keep_alive = apache_performance_cfg['keep_alive'] ? 'On' : 'Off'
+  it { should contain "KeepAlive #{keep_alive}" }
+  it { should contain "MaxKeepAliveRequests #{apache_performance_cfg['max_keep_alive_requests']}" }
+  it { should contain "KeepAliveTimeout #{apache_performance_cfg['keep_alive_timeout']}" }
+  it { should contain "MaxConnectionsPerChild #{apache_performance_cfg['max_connections_per_child']}" }
+
+  prefork_from = /^<IfModule prefork\.c>/
+  prefork_to = %r{^</IfModule>}
+
+  prefork_start_servers = apache_performance_cfg['prefork']['start_servers']
+  it { should contain("StartServers #{prefork_start_servers}").from(prefork_from).to(prefork_to) }
+
+  prefork_min_spare_servers = apache_performance_cfg['prefork']['min_spare_servers']
+  it { should contain("MinSpareServers #{prefork_min_spare_servers}").from(prefork_from).to(prefork_to) }
+
+  prefork_max_spare_servers = apache_performance_cfg['prefork']['max_spare_servers']
+  it { should contain("MaxSpareServers #{prefork_max_spare_servers}").from(prefork_from).to(prefork_to) }
+
+  prefork_max_request_workers = apache_performance_cfg['prefork']['max_request_workers']
+  it { should contain("MaxRequestWorkers #{prefork_max_request_workers}").from(prefork_from).to(prefork_to) }
+
+  prefork_server_limit = apache_performance_cfg['prefork']['server_limit']
+  it { should contain("ServerLimit #{prefork_server_limit}").from(prefork_from).to(prefork_to) }
+
+  worker_from = /^<IfModule worker\.c>/
+  worker_to = %r{^</IfModule>}
+
+  worker_start_servers = apache_performance_cfg['worker']['start_servers']
+  it { should contain("StartServers #{worker_start_servers}").from(worker_from).to(worker_to) }
+
+  worker_min_spare_threads = apache_performance_cfg['worker']['min_spare_servers']
+  it { should contain("MinSpareThreads #{worker_min_spare_threads}").from(worker_from).to(worker_to) }
+
+  worker_max_spare_threads = apache_performance_cfg['worker']['max_spare_servers']
+  it { should contain("MaxSpareThreads #{worker_max_spare_threads}").from(worker_from).to(worker_to) }
+
+  worker_max_request_workers = apache_performance_cfg['worker']['max_request_workers']
+  it { should contain("MaxRequestWorkers #{worker_max_request_workers}").from(worker_from).to(worker_to) }
+
+  worker_threads_per_child = apache_performance_cfg['worker']['threads_per_child']
+  it { should contain("ThreadsPerChild #{worker_threads_per_child}").from(worker_from).to(worker_to) }
+
+  worker_thread_limit = apache_performance_cfg['worker']['thread_limit']
+  it { should contain("ThreadLimit #{worker_thread_limit}").from(worker_from).to(worker_to) }
+
+  worker_server_limit = apache_performance_cfg['worker']['server_limit']
+  it { should contain("ServerLimit #{worker_server_limit}").from(worker_from).to(worker_to) }
+
+  event_from = /^<IfModule event\.c>/
+  event_to = %r{^</IfModule>}
+  event_start_servers = apache_performance_cfg['event']['start_servers']
+  it { should contain("StartServers #{event_start_servers}").from(event_from).to(event_to) }
+
+  event_min_spare_threads = apache_performance_cfg['event']['min_spare_servers']
+  it { should contain("MinSpareThreads #{event_min_spare_threads}").from(event_from).to(event_to) }
+
+  event_max_spare_threads = apache_performance_cfg['event']['max_spare_servers']
+  it { should contain("MaxSpareThreads #{event_max_spare_threads}").from(event_from).to(event_to) }
+
+  event_max_request_workers = apache_performance_cfg['event']['max_request_workers']
+  it { should contain("MaxRequestWorkers #{event_max_request_workers}").from(event_from).to(event_to) }
+
+  event_threads_per_child = apache_performance_cfg['event']['threads_per_child']
+  it { should contain("ThreadsPerChild #{event_threads_per_child}").from(event_from).to(event_to) }
+
+  event_thread_limit = apache_performance_cfg['event']['thread_limit']
+  it { should contain("ThreadLimit #{event_thread_limit}").from(event_from).to(event_to) }
+
+  event_server_limit = apache_performance_cfg['event']['server_limit']
+  it { should contain("ServerLimit #{event_server_limit}").from(event_from).to(event_to) }
+
+  event_async_request_worker_factor = apache_performance_cfg['event']['async_request_worker_factor']
+  it { should contain("AsyncRequestWorkerFactor #{event_async_request_worker_factor}").from(event_from).to(event_to) }
 end
 
 describe file('/etc/httpd/conf.d/extra.conf') do
@@ -44,122 +127,128 @@ property['apache_vhosts'].each do |site|
   state = site.key?('state') ? site['state'] : true
   file_name = site.key?('name') ? site['name'] : site['server_name']
   describe file('/etc/httpd/vhost/' + file_name + '.conf') do
-      if state
-        it { should exist }
-        it { should be_file }
-        vhost_ip = site.key?('ip') ? site['ip'] : '*'
-        vhost_port = site.key?('ssl') ? '443' : '80'
-        if site.key?('port')
-          vhost_port = site['port']
-        end
-        its(:content) { should match(/^<VirtualHost #{e(vhost_ip)}:#{e(vhost_port)}>/) }
-        if site.key?('server_name')
-          its(:content) { should match(/^\s+ServerName #{e(site['server_name'])}/) }
-        end
-        if site.key?('server_alias')
-          directive = site['server_alias'].is_a?(Array) ? site['server_alias'].join(' ') : site['server_alias']
-          its(:content) { should match(/^\s+ServerAlias #{e(directive)}/) }
-        end
-        if site.key?('document_root')
-          its(:content) { should match(/^\s+DocumentRoot #{e(site['document_root'])}/) }
-          its(:content) { should match(/^\s+<Directory #{e(site['document_root'])}>/) }
-          if site.key?('options')
-            directive = site['options'].is_a?(Array) ? site['options'].join(' ') : site['options']
-            its(:content) { should match(/^\s+Options #{e(directive)}/) }
-          end
-          if site.key?('allow_override')
-            its(:content) { should match(/^\s+AllowOverride #{e(site['allow_override'])}/) }
-          end
-          if site.key?('require')
-            site['require'].each do |require_directive|
-              op_not = ''
-              if require_directive.key?('not') && require_directive['not']
-                op_not = 'not '
-              end
-              its(:content) { should match(/^\s+Require #{op_not}#{e(require_directive['type'])} #{e(require_directive['value'])}/) }
-            end
-          else
-            its(:content) { should match(/^\s+Require all granted/) }
-          end
-        end
-        if site.key?('alias')
-          site['alias'].each do |alias_directive|
-            its(:content) { should match(/^\s+Alias #{e(alias_directive['from'])} #{e(alias_directive['to'])}/) }
-          end
-        end
-        if site.key?('directory_index')
-          directive = site['directory_index'].is_a?(Array) ? site['directory_index'].join(' ') : site['directory_index']
-          its(:content) { should match(/^\s+DirectoryIndex #{e(directive)}/) }
-        end
-        if site.key?('custom_log')
-          its(:content) { should match(/^\s+CustomLog #{e(site['custom_log']['path'])} #{e(site['custom_log']['format'])}/) }
-        end
-        if site.key?('error_log')
-          its(:content) { should match(/^\s+ErrorLog #{e(site['error_log']['path'])}/) }
-          log_level = site['error_log'].key?('log_level') ? site['error_log']['log_level'] : 'warn'
-          its(:content) { should match(/^\s+LogLevel #{e(log_level)}/) }
-        end
-        if site.key?('transfer_log')
-          if site['transfer_log'].key?('format')
-            its(:content) { should match(/^\s+LogFormat #{e(site['transfer_log']['format'])}/) }
-          end
-          its(:content) { should match(/^\s+TransferLog #{e(site['transfer_log']['path'])}/) }
-        end
-        if site.key?('proxy_pass')
-          site['proxy_pass'].each do |directive|
-            its(:content) { should match(/^\s+ProxyPass #{e(directive['from'])} #{e(directive['to'])}/) }
-          end
-        end
-        if site.key?('proxy_pass_reverse')
-          site['proxy_pass_reverse'].each do |directive|
-            its(:content) { should match(/^\s+ProxyPassReverse #{e(directive['from'])} #{e(directive['to'])}/) }
-          end
-        end
-        if site.key?('proxy_pass_match')
-          site['proxy_pass_match'].each do |directive|
-            its(:content) { should match(/^\s+ProxyPassMatch #{e(directive['pattern'])} #{e(directive['to'])}/) }
-          end
-        end
-        if site.key?('ssl')
-          its(:content) { should match(/^\s+SSLEngine on/) }
-          its(:content) { should match(/^\s+SSLCertificateFile #{e(site['ssl']['certificate_file'])}/) }
-          its(:content) { should match(/^\s+SSLCertificateKeyFile #{e(site['ssl']['certificate_key_file'])}/) }
-          if site.key?('certificate_chain_file')
-            its(:content) { should match(/^\s+SSLCertificateChainFile #{e(site['ssl']['certificate_chain_file'])}/) }
-          end
-          if site['ssl'].key?('protocol')
-            ssl_protocol = site['ssl']['protocol'].join(' ')
-            its(:content) { should match(/^\s+SSLProtocol #{e(ssl_protocol)}/) }
-          end
-          if site['ssl'].key?('cipher_suite')
-            ssl_cipher_suite = site['ssl']['cipher_suite'].join(':')
-            its(:content) { should match(/^\s+SSLCipherSuite #{e(ssl_cipher_suite)}/) }
-          end
-          if site['ssl'].key?('honor_cipher_order')
-            ssl_honor_cipher_order = site['ssl']['honor_cipher_order'] ? 'on' : 'off'
-            its(:content) { should match(/^\s+SSLHonorCipherOrder #{ssl_honor_cipher_order}/) }
-          end
-          if site['ssl'].key?('compression')
-            ssl_compression = site['ssl']['compression'] ? 'on' : 'off'
-            its(:content) { should match(/^\s+SSLCompression #{ssl_compression}/) }
-          end
-          if site['ssl'].key?('stapling_responder_timeout')
-            its(:content) { should match(/^\s+SSLStaplingResponderTimeout #{e(site['ssl']['stapling_responder_timeout'].to_s)}/) }
-          end
-          if site['ssl'].key?('stapling_return_responder_errors')
-            ssl_stapling_return_responder_errors = site['ssl']['stapling_return_responder_errors'] ? 'on' : 'off'
-            its(:content) { should match(/^\s+SSLStaplingReturnResponderErrors #{ssl_stapling_return_responder_errors}/) }
-          end
-          if site['ssl'].key?('stapling_cache')
-            its(:content) { should match(/^\s+SSLStaplingCache #{e(site['ssl']['stapling_cache'])}/) }
-          end
-          if site['ssl'].key?('hsts')
-            its(:content) { should match(/^\s+Header always set Strict-Transport-Security #{e(site['ssl']['hsts'])}/) }
-          end
-        end
-      else
-        it { should_not exist }
+    if state
+      it { should exist }
+      it { should be_file }
+      vhost_ip = site.key?('ip') ? site['ip'] : '*'
+      vhost_port = site.key?('ssl') ? '443' : '80'
+
+      vhost_port = site['port'] if site.key?('port')
+      its(:content) { should match(/^<VirtualHost #{e(vhost_ip)}:#{e(vhost_port)}>/) }
+      its(:content) { should match(/^\s+ServerName #{e(site['server_name'])}/) } if site.key?('server_name')
+      if site.key?('server_alias')
+        server_alias_value = site['server_alias'].is_a?(Array) ? site['server_alias'].join(' ') : site['server_alias']
+        its(:content) { should match(/^\s+ServerAlias #{e(server_alias_value)}/) }
       end
+      if site.key?('document_root')
+        its(:content) { should match(/^\s+DocumentRoot #{e(site['document_root'])}/) }
+        its(:content) { should match(/^\s+<Directory #{e(site['document_root'])}>/) }
+        if site.key?('options')
+          options_value = site['options'].is_a?(Array) ? site['options'].join(' ') : site['options']
+          its(:content) { should match(/^\s+Options #{e(options_value)}/) }
+        end
+
+        its(:content) { should match(/^\s+AllowOverride #{e(site['allow_override'])}/) } if site.key?('allow_override')
+        if site.key?('require')
+          site['require'].each do |require_directive|
+            require_type = require_directive['type']
+            require_value = require_directive['value']
+            op_not = ''
+            op_not = 'not ' if require_directive.key?('not') && require_directive['not']
+            its(:content) { should match(/^\s+Require #{op_not}#{e(require_type)} #{e(require_value)}/) }
+          end
+        else
+          its(:content) { should match(/^\s+Require all granted/) }
+        end
+      end
+      if site.key?('alias')
+        site['alias'].each do |alias_directive|
+          its(:content) { should match(/^\s+Alias #{e(alias_directive['from'])} #{e(alias_directive['to'])}/) }
+        end
+      end
+      if site.key?('directory_index')
+        directive = site['directory_index'].is_a?(Array) ? site['directory_index'].join(' ') : site['directory_index']
+        its(:content) { should match(/^\s+DirectoryIndex #{e(directive)}/) }
+      end
+      if site.key?('custom_log')
+        custom_log_value = site['custom_log']['path'] + ' ' + site['custom_log']['format']
+        custom_log_value << ' env=' + site['custom_log']['env'] if site['custom_log'].key?('env')
+        its(:content) { should match(/^\s+CustomLog #{e(custom_log_value)}/) }
+      end
+      if site.key?('error_log')
+        its(:content) { should match(/^\s+ErrorLog #{e(site['error_log']['path'])}/) }
+        log_level = site['error_log'].key?('log_level') ? site['error_log']['log_level'] : 'warn'
+        its(:content) { should match(/^\s+LogLevel #{e(log_level)}/) }
+      end
+      if site.key?('transfer_log')
+        if site['transfer_log'].key?('format')
+          its(:content) { should match(/^\s+LogFormat #{e(site['transfer_log']['format'])}/) }
+        end
+        its(:content) { should match(/^\s+TransferLog #{e(site['transfer_log']['path'])}/) }
+      end
+      if site.key?('proxy_pass')
+        site['proxy_pass'].each do |proxy_pass|
+          proxy_pass_from = proxy_pass['from']
+          proxy_pass_to = proxy_pass['to']
+          its(:content) { should match(/^\s+ProxyPass #{e(proxy_pass_from)} #{e(proxy_pass_to)}/) }
+        end
+      end
+      if site.key?('proxy_pass_reverse')
+        site['proxy_pass_reverse'].each do |proxy_pass_reverse|
+          proxy_reverse_from = proxy_pass_reverse['from']
+          proxy_reverse_to = proxy_pass_reverse['to']
+          its(:content) { should match(/^\s+ProxyPassReverse #{e(proxy_reverse_from)} #{e(proxy_reverse_to)}/) }
+        end
+      end
+      if site.key?('proxy_pass_match')
+        site['proxy_pass_match'].each do |proxy_pass_match|
+          proxy_match_pattern = proxy_pass_match['pattern']
+          proxy_match_to = proxy_pass_match['to']
+          its(:content) { should match(/^\s+ProxyPassMatch #{e(proxy_match_pattern)} #{e(proxy_match_to)}/) }
+        end
+      end
+      if site.key?('ssl')
+        site_ssl = site['ssl']
+        its(:content) { should match(/^\s+SSLEngine on/) }
+        its(:content) { should match(/^\s+SSLCertificateFile #{e(site_ssl['certificate_file'])}/) }
+        its(:content) { should match(/^\s+SSLCertificateKeyFile #{e(site_ssl['certificate_key_file'])}/) }
+        if site.key?('certificate_chain_file')
+          its(:content) { should match(/^\s+SSLCertificateChainFile #{e(site_ssl['certificate_chain_file'])}/) }
+        end
+        if site_ssl.key?('protocol')
+          ssl_protocol = site_ssl['protocol'].join(' ')
+          its(:content) { should match(/^\s+SSLProtocol #{e(ssl_protocol)}/) }
+        end
+        if site_ssl.key?('cipher_suite')
+          ssl_cipher_suite = site_ssl['cipher_suite'].join(':')
+          its(:content) { should match(/^\s+SSLCipherSuite #{e(ssl_cipher_suite)}/) }
+        end
+        if site_ssl.key?('honor_cipher_order')
+          ssl_honor_cipher_order = site_ssl['honor_cipher_order'] ? 'on' : 'off'
+          its(:content) { should match(/^\s+SSLHonorCipherOrder #{ssl_honor_cipher_order}/) }
+        end
+        if site_ssl.key?('compression')
+          ssl_compression = site_ssl['compression'] ? 'on' : 'off'
+          its(:content) { should match(/^\s+SSLCompression #{ssl_compression}/) }
+        end
+        if site_ssl.key?('stapling_responder_timeout')
+          stapling_responder_timeout = site_ssl['stapling_responder_timeout'].to_s
+          its(:content) { should match(/^\s+SSLStaplingResponderTimeout #{e(stapling_responder_timeout)}/) }
+        end
+        if site_ssl.key?('stapling_return_responder_errors')
+          stapling_return_responder_errors = site_ssl['stapling_return_responder_errors'] ? 'on' : 'off'
+          its(:content) { should match(/^\s+SSLStaplingReturnResponderErrors #{stapling_return_responder_errors}/) }
+        end
+        if site_ssl.key?('stapling_cache')
+          its(:content) { should match(/^\s+SSLStaplingCache #{e(site_ssl['stapling_cache'])}/) }
+        end
+        if site_ssl.key?('hsts')
+          its(:content) { should match(/^\s+Header always set Strict-Transport-Security #{e(site_ssl['hsts'])}/) }
+        end
+      end
+    else
+      it { should_not exist }
+    end
   end
 end
 describe service('httpd') do
@@ -170,23 +259,25 @@ describe port(80) do
   it { should be_listening }
 end
 if property['apache_packages'].include?('mod_ssl')
+  apache_ssl_cfg = property['apache_ssl_cfg']
   describe file('/etc/httpd/conf.d/ssl.conf') do
     it { should exist }
     it { should be_file }
-    ssl_protocol = property['apache_ssl_cfg']['protocol'].join(' ')
+    ssl_protocol = apache_ssl_cfg['protocol'].join(' ')
     its(:content) { should match(/^SSLProtocol #{e(ssl_protocol)}/) }
-    ssl_cipher_suite = property['apache_ssl_cfg']['cipher_suite'].join(':')
+    ssl_cipher_suite = apache_ssl_cfg['cipher_suite'].join(':')
     its(:content) { should match(/^SSLCipherSuite #{e(ssl_cipher_suite)}/) }
-    ssl_honor_cipher_order = property['apache_ssl_cfg']['honor_cipher_order'] ? 'on' : 'off'
+    ssl_honor_cipher_order = apache_ssl_cfg['honor_cipher_order'] ? 'on' : 'off'
     its(:content) { should match(/^SSLHonorCipherOrder #{ssl_honor_cipher_order}/) }
-    ssl_compression = property['apache_ssl_cfg']['compression'] ? 'on' : 'off'
+    ssl_compression = apache_ssl_cfg['compression'] ? 'on' : 'off'
     its(:content) { should match(/^SSLCompression #{ssl_compression}/) }
-    ssl_use_stapling = property['apache_ssl_cfg']['use_stapling'] ? 'on' : 'off'
+    ssl_use_stapling = apache_ssl_cfg['use_stapling'] ? 'on' : 'off'
     its(:content) { should match(/^SSLUseStapling #{ssl_use_stapling}/) }
-    its(:content) { should match(/^SSLStaplingResponderTimeout #{e(property['apache_ssl_cfg']['stapling_responder_timeout'].to_s)}/) }
-    ssl_stapling_return_responder_errors = property['apache_ssl_cfg']['stapling_return_responder_errors'] ? 'on' : 'off'
+    stapling_responder_timeout = apache_ssl_cfg['stapling_responder_timeout'].to_s
+    its(:content) { should match(/^SSLStaplingResponderTimeout #{e(stapling_responder_timeout)}/) }
+    ssl_stapling_return_responder_errors = apache_ssl_cfg['stapling_return_responder_errors'] ? 'on' : 'off'
     its(:content) { should match(/^SSLStaplingReturnResponderErrors #{ssl_stapling_return_responder_errors}/) }
-    its(:content) { should match(/^SSLStaplingCache #{e(property['apache_ssl_cfg']['stapling_cache'])}/) }
+    its(:content) { should match(/^SSLStaplingCache #{e(apache_ssl_cfg['stapling_cache'])}/) }
   end
   describe port(443) do
     it { should be_listening }

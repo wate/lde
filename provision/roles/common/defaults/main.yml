@@ -23,6 +23,11 @@ common_groups: []
   # - name: group1
   # - name: group2
   #   remove: yes
+  # - name: system_group
+  #   system: yes
+  # - name: system_group_with_id
+  #   id: 1000
+  #   system: yes
 
 common_users: []
   # - name: sample_user
@@ -35,11 +40,29 @@ common_users: []
   #     - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
   #     - https://github.com/wate.keys
   #   shell: /bin/nologin
+  #   id: 100000
+  #   system: yes
   #   admin: no
   #   remove: yes
+
+common_hostname: "{{ inventory_hostname }}"
+
+common_ssh_port: 22
+common_ssh_use_geoip_filter: yes
+common_ssh_allow_countries:
+  - JP
+
+common_cron_geoip_update:
+  hour: 4
+  minute: 0
+
+common_root_lock: no
 
 fail2ban_jail_cfg:
   sshd:
     enabled: yes
 
 sudo_require_password: no
+
+common_swap_dest: /var/spool/swap/swapfile
+common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000)|round(1, 'floor')|float * 2)|int }}"

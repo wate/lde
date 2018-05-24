@@ -72,7 +72,7 @@ apache_vhosts:
     #   hsts: "max-age=15768000"
     # ip: 127.0.0.1
     # port: 1080
-    # extra_param: |
+    # extra_setting: |
     #   <Location /server-status>
     #     SetHandler server-status
     #     Require ip 127.0.0.1
@@ -88,56 +88,68 @@ apache_secrity_cfg:
 
 apache_cfg:
   server_admin: root@localhost
+  enable_mmap: yes
   enable_sendfile: yes
-  # extra_param: |
+  # extra_setting: |
   #   ExtendedStatus On
 
 # Apache MPM(Multi Processing Module)
 # Setting Value: prefork OR worker OR event
 apache_module_mpm: prefork
 
+apache_performance_cfg:
+  timeout: 60
+  keep_alive: yes
+  max_keep_alive_requests: 100
+  keep_alive_timeout: 5
+  max_connections_per_child: 0
+  prefork:
+    start_servers: 5
+    min_spare_servers: 5
+    max_spare_servers: 10
+    max_request_workers: 256
+    server_limit: 256
+  worker:
+    start_servers: 3
+    min_spare_threads: 75
+    max_spare_threads: 250
+    max_request_workers: 400
+    threads_per_child: 25
+    thread_limit: 64
+    server_limit: 16
+  event:
+    start_servers: 3
+    min_spare_threads: 75
+    max_spare_threads: 250
+    max_request_workers: 400
+    threads_per_child: 25
+    thread_limit: 64
+    server_limit: 16
+    async_request_worker_factor: 2
+
 apache_ssl_cfg:
-    protocol:
-      - all
-      - "-SSLv3"
-    cipher_suite:
-      - ECDHE-ECDSA-CHACHA20-POLY1305
-      - ECDHE-RSA-CHACHA20-POLY1305
-      - ECDHE-ECDSA-AES128-GCM-SHA256
-      - ECDHE-RSA-AES128-GCM-SHA256
-      - ECDHE-ECDSA-AES256-GCM-SHA384
-      - ECDHE-RSA-AES256-GCM-SHA384
-      - DHE-RSA-AES128-GCM-SHA256
-      - DHE-RSA-AES256-GCM-SHA384
-      - ECDHE-ECDSA-AES128-SHA256
-      - ECDHE-RSA-AES128-SHA256
-      - ECDHE-ECDSA-AES128-SHA
-      - ECDHE-RSA-AES256-SHA384
-      - ECDHE-RSA-AES128-SHA
-      - ECDHE-ECDSA-AES256-SHA384
-      - ECDHE-ECDSA-AES256-SHA
-      - ECDHE-RSA-AES256-SHA
-      - DHE-RSA-AES128-SHA256
-      - DHE-RSA-AES128-SHA
-      - DHE-RSA-AES256-SHA256
-      - DHE-RSA-AES256-SHA
-      - ECDHE-ECDSA-DES-CBC3-SHA
-      - ECDHE-RSA-DES-CBC3-SHA
-      - EDH-RSA-DES-CBC3-SHA
-      - AES128-GCM-SHA256
-      - AES256-GCM-SHA384
-      - AES128-SHA256
-      - AES256-SHA256
-      - AES128-SHA
-      - AES256-SHA
-      - DES-CBC3-SHA
-      - "!DSS"
-    honor_cipher_order: yes
-    compression: no
-    use_stapling: yes
-    stapling_responder_timeout: 5
-    stapling_return_responder_errors: no
-    stapling_cache: "shmcb:/var/run/ocsp(128000)"
+  protocol:
+    - all
+    - "-SSLv3"
+    - "-TLSv1"
+    - "-TLSv1.1"
+  cipher_suite:
+    - ECDHE-ECDSA-AES256-GCM-SHA384
+    - ECDHE-RSA-AES256-GCM-SHA384
+    - ECDHE-ECDSA-CHACHA20-POLY1305
+    - ECDHE-RSA-CHACHA20-POLY1305
+    - ECDHE-ECDSA-AES128-GCM-SHA256
+    - ECDHE-RSA-AES128-GCM-SHA256
+    - ECDHE-ECDSA-AES256-SHA384
+    - ECDHE-RSA-AES256-SHA384
+    - ECDHE-ECDSA-AES128-SHA256
+    - ECDHE-RSA-AES128-SHA256
+  honor_cipher_order: yes
+  compression: no
+  use_stapling: yes
+  stapling_responder_timeout: 5
+  stapling_return_responder_errors: no
+  stapling_cache: "shmcb:/var/run/ocsp(128000)"
 
 apache_module_base:
   buffer: no

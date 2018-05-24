@@ -1,70 +1,27 @@
 ---
-- name: install requrement packages
-  yum:
-    name: "{{ item }}"
-  with_items:
-    - sudo
-- name: admin group sudo setting
-  template:
-    src: wheel.j2
-    dest: /etc/sudoers.d/wheel
-    validate: '/usr/sbin/visudo -cf %s'
+- name: setup sudo
+  import_tasks: sudo.yml
+  tags: sudo
+- name: set hostname
+  hostname:
+    name: "{{ common_hostname }}"
   tags:
-    - sudo
-- name: manage groups
-  group:
-    name: "{{ item.name }}"
-    state: "{{ 'absent' if item.remove|default(false) else 'present' }}"
-  with_items: "{{ common_groups }}"
-  tags:
-    - group
-- name: create skeleton user web directory
-  file:
-    path: /etc/skel/public
-    mode: "0755"
-    state: directory
-  tags:
-    - skeleton
-- name: create skeleton user web directory
+    - hostname
+- name: change home directory permission
   file:
     path: /home
     mode: "0755"
     state: directory
-- name: manage users
-  user:
-    name: "{{ item.name }}"
-    password: "{{ item.password|default(omit) }}"
-    shell: "{{ item.shell|default('/bin/bash') }}"
-    groups: "{{ item.groups|default(omit) }}"
-    state: "{{ 'absent' if item.remove|default(false) else 'present' }}"
-    # `userdel` command `--remove` option
-    remove: "{{ item.remove|default(false) }}"
-  with_items: "{{ common_users }}"
-  tags:
-    - user
-- name: set authorized keys
-  authorized_key:
-    user: "{{ item.0.name }}"
-    key: "{{ item.1 }}"
-  with_subelements:
-    - "{{ common_users|selectattr('remove', 'undefined')|list }}"
-    - authorized_keys
-    - flags:
-      skip_missing: yes
-  tags:
-    - user
-- name: add admin group for admin users
-  user:
-    name: "{{ item.name }}"
-    groups: wheel
-    append: yes
-  with_items: "{{ common_users|selectattr('remove', 'undefined')|selectattr('admin', 'defined')|selectattr('admin', 'equalto', true)|list }}"
-  tags:
-    - user
 - name: install common packages
   yum:
     name: "{{ item }}"
   with_items: "{{ common_packages }}"
+- name: manage user skeleton directory
+  import_tasks: skeleton.yml
+  tags: skeleton
+- name: manage user
+  import_tasks: user.yml
+  tags: user
 - name: install firewalld
   yum:
     name: firewalld
@@ -73,33 +30,29 @@
     name: firewalld
     state: started
     enabled: yes
-- name: install etckeeper
-  yum:
-    name: etckeeper
-    enablerepo: epel
-- name: check git repository directory
+- name: set locale
+  command: localectl set-locale LANG=ja_JP.utf8
+  tags:
+    - skip_ansible_lint
+- name: setup etckeeper
+  import_tasks: etckeeper.yml
+  tags: etckeeper
+- name: check ansible manage cron job file
   stat:
-    path: /etc/.git
+    path: /etc/cron.d/ansible_management_job
   register: result
-- block:
-    - name: initilize etckeeper
-      command: etckeeper init
-      args:
-        chdir: /etc
-    - name: initial commit
-      command: etckeeper commit "Initial commit"
+- name: create ansible manage cron job file
+  file:
+    path: /etc/cron.d/ansible_management_job
+    state: touch
   when: not result.stat.exists
-- name: install fail2ban
-  yum:
-    name: fail2ban
-    enablerepo: epel
-- name: create fail2ban setting
-  template:
-    src: jail.local.j2
-    dest: /etc/fail2ban/jail.local
-  notify: restart fail2ban
-- name: fail2ban is active and enabled on system startup
-  systemd:
-    name: fail2ban
-    state: started
-    enabled: yes
+- name: setup ssh
+  import_tasks: ssh.yml
+  tags: swap
+- name: setup fail2ban
+  import_tasks: fail2ban.yml
+  tags: fail2ban
+- name: setup swap
+  import_tasks: swap.yml
+  when: ansible_memory_mb.swap is undefined
+  tags: swap

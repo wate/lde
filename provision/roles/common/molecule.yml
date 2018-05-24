@@ -1,4 +1,59 @@
 ---
+ansible:
+  group_vars:
+    all:
+      common_ssh_allow_countries:
+        - JP
+        - US
+      common_cron_geoip_update:
+        hour: 1
+        minute: 23
+      common_groups:
+        - name: group_one
+        - name: group_two
+        - name: system_group
+          system: yes
+        - name: system_group_with_id
+          id: 200
+          system: yes
+        - name: absent_group
+          remove: yes
+      common_users:
+        - name: user_one
+          admin: yes
+          groups:
+            - group_one
+            - group_two
+          authorized_keys:
+            - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        - name: user_two
+          password: "{{ 'sampleUserP@ssw0rd'|password_hash('sha512') }}"
+          groups:
+            - group_one
+          shell: /bin/zsh
+        - name: system_user
+          system: yes
+        - name: system_user_with_id
+          id: 10000
+          home: /var/system_user_with_id
+          system: yes
+        - name: absent_user
+          groups:
+            - group_one
+            - group_two
+          remove: yes
+    enable_all:
+      postfix_cfg:
+        home_mailbox: "Maildir/"
+      common_root_lock: yes
+      common_requre_sudo_password: yes
+      common_ssh_use_geoip_filter: yes
+    disable_all:
+      postfix_cfg:
+        home_mailbox: Mailbox
+      common_root_lock: no
+      common_requre_sudo_password: no
+      common_ssh_use_geoip_filter: no
 dependency:
   name: galaxy
 driver:
@@ -14,8 +69,14 @@ vagrant:
         memory: 1024
         cpus: 1
   instances:
-    - name: common
+    - name: default
       ansible_groups:
         - molecule
+    - name: enable-all
+      ansible_groups:
+        - enable_all
+    - name: disable-all
+      ansible_groups:
+        - disable_all
 verifier:
   name: serverspec

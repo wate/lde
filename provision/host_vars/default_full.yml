@@ -229,7 +229,7 @@ apache_vhosts:
     ssl:
       certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
       certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
-      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/fullchain.pem"
   - name: 03-WWWSQLDesigner_http
     state: "{{ true if wwwsqldesigner_dest is defined else false }}"
     server_name: er.{{ domain }}
@@ -242,7 +242,7 @@ apache_vhosts:
     ssl:
       certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
       certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
-      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
+      certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/fullchain.pem"
   - name: 04-BootstrapPageGenerator_http
     state: "{{ true if pagegenerator_dest is defined else false }}"
     server_name: mock.{{ domain }}
@@ -298,13 +298,9 @@ dehydrated_hook_clean_challenge: |
   lexicon ${PROVIDER} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
 
 dehydrated_domains:
-  - [
-  "{{ domain }}",
-  "www.{{ domain }}",
-  "db.{{ domain }}",
-  "mail.{{ domain }}",
-  "er.{{ domain }}",
-  "mock..{{ domain }}"
-  ]
+  - name: "{{ domain }}"
+    domains:
+      - "{{ domain }}"
+      - "*.{{ domain }}"
 
 dehydrated_auto_execute: yes

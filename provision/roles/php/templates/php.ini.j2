@@ -342,7 +342,7 @@ open_basedir = {{ php_cfg.open_basedir }}
 ; This directive allows you to disable certain functions for security reasons.
 ; It receives a comma-delimited list of function names.
 ; http://php.net/disable-functions
-disable_functions = {{ php_cfg.disable_functions }}
+disable_functions = {{ php_cfg.disable_functions|join(',') }}
 
 ; This directive allows you to disable certain classes for security reasons.
 ; It receives a comma-delimited list of class names.
@@ -814,7 +814,7 @@ input_encoding = {{ php_cfg.input_encoding }}
 output_encoding = {{ php_cfg.output_encoding }}
 {% endif %}
 
-{% if php_version is version_compare('7.0', '<') -%}
+{% if php_version is version_compare('7.0', '<')  -%}
 ; Always populate the $HTTP_RAW_POST_DATA variable. PHP's default behavior is
 ; to disable this feature and it will be removed in a future version.
 ; If post reading is disabled through enable_post_data_reading,
@@ -1350,7 +1350,7 @@ ibase.dateformat = "{{ php_cfg.ibase.dateformat }}"
 ; Default time format.
 ibase.timeformat = "{{ php_cfg.ibase.timeformat }}"
 
-{% if php_version is version_compare('7.0', '<') -%}
+{% if php_version is version_compare('7.0', '<')  -%}
 [MySQL]
 ; Allow accessing, from PHP's perspective, local files with LOAD DATA statements
 ; http://php.net/mysql.allow_local_infile
