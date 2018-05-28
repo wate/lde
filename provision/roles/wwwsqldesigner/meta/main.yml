@@ -1,3 +1,2 @@
 dependencies:
-  - repo-epel
   - php
