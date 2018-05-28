@@ -105,7 +105,7 @@
             host: localhost
             database: "{{ mariadb_databases[0].name }}"
             user: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
-            password: "{{ mariadb_databases[0].user|default(mariadb_databases[0].password) }}"
+            password: "{{ mariadb_databases[0].password|default(mariadb_databases[0].user) }}"
             default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
             skip_pager: on
           become: no
