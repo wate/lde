@@ -34,6 +34,11 @@
     dest: /etc/httpd/conf.d/ssl.conf
   when: "'mod_ssl' in apache_packages"
   notify: reload apache
+- name: create performance setting file
+  template:
+    src: performance.conf.j2
+    dest: /etc/httpd/conf.d/performance.conf
+  notify: reload apache
 - name: create extra setting file
   template:
     src: extra.conf.j2

@@ -27,6 +27,87 @@ describe file('/etc/httpd/conf.d/security.conf') do
   end
 end
 
+describe file('/etc/httpd/conf.d/performance.conf') do
+  it { should exist }
+  it { should be_file }
+  apache_performance_cfg = property['apache_performance_cfg']
+
+  it { should contain "Timeout #{apache_performance_cfg['timeout']}" }
+  keep_alive = apache_performance_cfg['keep_alive'] ? 'On' : 'Off'
+  it { should contain "KeepAlive #{keep_alive}" }
+  it { should contain "MaxKeepAliveRequests #{apache_performance_cfg['max_keep_alive_requests']}" }
+  it { should contain "KeepAliveTimeout #{apache_performance_cfg['keep_alive_timeout']}" }
+  it { should contain "MaxConnectionsPerChild #{apache_performance_cfg['max_connections_per_child']}" }
+
+  prefork_from = /^<IfModule prefork\.c>/
+  prefork_to = %r{^</IfModule>}
+
+  prefork_start_servers = apache_performance_cfg['prefork']['start_servers']
+  it { should contain("StartServers #{prefork_start_servers}").from(prefork_from).to(prefork_to) }
+
+  prefork_min_spare_servers = apache_performance_cfg['prefork']['min_spare_servers']
+  it { should contain("MinSpareServers #{prefork_min_spare_servers}").from(prefork_from).to(prefork_to) }
+
+  prefork_max_spare_servers = apache_performance_cfg['prefork']['max_spare_servers']
+  it { should contain("MaxSpareServers #{prefork_max_spare_servers}").from(prefork_from).to(prefork_to) }
+
+  prefork_max_request_workers = apache_performance_cfg['prefork']['max_request_workers']
+  it { should contain("MaxRequestWorkers #{prefork_max_request_workers}").from(prefork_from).to(prefork_to) }
+
+  prefork_server_limit = apache_performance_cfg['prefork']['server_limit']
+  it { should contain("ServerLimit #{prefork_server_limit}").from(prefork_from).to(prefork_to) }
+
+  worker_from = /^<IfModule worker\.c>/
+  worker_to = %r{^</IfModule>}
+
+  worker_start_servers = apache_performance_cfg['worker']['start_servers']
+  it { should contain("StartServers #{worker_start_servers}").from(worker_from).to(worker_to) }
+
+  worker_min_spare_threads = apache_performance_cfg['worker']['min_spare_servers']
+  it { should contain("MinSpareThreads #{worker_min_spare_threads}").from(worker_from).to(worker_to) }
+
+  worker_max_spare_threads = apache_performance_cfg['worker']['max_spare_servers']
+  it { should contain("MaxSpareThreads #{worker_max_spare_threads}").from(worker_from).to(worker_to) }
+
+  worker_max_request_workers = apache_performance_cfg['worker']['max_request_workers']
+  it { should contain("MaxRequestWorkers #{worker_max_request_workers}").from(worker_from).to(worker_to) }
+
+  worker_threads_per_child = apache_performance_cfg['worker']['threads_per_child']
+  it { should contain("ThreadsPerChild #{worker_threads_per_child}").from(worker_from).to(worker_to) }
+
+  worker_thread_limit = apache_performance_cfg['worker']['thread_limit']
+  it { should contain("ThreadLimit #{worker_thread_limit}").from(worker_from).to(worker_to) }
+
+  worker_server_limit = apache_performance_cfg['worker']['server_limit']
+  it { should contain("ServerLimit #{worker_server_limit}").from(worker_from).to(worker_to) }
+
+  event_from = /^<IfModule event\.c>/
+  event_to = %r{^</IfModule>}
+  event_start_servers = apache_performance_cfg['event']['start_servers']
+  it { should contain("StartServers #{event_start_servers}").from(event_from).to(event_to) }
+
+  event_min_spare_threads = apache_performance_cfg['event']['min_spare_servers']
+  it { should contain("MinSpareThreads #{event_min_spare_threads}").from(event_from).to(event_to) }
+
+  event_max_spare_threads = apache_performance_cfg['event']['max_spare_servers']
+  it { should contain("MaxSpareThreads #{event_max_spare_threads}").from(event_from).to(event_to) }
+
+  event_max_request_workers = apache_performance_cfg['event']['max_request_workers']
+  it { should contain("MaxRequestWorkers #{event_max_request_workers}").from(event_from).to(event_to) }
+
+  event_threads_per_child = apache_performance_cfg['event']['threads_per_child']
+  it { should contain("ThreadsPerChild #{event_threads_per_child}").from(event_from).to(event_to) }
+
+  event_thread_limit = apache_performance_cfg['event']['thread_limit']
+  it { should contain("ThreadLimit #{event_thread_limit}").from(event_from).to(event_to) }
+
+  event_server_limit = apache_performance_cfg['event']['server_limit']
+  it { should contain("ServerLimit #{event_server_limit}").from(event_from).to(event_to) }
+
+  event_async_request_worker_factor = apache_performance_cfg['event']['async_request_worker_factor']
+  it { should contain("AsyncRequestWorkerFactor #{event_async_request_worker_factor}").from(event_from).to(event_to) }
+end
+
 describe file('/etc/httpd/conf.d/extra.conf') do
   it { should exist }
   it { should be_file }
@@ -91,9 +172,7 @@ property['apache_vhosts'].each do |site|
       end
       if site.key?('custom_log')
         custom_log_value = site['custom_log']['path'] + ' ' + site['custom_log']['format']
-        if site['custom_log'].key?('env')
-          custom_log_value << ' env=' + site['custom_log']['env']
-        end
+        custom_log_value << ' env=' + site['custom_log']['env'] if site['custom_log'].key?('env')
         its(:content) { should match(/^\s+CustomLog #{e(custom_log_value)}/) }
       end
       if site.key?('error_log')
