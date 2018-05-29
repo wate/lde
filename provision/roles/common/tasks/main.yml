@@ -54,5 +54,6 @@
   tags: fail2ban
 - name: setup swap
   import_tasks: swap.yml
-  when: ansible_memory_mb.swap is undefined
-  tags: swap
+  when: ansible_memory_mb.swap is undefined or ansible_memory_mb.swap.total == 0
+  tags:
+    - swap

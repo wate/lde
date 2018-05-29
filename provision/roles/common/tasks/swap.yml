@@ -1,30 +1,30 @@
 ---
 - name: check swapfile exist
   stat:
-    path: "{{ swap_dest }}"
+    path: "{{ common_swap_dest }}"
   register: result
 - name: create swapfile
   block:
     - name: create swapfile directory
       file:
-        path: "{{ swap_dest|dirname }}"
+        path: "{{ common_swap_dest|dirname }}"
         state: directory
     - name: create swapfile
       file:
-        path: "{{ swap_dest }}"
+        path: "{{ common_swap_dest }}"
         owner: root
         group: root
         mode: 0600
         state: touch
     - name: initilize swapfile
-      command: "dd if=/dev/zero of={{ swap_dest }} bs=1M count={{ swap_size * 1024 }}"
+      command: "dd if=/dev/zero of={{ common_swap_dest }} bs=1M count={{ common_swap_size|int * 1024 }}"
     - name: create swap
-      command: "mkswap {{ swap_dest }}"
+      command: "mkswap {{ common_swap_dest }}"
   when: not result.stat.exists
 - name: Ensure mounted swap
   mount:
-    path: none
-    src: "{{ swap_dest }}"
+    src: "{{ common_swap_dest }}"
+    path: swap
     fstype: swap
     opts: default
     state: present
