@@ -112,7 +112,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ファイル内に記載された内容はセットアップ用変数として、セットアップ処理に渡すことができます。
 
 また、既に定義されているセットアップ用変数と同じ変数を定義すれば、  
-セットアップ用変数を上書きできます。
+セットアップ用変数を上書きすることができます。
 
 #### サンプル
 
@@ -132,6 +132,7 @@ php_packages:
   - php-pdo
   - php-gd
   - php-xml
+  - php-pecl-xdebug
 
 # --------------
 # PHPの設定を変更する
@@ -233,10 +234,10 @@ yum install -y --enablerepo=epel jq
 
 | データベース名 | データベースユーザー名 | データベースパスワード |
 | -------------- | ---------------------- | ---------------------- |
-| app_dev        | app_dev                | app_dev_P455w0rd       |
-| app_test       | app_test               | app_test_P455w0rd      |
-| app_staging    | app_staging            | app_staging_P455w0rd   |
-| app_prod       | app_prod               | app_prod_P455w0rd      |
+| app_dev        | app_dev                | app_dev_P@ssw0rd       |
+| app_test       | app_test               | app_test_P@ssw0rd      |
+| app_staging    | app_staging            | app_staging_P@ssw0rd   |
+| app_prod       | app_prod               | app_prod_P@55w0rd      |
 
 ※`app_type`に`wordpress_theme`または`wordpress_plugin`が設定されている場合、  
 **app_dev** に接続するように設定されています。
