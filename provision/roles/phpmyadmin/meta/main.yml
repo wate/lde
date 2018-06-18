@@ -1,0 +1,14 @@
+galaxy_info:
+  author: yoshiaki tanaka
+  description: install phpMyAdmin
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  galaxy_tags:
+    - phpMyAdmin
+
+dependencies:
+  - repo-epel
+  - php

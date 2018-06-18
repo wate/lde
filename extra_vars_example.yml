@@ -1,0 +1,28 @@
+# ----------
+# 各PHPフレームワーク毎の設定
+# ----------
+
+## Laravel
+doc_root_suffix: /public
+php_project_skeleton: laravel/laravel
+
+## CakePHP
+# doc_root_suffix: /webroot
+# php_project_skeleton: cakephp/app
+
+## Symfony
+# doc_root_suffix: /public
+# php_project_skeleton: symfony/website-skeleton
+
+# FuelPHP
+# doc_root_suffix: /public
+# php_project_skeleton: fuel/fuel
+
+## Slim
+# doc_root_suffix: /public
+# php_project_skeleton: slim/slim-skeleton
+
+# ----------
+# EC-CUBEの設定
+# ----------
+# doc_root_suffix: /html

@@ -1,0 +1,96 @@
+- name: install apache
+  yum:
+    name: "{{ item }}"
+  with_items: "{{ apache_packages }}"
+- name: create Virtualhost config directory
+  file:
+    path: "{{ apache_virtualhost_conf_dir }}"
+    state: directory
+- name: update load base module
+  import_tasks: module/base.yml
+- name: update load lua module
+  import_tasks: module/lua.yml
+- name: update load WebDAV module
+  import_tasks: module/dav.yml
+- name: update load MPM module
+  import_tasks: module/mpm.yml
+- name: update load load balancing method module
+  import_tasks: module/lbmethod.yml
+- name: update load proxy module
+  import_tasks: module/proxy.yml
+- name: create base setting file
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+  notify: reload apache
+- name: create security setting file
+  template:
+    src: security.conf.j2
+    dest: /etc/httpd/conf.d/security.conf
+  notify: reload apache
+- name: create SSL setting file
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+  when: "'mod_ssl' in apache_packages"
+  notify: reload apache
+- name: create performance setting file
+  template:
+    src: performance.conf.j2
+    dest: /etc/httpd/conf.d/performance.conf
+  notify: reload apache
+- name: create extra setting file
+  template:
+    src: extra.conf.j2
+    dest: /etc/httpd/conf.d/extra.conf
+  notify: reload apache
+- name: create snippet directory
+  file:
+    path: "{{ apache_snippet_dir }}"
+    state: directory
+- name: install snippet
+  copy:
+    src: "{{ item }}"
+    dest: "{{ apache_snippet_dir }}/{{ item|basename }}"
+  with_fileglob:
+    - "*.conf"
+- name: create virtualhost setting files
+  template:
+    src: vhost.conf.j2
+    dest: "{{ apache_virtualhost_conf_dir }}/{{ item.name|default(item.server_name) }}.conf"
+  when: item.state|default(true)
+  with_items: "{{ apache_vhosts }}"
+  notify: reload apache
+- name: remove virtualhost setting files
+  file:
+    path: "{{ apache_virtualhost_conf_dir }}/{{ item.name|default(item.server_name) }}.conf"
+    state: absent
+  when: not item.state|default(true)
+  with_items: "{{ apache_vhosts }}"
+  notify: reload apache
+- name: create virtualhost directory
+  file:
+    path: "{{ item.document_root }}"
+    owner: "{{ item.owner|default(omit) }}"
+    group: "{{ item.group|default(omit) }}"
+    mode: "{{ item.mode|default('0755') }}"
+    state: directory
+  with_items: "{{ apache_vhosts | selectattr('document_root', 'defined') | selectattr('create', 'defined') | selectattr('create', 'equalto', true) | list }}"
+- name: allow http port
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+  notify: restart firewalld
+- name: allow https port
+  firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+  when: "'mod_ssl' in apache_packages"
+  notify: restart firewalld
+- name: Apache is active and enabled on system startup
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes

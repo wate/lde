@@ -1,0 +1,12 @@
+galaxy_info:
+  author: yoshiaki tanaka
+  description: install lexicon
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - 7
+
+dependencies:
+  - repo-epel
+  - python

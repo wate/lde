@@ -1,0 +1,11 @@
+galaxy_info:
+  author: yoshiaki tanaka
+  description: install Node.js
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - 7
+
+dependencies:
+  - repo-epel

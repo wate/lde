@@ -1,0 +1,119 @@
+- name: setup local development environment
+  hosts: all
+  become: yes
+  roles:
+    - role: common
+      tags: role_common
+    - role: python
+      tags: role_python
+    - role: ruby
+      tags: role_ruby
+    - role: nodejs
+      tags: role_nodejs
+    - role: mariadb
+      tags: role_mariadb
+    - role: lexicon
+      tags: role_lexicon
+    - role: dehydrated
+      tags: role_dehydrated
+    - role: apache
+      tags: role_apache
+    - role: php
+      tags: role_php
+    - role: mailhog
+      tags: role_mailhog
+    - role: wp-cli
+      tags: role_wp-cli
+    - role: phpmyadmin
+      tags: role_phpmyadmin
+    - role: wwwsqldesigner
+      tags: role_wwwsqldesigner
+    - role: pagegenerator
+      tags: role_pagegenerator
+  tasks:
+    - block:
+      - name: check global composer setting
+        stat:
+          path: ~/.config/composer/composer.json
+        register: result
+      - name: install prestissimo(composer plugin) for vagrant
+        composer:
+          command: require
+          global_command: yes
+          arguments: hirak/prestissimo
+        when: not result.stat.exists
+      - name: update global composer packages
+        composer:
+          command: update
+          global_command: yes
+        when: result.stat.exists
+      become: no
+      tags: prestissimo
+    - name: change group
+      file:
+        path: /var/www/html
+        recurse: yes
+        owner: vagrant
+        group: vagrant
+        state: directory
+    - name: setup WordPress
+      import_tasks: wordpress.yml
+      when: app_type.startswith('wordpress_')
+      tags: wordpress
+    - name: create mysql connection file
+      ini_file:
+        path: ~/.my.cnf
+        create: yes
+        section: client
+        option: "{{ item.key|replace('_', '-') }}"
+        value: "{{ item.value }}"
+      with_dict:
+        host: localhost
+        database: "{{ mariadb_databases[0].name }}"
+        user: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
+        password: "{{ mariadb_databases[0].password|default(mariadb_databases[0].user) }}"
+        default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
+      become: no
+      tags: my.cnf
+    - block:
+        - name: install pip
+          yum:
+            name: python2-pip
+        - name: install mycli
+          pip:
+            name: mycli
+        - name: create mycli main setting file
+          ini_file:
+            path: ~/.myclirc
+            create: yes
+            section: main
+            option: "{{ item.key }}"
+            value: "{{ item.value }}"
+          with_dict:
+            less_chatty: yes
+            multi_line: no
+            syntax_style: monokai
+          become: no
+        - name: create mycli connection setting file
+          ini_file:
+            path: ~/.myclirc
+            create: yes
+            section: client
+            option: "{{ item.key|replace('_', '-') }}"
+            value: "{{ item.value }}"
+          with_dict:
+            host: localhost
+            database: "{{ mariadb_databases[0].name }}"
+            user: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
+            password: "{{ mariadb_databases[0].password|default(mariadb_databases[0].user) }}"
+            default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
+            skip_pager: on
+          become: no
+      tags: mycli
+    - name: restart service
+      systemd:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - httpd
+        - mariadb

@@ -1,0 +1,23 @@
+---
+- name: install redis
+  yum:
+    name: redis
+    enablerepo: epel
+- name: create redis setting file
+  template:
+    src: redis.conf.j2
+    dest: /etc/redis.conf
+  notify: restart redis
+- name: redis is active and enabled on system startup
+  systemd:
+    name: redis
+    state: started
+    enabled: yes
+- name: allow redis port
+  firewalld:
+    port: "{{ redis_cfg.port }}/tcp"
+    source: "{{ mariadb_allow_host }}"
+    permanent: yes
+    state: enabled
+  when: redis_allow_host is defined
+  notify: restart firewalld

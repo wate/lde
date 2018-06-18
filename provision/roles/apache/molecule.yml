@@ -1,0 +1,45 @@
+---
+ansible:
+  group_vars:
+    enable_all:
+      apache_cfg:
+        enable_mmap: yes
+        enable_sendfile: yes
+      apache_ssl_cfg:
+        honor_cipher_order: yes
+        use_stapling: yes
+        stapling_return_responder_errors: yes
+    disable_all:
+      apache_cfg:
+        enable_mmap: no
+        enable_sendfile: no
+      apache_ssl_cfg:
+        honor_cipher_order: no
+        use_stapling: no
+        stapling_return_responder_errors: no
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+vagrant:
+  platforms:
+    - name: centos
+      box: wate/centos-7
+  providers:
+    - name: virtualbox
+      type: virtualbox
+      options:
+        memory: 512
+        cpus: 1
+  instances:
+    - name: apache
+      ansible_groups:
+        - default
+    - name: enable-all
+      ansible_groups:
+        - enable_all
+    - name: disable-all
+      ansible_groups:
+        - disable_all
+verifier:
+  name: serverspec
