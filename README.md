@@ -68,7 +68,10 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 * `default`：
     * 汎用的なPHPアプリケーション開発に利用できます。
-    * `source`ディレクトリ直下がWebサーバーのドキュメントルートとして設定されます。
+    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
+* `wordpress`：
+    * WordPress開発用の環境として利用できます。
+    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
 * `wordpress_theme`：
     * WordPressのテーマ開発用の環境として利用できます。
     * `source`ディレクトリ直下がWordPressのテーマ用ディレクトリとして設定されます。
@@ -139,7 +142,7 @@ php_packages:
 # --------------
 php_cfg:
   display_errors: yes
-  sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
+  sendmail_path: /usr/local/bin/mhsendmail
 
 # ----------
 # 各PHPフレームワーク毎の設定例
