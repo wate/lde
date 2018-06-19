@@ -1,14 +1,17 @@
+app_type: "default"
+domain: "example.com"
+
 # ----------
 # 各PHPフレームワーク毎の設定
 # ----------
 
-## Laravel
-doc_root_suffix: /public
-php_project_skeleton: laravel/laravel
-
-## CakePHP
+# CakePHP
 # doc_root_suffix: /webroot
 # php_project_skeleton: cakephp/app
+
+## Laravel
+# doc_root_suffix: /public
+# php_project_skeleton: laravel/laravel
 
 ## Symfony
 # doc_root_suffix: /public
@@ -23,6 +26,22 @@ php_project_skeleton: laravel/laravel
 # php_project_skeleton: slim/slim-skeleton
 
 # ----------
-# EC-CUBEの設定
+# WordPressの設定
 # ----------
-# doc_root_suffix: /html
+# wordpress:
+#   version: latest
+#   title: "ナレッジベース"
+#   admin_user: "admin"
+#   admin_password: "str0ngp455w0rd"
+#   admin_email: "info@example.com"
+#   import:
+#     file: https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml
+#     authors: create
+#   plugins:
+#     - name: "ssh-sftp-updater-support"
+#       activate: yes
+#     - name: "wp-members"
+#       activate: yes
+#   themes:
+#     - name: "myknowledgebase"
+#       activate: yes

@@ -30,7 +30,37 @@
       tags: role_wwwsqldesigner
     - role: pagegenerator
       tags: role_pagegenerator
+  vars:
+    tbls_version: "0.8.2"
   tasks:
+    - name: install graphviz
+      yum:
+        name: graphviz
+    - name: download tbls
+      get_url:
+        url: https://github.com/k1LoW/tbls/releases/download/v{{ tbls_version }}/tbls_v{{ tbls_version }}_linux_amd64.tar.gz
+        dest: /usr/local/src/tbls_v{{ tbls_version }}_linux_amd64.tar.gz
+    - name: unarchive tbls archive file
+      unarchive:
+        src: /usr/local/src/tbls_v{{ tbls_version }}_linux_amd64.tar.gz
+        dest: /usr/local/bin
+        exclude:
+          - LICENSE
+          - README.md
+          - CHANGELOG.md
+        extra_opts:
+          - '--strip=1'
+        owner: root
+        group: root
+        remote_src: yes
+    - block:
+      - name: create scripts
+        template:
+          src: "{{ item }}"
+          dest: ~/{{ item[:-3]|basename }}
+          mode: "0700"
+        with_fileglob: scripts/*.j2
+      become: no
     - block:
       - name: check global composer setting
         stat:
@@ -58,7 +88,7 @@
         state: directory
     - name: setup WordPress
       import_tasks: wordpress.yml
-      when: app_type.startswith('wordpress_')
+      when: app_type.startswith('wordpress')
       tags: wordpress
     - name: create mysql connection file
       ini_file:

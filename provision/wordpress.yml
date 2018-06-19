@@ -12,31 +12,35 @@
         dbcharset: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
         dbcollate: "{{ mariadb_databases[0].collation|default(mariadb_default_collation) }}"
       core install:
-          url: "{{ apache_vhosts[0].server_name }}"
-          title: "{{ wordpress.title }}"
-          admin_user: "{{ wordpress.admin_user }}"
-          admin_password: "{{ wordpress.admin_password }}"
-          admin_email: "{{ wordpress.admin_email }}"
+        url: "{{ apache_vhosts[0].server_name }}"
+        title: "{{ wordpress.title }}"
+        admin_user: "{{ wordpress.admin_user }}"
+        admin_password: "{{ wordpress.admin_password }}"
+        admin_email: "{{ wordpress.admin_email }}"
       core update:
         locale: "{{ wordpress.locale|default('ja') }}"
-- name: create wp-cli config file
-  blockinfile:
-    path: /tmp/wp-cli.yml
-    block: "{{ wp_cli_cfg|to_nice_yaml }}"
-    create: yes
 - block:
+    - name: create wp-cli config directory
+      file:
+        path: ~/.wp-cli
+        state: directory
+    - name: create wp-cli config file
+      blockinfile:
+        path: ~/.wp-cli/config.yml
+        block: "{{ wp_cli_cfg|to_nice_yaml }}"
+        create: yes
     - name: download WordPress
       command: /usr/local/bin/wp core download
       args:
-        creates: "/var/www/html/wp-config-sample.php"
+        creates: /var/www/html/wp-config-sample.php
     - name: create WordPress config file
       command: /usr/local/bin/wp config create
       args:
-        creates: "/var/www/html/wp-config.php"
+        creates: /var/www/html/wp-config.php
     - name: add WordPress extra config
       blockinfile:
-        marker: "// {mark} ANSIBLE MANAGED BLOCK"
-        path: "/var/www/html/wp-config.php"
+        marker: "/* {mark} ANSIBLE MANAGED BLOCK */"
+        path: /var/www/html/wp-config.php
         insertafter: "\\$table_prefix ="
         block: "{{ wordpress.extra_setting }}"
     - name: check WordPress installed
@@ -54,7 +58,9 @@
         block: "{{ wordpress.htaccess }}"
     - name: activate WP Multibyte Patch plugin
       command: /usr/local/bin/wp plugin activate wp-multibyte-patch
-      when: wp_cli_cfg['core download'].locale is defined and wp_cli_cfg['core download'].locale == 'ja'
+      when:
+        - wp_cli_cfg['core download'].locale is defined
+        - wp_cli_cfg['core download'].locale == 'ja'
     - name: set WordPress site setting
       command: /usr/local/bin/wp option update {{ item }} 'http://{{ apache_vhosts[0].server_name }}'
       with_items:
@@ -90,18 +96,20 @@
           copy:
             src: "{{ wordpress.import.file }}"
             dest: /tmp/worepress_import_data.xml
-          when: not wordpress.import.file.startswith('http://') and not wordpress.import.file.startswith('https://')
+          when:
+            - not wordpress.import.file.startswith('http://')
+            - not wordpress.import.file.startswith('https://')
         - name: upload user mapping file
           copy:
             src: "{{ wordpress.import.file }}"
             dest: /tmp/worepress_user_mapping.csv
           when: not wordpress.import.authors in ['create', 'skip']
         - name: import data
-          command: /usr/local/bin/wp import /tmp/worepress_import_data.xml --authors={{ wordpress.import.authors if wordpress.import.authors in ['create', 'skip'] else '/tmp/worepress_user_mapping.csv'  }}
+          command: /usr/local/bin/wp import /tmp/worepress_import_data.xml --authors={{ wordpress.import.authors if wordpress.import.authors in ['create', 'skip'] else '/tmp/worepress_user_mapping.csv' }}
       when: wordpress.import is defined
     - name: change permission for uploads directory
       file:
-        path: "/var/www/html/wp-content/uploads"
+        path: /var/www/html/wp-content/uploads
         state: directory
         recurse: yes
         mode: "0707"
@@ -124,11 +132,15 @@
             - name: add WooCommerce param
               set_fact:
                 request_params: "{{ request_params }} + [ 'underscoresme_woocommerce=1' ]"
-              when: wordpress.boilerplate.woocommerce is defined and wordpress.boilerplate.woocommerce
+              when:
+                - wordpress.boilerplate.woocommerce is defined
+                - wordpress.boilerplate.woocommerce
             - name: add sassify param
               set_fact:
                 request_params: "{{ request_params }} + [ 'underscoresme_sass=1' ]"
-              when: wordpress.boilerplate.sassify is defined and wordpress.boilerplate.sassify
+              when:
+                - wordpress.boilerplate.sassify is defined
+                - wordpress.boilerplate.sassify
             - name: unarchive boilerplate file
               unarchive:
                 src: https://underscores.me/?{{ request_params|join('&') }}
@@ -139,7 +151,7 @@
               args:
                 chdir: "/tmp/{{ wordpress.boilerplate.slug }}"
           when: not result.stat.exists
-      when: app_type == 'wordpress_theme' and wordpress.use_boilerplate
+      when:
+        - app_type == 'wordpress_theme'
+        - wordpress.use_boilerplate
   become: no
-  environment:
-    WP_CLI_CONFIG_PATH: /tmp/wp-cli.yml

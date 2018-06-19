@@ -17,13 +17,13 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ------------
 
 * [Vagrant Manager](http://vagrantmanager.com/)
-    * 作成済みのローカル開発環境をGUI上から操作することができます。
+    * 作成済みのローカル開発環境をGUI上から操作できます。
     * 黒い画面が苦手な人にお勧めです。
 
 ディレクトリ構成
 ------------
 
-ディレクトリ構成は以下の通りです
+ディレクトリ構成は以下の通りです。
 
 ```
 ├── LICENSE
@@ -68,7 +68,10 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 * `default`：
     * 汎用的なPHPアプリケーション開発に利用できます。
-    * `source`ディレクトリ直下がWebサーバーのドキュメントルートとして設定されます。
+    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
+* `wordpress`：
+    * WordPress開発用の環境として利用できます。
+    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
 * `wordpress_theme`：
     * WordPressのテーマ開発用の環境として利用できます。
     * `source`ディレクトリ直下がWordPressのテーマ用ディレクトリとして設定されます。
@@ -112,7 +115,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ファイル内に記載された内容はセットアップ用変数として、セットアップ処理に渡すことができます。
 
 また、既に定義されているセットアップ用変数と同じ変数を定義すれば、  
-セットアップ用変数を上書きすることができます。
+セットアップ用変数を上書きできます。
 
 #### サンプル
 
@@ -132,14 +135,13 @@ php_packages:
   - php-pdo
   - php-gd
   - php-xml
-  - php-pecl-xdebug
 
 # --------------
 # PHPの設定を変更する
 # --------------
 php_cfg:
   display_errors: yes
-  sendmail_path: "/usr/bin/env catchmail -f admin@{{ domain }}"
+  sendmail_path: /usr/local/bin/mhsendmail
 
 # ----------
 # 各PHPフレームワーク毎の設定例
@@ -176,40 +178,50 @@ php_project_skeleton: cakephp/app
 #### サンプル
 
 ```yaml
-- name: post task
+- name: post tasks
   hosts: all
   become: yes
   tasks:
+    - name: install xdebug
+      yum:
+        name: php-pecl-xdebug
     - name: check composer.json
       stat:
         path: /var/www/html/composer.json
       register: result
-    - name: create project
+      tags: always
+    - name: create PHP project
       block:
-          - name: install oil command
-            get_url:
-              url: https://get.fuelphp.com/installer.sh
-              dest: /usr/local/bin/oil
-              mode: +x
-            when: php_project_skeleton is defined and php_project_skeleton == 'fuel/fuel'
-          - block:
-              - name: remove .gitkeep
-                file:
-                  path: /var/www/html/.gitkeep
-                  state: absent
-              - name: create project
-                composer:
-                  command: create-project
-                  arguments: "{{ php_project_skeleton }} ."
-                  no_dev: no
-                  prefer_dist: yes
-                  working_dir: /var/www/html
-              - name: recreate .gitkeep
-                file:
-                  path: /var/www/html/.gitkeep
-                  state: touch
-            become: no
-      when: not result.stat.exists and php_project_skeleton is defined
+        - name: install oil command
+          get_url:
+            url: https://get.fuelphp.com/installer.sh
+            dest: /usr/local/bin/oil
+            mode: +x
+          when:
+            - php_project_skeleton is defined
+            - php_project_skeleton == 'fuel/fuel'
+        - block:
+            - name: remove .gitkeep
+              file:
+                path: /var/www/html/.gitkeep
+                state: absent
+            - name: create project
+              composer:
+                command: create-project
+                arguments: "--prefer-dist {{ php_project_skeleton }} ."
+                no_dev: no
+                prefer_dist: yes
+                working_dir: /var/www/html
+            - name: recreate .gitkeep
+              file:
+                path: /var/www/html/.gitkeep
+                state: touch
+          become: no
+      when:
+        - not result.stat.exists
+        - php_project_skeleton is defined
+      tags:
+        - create_project_skeleton
 ```
 
 ### post_task.sh
@@ -234,13 +246,17 @@ yum install -y --enablerepo=epel jq
 
 | データベース名 | データベースユーザー名 | データベースパスワード |
 | -------------- | ---------------------- | ---------------------- |
-| app_dev        | app_dev                | app_dev_P@ssw0rd       |
-| app_test       | app_test               | app_test_P@ssw0rd      |
-| app_staging    | app_staging            | app_staging_P@ssw0rd   |
-| app_prod       | app_prod               | app_prod_P@55w0rd      |
+| app_dev        | app_dev                | app_dev_P455w0rd       |
+| app_test       | app_test               | app_test_P455w0rd      |
+| app_staging    | app_staging            | app_staging_P455w0rd   |
+| app_prod       | app_prod               | app_prod_P455w0rd      |
 
-※`app_type`に`wordpress_theme`または`wordpress_plugin`が設定されている場合、  
-**app_dev** に接続するように設定されています。
+※`app_type`に以下のいずれかが設定されている場合、  
+**app_dev** の接続設定が利用されています。
+
+* `wordpress_theme`
+* `wordpress_theme`
+* `wordpress_plugin`
 
 ### Webサーバー
 
@@ -271,16 +287,15 @@ WordPress用開発環境について
 
 ### プラグインやテーマのアップデート方法
 
-インストール済みのWordPress本体やプラグインなどの更新を行う場合、  
-アップデート時に表示されるダイアログに以下の情報を入力するとアップデートすることができます。
+インストール済みのWordPress本体やプラグインの更新を行う場合、  
+ダイアログに以下の情報を入力するとアップデートできます。
 
 * ホスト名：localhost
 * FTP/SSH ユーザー名：vagrant
 * FTP/SSH パスワード：vagrant
 * 接続形式：ssh2
 
-※「SSH Authentication Keys」の設定は不要です
-
+※「SSH Authentication Keys」の設定は不要です。
 
 License
 -------
