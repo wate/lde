@@ -57,7 +57,7 @@
       - name: create scripts
         template:
           src: "{{ item }}"
-          dest: ~/{{ item[-3]|basename }}
+          dest: ~/{{ item[:-3]|basename }}
           mode: "0700"
         with_fileglob: scripts/*.j2
       become: no

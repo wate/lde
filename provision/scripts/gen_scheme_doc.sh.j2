@@ -1,0 +1,8 @@
+#!/bin/sh
+mkdir -p /vagrant/output/scheme
+
+TBLS_PARAMS=''
+if [ -f /vagrant/additional_data.yml ]; then
+  TBLS_PARAMS='--add /vagrant/additional_data.yml'
+fi
+/usr/local/bin/tbls doc mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost:3306/{{ mariadb_databases[0].name }} -f ${TBLS_PARAMS} /vagrant/output/scheme
