@@ -237,12 +237,12 @@ yum install -y --enablerepo=epel jq
 
 | データベース名 | データベースユーザー名 | データベースパスワード |
 | -------------- | ---------------------- | ---------------------- |
-| app_dev        | app_dev                | app_dev_P@ssw0rd       |
-| app_test       | app_test               | app_test_P@ssw0rd      |
-| app_staging    | app_staging            | app_staging_P@ssw0rd   |
-| app_prod       | app_prod               | app_prod_P@55w0rd      |
+| app_dev        | app_dev                | app_dev_P455w0rd       |
+| app_test       | app_test               | app_test_P455w0rd      |
+| app_staging    | app_staging            | app_staging_P455w0rd   |
+| app_prod       | app_prod               | app_prod_P455w0rd      |
 
-※`app_type`に`wordpress_theme`または`wordpress_plugin`が設定されている場合、  
+※`app_type`に`wordpress_theme`・`wordpress_theme`・`wordpress_plugin`のいずれかが設定されている場合、  
 **app_dev** に接続するように設定されています。
 
 ### Webサーバー

@@ -1,7 +1,7 @@
 # --------------
 # MariaDBのrootパスワード
 # --------------
-mariadb_root_password: &db_root_password r00tP@55w0rd
+mariadb_root_password: &db_root_password r00tP455w0rd
 
 # --------------
 # PHPのバージョン
@@ -27,7 +27,7 @@ mariadb_allow_host: "192.168.33.0/24"
 mariadb_databases:
   # 開発用データベース
   - name: app_dev
-    password: app_dev_P@ssw0rd
+    password: app_dev_P455w0rd
     hosts:
       - "127.0.0.1"
       - localhost
@@ -35,28 +35,28 @@ mariadb_databases:
   # テスト用データベース
   - name: app_test
     # import_data: /vagrant/source/test_data.sql
-    password: app_test_P@ssw0rd
+    password: app_test_P455w0rd
     hosts:
       - "127.0.0.1"
       - localhost
       - "192.168.33.%"
   # ステージング用データベース
   - name: app_staging
-    password: app_staging_P@ssw0rd
+    password: app_staging_P455w0rd
     hosts:
       - "127.0.0.1"
       - localhost
       - "192.168.33.%"
   # 本番用データベース
   - name: app_prod
-    password: app_prod_P@55w0rd
+    password: app_prod_P455w0rd
     hosts:
       - "127.0.0.1"
       - localhost
       - "192.168.33.%"
   # WWW SQL Designer用データベース
   - name: wwwsqldesigner
-    password: &wwwsqldesigner_db_password wwwsqldesigner_P@ssw0rd
+    password: &wwwsqldesigner_db_password wwwsqldesigner_P455w0rd
     hosts:
       - "127.0.0.1"
       - localhost
