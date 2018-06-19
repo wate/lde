@@ -39,7 +39,7 @@
         creates: /var/www/html/wp-config.php
     - name: add WordPress extra config
       blockinfile:
-        marker: "// {mark} ANSIBLE MANAGED BLOCK"
+        marker: "/* {mark} ANSIBLE MANAGED BLOCK */"
         path: /var/www/html/wp-config.php
         insertafter: "\\$table_prefix ="
         block: "{{ wordpress.extra_setting }}"
