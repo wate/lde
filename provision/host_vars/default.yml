@@ -213,6 +213,9 @@ apache_module_proxy:
   balancer: no
   ftp: no
 
+# --------------
+# MariaDBの設定
+# --------------
 mariadb_cfg:
   mysqld:
     slow_query_log: yes
@@ -222,5 +225,5 @@ mariadb_cfg:
     # log_queries_not_using_indexes: no
     # log_slow_admin_statements: no
     slow_query_log_file: /var/log/mariadb/slow_query.log
-    general_log: yes
+    general_log: no
     general_log_file: /var/log/mariadb/general.log
