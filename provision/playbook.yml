@@ -31,7 +31,7 @@
     - role: pagegenerator
       tags: role_pagegenerator
   vars:
-    tbls_version: "0.8.2"
+    tbls_version: "0.9.1"
   tasks:
     - name: install graphviz
       yum:
@@ -83,6 +83,7 @@
       file:
         path: /var/www/html
         recurse: yes
+        follow: no
         owner: vagrant
         group: vagrant
         state: directory

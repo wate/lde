@@ -136,7 +136,7 @@ apache_vhosts:
       - index.html
       - index.htm
       - index.php
-    document_root: /var/www/html
+    document_root: /var/www/html{{ doc_root_suffix|default('', true) }}
     # サーバー名の別名
     server_alias: "www.{{ domain }}"
     # AllowOverrideの設定値
@@ -145,8 +145,6 @@ apache_vhosts:
       certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
       certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
       certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
-      # HTTP Strict Transport Security
-      # hsts: "max-age=15768000"
   - name: 00-default_http
     server_name: www.{{ domain }}
     document_root: /var/www/html
@@ -254,7 +252,7 @@ apache_vhosts:
 # その他の設定値は、「provision/roles/apache/defaults/main.yml」を参照
 # --------------
 apache_cfg:
-  # EnableSendfileをOffに変更(VirtualBoxの共有ディレクトリ機能用)
+  enable_mmap: no
   enable_sendfile: no
 
 # 不要なモジュールを無効化
@@ -272,6 +270,21 @@ apache_module_proxy:
   ajp: no
   balancer: no
   ftp: no
+
+# --------------
+# MariaDBの設定
+# --------------
+mariadb_cfg:
+  mysqld:
+    slow_query_log: yes
+    long_query_time: 1
+    # log_warnings: 0
+    # min_examined_row_limit: 0
+    # log_queries_not_using_indexes: no
+    # log_slow_admin_statements: no
+    slow_query_log_file: /var/log/mariadb/slow_query.log
+    general_log: no
+    general_log_file: /var/log/mariadb/general.log
 
 # --------------
 # dehydratedの各種設定
