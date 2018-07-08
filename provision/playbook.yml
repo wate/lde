@@ -83,6 +83,7 @@
       file:
         path: /var/www/html
         recurse: yes
+        follow: no
         owner: vagrant
         group: vagrant
         state: directory
