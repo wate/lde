@@ -7,6 +7,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ------------
 
 * [Vagrant](https://www.vagrantup.com/)
+    * Ver 2.1.0以上
 * [VirtualBox](https://www.virtualbox.org/)
 * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
     * Vagrantのプラグインです。
@@ -285,10 +286,10 @@ yum install -y --enablerepo=epel jq
 WordPress用開発環境について
 ------------
 
-### プラグインやテーマのアップデート方法
+### プラグインやテーマのインストール/アップデート方法
 
-インストール済みのWordPress本体やプラグインの更新を行う場合、  
-ダイアログに以下の情報を入力するとアップデートできます。
+プラグインのインストールやプラグインの更新を行う場合、  
+ダイアログに以下の情報を入力するとインストールまたはアップデートできます。
 
 * ホスト名：localhost
 * FTP/SSH ユーザー名：vagrant
@@ -297,7 +298,13 @@ WordPress用開発環境について
 
 ※「SSH Authentication Keys」の設定は不要です。
 
-License
+その他
+------------
+
+仮想マシンを破棄するときに、ローカル開発環境のデータベースの内容を、  
+`db_dump.sql`というファイルに自動出力します。
+
+ライセンス
 -------
 
 MIT
