@@ -166,6 +166,7 @@ Vagrant.configure("2") do |config|
   end
   config.trigger.before :destroy do |trigger|
     trigger.info = "Dumping database to db_dump.sql"
+    trigger.on_error = :continue
     db_name = settings['mariadb_databases'][0]['name']
     db_user = settings['mariadb_databases'][0]['user'] || settings['mariadb_databases'][0]['name']
     db_password = settings['mariadb_databases'][0]['password']
