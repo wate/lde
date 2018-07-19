@@ -31,8 +31,11 @@
     - role: pagegenerator
       tags: role_pagegenerator
   vars:
-    tbls_version: "0.9.1"
+    tbls_version: "0.9.3"
   tasks:
+    - name: install the silver searcher
+      yum:
+        name: the_silver_searcher
     - name: install graphviz
       yum:
         name: graphviz
@@ -120,10 +123,16 @@
             section: main
             option: "{{ item.key }}"
             value: "{{ item.value }}"
-          with_dict:
-            less_chatty: yes
-            multi_line: no
-            syntax_style: monokai
+          with_dict: "{{ mycli_main_cfg }}"
+          become: no
+        - name: add mycli dsn alias
+          ini_file:
+            path: ~/.myclirc
+            create: yes
+            section: alias_dsn
+            option: "{{ item.key }}"
+            value: "{{ item.value }}"
+          with_dict: "{{ mycli_alias_dsn }}"
           become: no
         - name: create mycli connection setting file
           ini_file:
