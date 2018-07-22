@@ -28,7 +28,7 @@
       blockinfile:
         path: ~/.wp-cli/config.yml
         block: "{{ wp_cli_cfg|to_nice_yaml }}"
-        create: yes
+        create: true
     - name: download WordPress
       command: /usr/local/bin/wp core download
       args:
@@ -45,8 +45,8 @@
         block: "{{ wordpress.extra_setting }}"
     - name: check WordPress installed
       shell: /usr/local/bin/wp core is-installed &> /dev/null
-      ignore_errors: yes
-      changed_when: no
+      ignore_errors: true
+      changed_when: false
       register: result
     - name: install WordPress
       command: /usr/local/bin/wp core install
@@ -54,7 +54,7 @@
     - name: create .htaccess
       blockinfile:
         path: "/var/www/html/.htaccess"
-        create: yes
+        create: true
         block: "{{ wordpress.htaccess }}"
     - name: activate WP Multibyte Patch plugin
       command: /usr/local/bin/wp plugin activate wp-multibyte-patch
@@ -111,7 +111,7 @@
       file:
         path: /var/www/html/wp-content/uploads
         state: directory
-        recurse: yes
+        recurse: true
         mode: "0707"
     - name: get boilerplate
       block:
@@ -145,7 +145,7 @@
               unarchive:
                 src: https://underscores.me/?{{ request_params|join('&') }}
                 dest: /tmp
-                remote_src: yes
+                remote_src: true
             - name: move boilerplate files to shared directory
               shell: mv * /vagrant/source/
               args:
@@ -154,4 +154,4 @@
       when:
         - app_type == 'wordpress_theme'
         - wordpress.use_boilerplate
-  become: no
+  become: false
