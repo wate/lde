@@ -372,16 +372,23 @@ mycli_alias_dsn:
 # --------------
 # lexiconの設定
 # --------------
-## lexiconプロバイダー(cloudflare / route53 / vultr)
+## lexiconプロバイダー(cloudflare / route53 / vultr / sakuracloud )
 # lexicon_provider: cloudflare
-## CloudflareのAPI接続情報
+
+## CloudflareのAPI情報
 # cloudflare_email: "{{ lookup('env','CLOUDFLARE_EMAIL') }}"
 # cloudflare_token: "{{ lookup('env','CLOUDFLARE_TOKEN') }}"
-## AWS Route53のAPI接続情報
+
+## AWS Route53のAPI情報
 # aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
 # aws_access_secret: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
-## VultrのAPI接続情報
+
+## VultrのAPI情報
 # vultr_token: "{{ lookup('env','VULTR_TOKEN') }}"
+
+## さくらクラウドのAPI情報
+# sakuracloud_token: "{{ lookup('env','SAKURACLOUD_ACCESS_TOKEN') }}"
+# sakuracloud_secret: "{{ lookup('env','SAKURACLOUD_ACCESS_TOKEN_SECRET') }}"
 
 # --------------
 # dehydratedの設定
@@ -396,6 +403,8 @@ mycli_alias_dsn:
 #   export LEXICON_ROUTE53_ACCESS_KEY="{{ aws_access_key }}"
 #   export LEXICON_ROUTE53_ACCESS_SECRET="{{ aws_access_secret }}"
 #   export LEXICON_VULTR_TOKEN="{{ vultr_token }}"
+#   export LEXICON_SAKURACLOUD_TOKEN="{{ sakuracloud_token }}"
+#   export LEXICON_SAKURACLOUD_SECRET="{{ sakuracloud_secret }}"
 #
 # dehydrated_hook_deploy_challenge: |
 #   lexicon ${PROVIDER} create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
