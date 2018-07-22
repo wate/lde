@@ -74,7 +74,7 @@
           command: require
           global_command: true
           arguments: hirak/prestissimo
-        when: falset result.stat.exists
+        when: not result.stat.exists
       - name: update global composer packages
         composer:
           command: update
