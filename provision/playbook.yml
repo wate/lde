@@ -31,7 +31,7 @@
     - role: pagegenerator
       tags: role_pagegenerator
   vars:
-    tbls_version: "0.9.3"
+    tbls_version: "0.10.0"
   tasks:
     - name: install the silver searcher
       yum:
