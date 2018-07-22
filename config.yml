@@ -14,7 +14,7 @@ wordpress:
   ## 管理者名
   admin_user: "admin"
   ## 管理者パスワード
-  admin_password: "str0ngp@55w0rd"
+  admin_password: "str0ngp455w0rd"
   ## 管理者メールアドレス
   admin_email: "info@example.com"
   ## wp-config.phpに追記するWordPressの拡張設定の内容
@@ -118,6 +118,9 @@ vagrant:
   synced_folder:
     type:
       default:
+        local: ./source
+        remote: /var/www/html
+      wordpress:
         local: ./source
         remote: /var/www/html
       wordpress_plugin:
