@@ -157,12 +157,12 @@ vagrant:
       ec_cube:
         local: ./source
         remote: /var/www/html
-      # ec_cube_plugin:
-      #   local: ./source
-      #   remote: /var/www/html/app/plugins/source
-      # ec_cube_theme:
-      #   local: ./source
-      #   remote: /var/www/html/app/template/source
+      ec_cube_plugin:
+        local: ./source
+        remote: /var/www/html/app/plugins/Source
+      ec_cube_theme:
+        local: ./source
+        remote: /var/www/html/app/template/Source
     mount_options:
       - dmode=777
       - fmode=666

@@ -1,0 +1,47 @@
+- name: download archive
+  get_url:
+    url: https://github.com/EC-CUBE/ec-cube/archive/{{ ec_cube.version }}.tar.gz
+    dest: /usr/local/src/ec-cube_{{ ec_cube.version }}.tar.gz
+- block:
+    - name: Unarchive downloaded archive file
+      unarchive:
+        src: /usr/local/src/ec-cube_{{ ec_cube.version }}.tar.gz
+        dest: /var/www/html
+        extra_opts:
+          - '--strip=1'
+        remote_src: true
+    - name: file exists composer.lock
+      stat:
+        path: /var/www/html/vendor
+      register: result
+    - name: downloads and installs all the libs and dependencies
+      composer:
+        command: install
+        working_dir: /var/www/html
+        no_dev: false
+      when: not result.stat.exists
+    - name: install EC-CUBE
+      command: /usr/bin/php eccube_install.php mysql none --skip-createdb
+      args:
+        chdir: /var/www/html
+        removes: /var/www/html/html/install.php
+      environment:
+        DBNAME: "{{ mariadb_databases[0].name }}"
+        DBUSER: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
+        DBPASS: "{{ mariadb_databases[0].password }}"
+        SHOP_NAME: "{{ ec_cube.shop_name|default('EC-CUBE SHOP') }}"
+        ADMIN_USER: "{{ ec_cube.admin_user|default('admin') }}"
+        ADMIN_PASS: "{{ ec_cube.admin_password|default('password') }}"
+        ADMIN_MAIL: "{{ ec_cube.admin_mail|default('admin@example.com') }}"
+        MAIL_BACKEND: "{{ ec_cube.mail_backend|default('smtp') }}"
+        MAIL_HOST: "{{ ec_cube.mail_host|default('localhost') }}"
+        MAIL_PORT: "{{ ec_cube.mail_port|default(25) }}"
+        MAIL_USER: "{{ ec_cube.mail_user|default('') }}"
+        MAIL_PASS: "{{ ec_cube.mail_password|default('') }}"
+        ADMIN_ROUTE: "{{ ec_cube.admin_route|default('admin') }}"
+        ROOT_URLPATH: "{{ ec_cube.root_urlpath|default('') }}"
+    - name: remove install.php
+      file:
+        path: /var/www/html/html/install.php
+        state: absent
+  become: no

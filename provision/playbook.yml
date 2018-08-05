@@ -94,6 +94,10 @@
       import_tasks: wordpress.yml
       when: app_type.startswith('wordpress')
       tags: wordpress
+    - name: setup EC-CUBE
+      import_tasks: ec_cube.yml
+      when: app_type.startswith('ec_cube')
+      tags: wordpress
     - name: create mysql connection file
       ini_file:
         path: ~/.my.cnf
