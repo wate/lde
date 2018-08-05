@@ -1,6 +1,6 @@
 - name: setup local development environment
   hosts: all
-  become: yes
+  become: true
   roles:
     - role: common
       tags: role_common
@@ -31,8 +31,11 @@
     - role: pagegenerator
       tags: role_pagegenerator
   vars:
-    tbls_version: "0.9.1"
+    tbls_version: "1.1.0"
   tasks:
+    - name: install the silver searcher
+      yum:
+        name: the_silver_searcher
     - name: install graphviz
       yum:
         name: graphviz
@@ -52,7 +55,7 @@
           - '--strip=1'
         owner: root
         group: root
-        remote_src: yes
+        remote_src: true
     - block:
       - name: create scripts
         template:
@@ -60,7 +63,7 @@
           dest: ~/{{ item[:-3]|basename }}
           mode: "0700"
         with_fileglob: scripts/*.j2
-      become: no
+      become: false
     - block:
       - name: check global composer setting
         stat:
@@ -69,21 +72,21 @@
       - name: install prestissimo(composer plugin) for vagrant
         composer:
           command: require
-          global_command: yes
+          global_command: true
           arguments: hirak/prestissimo
         when: not result.stat.exists
       - name: update global composer packages
         composer:
           command: update
-          global_command: yes
+          global_command: true
         when: result.stat.exists
-      become: no
+      become: false
       tags: prestissimo
     - name: change group
       file:
         path: /var/www/html
-        recurse: yes
-        follow: no
+        recurse: true
+        follow: false
         owner: vagrant
         group: vagrant
         state: directory
@@ -94,7 +97,7 @@
     - name: create mysql connection file
       ini_file:
         path: ~/.my.cnf
-        create: yes
+        create: true
         section: client
         option: "{{ item.key|replace('_', '-') }}"
         value: "{{ item.value }}"
@@ -104,7 +107,7 @@
         user: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
         password: "{{ mariadb_databases[0].password|default(mariadb_databases[0].user) }}"
         default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
-      become: no
+      become: false
       tags: my.cnf
     - block:
         - name: install pip
@@ -116,19 +119,25 @@
         - name: create mycli main setting file
           ini_file:
             path: ~/.myclirc
-            create: yes
+            create: true
             section: main
             option: "{{ item.key }}"
             value: "{{ item.value }}"
-          with_dict:
-            less_chatty: yes
-            multi_line: no
-            syntax_style: monokai
-          become: no
+          with_dict: "{{ mycli_main_cfg }}"
+          become: false
+        - name: add mycli dsn alias
+          ini_file:
+            path: ~/.myclirc
+            create: true
+            section: alias_dsn
+            option: "{{ item.key }}"
+            value: "{{ item.value }}"
+          with_dict: "{{ mycli_alias_dsn }}"
+          become: false
         - name: create mycli connection setting file
           ini_file:
             path: ~/.myclirc
-            create: yes
+            create: true
             section: client
             option: "{{ item.key|replace('_', '-') }}"
             value: "{{ item.value }}"
@@ -139,7 +148,7 @@
             password: "{{ mariadb_databases[0].password|default(mariadb_databases[0].user) }}"
             default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
             skip_pager: on
-          become: no
+          become: false
       tags: mycli
     - name: restart service
       systemd:
