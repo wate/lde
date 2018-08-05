@@ -164,15 +164,15 @@ Vagrant.configure("2") do |config|
     vm.cpus = settings['vagrant']['vm_cpu'] || 1
     vm.memory = settings['vagrant']['vm_memory'] || 1024
   end
-  config.trigger.before :destroy do |trigger|
-    trigger.info = "Dumping database to db_dump.sql"
-    trigger.on_error = :continue
-    db_name = settings['mariadb_databases'][0]['name']
-    db_user = settings['mariadb_databases'][0]['user'] || settings['mariadb_databases'][0]['name']
-    db_password = settings['mariadb_databases'][0]['password']
-    db_dump_param = "--no-create-db --no-create-info --complete-insert"
-    trigger.run_remote = {
-      inline: "mysqldump -u #{db_user} -p#{db_password} #{db_dump_param} #{db_name} > /vagrant/db_dump.sql"
-    }
-  end
+  # config.trigger.before :destroy do |trigger|
+  #   trigger.info = "Dumping database to db_dump.sql"
+  #   trigger.on_error = :continue
+  #   db_name = settings['mariadb_databases'][0]['name']
+  #   db_user = settings['mariadb_databases'][0]['user'] || settings['mariadb_databases'][0]['name']
+  #   db_password = settings['mariadb_databases'][0]['password']
+  #   db_dump_param = "--no-create-db --no-create-info --complete-insert"
+  #   trigger.run_remote = {
+  #     inline: "mysqldump -u #{db_user} -p#{db_password} #{db_dump_param} #{db_name} > /vagrant/db_dump.sql"
+  #   }
+  # end
 end
