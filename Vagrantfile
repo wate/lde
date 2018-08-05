@@ -92,11 +92,16 @@ Vagrant.configure("2") do |config|
     php_version: settings['php_version'],
     doc_root_suffix: settings['doc_root_suffix'],
     wordpress: settings['wordpress'],
+    ec_cube: settings['ec_cube'],
   }
   unless ansible_custom_vars.empty?()
     if ansible_custom_vars.key?('wordpress')
       ansible_extra_vars[:wordpress].merge!(ansible_custom_vars['wordpress']);
       ansible_custom_vars.delete('wordpress')
+    end
+    if ansible_custom_vars.key?('ec_cube')
+      ansible_extra_vars[:ec_cube].merge!(ansible_custom_vars['ec_cube']);
+      ansible_custom_vars.delete('ec_cube')
     end
     ansible_extra_vars.merge!(ansible_custom_vars);
   end

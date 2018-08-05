@@ -79,6 +79,31 @@ wordpress:
     sassify: no
     # WooCommerceのボイラープレートを生成するか否か
     woocommerce: no
+ec_cube:
+  ## EC-CUBEのバージョン
+  version: "3.0.16"
+  ## サイトのタイトル
+  shop_name: "EC-CUBE SHOP"
+  ## 管理者名
+  admin_user: "admin"
+  ## 管理者パスワード
+  admin_password: "password"
+  ## 管理者メールアドレス
+  admin_mail: "admin@example.com"
+  ## メール送信バックエンド
+  mail_backend: mail
+  ## メールホスト名
+  # mail_host: localhost
+  ## メールポート番号
+  # mail_port: 25
+  ## メールユーザー名
+  # mail_user: ""
+  ## メールパスワード
+  # mail_password: ""
+  ## 管理画面用ディレクトリ名
+  # admin_route: "admin"
+  ## URLのルートパス
+  # root_urlpath: ""
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
 # ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
@@ -129,6 +154,15 @@ vagrant:
       wordpress_theme:
         local: ./source
         remote: /var/www/html/wp-content/themes/source
+      ec_cube:
+        local: ./source
+        remote: /var/www/html
+      # ec_cube_plugin:
+      #   local: ./source
+      #   remote: /var/www/html/app/plugins/source
+      # ec_cube_theme:
+      #   local: ./source
+      #   remote: /var/www/html/app/template/source
     mount_options:
       - dmode=777
       - fmode=666
