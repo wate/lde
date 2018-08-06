@@ -24,7 +24,7 @@
       command: /usr/bin/php eccube_install.php mysql none --skip-createdb
       args:
         chdir: /var/www/html
-        removes: /var/www/html/html/install.php
+        creates: /var/www/html/app/config/eccube/database.yml
       environment:
         DBNAME: "{{ mariadb_databases[0].name }}"
         DBUSER: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
@@ -40,8 +40,20 @@
         MAIL_PASS: "{{ ec_cube.mail_password|default('') }}"
         ADMIN_ROUTE: "{{ ec_cube.admin_route|default('admin') }}"
         ROOT_URLPATH: "{{ ec_cube.root_urlpath|default('') }}"
-    - name: remove install.php
+    - name: remove EC-CUBE installer
       file:
         path: /var/www/html/html/install.php
         state: absent
+    - name: checkout  EC-CUBE plugins
+      git:
+        repo: "{{ item.repo }}"
+        dest: "/var/www/html/app/Plugin/{{ item.code }}"
+        version: "{{ item.version|default('master') }}"
+      with_items: "{{ ec_cube.plugins }}"
+    - name: install EC-CUBE plugin
+      shell: /usr/bin/php app/console plugin:develop install --code={{ item.code }} >/var/www/html/app/Plugin/{{ item.code }}/installed
+      args:
+        chdir: /var/www/html
+        creates: /var/www/html/app/Plugin/{{ item.code }}/installed
+      with_items: "{{ ec_cube.plugins }}"
   become: no
