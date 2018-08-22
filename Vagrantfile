@@ -50,7 +50,6 @@ Vagrant.configure("2") do |config|
   unless settings['vagrant']['synced_folder'].empty?
     synced_folder_args.push(settings['vagrant']['synced_folder'].map{|k,v| [k.to_sym, v] }.to_h)
   end
-  puts synced_folder_args
   config.vm.send(:synced_folder, *synced_folder_args)
 
   vm_host_aliases = [
