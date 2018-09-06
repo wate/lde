@@ -1,7 +1,7 @@
 common
 =========
 
-ユーザーの追加や基本パッケージのインストールなど、サーバーの共通セットアップ処理を行います
+ユーザーの追加や基本パッケージのインストールなど、サーバーの共通セットアップ処理を行います。
 
 Role Variables
 --------------
@@ -10,11 +10,16 @@ Role Variables
 
 サーバーに登録/削除するグループを指定します。
 
-```yaml
+```yml
 common_groups:
   - name: group1
   - name: group2
     remove: yes
+  - name: system_group
+    system: yes
+  - name: system_group_with_id
+    id: 1000
+    system: yes
 ```
 
 ### common_users
@@ -24,36 +29,24 @@ common_groups:
 ```yaml
 common_users:
   - name: sample_user
+    # Optional
     password: "{{ 'password'|password_hash('sha512') }}"
     groups:
       - group1
       - group2
+    authorized_keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - https://github.com/hoge.keys
     shell: /bin/nologin
+    id: 100000
+    system: yes
     admin: no
-- name: admin_user
-  password: "{{ 'password'|password_hash('sha512') }}"
-  admin: yes
-  groups:
-    - group1
-    - group2
-  authorized_keys:
-    - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-    - https://github.com/ghuser.keys
-- name: remove_user
-  password: "{{ 'password'|password_hash('sha512') }}"
-  groups:
-    - group1
-    - group2
-  authorized_keys:
-    - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-    - https://github.com/ghuser.keys
-  shell: /bin/nologin
-  remove: yes
+    remove: yes
 ```
 
 ### common_packages
 
-インストールする基本パッケージを指定します
+インストールする基本パッケージを指定します。
 
 ```yaml
 common_packages:
@@ -101,7 +94,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: common }
+    - role: common
 ```
 
 License
