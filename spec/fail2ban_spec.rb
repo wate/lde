@@ -9,7 +9,6 @@ describe file('/etc/fail2ban/jail.d/local.conf') do
   it { should be_file }
   it { should contain 'banaction = firewallcmd-ipset' }
   it { should contain 'backend = systemd' }
-  it { should contain('enabled = True').after(/^\[sshd\]/) }
 end
 
 describe service('fail2ban') do
