@@ -13,7 +13,6 @@ describe 'PHP' do
     'php-pdo',
     'php-gd',
     'php-xml',
-    'php-pecl-xdebug'
   ]
   php_packages.each do |pkg|
     describe package(pkg) do
