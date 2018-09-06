@@ -54,7 +54,7 @@ describe 'MariaDB' do
     end
     # slow_query_log_file = /var/log/mysql/slow_query.log
     context command('/usr/libexec/mysqld --verbose --help 2> /dev/null | grep \'^slow-query-log-file\' ') do
-      its(:stdout) { should match(%r{^slow-query-log-file\s+/var/log/mysql/slow_query.log$}) }
+      its(:stdout) { should match(%r{^slow-query-log-file\s+/var/log/mariadb/slow_query.log$}) }
     end
   end
 

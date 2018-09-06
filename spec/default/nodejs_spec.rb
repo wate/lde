@@ -9,7 +9,7 @@ describe 'Node.js' do
   describe file('/etc/yum.repos.d/nodesource-el.repo') do
     it { should exist }
     it { should be_file }
-    repo_baseurl = 'https://rpm.nodesource.com/pub_8.x/el/'
+    repo_baseurl = 'https://rpm.nodesource.com/pub_10.x/el/'
     its(:content) { should match(/baseurl\s*=\s*#{repo_baseurl}/) }
   end
 
