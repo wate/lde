@@ -42,13 +42,14 @@ ansible:
             - group_one
             - group_two
           remove: yes
-    enable_all:
+  host_vars:
+    enable-all:
       postfix_cfg:
         home_mailbox: "Maildir/"
       common_root_lock: yes
       common_requre_sudo_password: yes
       common_ssh_use_geoip_filter: yes
-    disable_all:
+    disable-all:
       postfix_cfg:
         home_mailbox: Mailbox
       common_root_lock: no
@@ -74,9 +75,9 @@ vagrant:
         - molecule
     - name: enable-all
       ansible_groups:
-        - enable_all
+        - molecule
     - name: disable-all
       ansible_groups:
-        - disable_all
+        - molecule
 verifier:
   name: serverspec
