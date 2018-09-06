@@ -3,7 +3,7 @@ app_type: "default"
 ## ドメイン
 domain: "example.com"
 ## PHPのバージョン：5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2
-php_version: 7.1
+php_version: 7.2
 wordpress:
   ## ダウンロードするWordPressのバージョン
   version: "latest"
