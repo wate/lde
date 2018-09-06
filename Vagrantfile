@@ -84,7 +84,10 @@ Vagrant.configure("2") do |config|
     config.hostmanager.manage_guest = plugin_setting.key?('manage_guest') ? plugin_setting['manage_guest'] : true
     config.hostmanager.aliases = vm_host_aliases
   end
-
+  if Vagrant.has_plugin?('vagrant-exec')
+    config.exec.commands 'wp', directory: '/var/www/html'
+    config.exec.commands 'msgfmt', directory: '/var/www/html/wp-content/plugins'
+  end
   # Provisioning
   ansible_extra_vars = {
     app_type: app_type,
