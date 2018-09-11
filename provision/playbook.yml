@@ -33,6 +33,27 @@
   vars:
     tbls_version: "1.3.0"
   tasks:
+    - name: install php xdebug module
+      yum:
+        name: php-pecl-xdebug
+    - block:
+        - name: add tideways repo
+          yum_repository:
+            name: tideways
+            description: Tideways
+            baseurl: https://s3-eu-west-1.amazonaws.com/tideways/rpm
+            file: tideways
+        - name: add gpg key
+          rpm_key:
+            key: https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg
+        - name: install php tideways module
+          yum:
+            name: tideways-php
+      when: php_version is version_compare('7', '>=')
+    - name: install php xhprof module
+      yum:
+        name: php-pecl-xhprof
+      when: php_version is version_compare('7', '<')
     - name: install the silver searcher
       yum:
         name: the_silver_searcher
