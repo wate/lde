@@ -1,0 +1,4 @@
+---
+xhgui_repo: https://github.com/preinheimer/xhprof.git
+xhgui_version: master
+xhgui_dest: /opt/xhgui

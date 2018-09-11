@@ -1,0 +1,17 @@
+---
+- name: install dependency packages
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - git
+    - graphviz
+- name: checkout source
+  git:
+    repo: "{{ xhgui_repo }}"
+    version: "{{ xhgui_version }}"
+    dest: "{{ xhgui_dest }}"
+    force: yes
+- name: create XHGUI config file
+  template:
+    src: config.php.j2
+    dest: "{{ xhgui_dest }}/xhprof_lib/config.php"
