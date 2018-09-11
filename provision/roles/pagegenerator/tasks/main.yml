@@ -1,9 +1,0 @@
----
-- name: install git
-  yum:
-    name: git
-- name: checkout Bootstrap Page Generator
-  git:
-    repo: https://github.com/wate/BootstrapPageGenerator.git
-    dest: "{{ pagegenerator_dest }}"
-    version: "{{ pagegenerator_varsion }}"
