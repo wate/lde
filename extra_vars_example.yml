@@ -2,6 +2,18 @@ app_type: "default"
 domain: "example.com"
 
 # ----------
+# PHPのバージョン
+# 5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2 / 7.3
+# ----------
+# php_version: 7.2
+
+# ----------
+# Xdebugまたはプロファイラのインストール
+# ----------
+# php_xdebug_installed: no
+# php_tideways_profiler_installed: no
+
+# ----------
 # 各PHPフレームワーク毎の設定
 # ----------
 
