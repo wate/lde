@@ -90,10 +90,21 @@ php_packages:
 php_cfg:
   display_errors: yes
   sendmail_path: /usr/local/bin/mhsendmail
-  # auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined else '' }}"
+  auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined else '' }}"
   extra_setting: |
-    [xhprof]
-    xhprof.output_dir = /vagrant/output/profile
+    [tideways]
+    tideways.auto_prepend_library = 0
+    tideways.api_key =
+    tideways.auto_start = 1
+    tideways.connection = unix:///var/run/tideways/tidewaysd.sock
+    tideways.monitor_cli = 0
+    tideways.monitor = basic
+    tideways.collect = tracing
+    tideways.framework =
+    tideways.service =
+    tideways.timeout = 10000
+    tideways.distributed_tracing_hosts = 127.0.0.1
+    tideways.udp_connection = 127.0.0.1:8135
     [xdebug]
     xdebug.auto_trace = Off
     xdebug.cli_color = 0
@@ -181,8 +192,8 @@ xhgui_cfg:
   dbpass: *xhgui_db_password
   dbname: xhprof
   dbadapter: Pdo
-  servername: null
-  namespace: null
+  servername: "{{ domain }}"
+  namespace: myapp
   url: http://profile.{{ domain }}/
   getparam: _profile
   serializer: php

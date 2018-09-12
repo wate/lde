@@ -32,28 +32,50 @@
       tags: role_xhgui
   vars:
     tbls_version: "1.3.0"
+    tideware_version: 4.x
+    tideware_extension_name: tideways
   tasks:
     - name: install php xdebug module
       yum:
         name: php-pecl-xdebug
+      when: xdebug_installed|default(false)
     - block:
-        - name: add tideways repo
-          yum_repository:
-            name: tideways
-            description: Tideways
-            baseurl: https://s3-eu-west-1.amazonaws.com/tideways/rpm
-            file: tideways
-        - name: add gpg key
-          rpm_key:
-            key: https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg
-        - name: install php tideways module
-          yum:
-            name: tideways-php
-      when: php_version is version_compare('7', '>=')
-    - name: install php xhprof module
+        - name: checkout source
+          git:
+            repo: https://github.com/tideways/php-profiler-extension.git
+            dest: /usr/local/src/php-profiler-extension
+            version: "{{ tideware_version }}"
+          register: result
+        - name: build extension(phpize)
+          command: phpize
+          args:
+            chdir: /usr/local/src/php-profiler-extension
+          when: result is changed
+        - name: build extension(./configure)
+          command: ./configure
+          args:
+            chdir: /usr/local/src/php-profiler-extension
+          when: result is changed
+        - name: build extension(make)
+          command: make
+          args:
+            chdir: /usr/local/src/php-profiler-extension
+          when: result is changed
+        - name: build extension(make install)
+          command: make install
+          args:
+            chdir: /usr/local/src/php-profiler-extension
+          when: result is changed
+        - name: create extension config file
+          lineinfile:
+            path: /etc/php.d/20-tideways.ini
+            regexp: ^#?\s*extension=.*
+            line: "extension={{ tideware_extension_name }}"
+            create: yes
+      when: php_tideways_profiler_installed|default(false)
+    - name: install dependency packages
       yum:
-        name: php-pecl-xhprof
-      when: php_version is version_compare('7', '<')
+        name: php-devel
     - name: install the silver searcher
       yum:
         name: the_silver_searcher
