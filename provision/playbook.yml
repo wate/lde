@@ -194,6 +194,17 @@
             skip_pager: on
           become: false
       tags: mycli
+    - name: setup application
+      include_tasks: "{{ setup_file }}"
+      with_first_found:
+        - files:
+            - app.yml
+            - setup.yml
+            - setup_app.yml
+            - app_setup.yml
+          skip: yes
+      loop_control:
+        loop_var: setup_file
     - name: restart service
       systemd:
         name: "{{ item }}"
