@@ -204,8 +204,10 @@ xhgui_cfg:
   doprofile: no
   ignoreURLs: []
   ignoreDomains:
-    - www.{{ domain }}
-    - "{{ domain }}"
+    - "profile.{{ domain }}"
+    - "db.{{ domain }}"
+    - "er.{{ domain }}"
+    - "mail.{{ domain }}"
   exceptionURLs: []
   exceptionPostURLs:
     - login

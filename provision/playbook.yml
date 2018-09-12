@@ -74,7 +74,7 @@
           lineinfile:
             path: /etc/php.d/20-tideways.ini
             regexp: ^#?\s*extension=.*
-            line: "extension={{ tideware_extension_name }}{{ '.so' if php_version is version('7', '<') else '' }}"
+            line: "extension={{ tideware_extension_name }}{{ '.so' if php_version is version('7.2', '<') else '' }}"
             create: yes
       when: php_tideways_profiler_installed|default(false)
     - name: install the silver searcher
