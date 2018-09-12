@@ -38,8 +38,12 @@
     - name: install php xdebug module
       yum:
         name: php-pecl-xdebug
-      when: xdebug_installed|default(false)
-    - block:
+      when: php_xdebug_installed|default(false)
+    - name: install php tideways module
+      block:
+        - name: install php-devel package
+          yum:
+            name: php-devel
         - name: checkout source
           git:
             repo: https://github.com/tideways/php-profiler-extension.git
@@ -70,12 +74,9 @@
           lineinfile:
             path: /etc/php.d/20-tideways.ini
             regexp: ^#?\s*extension=.*
-            line: "extension={{ tideware_extension_name }}"
+            line: "extension={{ tideware_extension_name }}{{ '.so' if php_version is version('7', '<') else '' }}"
             create: yes
       when: php_tideways_profiler_installed|default(false)
-    - name: install dependency packages
-      yum:
-        name: php-devel
     - name: install the silver searcher
       yum:
         name: the_silver_searcher

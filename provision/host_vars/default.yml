@@ -90,7 +90,7 @@ php_packages:
 php_cfg:
   display_errors: yes
   sendmail_path: /usr/local/bin/mhsendmail
-  auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined else '' }}"
+  auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined and php_tideways_profiler_installed|default(false) else '' }}"
   extra_setting: |
     [tideways]
     tideways.auto_prepend_library = 0
