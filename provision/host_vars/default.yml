@@ -14,7 +14,7 @@ mariadb_root_password: &db_root_password r00tP455w0rd
 # - 7.1
 # - 7.2
 # --------------
-php_version: 7.1
+php_version: 7.2
 
 # --------------
 # MariaDB用のfirewalld設定
@@ -60,6 +60,12 @@ mariadb_databases:
     hosts:
       - "127.0.0.1"
       - localhost
+  - name: xhprof
+    password: &xhgui_db_password xhgui_P455w0rd
+    hosts:
+      - "127.0.0.1"
+      - localhost
+
 
 # --------------
 # インストールするPHPのパッケージ
@@ -84,6 +90,82 @@ php_packages:
 php_cfg:
   display_errors: yes
   sendmail_path: /usr/local/bin/mhsendmail
+  auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined and php_tideways_profiler_installed|default(false) else '' }}"
+  extra_setting: |
+    [tideways]
+    tideways.auto_prepend_library = 0
+    tideways.api_key =
+    tideways.auto_start = 1
+    tideways.connection = unix:///var/run/tideways/tidewaysd.sock
+    tideways.monitor_cli = 0
+    tideways.monitor = basic
+    tideways.collect = tracing
+    tideways.framework =
+    tideways.service =
+    tideways.timeout = 10000
+    tideways.distributed_tracing_hosts = 127.0.0.1
+    tideways.udp_connection = 127.0.0.1:8135
+    [xdebug]
+    xdebug.auto_trace = Off
+    xdebug.cli_color = 0
+    xdebug.collect_assignments = Off
+    xdebug.collect_includes = On
+    xdebug.collect_params = 0
+    xdebug.collect_return = Off
+    xdebug.collect_vars = Off
+    xdebug.coverage_enable = On
+    xdebug.default_enable = On
+    xdebug.dump.COOKIE = ""
+    xdebug.dump.ENV = ""
+    xdebug.dump.FILES = ""
+    xdebug.dump.GET = ""
+    xdebug.dump.POST = ""
+    xdebug.dump.REQUEST = ""
+    xdebug.dump.SERVER = ""
+    xdebug.dump.SESSION = ""
+    xdebug.dump_globals = On
+    xdebug.dump_once = On
+    xdebug.dump_undefined = Off
+    xdebug.extended_info = On
+    xdebug.file_link_format = ""
+    xdebug.force_display_errors = Off
+    xdebug.force_error_reporting = 0
+    xdebug.halt_level = 0
+    xdebug.idekey = ""
+    xdebug.max_nesting_level = 256
+    xdebug.max_stack_frames = -1
+    xdebug.overload_var_dump = 2
+    xdebug.profiler_aggregate = Off
+    xdebug.profiler_append = Off
+    xdebug.profiler_enable = Off
+    xdebug.profiler_enable_trigger = Off
+    xdebug.profiler_enable_trigger_value = ""
+    xdebug.profiler_output_dir = /vagrant/output/profile
+    xdebug.profiler_output_name = cachegrind.out.%p
+    xdebug.remote_addr_header = ""
+    xdebug.remote_autostart = Off
+    xdebug.remote_connect_back = Off
+    xdebug.remote_cookie_expire_time = 3600
+    xdebug.remote_enable = Off
+    xdebug.remote_handler = dbgp
+    xdebug.remote_host = localhost
+    xdebug.remote_log = ""
+    xdebug.remote_mode = req
+    xdebug.remote_port = 9000
+    xdebug.scream = Off
+    xdebug.show_error_trace = Off
+    xdebug.show_exception_trace = Off
+    xdebug.show_local_vars = Off
+    xdebug.show_mem_delta = Off
+    xdebug.trace_enable_trigger = Off
+    xdebug.trace_enable_trigger_value = ""
+    xdebug.trace_format = 0
+    xdebug.trace_options = 0
+    xdebug.trace_output_dir = /vagrant/output/trace
+    xdebug.trace_output_name = trace.%c
+    xdebug.var_display_max_children = 128
+    xdebug.var_display_max_data = 512
+    xdebug.var_display_max_depth = 3
 
 # --------------
 # WWW SQL Designerのバックエンドの設定
@@ -99,6 +181,41 @@ wwwsqldesigner_backend_pdo_cfg:
     dsn: "mysql:dbname=information_schema;host=localhost"
     user: root
     password: *db_root_password
+
+# --------------
+# XHGUIの設定
+# --------------
+xhgui_cfg:
+  dbtype: mysql
+  dbhost: localhost
+  dbuser: xhprof
+  dbpass: *xhgui_db_password
+  dbname: xhprof
+  dbadapter: Pdo
+  servername: "{{ domain }}"
+  namespace: myapp
+  url: http://profile.{{ domain }}/
+  getparam: _profile
+  serializer: php
+  dot_binary: /usr/bin/dot
+  dot_tempdir: /tmp
+  dot_errfile: /tmp/xh_dot.err
+  display: no
+  doprofile: no
+  ignoreURLs: []
+  ignoreDomains:
+    - "profile.{{ domain }}"
+    - "db.{{ domain }}"
+    - "er.{{ domain }}"
+    - "mail.{{ domain }}"
+  exceptionURLs: []
+  exceptionPostURLs:
+    - login
+  controlIPs: no
+  # ignoredFunctions:
+  #   - call_user_func
+  #   - call_user_func_array
+  #   - socket_select
 
 
 # --------------
@@ -180,10 +297,14 @@ apache_vhosts:
     require:
       - type: ip
         value: 192.168.33
-  - name: 04-BootstrapPageGenerator
-    state: "{{ true if pagegenerator_dest is defined else false }}"
-    server_name: mock.{{ domain }}
-    document_root: "{{ pagegenerator_dest|default('/opt/BootstrapPageGenerator') }}"
+  - name: 04-XHGUI
+    state: "{{ true if xhgui_dest is defined else false }}"
+    server_name: profile.{{ domain }}
+    document_root: "{{ xhgui_dest|default('/opt/xhgui') }}/xhprof_html"
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
     custom_log:
       path: /dev/null
       format: combine
@@ -284,6 +405,10 @@ apache_vhosts:
 #     state: "{{ true if wwwsqldesigner_dest is defined else false }}"
 #     server_name: er.{{ domain }}
 #     document_root: "{{ wwwsqldesigner_dest|default('/opt/wwwsqldesigner') }}"
+#     directory_index:
+#       - index.html
+#       - index.htm
+#       - index.php
 #     options:
 #       - "-Indexes"
 #       - "+FollowSymLinks"
@@ -300,17 +425,21 @@ apache_vhosts:
 #     server_name: er.{{ domain }}
 #     include:
 #       - "{{ apache_snippet_dir }}/redirect_https.conf"
-#   - name: 04-BootstrapPageGenerator
-#     state: "{{ true if pagegenerator_dest is defined else false }}"
-#     server_name: mock.{{ domain }}
-#     document_root: "{{ pagegenerator_dest|default('/opt/BootstrapPageGenerator') }}"
+#   - name: 04-XHGUI
+#     state: "{{ true if xhgui_dest is defined else false }}"
+#     server_name: profile.{{ domain }}
+#     document_root: "{{ xhgui_dest|default('/opt/xhgui') }}/xhprof_html"
+#     custom_log:
+#       path: /dev/null
+#       format: combine
+#       env: 0
 #     ssl:
 #       certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
 #       certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
 #       certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/fullchain.pem"
-#   - name: 04-BootstrapPageGenerator_http
-#     state: "{{ true if pagegenerator_dest is defined else false }}"
-#     server_name: mock.{{ domain }}
+#   - name: 04-XHGUI_http
+#     state: "{{ true if xhgui_dest is defined else false }}"
+#     server_name: profile.{{ domain }}
 #     include:
 #       - "{{ apache_snippet_dir }}/redirect_https.conf"
 

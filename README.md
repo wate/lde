@@ -89,7 +89,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `http://mail.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
 * `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
 * `http://er.<設定したドメイン>/`：[WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)用のURLです。
-* `http://mock.<設定したドメイン>/`：[Bootstrap Page Generator](https://github.com/Vegetam/BootstrapPageGenerator)用のURLです。
+* `http://profile.<設定したドメイン>/`：[XHProf UI](https://github.com/preinheimer/xhprof)用のURLです。
 
 #### php_version
 

@@ -1,0 +1,35 @@
+---
+- name: install dependency packages
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - git
+    - graphviz
+- name: checkout source
+  git:
+    repo: "{{ xhgui_repo }}"
+    version: "{{ xhgui_version }}"
+    dest: "{{ xhgui_dest }}"
+    force: yes
+- name: create XHGUI config file
+  template:
+    src: config.php.j2
+    dest: "{{ xhgui_dest }}/xhprof_lib/config.php"
+- name: upload xhgui ddl
+  copy:
+    src: xhgui_ddl.sql
+    dest: /tmp/xhgui_ddl.sql
+- name: install MySQL dependency packages
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - MySQL-python
+    - mariadb
+- name: import DDL
+  mysql_db:
+    state: import
+    name: "{{ xhgui_cfg.dbname }}"
+    login_host: "{{ xhgui_cfg.dbhost }}"
+    login_user: "{{ xhgui_cfg.dbuser }}"
+    login_password: "{{ xhgui_cfg.dbpass }}"
+    target: /tmp/xhgui_ddl.sql

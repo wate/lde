@@ -1,9 +1,0 @@
-- name: restart mailcatcher
-  systemd:
-    daemon_reload: yes
-    name: mailcatcher
-    state: restarted
-- name: restart firewalld
-  systemd:
-    name: firewalld
-    state: restarted
