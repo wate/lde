@@ -191,6 +191,9 @@ log_slave_updates = {{ 'ON' if mariadb_cfg.mysqld.log_slave_updates else 'OFF' }
 {% endif %}
 
 {% if mariadb_cfg.mysqld.extra_setting is defined -%}
+# -----------------
+# Other Extra Setting
+# -----------------
 {{ mariadb_cfg.mysqld.extra_setting }}
 {% endif %}
 
