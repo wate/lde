@@ -205,6 +205,14 @@
           skip: yes
       loop_control:
         loop_var: setup_file
+    - name: execute post tasks
+      include_tasks: "{{ post_task_file }}"
+      with_first_found:
+        - files:
+            - ../post_task.yml
+          skip: yes
+      loop_control:
+        loop_var: post_task_file
     - name: restart service
       systemd:
         name: "{{ item }}"

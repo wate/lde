@@ -8,9 +8,14 @@ domain: "example.com"
 # php_version: 7.2
 
 # ----------
-# Xdebugまたはプロファイラのインストール
+# Xdebugをインストールするか否かを指定します
 # ----------
 # php_xdebug_installed: no
+
+# ----------
+# Tideways XHProf Extensionをインストールするか否かを指定します
+# https://github.com/tideways/php-xhprof-extension
+# ----------
 # php_tideways_profiler_installed: no
 
 # ----------

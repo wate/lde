@@ -136,7 +136,10 @@ mariadb_cfg:
     # -----------------
     # Other Extra Setting
     # -----------------
-    # extra_setting: ""
+    # extra_setting: |
+    #   innodb_fast_shutdown = 0
+    #   innodb_flush_log_at_trx_commit = 0
+    #   innodb_doublewrite = OFF
   # mysqld_safe:
   #   datadir: /var/lib/mysql
   #   socket: /var/run/mysqld/mysqld.sock
