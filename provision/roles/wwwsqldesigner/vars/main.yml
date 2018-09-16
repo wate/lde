@@ -1,2 +1,4 @@
 ---
+wwwsqldesigner_repo: https://github.com/wate/wwwsqldesigner.git
+wwwsqldesigner_version: master
 wwwsqldesigner_dest: /opt/wwwsqldesigner

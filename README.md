@@ -89,7 +89,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `http://mail.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
 * `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
 * `http://er.<設定したドメイン>/`：[WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)用のURLです。
-* `http://mock.<設定したドメイン>/`：[Bootstrap Page Generator](https://github.com/Vegetam/BootstrapPageGenerator)用のURLです。
+* `http://profile.<設定したドメイン>/`：[XHProf UI](https://github.com/preinheimer/xhprof)用のURLです。
 
 #### php_version
 
@@ -174,55 +174,48 @@ php_project_skeleton: cakephp/app
 ### post_task.yml
 
 このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
-記載方法は[Ansible](https://www.ansible.com/)のplaybook形式で記載します。
+記載方法は[Ansible](https://www.ansible.com/)の記載フォーマットで記載します。
 
 #### サンプル
 
-```yaml
-- name: post tasks
-  hosts: all
-  become: yes
-  tasks:
-    - name: install xdebug
-      yum:
-        name: php-pecl-xdebug
-    - name: check composer.json
-      stat:
-        path: /var/www/html/composer.json
-      register: result
-      tags: always
-    - name: create PHP project
-      block:
-        - name: install oil command
-          get_url:
-            url: https://get.fuelphp.com/installer.sh
-            dest: /usr/local/bin/oil
-            mode: +x
-          when:
-            - php_project_skeleton is defined
-            - php_project_skeleton == 'fuel/fuel'
-        - block:
-            - name: remove .gitkeep
-              file:
-                path: /var/www/html/.gitkeep
-                state: absent
-            - name: create project
-              composer:
-                command: create-project
-                arguments: "--prefer-dist {{ php_project_skeleton }} ."
-                no_dev: no
-                prefer_dist: yes
-                working_dir: /var/www/html
-            - name: recreate .gitkeep
-              file:
-                path: /var/www/html/.gitkeep
-                state: touch
-          become: no
+```yml
+- name: check composer.json
+  stat:
+    path: /var/www/html/composer.json
+  register: result
+  tags: always
+- name: create PHP project
+  block:
+    - name: install oil command
+      get_url:
+        url: https://get.fuelphp.com/installer.sh
+        dest: /usr/local/bin/oil
+        mode: +x
       when:
-        - not result.stat.exists
         - php_project_skeleton is defined
-      tags:
-        - create_project_skeleton
+        - php_project_skeleton == 'fuel/fuel'
+    - block:
+        - name: remove .gitkeep
+          file:
+            path: /var/www/html/.gitkeep
+            state: absent
+        - name: create project
+          composer:
+            command: create-project
+            arguments: "--prefer-dist {{ php_project_skeleton }} ."
+            no_dev: no
+            prefer_dist: yes
+            working_dir: /var/www/html
+        - name: recreate .gitkeep
+          file:
+            path: /var/www/html/.gitkeep
+            state: touch
+      become: no
+  when:
+    - not result.stat.exists
+    - php_project_skeleton is defined
+  tags:
+    - create_project_skeleton
 ```
 
 ### post_task.sh

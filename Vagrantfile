@@ -61,8 +61,8 @@ Vagrant.configure("2") do |config|
     'mail.' + settings['domain'],
     # WWW SQL Designer
     'er.' + settings['domain'],
-    # Bootstrap Page Generator
-    'mock.' + settings['domain'],
+    # XHGUI
+    'profile.' + settings['domain'],
   ]
   # vagrant-hostsupdater
   plugin_setting = {}
@@ -133,34 +133,6 @@ Vagrant.configure("2") do |config|
       end
     end
   end
-  # post task playbook
-  ansible_post_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'post_task.yml'))
-  if File.exists?(ansible_post_task_file)
-    if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
-      config.vm.provision "ansible_local" do |ansible|
-        ansible.playbook = "../post_task.yml"
-        ansible.provisioning_path = "/vagrant/provision"
-        ansible.compatibility_mode = "2.0"
-        ansible.extra_vars = ansible_extra_vars
-        if settings['vagrant'].key?('provision_only_tags')
-          ansible.tags = settings['vagrant']['provision_only_tags']
-        end
-      end
-    else
-      config.vm.provision "ansible" do |ansible|
-        ansible.playbook = "post_task.yml"
-        ansible.config_file = "provision/ansible.cfg"
-        ansible.compatibility_mode = "2.0"
-        ansible.extra_vars = ansible_extra_vars
-        ansible.groups = {
-          "vagrant" => ["default"],
-        }
-        if settings['vagrant'].key?('provision_only_tags')
-          ansible.tags = settings['vagrant']['provision_only_tags']
-        end
-      end
-    end
-  end
   ansible_post_task_file = File.expand_path(File.join(File.dirname(__FILE__), 'post_task.sh'))
   if File.exists?(ansible_post_task_file)
     config.vm.provision "shell", path: "post_task.sh"
@@ -172,15 +144,4 @@ Vagrant.configure("2") do |config|
     vm.cpus = settings['vagrant']['vm_cpu'] || 1
     vm.memory = settings['vagrant']['vm_memory'] || 1024
   end
-  # config.trigger.before :destroy do |trigger|
-  #   trigger.info = "Dumping database to db_dump.sql"
-  #   trigger.on_error = :continue
-  #   db_name = settings['mariadb_databases'][0]['name']
-  #   db_user = settings['mariadb_databases'][0]['user'] || settings['mariadb_databases'][0]['name']
-  #   db_password = settings['mariadb_databases'][0]['password']
-  #   db_dump_param = "--no-create-db --no-create-info --complete-insert"
-  #   trigger.run_remote = {
-  #     inline: "mysqldump -u #{db_user} -p#{db_password} #{db_dump_param} #{db_name} > /vagrant/db_dump.sql"
-  #   }
-  # end
 end
