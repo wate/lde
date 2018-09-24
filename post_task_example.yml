@@ -21,7 +21,7 @@
         - name: create project
           composer:
             command: create-project
-            arguments: "--prefer-dist {{ php_project_skeleton }} ."
+            arguments: "{{ php_project_skeleton }} ./"
             no_dev: no
             prefer_dist: yes
             working_dir: /var/www/html
