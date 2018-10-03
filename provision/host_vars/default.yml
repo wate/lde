@@ -484,12 +484,25 @@ mariadb_cfg:
 
 # --------------
 # mycliの設定
+# https://www.mycli.net/config
 # --------------
 mycli_main_cfg:
+  # Multi-line mode allows breaking up the sql statements into multiple lines. If
+  # this is set to True, then the end of the statements must have a semi-colon.
+  # If this is set to False then sql statements can't be split into multiple
+  # lines. End of line (return) is considered as the end of the statement.
   multi_line: false
+  # Syntax Style. Possible values: manni, igor, xcode, vim, autumn, vs, rrt,
+  # native, perldoc, borland, tango, emacs, friendly, monokai, paraiso-dark,
+  # colorful, murphy, bw, pastie, paraiso-light, trac, default, fruity
   syntax_style: monokai
+  # Skip intro info on startup and outro info on exit
   less_chatty: false
+  # Enable the pager on startup.
   enable_pager: false
+  # Destructive warning mode will alert you before executing a sql statement
+  # that may cause harm to the database such as "drop table", "drop database" or "shutdown".
+  destructive_warning: false
 
 mycli_alias_dsn:
   dev: "mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}"

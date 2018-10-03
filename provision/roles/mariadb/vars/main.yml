@@ -1,9 +1,9 @@
-mariadb_mysql55_default_sql_mode: &mysql55_default_sql_mode
+mariadb_mysql55_default_sql_mode:
   - NO_ENGINE_SUBSTITUTION
-mariadb_mysql56_default_sql_mode: &mysql56_default_sql_mode
+mariadb_mysql56_default_sql_mode:
   - STRICT_TRANS_TABLES
   - NO_ENGINE_SUBSTITUTION
-mariadb_mysql57_default_sql_mode: &mysql57_default_sql_mode
+mariadb_mysql57_default_sql_mode:
   - ONLY_FULL_GROUP_BY
   - STRICT_TRANS_TABLES
   - NO_ZERO_IN_DATE
