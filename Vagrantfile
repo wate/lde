@@ -85,8 +85,12 @@ Vagrant.configure("2") do |config|
     config.hostmanager.aliases = vm_host_aliases
   end
   if Vagrant.has_plugin?('vagrant-exec')
+    # WordPress
     config.exec.commands 'wp', directory: '/var/www/html'
-    config.exec.commands 'msgfmt', directory: '/var/www/html/wp-content/plugins'
+    # PHP
+    config.exec.commands 'composer', directory: '/vagrant/source'
+    # CakePHP
+    config.exec.commands 'bin/cake', directory: '/vagrant/source'
   end
   # Provisioning
   ansible_extra_vars = {
