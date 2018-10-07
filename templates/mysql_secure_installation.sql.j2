@@ -1,4 +1,6 @@
 -- Change root password
+SET PASSWORD FOR 'root'@'::1' = PASSWORD('{{ mariadb_root_password }}');
+SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('{{ mariadb_root_password }}');
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('{{ mariadb_root_password }}');
 -- Remove anonymous users
 DELETE FROM mysql.user WHERE User='';
