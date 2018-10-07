@@ -33,7 +33,7 @@
       state: absent
   when: not result.stat.exists
 - name: change root password
-  command: mysqladmin password "{{ mariadb_root_password|mandatory }}" -u root
+  command: mysqladmin password "{{ mariadb_root_password }}" -u root
   when: result.stat.exists
 - name: create root user connection setting
   ini_file:
@@ -44,10 +44,12 @@
     mode: "0600"
     create: yes
   with_items:
+    - option: host
+      value: localhost
     - option: user
       value: root
     - option: password
-      value: "{{ mariadb_root_password|mandatory }}"
+      value: "{{ mariadb_root_password }}"
 - name: create/remove databases
   mysql_db:
     name: "{{ item.name }}"
