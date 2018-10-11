@@ -1,11 +1,10 @@
 galaxy_info:
-  author: your name
-  description: your description
-  company: your company (optional)
+  author: yoshiaki tanaka
+  description: install xhgui
   license: MIT
-  min_ansible_version: 2.4
+  min_ansible_version: 2.5
   platforms:
-  - name: RHEL
+  - name: EL
     versions:
       - 7
   galaxy_tags: []
