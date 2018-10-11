@@ -9,8 +9,7 @@
     value: 1
 - name: install php packages
   yum:
-    name: "{{ item }}"
-  with_items: "{{ php_packages }}"
+    name: "{{ php_packages }}"
 - name: install composer
   yum:
     name: composer
