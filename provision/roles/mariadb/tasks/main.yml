@@ -1,8 +1,7 @@
 ---
 - name: install MariaDB packages
   yum:
-    name: "{{ item }}"
-  with_items: "{{ mariadb_packages }}"
+    name: "{{ mariadb_packages }}"
 - name: install dependency packages
   yum:
     name: MySQL-python
