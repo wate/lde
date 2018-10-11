@@ -1,10 +1,9 @@
 ---
 - name: install dependency packages
   yum:
-    name: "{{ item }}"
-  with_items:
-    - git
-    - graphviz
+    name:
+      - git
+      - graphviz
 - name: checkout source
   git:
     repo: "{{ xhgui_repo }}"
@@ -21,10 +20,9 @@
     dest: /tmp/xhgui_ddl.sql
 - name: install MySQL dependency packages
   yum:
-    name: "{{ item }}"
-  with_items:
-    - MySQL-python
-    - mariadb
+    name:
+      - MySQL-python
+      - mariadb
 - name: import DDL
   mysql_db:
     state: import
