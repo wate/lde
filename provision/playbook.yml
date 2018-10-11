@@ -198,6 +198,13 @@
             skip_pager: on
           become: false
       tags: mycli
+    - name: restart service
+      systemd:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - httpd
+        - mariadb
     - name: setup application
       include_tasks: "{{ setup_file }}"
       with_first_found:
@@ -217,10 +224,3 @@
           skip: yes
       loop_control:
         loop_var: post_task_file
-    - name: restart service
-      systemd:
-        name: "{{ item }}"
-        state: restarted
-      with_items:
-        - httpd
-        - mariadb
