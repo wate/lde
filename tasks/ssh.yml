@@ -1,11 +1,10 @@
 ---
 - name: install dependency packages
   yum:
-    name: "{{ item }}"
-  with_items:
-    - GeoIP
-    - GeoIP-data
-    - GeoIP-update
+    name:
+      - GeoIP
+      - GeoIP-data
+      - GeoIP-update
 - name: create ssh filter script
   template:
     src: sshfilter.j2

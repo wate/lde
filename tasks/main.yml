@@ -14,8 +14,7 @@
     state: directory
 - name: install common packages
   yum:
-    name: "{{ item }}"
-  with_items: "{{ common_packages }}"
+    name: "{{ common_packages }}"
 - name: manage user skeleton directory
   import_tasks: skeleton.yml
   tags: skeleton
