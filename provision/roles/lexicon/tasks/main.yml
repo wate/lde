@@ -1,14 +1,13 @@
 ---
 - name: install dependency packages
   yum:
-    name: "{{ item }}"
+    name:
+      - python-requests
+      - python-babel
+      - python2-boto3
+      - python2-future
+      - python-idna
     enablerepo: epel
-  with_items:
-    - python-requests
-    - python-babel
-    - python2-boto3
-    - python2-future
-    - python-idna
 - name: install lexicon
   pip:
     name: dns-lexicon
