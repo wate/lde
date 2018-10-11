@@ -1,7 +1,6 @@
 - name: install apache
   yum:
-    name: "{{ item }}"
-  with_items: "{{ apache_packages }}"
+    name: "{{ apache_packages }}"
 - name: create Virtualhost config directory
   file:
     path: "{{ apache_virtualhost_conf_dir }}"
