@@ -1,8 +1,6 @@
 - name: install requrement packages
   yum:
-    name: "{{ item }}"
-  with_items:
-    - sudo
+    name: sudo
 - name: admin group sudo setting
   template:
     src: wheel.j2
