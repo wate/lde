@@ -27,7 +27,7 @@
     - name: create wp-cli config file
       blockinfile:
         path: ~/.wp-cli/config.yml
-        block: "{{ wp_cli_cfg|to_nice_yaml }}"
+        block: "{{ wp_cli_cfg | to_nice_yaml }}"
         create: true
     - name: download WordPress
       command: /usr/local/bin/wp core download
