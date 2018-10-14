@@ -139,9 +139,9 @@
       when: app_type.startswith('wordpress')
       tags: wordpress
     - name: setup EC-CUBE
-      import_tasks: ec_cube.yml
-      when: app_type.startswith('ec_cube')
-      tags: ec_cube
+      import_tasks: ec-cube.yml
+      when: app_type.startswith('ec-cube')
+      tags: ec-cube
     - name: create mysql connection file
       ini_file:
         path: ~/.my.cnf

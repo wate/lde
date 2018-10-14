@@ -1,0 +1,18 @@
+- name: remove .gitkeep
+  file:
+    path: /var/www/html/.gitkeep
+    state: absent
+- block:
+    - name: create EC-CUBE project
+      composer:
+        command: create-project
+        arguments: "ec-cube/ec-cube ./"
+        prefer_dist: yes
+        no_dev: yes
+        no_scripts: yes
+        working_dir: /var/www/html
+  become: no
+- name: recreate .gitkeep
+  file:
+    path: /var/www/html/.gitkeep
+    state: touch

@@ -80,98 +80,11 @@ wordpress:
     # WooCommerceのボイラープレートを生成するか否か
     woocommerce: no
 ec_cube:
-  ## EC-CUBEのバージョン
-  version: "3.0.16"
-  ## サイトのタイトル
-  shop_name: "EC-CUBE SHOP"
-  ## 管理者名
-  admin_user: "admin"
-  ## 管理者パスワード
-  admin_password: "password"
-  ## 管理者メールアドレス
-  admin_mail: "admin@example.com"
-  ## メール送信バックエンド
-  mail_backend: mail
-  ## メールホスト名
-  # mail_host: localhost
-  ## メールポート番号
-  # mail_port: 25
-  ## メールユーザー名
-  # mail_user: ""
-  ## メールパスワード
-  # mail_password: ""
-  ## 管理画面用ディレクトリ名
-  # admin_route: "admin"
-  ## URLのルートパス
-  # root_urlpath: ""
-  plugins: []
-    # - name: 帳票出力プラグイン
-    #   code: OrderPdf
-    #   repo: https://github.com/EC-CUBE/order-pdf-plugin.git
-    #   version: "1.0.0"
-    # - name: 売上集計プラグイン
-    #   code: SalesReport
-    #   repo: https://github.com/EC-CUBE/sales-report-plugin.git
-    #   version: "1.0.0"
-    # - name: 商品おすすめ順プラグイン
-    #   code: ProductPriority
-    #   repo: https://github.com/EC-CUBE/product-priority-plugin.git
-    #   version: "1.0.0"
-    # - name: カテゴリコンテンツプラグイン
-    #   code: CategoryContent
-    #   repo: https://github.com/EC-CUBE/category-content-plugin.git
-    #   version: "1.0.0"
-    # - name: おすすめ商品管理プラグイン
-    #   code: Recommend
-    #   repo: https://github.com/EC-CUBE/Recommend-plugin.git
-    #   version: "2.0.1"
-    # - name: 関連商品プラグイン
-    #   code: RelatedProduct
-    #   repo: https://github.com/EC-CUBE/related-product-plugin.git
-    #   version: "1.0.1"
-    # - name: 商品レビュープラグイン
-    #   code: ProductReview
-    #   repo: https://github.com/EC-CUBE/ProductReview-plugin.git
-    #   version: "1.0.1"
-    # - name: ポイントプラグイン
-    #   code: Point
-    #   repo: https://github.com/EC-CUBE/point-plugin.git
-    #   version: "1.0.0"
-    # - name: クーポンプラグイン
-    #   code: Coupon
-    #   repo: https://github.com/EC-CUBE/coupon-plugin.git
-    #   version: "2.0.1"
-    # - name: メーカー管理プラグイン
-    #   code: Maker
-    #   repo: https://github.com/EC-CUBE/maker-plugin.git
-    #   version: "1.0.0"
-    # - name: メルマガ管理プラグイン
-    #   code: MailMagazine
-    #   repo: https://github.com/EC-CUBE/mail-magazine-plugin.git
-    #   version: "1.0.1"
-    # - name: メール設定プラグイン
-    #   code: MailTemplateEditor
-    #   repo: https://github.com/EC-CUBE/MailTemplateEditor-plugin.git
-    #   version: "1.0.0"
-    # - name: カスタムCSV出力プラグイン
-    #   code: CustomCsvExport
-    #   repo: https://github.com/EC-CUBE/custom-csv-export-plugin.git
-    #   version: "1.0.0"
-    # - name: リスティング広告入稿用CSV作成プラグイン
-    #   code: ListingAdCsv
-    #   repo: https://github.com/EC-CUBE/listing-ad-plugin.git
-    #   version: "1.0.2"
-    # - name: EC-CUBE Web API
-    #   code: EccubeApi
-    #   repo: https://github.com/EC-CUBE/eccube-api.git
-    #   version: "v0-beta-1.0.3"
-    # - name: 商品並び替えプラグイン
-    #   code: ProductRank
-    #   repo: https://github.com/EC-CUBE/ProductRank-plugin.git
-    # - name: 定休日管理プラグイン
-    #   code: Holiday
-    #   repo: https://github.com/EC-CUBE/Holiday-plugin.git
-
+  app_env: prod
+  app_debug: 0
+  locale: ja
+  timezone: Asia/Tokyo
+  currency: JPY
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
 # ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
@@ -222,15 +135,9 @@ vagrant:
       wordpress_theme:
         local: ./source
         remote: /var/www/html/wp-content/themes/source
-      ec_cube:
+      "ec-cube":
         local: ./source
         remote: /var/www/html
-      ec_cube_plugin:
-        local: ./source
-        remote: /var/www/html/app/plugins/Source
-      ec_cube_theme:
-        local: ./source
-        remote: /var/www/html/app/template/Source
     owner: vagrant
     group: vagrant
     mount_options:
