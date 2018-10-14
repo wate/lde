@@ -118,118 +118,15 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 また、既に定義されているセットアップ用変数と同じ変数を定義すれば、  
 セットアップ用変数を上書きできます。
 
-#### サンプル
-
-```yaml
-# --------------
-# インストールするPHPのパッケージの変更する
-# --------------
-php_packages:
-  - php
-  - php-common
-  - php-cli
-  - php-devel
-  - php-opcache
-  - php-mbstring
-  - php-mysqlnd
-  - php-json
-  - php-pdo
-  - php-gd
-  - php-xml
-
-# --------------
-# PHPの設定を変更する
-# --------------
-php_cfg:
-  display_errors: yes
-  sendmail_path: /usr/local/bin/mhsendmail
-
-# ----------
-# 各PHPフレームワーク毎の設定例
-# ----------
-# ※「php_project_skeleton」は「post_task.yml」側で利用している変数
-
-## CakePHP
-doc_root_suffix: /webroot
-php_project_skeleton: cakephp/app
-
-## Laravel
-# doc_root_suffix: /public
-# php_project_skeleton: laravel/laravel
-
-## Symfony
-# doc_root_suffix: /public
-# php_project_skeleton: symfony/website-skeleton
-
-# FuelPHP
-# doc_root_suffix: /public
-# php_project_skeleton: fuel/fuel
-
-## Slim
-# doc_root_suffix: /public
-# php_project_skeleton: slim/slim-skeleton
-```
-
-
 ### post_task.yml
 
 このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
 記載方法は[Ansible](https://www.ansible.com/)の記載フォーマットで記載します。
 
-#### サンプル
-
-```yml
-- name: check composer.json
-  stat:
-    path: /var/www/html/composer.json
-  register: result
-  tags: always
-- name: create PHP project
-  block:
-    - name: install oil command
-      get_url:
-        url: https://get.fuelphp.com/installer.sh
-        dest: /usr/local/bin/oil
-        mode: +x
-      when:
-        - php_project_skeleton is defined
-        - php_project_skeleton == 'fuel/fuel'
-    - block:
-        - name: remove .gitkeep
-          file:
-            path: /var/www/html/.gitkeep
-            state: absent
-        - name: create project
-          composer:
-            command: create-project
-            arguments: "--prefer-dist {{ php_project_skeleton }} ."
-            no_dev: no
-            prefer_dist: yes
-            working_dir: /var/www/html
-        - name: recreate .gitkeep
-          file:
-            path: /var/www/html/.gitkeep
-            state: touch
-      become: no
-  when:
-    - not result.stat.exists
-    - php_project_skeleton is defined
-  tags:
-    - create_project_skeleton
-```
-
 ### post_task.sh
 
 このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
 処理内容はシェルスクリプトで記載します。
-
-#### サンプル
-
-```sh
-#!/bin/bash
-yum install -y --enablerepo=epel jq
-```
-
 
 ローカル開発環境のサーバー情報
 ------------
@@ -290,12 +187,6 @@ WordPress用開発環境について
 * 接続形式：ssh2
 
 ※「SSH Authentication Keys」の設定は不要です。
-
-その他
-------------
-
-仮想マシンを破棄するときに、ローカル開発環境が起動している場合は、  
-データベースの内容を`db_dump.sql`というファイルに自動出力します。
 
 ライセンス
 -------

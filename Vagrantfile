@@ -94,15 +94,15 @@ Vagrant.configure("2") do |config|
   end
   # Provisioning
   ansible_extra_vars = {
-    app_type: app_type,
-    domain: settings['domain'],
-    php_version: settings['php_version'],
-    doc_root_suffix: settings['doc_root_suffix'],
-    wordpress: settings['wordpress'],
+    'app_type' => app_type,
+    'domain' => settings['domain'],
+    'php_version' => settings['php_version'],
+    'doc_root_suffix' => settings['doc_root_suffix'],
+    'wordpress' => settings['wordpress'],
   }
   unless ansible_custom_vars.empty?()
     if ansible_custom_vars.key?('wordpress')
-      ansible_extra_vars[:wordpress].merge!(ansible_custom_vars['wordpress']);
+      ansible_extra_vars['wordpress'].merge!(ansible_custom_vars['wordpress']);
       ansible_custom_vars.delete('wordpress')
     end
     ansible_extra_vars.merge!(ansible_custom_vars);
