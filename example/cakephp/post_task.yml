@@ -5,14 +5,6 @@
   tags: always
 - name: create PHP project
   block:
-    - name: install oil command
-      get_url:
-        url: https://get.fuelphp.com/installer.sh
-        dest: /usr/local/bin/oil
-        mode: +x
-      when:
-        - php_project_skeleton is defined
-        - php_project_skeleton == 'fuel/fuel'
     - block:
         - name: remove .gitkeep
           file:
