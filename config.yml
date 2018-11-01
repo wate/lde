@@ -23,6 +23,10 @@ wordpress:
     define('WP_DEBUG_DISPLAY', true);
     define('WP_POST_REVISIONS', false);
     define('DISALLOW_FILE_EDIT', true);
+  # ## WordPressの設定内容
+  # options:
+  #   WPLANG: ja
+  #   timezone_string: Asia/Tokyo
   # ## WordPressのパーマリンク設定の内容
   # rewrite_structure: /%category%/%postname%/
   # ## WordPressにインポートするデータの設定
