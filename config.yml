@@ -37,7 +37,11 @@ wordpress:
   plugins:
     - name: "ssh-sftp-updater-support"
       activate: yes
+    - name: wp-multibyte-patch
+      activate: yes
     # - name: "contact-form-7"
+    #   activate: yes
+    # - name: classic-editor
     #   activate: yes
     # - name: "all-in-one-seo-pack"
     #   activate: yes

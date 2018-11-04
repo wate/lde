@@ -56,11 +56,6 @@
         path: "/var/www/html/.htaccess"
         create: true
         block: "{{ wordpress.htaccess }}"
-    - name: activate WP Multibyte Patch plugin
-      command: /usr/local/bin/wp plugin activate wp-multibyte-patch
-      when:
-        - wp_cli_cfg['core download'].locale is defined
-        - wp_cli_cfg['core download'].locale == 'ja'
     - name: set WordPress options
       command: /usr/local/bin/wp option update {{ item.key }} '{{ item.value }}'
       with_dict: "{{ wordpress.options|default({}) }}"
@@ -70,9 +65,12 @@
         - siteurl
         - home
     - name: install WordPress plugins
-      command: /usr/local/bin/wp plugin install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
+      command: /usr/local/bin/wp plugin install {{ item.name }} {{ '--version=' + item.version if item.version|default(None) else '' }}
       args:
         creates: "/var/www/html/wp-content/plugins/{{ item.name }}"
+      with_items: "{{ wordpress.plugins }}"
+    - name: Activates/Deactivates plugin status
+      command: /usr/local/bin/wp plugin {{ 'activate' if item.activate|default(false) else 'deactivate' }} {{ item.name }}
       with_items: "{{ wordpress.plugins }}"
     - name: install WordPress themes
       command: /usr/local/bin/wp theme install {{ item.name }} {{ '--activate' if item.activate|default(false) else '' }} {{ '--version=' + item.version if item.version|default(None) else '' }}
