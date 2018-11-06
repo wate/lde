@@ -61,6 +61,9 @@
       when:
         - wp_cli_cfg['core download'].locale is defined
         - wp_cli_cfg['core download'].locale == 'ja'
+    - name: set WordPress options
+      command: /usr/local/bin/wp option update {{ item.key }} '{{ item.value }}'
+      with_dict: "{{ wordpress.options|default({}) }}"
     - name: set WordPress site setting
       command: /usr/local/bin/wp option update {{ item }} 'http://{{ apache_vhosts[0].server_name }}'
       with_items:

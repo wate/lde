@@ -50,25 +50,23 @@
             dest: /usr/local/src/php-profiler-extension
             version: "{{ tideware_version }}"
           register: result
-        - name: build extension(phpize)
-          command: phpize
-          args:
-            chdir: /usr/local/src/php-profiler-extension
-          when: result is changed
-        - name: build extension(./configure)
-          command: ./configure
-          args:
-            chdir: /usr/local/src/php-profiler-extension
-          when: result is changed
-        - name: build extension(make)
-          command: make
-          args:
-            chdir: /usr/local/src/php-profiler-extension
-          when: result is changed
-        - name: build extension(make install)
-          command: make install
-          args:
-            chdir: /usr/local/src/php-profiler-extension
+        - block:
+            - name: build extension(phpize)
+              command: phpize
+              args:
+                chdir: /usr/local/src/php-profiler-extension
+            - name: build extension(./configure)
+              command: ./configure
+              args:
+                chdir: /usr/local/src/php-profiler-extension
+            - name: build extension(make)
+              command: make
+              args:
+                chdir: /usr/local/src/php-profiler-extension
+            - name: build extension(make install)
+              command: make install
+              args:
+                chdir: /usr/local/src/php-profiler-extension
           when: result is changed
         - name: create extension config file
           lineinfile:
