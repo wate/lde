@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
     # phpMyAdmin
     'db.' + settings['domain'],
     # MailCatcher
-    'mail.' + settings['domain'],
+    'mailhog.' + settings['domain'],
     # WWW SQL Designer
     'er.' + settings['domain'],
     # XHGUI
