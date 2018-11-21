@@ -112,9 +112,9 @@ vagrant:
   #   - wordpress
   ## ポートフォワーディングの設定
   forwarded_ports:
-    - guest: 3306
     - guest: 80
       host: 8080
+    - guest: 3306
     # - guest: 5432
     # - guest: 22
     #   host: 2240
