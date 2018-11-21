@@ -73,7 +73,7 @@
             path: /etc/php.d/20-tideways.ini
             regexp: ^#?\s*extension=.*
             line: "extension={{ tideware_extension_name }}{{ '.so' if php_version is version('7.2', '<') else '' }}"
-            create: yes
+            create: true
       when: php_tideways_profiler_installed|default(false)
     - name: install the silver searcher
       yum:
@@ -190,7 +190,7 @@
             user: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
             password: "{{ mariadb_databases[0].password|default(mariadb_databases[0].user) }}"
             default_character_set: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
-            skip_pager: on
+            skip_pager: false
           become: false
       tags: mycli
     - name: restart service
@@ -208,7 +208,7 @@
             - setup.yml
             - setup_app.yml
             - app_setup.yml
-          skip: yes
+          skip: true
       loop_control:
         loop_var: setup_file
     - name: execute post tasks
@@ -216,6 +216,6 @@
       with_first_found:
         - files:
             - ../post_task.yml
-          skip: yes
+          skip: true
       loop_control:
         loop_var: post_task_file
