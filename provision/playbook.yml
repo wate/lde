@@ -132,6 +132,7 @@
         owner: vagrant
         group: vagrant
         state: directory
+      when: app_type not in ['wordpress', 'default']
     - name: setup WordPress
       import_tasks: wordpress.yml
       when: app_type.startswith('wordpress')
