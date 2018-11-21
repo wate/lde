@@ -207,7 +207,7 @@ xhgui_cfg:
     - "profile.{{ domain }}"
     - "db.{{ domain }}"
     - "er.{{ domain }}"
-    - "mail.{{ domain }}"
+    - "mailhog.{{ domain }}"
   exceptionURLs: []
   exceptionPostURLs:
     - login
@@ -260,11 +260,11 @@ apache_vhosts:
     require:
       - type: ip
         value: 192.168.33
-  # MailHog用のバーチャルホスト ( http://mail.<ドメイン>/ )
+  # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   # https://github.com/mailhog/MailHog
   - name: 02-MailHog
     state: "{{ true if mailhog_http_port is defined else false }}"
-    server_name: mail.{{ domain }}
+    server_name: mailhog.{{ domain }}
     custom_log:
       path: /dev/null
       format: combine
@@ -378,11 +378,11 @@ apache_vhosts:
 #       - index.php
 #     include:
 #       - "{{ apache_snippet_dir }}/redirect_https.conf"
-#   # MailHog用のバーチャルホスト ( http://mail.<ドメイン>/ )
+#   # MailHog用のバーチャルホスト ( http://mailhog<ドメイン>/ )
 #   # https://github.com/mailhog/MailHog
 #   - name: 02-MailHog
 #     state: "{{ true if mailhog_http_port is defined else false }}"
-#     server_name: mail.{{ domain }}
+#     server_name: mailhog.{{ domain }}
 #     # リバースプロキシの設定
 #     proxy_pass:
 #       - from: /
@@ -396,7 +396,7 @@ apache_vhosts:
 #       certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/chain.pem"
 #   - name: 02-MailHog_http
 #     state: "{{ true if mailhog_http_port is defined else false }}"
-#     server_name: mail.{{ domain }}
+#     server_name: mailhog.{{ domain }}
 #     include:
 #       - "{{ apache_snippet_dir }}/redirect_https.conf"
 #   # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
