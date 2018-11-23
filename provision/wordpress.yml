@@ -2,22 +2,22 @@
   set_fact:
     wp_cli_cfg:
       path: /var/www/html
-      core download:
+      "core download":
         locale: "{{ wordpress.locale|default('ja') }}"
         version: "{{ wordpress.version|default('latest') }}"
-      config create:
+      "config create":
         dbname: "{{ mariadb_databases[0].name }}"
         dbuser: "{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}"
         dbpass: "{{ mariadb_databases[0].password }}"
         dbcharset: "{{ mariadb_databases[0].encoding|default(mariadb_default_charset) }}"
         dbcollate: "{{ mariadb_databases[0].collation|default(mariadb_default_collation) }}"
-      core install:
+      "core install":
         url: "{{ apache_vhosts[0].server_name }}"
         title: "{{ wordpress.title }}"
         admin_user: "{{ wordpress.admin_user }}"
         admin_password: "{{ wordpress.admin_password }}"
         admin_email: "{{ wordpress.admin_email }}"
-      core update:
+      "core update":
         locale: "{{ wordpress.locale|default('ja') }}"
 - block:
     - name: create wp-cli config directory
