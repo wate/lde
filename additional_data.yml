@@ -1,8 +1,10 @@
 ---
-# --------------
-# tbls additional data file
-# https://github.com/k1LoW/tbls#add-additional-data-relations-comments-to-schema
-# --------------
+## Data Source Name
+# dsn: my://root:mypass@localhost:33306/testdb
+## Output Directry
+# dataPath: /vagrant/output/scheme
+## relations additional data file
+## https://github.com/k1LoW/tbls#add-additional-data-relations-comments-to-schema
 # relations:
 #   - table: logs
 #     columns:
