@@ -4,7 +4,7 @@
     name:
       - python-requests
       - python-babel
-      - python2-boto3
+      - python-boto3
       - python2-future
       - python-idna
     enablerepo: epel
