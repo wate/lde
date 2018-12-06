@@ -1,8 +1,13 @@
-- name: remove .gitkeep
-  file:
-    path: /var/www/html/.gitkeep
-    state: absent
+- name: check composer.json
+  stat:
+    path: /var/www/html/composer.json
+  register: result
+  tags: always
 - block:
+    - name: remove .gitkeep
+      file:
+        path: /var/www/html/.gitkeep
+        state: absent
     - name: create EC-CUBE project
       composer:
         command: create-project
@@ -11,8 +16,27 @@
         no_dev: true
         no_scripts: true
         working_dir: /var/www/html
+    - name: create .env file
+      blockinfile:
+        path: /var/www/html/.env
+        block: |
+          APP_ENV=dev
+          APP_DEBUG=1
+          DATABASE_URL=mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}
+        create: true
+    - name: execute compile
+      composer:
+        command: run
+        arguments: compile
+        working_dir: /var/www/html
+    - name: execute auto-scripts
+      composer:
+        command: run
+        arguments: auto-scripts
+        working_dir: /var/www/html
+    - name: recreate .gitkeep
+      file:
+        path: /var/www/html/.gitkeep
+        state: touch
   become: false
-- name: recreate .gitkeep
-  file:
-    path: /var/www/html/.gitkeep
-    state: touch
+  when: not result.stat.exists
