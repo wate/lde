@@ -36,19 +36,25 @@ wordpress:
   ## インストールするプラグイン
   plugins:
     - name: "ssh-sftp-updater-support"
-      activate: yes
+      activate: true
+    # - name: "wp-multibyte-patch"
+    #   activate: true
+    # - name: "gutenberg"
+    #   activate: false
+    # - name: "classic-editor"
+    #   activate: false
     # - name: "contact-form-7"
-    #   activate: yes
+    #   activate: true
     # - name: "all-in-one-seo-pack"
-    #   activate: yes
+    #   activate: true
     # - name: some-plugin-name
-    #   activate: yes (optional)
+    #   activate: true (optional)
     #   version: 1.2.3 (optional)
   ## インストールするテーマ
   themes: []
     # - name: some-theme-name
     #   version: 1.2.3 (optional)
-    #   active: yes (optional)
+    #   active: true (optional)
   ## .htaccessに記述する内容
   htaccess: |
     <IfModule mod_rewrite.c>
@@ -63,7 +69,7 @@ wordpress:
   # ボイラープレートを利用するか否か
   # ※「app_type」に「wordpress_theme」が設定されている場合のみ評価されます
   # ------------------------------
-  use_boilerplate: yes
+  use_boilerplate: true
   # ------------------------------
   # ボイラープレート(_s)の設定
   # ※「use_boilerplate」にtrueが設定されている場合のみ評価されます
@@ -80,9 +86,9 @@ wordpress:
     # テーマの説明 (任意)
     description: ""
     # Sassを利用するか否か
-    sassify: no
+    sassify: false
     # WooCommerceのボイラープレートを生成するか否か
-    woocommerce: no
+    woocommerce: false
 ec_cube:
   app_env: prod
   app_debug: 0
@@ -118,9 +124,9 @@ vagrant:
   #   - wordpress
   ## ポートフォワーディングの設定
   forwarded_ports:
-    - guest: 3306
     - guest: 80
       host: 8080
+    - guest: 3306
     # - guest: 5432
     # - guest: 22
     #   host: 2240
@@ -150,5 +156,5 @@ vagrant:
     # type: rsync
     # group: vagrant
     # owner: vagrant
-    # create: no
-    # disabled: no
+    # create: false
+    # disabled: false
