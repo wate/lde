@@ -28,15 +28,17 @@
       composer:
         command: run
         arguments: compile
-        working_dir: /var/www/html
+        working_dir: /vagrant/source
     - name: execute auto-scripts
       composer:
         command: run
         arguments: auto-scripts
-        working_dir: /var/www/html
+        working_dir: /vagrant/source
     - name: recreate .gitkeep
       file:
         path: /var/www/html/.gitkeep
         state: touch
+        access_time: preserve
+        modification_time_format: preserve
   become: false
   when: not result.stat.exists
