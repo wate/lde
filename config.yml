@@ -39,8 +39,6 @@ wordpress:
       activate: true
     # - name: "wp-multibyte-patch"
     #   activate: true
-    # - name: "gutenberg"
-    #   activate: false
     # - name: "classic-editor"
     #   activate: false
     # - name: "contact-form-7"
