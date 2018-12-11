@@ -20,10 +20,29 @@
       blockinfile:
         path: /var/www/html/.env
         block: |
-          APP_ENV=dev
-          APP_DEBUG=1
+          APP_ENV={{ ec_cube.app_env|default('prod') }}
+          APP_DEBUG={{ '1' if ec_cube.app_debug|default(false) else '0' }}
           DATABASE_URL=mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}
         create: true
+    - name: find log setting files
+      find:
+        paths: /vagrant/source/app/config/eccube/packages
+        recurse: true
+        patterns: monolog.yml
+      register: result
+    - debug:
+        msg: "{{ result.files | map(attribute='path') | list }}"
+    - name: replace log directory
+      replace:
+        path: "{{ item }}"
+        regexp: "%kernel.logs_dir%"
+        replace: /tmp/ec-cube
+      with_items: "{{ result.files | map(attribute='path') | list }}"
+    - name: replace session save directory
+      replace:
+        path: /vagrant/source/app/config/eccube/packages/framework.yaml
+        regexp: "%kernel.project_dir%/var/sessions"
+        replace: /tmp/ec-cube/sessions
     - name: execute compile
       composer:
         command: run
