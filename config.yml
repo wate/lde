@@ -88,8 +88,8 @@ wordpress:
     # WooCommerceのボイラープレートを生成するか否か
     woocommerce: false
 ec_cube:
-  app_env: prod
-  app_debug: false
+  app_env: dev
+  app_debug: true
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
 # ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
