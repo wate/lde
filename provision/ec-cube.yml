@@ -1,10 +1,17 @@
+- name: install php APCu module
+  yum:
+    name: php-pecl-apcu
 - name: create EC-CUBE output directory
   file:
-    path: /var/ec-cube
+    path: "{{ item }}"
     state: directory
     mode: "0777"
     owner: vagrant
     group: vagrant
+  with_items:
+    - /var/ec-cube
+    - /var/ec-cube/cache
+    - /var/ec-cube/log
 - name: check composer.json
   stat:
     path: /var/www/html/composer.json
@@ -33,7 +40,7 @@
         create: true
     - name: find replace setting files
       find:
-        paths: /vagrant/source/app/config/eccube/packages
+        paths: /var/www/html/app/config/eccube/packages
         recurse: true
         patterns: monolog.yml
       register: monolog_result
@@ -45,9 +52,17 @@
       with_items: "{{ monolog_result.files | map(attribute='path') | list }}"
     - name: replace session save directory setting
       replace:
-        path: /vagrant/source/app/config/eccube/packages/framework.yaml
+        path: /var/www/html/app/config/eccube/packages/framework.yaml
         regexp: "%kernel.project_dir%/var/sessions"
         replace: /var/ec-cube/sessions
+    - name: create cache directory symlink
+      file:
+        path: /var/www/html/var/{{ item }}
+        src: /var/ec-cube/{{ item }}
+        state: link
+      with_items:
+        - cache
+        - log
     - name: execute compile
       composer:
         command: run
