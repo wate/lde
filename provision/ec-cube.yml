@@ -1,3 +1,10 @@
+- name: create EC-CUBE output directory
+  file:
+    path: /var/ec-cube
+    state: directory
+    mode: "0777"
+    owner: vagrant
+    group: vagrant
 - name: check composer.json
   stat:
     path: /var/www/html/composer.json
@@ -24,25 +31,23 @@
           APP_DEBUG={{ '1' if ec_cube.app_debug|default(false) else '0' }}
           DATABASE_URL=mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}
         create: true
-    - name: find log setting files
+    - name: find replace setting files
       find:
         paths: /vagrant/source/app/config/eccube/packages
         recurse: true
         patterns: monolog.yml
-      register: result
-    - debug:
-        msg: "{{ result.files | map(attribute='path') | list }}"
-    - name: replace log directory
+      register: monolog_result
+    - name: replace log directory setting
       replace:
         path: "{{ item }}"
         regexp: "%kernel.logs_dir%"
-        replace: /tmp/ec-cube
-      with_items: "{{ result.files | map(attribute='path') | list }}"
-    - name: replace session save directory
+        replace: /var/ec-cube/log
+      with_items: "{{ monolog_result.files | map(attribute='path') | list }}"
+    - name: replace session save directory setting
       replace:
         path: /vagrant/source/app/config/eccube/packages/framework.yaml
         regexp: "%kernel.project_dir%/var/sessions"
-        replace: /tmp/ec-cube/sessions
+        replace: /var/ec-cube/sessions
     - name: execute compile
       composer:
         command: run
