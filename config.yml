@@ -90,6 +90,10 @@ wordpress:
 ec_cube:
   app_env: dev
   app_debug: false
+  admin_user: admin
+  admin_pass: password
+  admin_mail: EC-CUBE SHOP
+  shop_name: admin@example.com
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
 # ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
