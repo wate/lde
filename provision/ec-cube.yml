@@ -10,8 +10,8 @@
     group: vagrant
   with_items:
     - /var/ec-cube
-    - /var/ec-cube/cache
     - /var/ec-cube/log
+    - /var/ec-cube/sessions
 - name: check composer.json
   stat:
     path: /var/www/html/composer.json
@@ -53,8 +53,8 @@
         src: /var/ec-cube/{{ item }}
         state: link
       with_items:
-        - cache
         - log
+        - sessions
     - name: execute compile
       composer:
         command: run
