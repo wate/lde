@@ -30,6 +30,19 @@
         no_dev: true
         no_scripts: true
         working_dir: /var/www/html
+    - name: create cache setting files
+      blockinfile:
+        path: /var/www/html/app/config/eccube/packages/{{ item }}/framework.yaml
+        create: true
+        block: "{{ cache_setting | to_nice_yaml }}"
+      with_items:
+        - dev
+        - prod
+      vars:
+        cache_setting:
+          framework:
+            cache:
+              system: cache.adapter.apcu
     - name: find replace setting files
       find:
         paths: /var/www/html/app/config/eccube/packages
@@ -47,7 +60,7 @@
         path: /var/www/html/app/config/eccube/packages/framework.yaml
         regexp: "%kernel.project_dir%/var/sessions"
         replace: /var/ec-cube/sessions
-    - name: create cache directory symlink
+    - name: create symlink
       file:
         path: /var/www/html/var/{{ item }}
         src: /var/ec-cube/{{ item }}
