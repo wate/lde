@@ -100,7 +100,7 @@ ec_cube:
   # ## 店舗情報
   # ## --------------
   # # 店名
-  # shop_name: EC-CUBE SHOT
+  # shop_name: EC-CUBE SHOP
   # # 店名(カナ)
   # shop_kana: ""
   # # 店名(英語表記)
@@ -180,6 +180,50 @@ ec_cube:
   # ## --------------
   # # 認証キー設定
   # authentication_key: ""
+  ## --------------
+  ## プラグイン
+  ## ※プラグインのインストールを行う場合は、オーナーズストアの認証キーの設定を行ってください
+  ## --------------
+  # plugins:
+  #     # おすすめ商品管理プラグイン
+  #   - name: "Recommend4"
+  #     state: true
+  #     # 関連商品プラグイン
+  #   - name: "RelatedProduct4"
+  #     state: true
+  #     # 商品レビュー管理プラグイン
+  #   - name: "ProductReview4"
+  #     state: true
+  #     # メルマガ管理プラグイン
+  #   - name: "MailMagazine4"
+  #     state: true
+  #     # 売上集計プラグイン
+  #   - name: "SalesReport4"
+  #     state: true
+  #     # メーカー管理プラグイン
+  #   - name: "Maker4"
+  #     state: false
+  #     # AMPプラグイン
+  #   - name: "Amp4"
+  #     state: false
+  #     # クロネコヤマト　クレジットカード決済モジュール
+  #   - name: "YamatoPayment4"
+  #     # Amazon Payプラグイン
+  #   - name: "AmazonPay"
+  #     # ルミーズ決済プラグイン
+  #   - name: "RemisePayment4"
+  #     # EC-CUBEペイメント決済プラグイン
+  #   - name: "GmoPaymentGateway4"
+  #     # HubSpotプラグイン
+  #   - name: "HubSpot"
+  #     # Facebook連携プラグイン
+  #   - name: "FacebookAdsExtention"
+  #     # ソーシャルボタン追加プラグイン
+  #   - name: "MGSocialButton"
+  #     # カテゴリページ/コンテンツ追加
+  #   - name: "CategoryExtensionB"
+  #     # フラッシュセール プラグイン
+  #   - name: "FlashSale"
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
 # ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
