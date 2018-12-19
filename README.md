@@ -53,13 +53,14 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 ローカル開発環境の設定ファイルです。
 
-| 設定項目    | 内容                                          |
-| ----------- | --------------------------------------------- |
-| app_type    | ローカル開発環境の種別を設定します            |
-| domain      | ローカル開発環境のドメインを設定します        |
-| php_version | インストールするPHPのバージョンを指定します   |
-| wordpress   | WordPressのインストール設定を指定します       |
-| vagrant     | Vagrantで作成する仮想マシンの設定を指定します |
+| 設定項目    | 内容                                            |
+| ----------- | ----------------------------------------------- |
+| app_type    | ローカル開発環境の種別を設定します              |
+| domain      | ローカル開発環境のドメインを設定します          |
+| php_version | インストールするPHPのバージョンを指定します     |
+| wordpress   | WordPressのインストール時の各種設定を指定します |
+| ec_cube     | EC-CUBEのインストール時の各種設定を指定します   |
+| vagrant     | Vagrantで作成する仮想マシンの設定を指定します   |
 
 #### app_type
 
@@ -79,6 +80,10 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `wordpress_plugin`：
     * WordPressのプラグイン開発用の環境として利用できます。
     * `source`ディレクトリ直下がWordPressのプラグイン用ディレクトリとして設定されます。
+* `ec-cube`：
+    * EC-CUBE開発用の環境として利用できます。
+    * **※この設定は実験的な機能です。**
+    + 初回表示時はキャッシュが効いていないため表示に時間がかかります。
 
 #### domain
 
@@ -109,7 +114,15 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 `app_type`に`wordpress_theme`または`wordpress_plugin`を設定している場合に、  
 インストールするWordPressの情報を設定します。
 
-設定可能な項目に関しては[config.yml](https://github.com/wate/lde/blob/master/config.yml#L7-L77)内にコメントで記載しています。
+設定可能な項目に関しては`config.yml`の`wordpress`部分のコメントを参照してください。
+
+#### ec_cube
+
+`app_type`に`ec-cube`を設定している場合に、  
+インストールするEC-CUBEの情報を設定します。
+
+設定可能な項目に関しては`config.yml`の`ec_cube`部分のコメントを参照してください。
+
 
 ### extra_vars.yml
 
@@ -146,9 +159,10 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ※`app_type`に以下のいずれかが設定されている場合、  
 **app_dev** の接続設定が利用されています。
 
-* `wordpress_theme`
+* `wordpress`
 * `wordpress_theme`
 * `wordpress_plugin`
+* `ec-cube`
 
 ### Webサーバー
 
@@ -161,7 +175,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 また、`app_type`の設定に応じて`source`ディレクトリを  
 仮想マシンのディレクトリとして割り当てています。
 
-#### `default`が設定されている場合
+#### `wordpress_theme`または`wordpress_plugin`以外が設定されている場合
 
 仮想マシンの`/var/www/html`として割り当てています。
 
