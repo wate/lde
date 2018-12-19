@@ -31,7 +31,7 @@
     - role: xhgui
       tags: role_xhgui
   vars:
-    tbls_version: "1.7.0"
+    tbls_version: "1.7.1"
     tideware_version: 4.x
     tideware_extension_name: tideways
   tasks:
@@ -132,11 +132,15 @@
         owner: vagrant
         group: vagrant
         state: directory
-      when: app_type not in ['wordpress', 'default']
+      when: apache_vhosts[0].document_root != '/var/www/html'
     - name: setup WordPress
       import_tasks: wordpress.yml
       when: app_type.startswith('wordpress')
       tags: wordpress
+    - name: setup EC-CUBE
+      import_tasks: ec-cube.yml
+      when: app_type.startswith('ec-cube')
+      tags: ec-cube
     - name: create mysql connection file
       ini_file:
         path: ~/.my.cnf
