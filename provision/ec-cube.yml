@@ -125,21 +125,18 @@
     chdir: /vagrant/source
 - block:
     - name: install EC-CUBE plugins
-      command: bin/console eccube:composer:require "ec-cube/{{ item.name }}"
+      command: bin/console eccube:composer:require "ec-cube/{{ item.code }}"
       args:
         chdir: /vagrant/source
-        creates: /vagrant/source/app/Plugin/{{ item.name }}
+        creates: /vagrant/source/app/Plugin/{{ item.code }}
       with_items: "{{ ec_cube.plugins | default([]) }}"
-      register: plugin_install_results
     - name: change plugin status
-      command: bin/console eccube:plugin:{{ 'enable' if item.state else 'disable' }} --code="{{ item.name }}"
+      command: bin/console eccube:plugin:{{ 'enable' if item.status else 'disable' }} --code="{{ item.code }}"
       args:
         chdir: /vagrant/source
-      with_items: "{{ ec_cube.plugins | default([]) | selectattr('state', 'defined') | list }}"
-      register: plugin_status_results
+      with_items: "{{ ec_cube.plugins | default([]) | selectattr('status', 'defined') | list }}"
   become: false
 - name: clear EC-CUBE cache
   command: bin/console cache:clear --no-warmup
   args:
     chdir: /vagrant/source
-  when: plugin_install_results is changed or plugin_status_results is changed
