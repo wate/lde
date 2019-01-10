@@ -562,7 +562,15 @@ mycli_alias_dsn:
 #
 # dehydrated_hook_clean_challenge: |
 #   lexicon ${PROVIDER} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
-#
+
+# dehydrated_hook_deploy_cert: |
+#   if [ -e /etc/systemd/system/multi-user.target.wants/httpd.service ]; then
+#     /bin/systemctl reload httpd
+#   fi
+#   if [ -e /etc/systemd/system/multi-user.target.wants/nginx.service ]; then
+#     /bin/systemctl reload nginx
+#   fi
+
 # dehydrated_domains:
 #   - name: "{{ domain }}"
 #     domains:
