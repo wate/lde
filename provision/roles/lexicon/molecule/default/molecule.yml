@@ -1,0 +1,39 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+platforms:
+  - name: centos7
+    box: wate/centos-7
+    # memory: 512
+    # cpus: 2
+    provider_override_args:
+      - "vm.synced_folder '${MOLECULE_PROJECT_DIRECTORY}', '/vagrant'"
+    # instance_raw_config_args:
+    #   - "vm.network 'forwarded_port', guest: 80, host: 8080"
+    # provider_raw_config_args:
+    #   - "customize ['modifyvm', :id, '--cpuexecutioncap', '50']"
+lint:
+  name: yamllint
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      hash_behaviour: merge
+  options:
+    diff: true
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  options:
+    verbose: true
+  lint:
+    name: flake8
+    options:
+      ignore: E501

@@ -3,6 +3,19 @@ lexicon
 
 [lexicon](https://github.com/AnalogJ/lexicon)をインストールします
 
+
+Role Variables
+--------------
+
+### lexicon_additional_packages
+
+追加インストールするパッケージを指定します
+
+```yaml
+lexicon_additional_packages:
+  - python2-boto3
+```
+
 Example Playbook
 ----------------
 
@@ -11,6 +24,7 @@ Example Playbook
   roles:
      - { role: lexicon }
 ```
+
 License
 -------
 
