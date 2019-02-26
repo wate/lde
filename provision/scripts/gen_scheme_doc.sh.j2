@@ -2,7 +2,7 @@
 mkdir -p /vagrant/output/scheme
 
 TBLS_PARAMS=''
-if [ -f /vagrant/additional_data.yml ]; then
-  TBLS_PARAMS='--config /vagrant/additional_data.yml'
+if [ -f /vagrant/.tbls.yml ]; then
+  TBLS_PARAMS='--config /vagrant/.tbls.yml'
 fi
-/usr/local/bin/tbls doc mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost:3306/{{ mariadb_databases[0].name }} -f --er-format png --adjust-table ${TBLS_PARAMS} /vagrant/output/scheme
+/usr/local/bin/tbls doc mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost:3306/{{ mariadb_databases[0].name }} -f --er-format png --adjust-table ${TBLS_PARAMS}
