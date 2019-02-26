@@ -31,7 +31,7 @@
     - role: xhgui
       tags: role_xhgui
   vars:
-    tbls_version: "1.7.1"
+    tbls_version: "1.8.3"
     tideware_version: 4.x
     tideware_extension_name: tideways
   tasks:
@@ -124,7 +124,7 @@
         when: result.stat.exists
       become: false
       tags: prestissimo
-    - name: change group
+    - name: change owner on document root directory
       file:
         path: /var/www/html
         recurse: true
@@ -132,9 +132,9 @@
         owner: vagrant
         group: vagrant
         state: directory
-      when: apache_vhosts[0].document_root != '/var/www/html'
     - name: setup WordPress
       import_tasks: wordpress.yml
+      become: false
       when: app_type.startswith('wordpress')
       tags: wordpress
     - name: setup EC-CUBE
