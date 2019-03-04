@@ -7,7 +7,7 @@ docPath: /vagrant/output/scheme
 ## Data Source Name
 dsn: mysql://app_dev:app_dev_P455w0rd@localhost:3306/app_dev
 # dsn: postgres://app_dev:app_dev_P455w0rd@localhost:5432/app_dev
-# dsn: sqlite3:///vagrant/sample.gnucash
+# dsn: sqlite3:///vagrant/database.sqlite3
 ## Lint rule
 lint:
   requireTableComment:
