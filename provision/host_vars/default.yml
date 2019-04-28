@@ -99,6 +99,8 @@ php_cfg:
   display_errors: yes
   sendmail_path: /usr/local/bin/mhsendmail
   auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined and php_tideways_profiler_installed|default(false) else '' }}"
+  memory_limit: 512M
+  max_execution_time: 180
   extra_setting: |
     [tideways]
     tideways.auto_prepend_library = 0

@@ -31,14 +31,14 @@
     - role: xhgui
       tags: role_xhgui
   vars:
-    tbls_version: "1.8.3"
+    tbls_version: "1.11.1"
     tideware_version: 4.x
     tideware_extension_name: tideways
   tasks:
     - name: install php xdebug module
       yum:
         name: php-pecl-xdebug
-      when: php_xdebug_installed|default(false)
+      when: php_xdebug_installed | default(false)
     - name: install php tideways module
       block:
         - name: install php-devel package
