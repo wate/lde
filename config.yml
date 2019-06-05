@@ -186,42 +186,42 @@ ec_cube:
   ## --------------
   # plugins:
   #     # おすすめ商品管理プラグイン
-  #   - name: "Recommend4"
+  #   - code: "Recommend4"
   #     state: true
   #     # 関連商品プラグイン
-  #   - name: "RelatedProduct4"
+  #   - code: "RelatedProduct4"
   #     state: true
   #     # 商品レビュー管理プラグイン
-  #   - name: "ProductReview4"
+  #   - code: "ProductReview4"
   #     state: true
   #     # メルマガ管理プラグイン
-  #   - name: "MailMagazine4"
+  #   - code: "MailMagazine4"
   #     state: true
   #     # 売上集計プラグイン
-  #   - name: "SalesReport4"
+  #   - code: "SalesReport4"
   #     state: true
   #     # メーカー管理プラグイン
-  #   - name: "Maker4"
+  #   - code: "Maker4"
   #     state: false
   #     # AMPプラグイン
-  #   - name: "Amp4"
+  #   - code: "Amp4"
   #     state: false
   #     # クロネコヤマト　クレジットカード決済モジュール
-  #   - name: "YamatoPayment4"
+  #   - code: "YamatoPayment4"
   #     # Amazon Payプラグイン
-  #   - name: "AmazonPay"
+  #   - code: "AmazonPay"
   #     # ルミーズ決済プラグイン
-  #   - name: "RemisePayment4"
+  #   - code: "RemisePayment4"
   #     # EC-CUBEペイメント決済プラグイン
   #   - name: "GmoPaymentGateway4"
   #     # HubSpotプラグイン
-  #   - name: "HubSpot"
+  #   - code: "HubSpot"
   #     # Facebook連携プラグイン
   #   - name: "FacebookAdsExtention"
   #     # ソーシャルボタン追加プラグイン
-  #   - name: "MGSocialButton"
+  #   - code: "MGSocialButton"
   #     # カテゴリページ/コンテンツ追加
-  #   - name: "CategoryExtensionB"
+  #   - code: "CategoryExtensionB"
   #     # フラッシュセール プラグイン
   #   - name: "FlashSale"
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
