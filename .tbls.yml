@@ -2,13 +2,29 @@
 # --------------
 # tbls config file
 # --------------
-## Output Directry
+### Output Directry
 docPath: /vagrant/output/schema
-## Data Source Name
+### Data Source Name
 dsn: mysql://app_dev:app_dev_P455w0rd@localhost:3306/app_dev
 # dsn: postgres://app_dev:app_dev_P455w0rd@localhost:5432/app_dev
 # dsn: sqlite3:///vagrant/database.sqlite3
-## Lint rule
+### Table format
+format:
+  # Adjust the column width of Markdown format table
+  # Default is false
+  adjust: true
+  # Sort the order of table list and  columns
+  # Default is false
+  sort: false
+### ER diagram
+er:
+  # ER diagram format
+  # Default is `png`
+  format: png
+  # Skip generation of ER diagram
+  # Default is false
+  skip: false
+### Lint
 lint:
   requireTableComment:
     enabled: true
@@ -19,6 +35,27 @@ lint:
   columnCount:
     enabled: true
     max: 10
+### Exclude tables
+# exclude:
+#   - logs
+#   - CamelizeTable
+### Comments
+# comments:
+#   - table: posts
+#     columnComments:
+#       body: post body
+#   - table: logs
+#     tableComment: audit log table
+#   - table: post_comments
+#     tableComment: post and comments View table
+#     columnComments:
+#       id: comments.id
+#       title: posts.title
+#       post_user: posts.users.username
+#       comment_user: comments.users.username
+#       created: comments.created
+#       updated: comments.updated
+### Relations
 # relations:
 #   - table: logs
 #     columns:
@@ -45,18 +82,3 @@ lint:
 #     parentTable: comment_stars
 #     parentColumns:
 #       - id
-# comments:
-#   - table: posts
-#     columnComments:
-#       body: post body
-#   - table: logs
-#     tableComment: audit log table
-#   - table: post_comments
-#     tableComment: post and comments View table
-#     columnComments:
-#       id: comments.id
-#       title: posts.title
-#       post_user: posts.users.username
-#       comment_user: comments.users.username
-#       created: comments.created
-#       updated: comments.updated

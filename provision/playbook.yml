@@ -31,7 +31,7 @@
     - role: xhgui
       tags: role_xhgui
   vars:
-    tbls_version: "1.11.1"
+    tbls_version: "1.16.0"
     tideware_version: 4.x
     tideware_extension_name: tideways
   tasks:
