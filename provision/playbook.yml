@@ -31,8 +31,8 @@
     - role: xhgui
       tags: role_xhgui
   vars:
-    tbls_version: "1.16.1"
-    tideware_version: 4.x
+    tbls_version: "1.17.0"
+    tideware_version: "4.x"
     tideware_extension_name: tideways
   tasks:
     - name: install php xdebug module
@@ -83,7 +83,7 @@
         name: graphviz
     - name: download tbls
       get_url:
-        url: https://github.com/k1LoW/tbls/releases/download/v{{ tbls_version }}/tbls_v{{ tbls_version }}_linux_amd64.tar.gz
+        url: "https://github.com/k1LoW/tbls/releases/download/v{{ tbls_version }}/tbls_v{{ tbls_version }}_linux_amd64.tar.gz"
         dest: /usr/local/src/tbls_v{{ tbls_version }}_linux_amd64.tar.gz
     - name: unarchive tbls archive file
       unarchive:
@@ -93,8 +93,6 @@
           - LICENSE
           - README.md
           - CHANGELOG.md
-        extra_opts:
-          - '--strip=1'
         owner: root
         group: root
         remote_src: true
