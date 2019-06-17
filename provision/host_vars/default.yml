@@ -15,7 +15,7 @@ mariadb_root_password: &db_root_password r00tP455w0rd
 # - 7.2
 # - 7.3
 # --------------
-php_version: 7.2
+php_version: 7.3
 
 # --------------
 # MariaDB用のfirewalld設定
