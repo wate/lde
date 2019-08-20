@@ -25,9 +25,9 @@ php_cfg:
   #################
   # Language Options
   #################
-  engine: yes
-  short_open_tag: no
-  asp_tags: no
+  engine: true
+  short_open_tag: false
+  asp_tags: false
   precision: 14
   output_buffering: 4096
   # output_handler: ""
@@ -35,10 +35,10 @@ php_cfg:
   #   tags: "form="
   #   hosts:
   zlib:
-    output_compression: no
+    output_compression: false
     # output_compression_level: -1
     # output_handler: ""
-  implicit_flush: no
+  implicit_flush: false
   unserialize_callback_func: ""
   serialize_precision: -1
   # open_basedir: ""
@@ -50,18 +50,18 @@ php_cfg:
   #   keyword: #007700
   #   default: #0000BB
   #   html: #000000
-  # ignore_user_abort: yes
+  # ignore_user_abort: true
   # realpath_cache_size: 16k
   # realpath_cache_ttl: 120
   zend:
-    enable_gc: yes
-  #  multibyte: no
+    enable_gc: true
+  #  multibyte: false
   #  script_encoding: ""
     assertions: -1
   #################
   # Miscellaneous
   #################
-  expose_php: yes
+  expose_php: true
   #################
   # Resource Limits
   #################
@@ -74,18 +74,18 @@ php_cfg:
   # Error handling and logging
   #################
   error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-  display_errors: no
-  display_startup_errors: no
-  log_errors: yes
+  display_errors: false
+  display_startup_errors: false
+  log_errors: true
   log_errors_max_len: 1024
-  ignore_repeated_errors: no
-  ignore_repeated_source: no
-  report_memleaks: yes
+  ignore_repeated_errors: false
+  ignore_repeated_source: false
+  report_memleaks: true
   # report_zend_debug: 0
-  track_errors: no
+  track_errors: false
   # xmlrpc_errors: 0
   # xmlrpc_error_number: 0
-  html_errors: yes
+  html_errors: true
   # docref_root: /phpmanual/
   # docref_ext: .html
   # error_prepend_string: ""
@@ -99,9 +99,9 @@ php_cfg:
   #   input: "&"
   variables_order: GPCS
   request_order: GP
-  register_argc_argv: no
-  auto_globals_jit: yes
-  # enable_post_data_reading: no
+  register_argc_argv: false
+  auto_globals_jit: true
+  # enable_post_data_reading: false
   post_max_size: 8M
   auto_prepend_file: ""
   auto_append_file: ""
@@ -119,7 +119,7 @@ php_cfg:
   user_dir: ""
   # extension_dir: "./"
   # sys_temp_dir: "/tmp"
-  enable_dl: no
+  enable_dl: false
   # cgi:
   #   force_redirect: 1
   #   nph: 1
@@ -134,24 +134,24 @@ php_cfg:
   #################
   # File Uploads
   #################
-  file_uploads: yes
+  file_uploads: true
   # upload_tmp_dir: "/tmp"
   upload_max_filesize: 2M
   max_file_uploads: 20
   #################
   # Fopen wrappers
   #################
-  allow_url_fopen: yes
-  allow_url_include: no
+  allow_url_fopen: true
+  allow_url_include: false
   # from: "john@doe.com"
   # user_agent: PHP
   default_socket_timeout: 60
-  # auto_detect_line_endings: no
+  # auto_detect_line_endings: false
   #################
   # Module Settings
   #################
   cli_server:
-    color: yes
+    color: true
   date:
     timezone: Asia/Tokyo
   #  default_latitude: 31.7667
@@ -183,23 +183,23 @@ php_cfg:
     cache_size: 2000
     default_socket: ""
   # phar:
-  #   readonly: yes
-  #   require_hash: yes
+  #   readonly: true
+  #   require_hash: true
   #   cache_list: ""
   sendmail_path: "/usr/sbin/sendmail -t -i"
   mail:
   #   force_extra_parameters: ""
-    add_x_header: yes
+    add_x_header: true
   #   log:
   sql:
-    safe_mode: no
+    safe_mode: false
   odbc:
   #   default_db: ""
   #   default_user: ""
   #   default_pw: ""
   #   default_cursortype: ""
-    allow_persistent: yes
-    check_persistent: yes
+    allow_persistent: true
+    check_persistent: true
     max_persistent: -1
     max_links: -1
     defaultlrl: 4096
@@ -218,8 +218,8 @@ php_cfg:
     dateformat: "%Y-%m-%d"
     timeformat: "%H:%M:%S"
   mysql:
-    allow_local_infile: yes
-    allow_persistent: yes
+    allow_local_infile: true
+    allow_persistent: true
     cache_size: 2000
     max_persistent: -1
     max_links: -1
@@ -229,11 +229,11 @@ php_cfg:
     default_user: ""
     default_password: ""
     connect_timeout: 60
-    trace_mode: no
+    trace_mode: false
   mysqli:
     max_persistent: -1
-    # allow_local_infile: yes
-    allow_persistent: yes
+    # allow_local_infile: true
+    allow_persistent: true
     max_links: -1
     cache_size: 2000
     default_port: 3306
@@ -241,10 +241,10 @@ php_cfg:
     default_host: ""
     default_user: ""
     default_pw: ""
-    reconnect: no
+    reconnect: false
   mysqlnd:
-    collect_statistics: yes
-    collect_memory_statistics: no
+    collect_statistics: true
+    collect_memory_statistics: false
     # net_cmd_buffer_size: 2048
     # net_read_buffer_size: 32768
     # net_read_timeout: 31536000
@@ -253,8 +253,8 @@ php_cfg:
     # mempool_default_size: 16000
     # sha256_server_public_key:
   pgsql:
-    allow_persistent: yes
-    auto_reset_persistent: no
+    allow_persistent: true
+    auto_reset_persistent: false
     max_persistent: -1
     max_links: -1
     ignore_notice: 0
@@ -265,16 +265,16 @@ php_cfg:
   session:
     save_handler: files
     # save_path: /tmp
-    use_strict_mode: no
-    use_cookies: yes
-    cookie_secure: no
-    use_only_cookies: yes
+    use_strict_mode: false
+    use_cookies: true
+    cookie_secure: false
+    use_only_cookies: true
     name: PHPSESSID
-    auto_start: no
+    auto_start: false
     cookie_lifetime: 0
     cookie_path: /
     cookie_domain: ""
-    cookie_httponly: no
+    cookie_httponly: false
     serialize_handler: php
     gc_probability: 1
     gc_divisor: 1000
@@ -284,7 +284,7 @@ php_cfg:
     entropy_file: /dev/urandom
     cache_limiter: nocache
     cache_expire: 180
-    use_trans_sid: no
+    use_trans_sid: false
     sid_length: 26
     trans_sid_tags: "a=href,area=href,frame=src,form="
     # trans_sid_hosts:
@@ -293,32 +293,32 @@ php_cfg:
     hash_function: 0
   #   lazy_write: On
   #   upload_progress:
-  #     enabled: yes
-  #     cleanup: yes
+  #     enabled: true
+  #     cleanup: true
   #     prefix: upload_progress_
   #     name: PHP_SESSION_UPLOAD_PROGRESS
   #     freq:  1%
   #     min_freq: 1
   # assert:
-  #   active: yes
-  #   warning: yes
-  #   bail: no
+  #   active: true
+  #   warning: true
+  #   bail: false
   #   callback: 0
   #   quiet_eval: 0
-  #   exception: yes
+  #   exception: true
   # mbstring:
   #   language: Japanese
   #   internal_encoding: ""
   #   http_input: ""
   #   http_output: ""
-  #   encoding_translation: no
+  #   encoding_translation: false
   #   detect_order: auto
   #   substitute_character: none
   #   func_overload: 0
-  #   strict_detection: yes
+  #   strict_detection: true
   #   http_output_conv_mimetype: ""
   # gd:
-  #   jpeg_ignore_warning: yes
+  #   jpeg_ignore_warning: true
   # exif:
   #   encode_unicode: ISO-8859-15
   #   decode_unicode_motorola: UCS-2BE
@@ -328,7 +328,7 @@ php_cfg:
   #   decode_jis_intel  : JIS
   tidy:
   #   default_config: /usr/local/lib/php/default.tcfg
-    clean_output: no
+    clean_output: false
   soap:
     wsdl_cache_enabled: 1
     wsdl_cache_dir: /tmp
@@ -349,23 +349,23 @@ php_cfg:
   #   cafile: ""
   #   capath: ""
   # opcache:
-  #   enable: yes
-  #   enable_cli: no
+  #   enable: true
+  #   enable_cli: false
   #   memory_consumption: 128
   #   interned_strings_buffer: 8
   #   max_accelerated_files: 4000
   #   max_wasted_percentage: 5
-  #   use_cwd: yes
-  #   validate_timestamps: yes
+  #   use_cwd: true
+  #   validate_timestamps: true
   #   revalidate_freq: 2
-  #   revalidate_path: no
-  #   save_comments: yes
-  #   load_comments: yes
-  #   fast_shutdown: yes
-  #   enable_file_override: no
+  #   revalidate_path: false
+  #   save_comments: true
+  #   load_comments: true
+  #   fast_shutdown: true
+  #   enable_file_override: false
   #   optimization_level: "0x7FFFBFFF"
-  #   inherited_hack: yes
-  #   dups_fix: no
+  #   inherited_hack: true
+  #   dups_fix: false
   #   blacklist_filename: "/etc/php.d/opcache*.blacklist"
   #   max_file_size: 0
   #   force_restart_timeout: 180
