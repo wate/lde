@@ -176,7 +176,7 @@
             create: true
             section: alias_dsn
             option: "{{ item.key }}"
-            value: "{{ item.value }}"
+            value: "{{ item.value | string }}"
           with_dict: "{{ mycli_alias_dsn }}"
           become: false
         - name: create mycli connection setting file
@@ -185,7 +185,7 @@
             create: true
             section: client
             option: "{{ item.key|replace('_', '-') }}"
-            value: "{{ item.value }}"
+            value: "{{ item.value | string }}"
           with_dict:
             host: localhost
             database: "{{ mariadb_databases[0].name }}"
