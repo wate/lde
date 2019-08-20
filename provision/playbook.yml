@@ -145,7 +145,7 @@
         create: true
         section: client
         option: "{{ item.key|replace('_', '-') }}"
-        value: "{{ item.value }}"
+        value: "{{ item.value | string }}"
       with_dict:
         host: localhost
         database: "{{ mariadb_databases[0].name }}"
@@ -167,7 +167,7 @@
             create: true
             section: main
             option: "{{ item.key }}"
-            value: "{{ item.value }}"
+            value: "{{ item.value | string }}"
           with_dict: "{{ mycli_main_cfg }}"
           become: false
         - name: add mycli dsn alias
