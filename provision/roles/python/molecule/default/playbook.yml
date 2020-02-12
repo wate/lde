@@ -4,20 +4,20 @@
   gather_facts: true
   become: true
   roles:
-    - role: lexicon
+    - role: _skeleton
   pre_tasks:
     - name: dump vars
       block:
         - name: create dump directory
           file:
-            path: tests/__pycache__
+            path: dump_vars
             state: directory
           changed_when: false
         - name: dump vars
           blockinfile:
-            path: "tests/__pycache__/{{ inventory_hostname }}.yml"
+            path: "dump_vars/{{ inventory_hostname }}.yml"
             create: true
-            block: "{{ vars | to_nice_yaml }}"
+            block: "{{ vars | to_json }}"
           changed_when: false
       connection: local
       become: false

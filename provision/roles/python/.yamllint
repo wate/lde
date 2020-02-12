@@ -1,4 +1,8 @@
+---
+# Based on ansible-lint config
 extends: default
+ignore: |
+  dump_vars/
 
 rules:
   braces:
@@ -7,7 +11,25 @@ rules:
   brackets:
     max-spaces-inside: 1
     level: error
+  colons:
+    max-spaces-after: -1
+    level: error
+  commas:
+    max-spaces-after: -1
+    level: error
+  comments: disable
   comments-indentation: disable
-  line-length:
-    max: 120
-    level: warning
+  document-start: disable
+  empty-lines:
+    max: 3
+    level: error
+  hyphens:
+    level: error
+  indentation: disable
+  key-duplicates: enable
+  line-length: disable
+  new-line-at-end-of-file: disable
+  new-lines:
+    type: unix
+  trailing-spaces: disable
+  truthy: disable
