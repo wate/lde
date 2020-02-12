@@ -5,5 +5,7 @@
 ### Vagrant ###
 .vagrant/
 
+### Other ###
 source/
 wiki/
+provision/mitogen

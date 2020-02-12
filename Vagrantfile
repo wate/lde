@@ -112,6 +112,7 @@ Vagrant.configure("2") do |config|
     end
     ansible_extra_vars.merge!(ansible_custom_vars);
   end
+
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
     config.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"
@@ -124,8 +125,13 @@ Vagrant.configure("2") do |config|
     end
   else
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "provision/playbook.yml"
+      ansible.playbook = "provision/install_mitogen.yml"
       ansible.config_file = "provision/ansible.cfg"
+      ansible.compatibility_mode = "2.0"
+    end
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "provision/playbook.yml"
+      ansible.config_file = "provision/ansible_with_mitogen.cfg"
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
       ansible.groups = {

@@ -14,7 +14,7 @@
   systemd:
     name: mariadb
     state: started
-    enabled: yes
+    enabled: true
 - name: check root user connection setting
   stat:
     path: /root/.my.cnf
@@ -41,7 +41,7 @@
     option: "{{ item.option }}"
     value: "{{ item.value }}"
     mode: "0600"
-    create: yes
+    create: true
   with_items:
     - option: host
       value: localhost
@@ -87,8 +87,7 @@
 - name: allow MariaDB port
   firewalld:
     service: mysql
-    source: "{{ mariadb_allow_host }}"
-    permanent: yes
+    permanent: true
     state: enabled
-  when: mariadb_allow_host is defined
+  when: mariadb_allow_connect_other_host | default(false)
   notify: restart firewalld

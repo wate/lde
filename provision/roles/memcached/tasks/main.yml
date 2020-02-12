@@ -11,11 +11,11 @@
   systemd:
     name: memcached
     state: started
-    enabled: yes
+    enabled: true
 - name: allow memcached port
   firewalld:
     port: "{{ memcached_cfg.port|default(11211) }}/tcp"
-    permanent: yes
+    permanent: true
     state: enabled
   when: memcached_allow_host is defined
   notify: restart firewalld

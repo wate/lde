@@ -1,0 +1,31 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    xhgui_cfg:
+      dbtype: mysql
+      dbhost: localhost
+      dbuser: root
+      dbpass: "{{ mariadb_root_password }}"
+      dbname: xhprof
+  roles:
+    - role: mariadb
+    - role: xhgui
+  pre_tasks:
+    - name: dump vars
+      block:
+        - name: create dump directory
+          file:
+            path: dump_vars
+            state: directory
+          changed_when: false
+        - name: dump vars
+          blockinfile:
+            path: "dump_vars/{{ inventory_hostname }}.yml"
+            create: true
+            block: "{{ vars | to_json }}"
+          changed_when: false
+      connection: local
+      become: false
