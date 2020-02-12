@@ -4,8 +4,6 @@ mariadb_packages:
   - mariadb-server
   - mariadb-libs
 
-# mariadb_allow_host: "192.168.33.0/24"
-
 mariadb_root_password: rootP@55w0rd
 
 mariadb_default_charset: utf8
@@ -143,3 +141,6 @@ mariadb_cfg:
   # mysqld_safe:
   #   datadir: /var/lib/mysql
   #   socket: /var/run/mysqld/mysqld.sock
+
+
+# mariadb_allow_connect_other_host: true
