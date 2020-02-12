@@ -29,8 +29,15 @@
     name: firewalld
     state: started
     enabled: yes
+- name: get system locale
+  shell: |
+    set -o pipefail
+    localectl | grep "System Locale:"
+  register: result
+  changed_when: false
 - name: set locale
   command: localectl set-locale LANG=ja_JP.utf8
+  when: "'LANG=ja_JP.utf8' not in result.stdout"
   tags:
     - skip_ansible_lint
 - name: setup etckeeper
