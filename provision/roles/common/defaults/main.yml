@@ -56,11 +56,17 @@ common_cron_geoip_update:
   hour: 4
   minute: 0
 
-common_root_lock: no
+# common_root_lock: no
 
-fail2ban_jail_cfg:
-  sshd:
-    enabled: yes
+fail2ban_cfg: |
+  #[DEFAULT]
+  #bantime  = 10m
+  #findtime  = 10m
+  #maxretry = 5
+  #sender = root@<fq-hostname>
+  #destemail = root@localhost
+  [sshd]
+  enabled = true
 
 sudo_require_password: no
 
