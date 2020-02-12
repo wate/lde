@@ -1,0 +1,27 @@
+app_type: "default"
+domain: "example.com"
+
+# ----------
+# PHPのバージョン
+# 5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2 / 7.3
+# ----------
+# php_version: 7.2
+
+# ----------
+# Xdebugをインストールするか否かを指定します
+# ----------
+# php_xdebug_installed: no
+
+# ----------
+# Tideways XHProf Extensionをインストールするか否かを指定します
+# https://github.com/tideways/php-xhprof-extension
+# ----------
+# php_tideways_profiler_installed: no
+
+# ----------
+# Slim用の設定
+# ----------
+# ドキュメントルート
+doc_root_suffix: /public
+# アプリケーションのスケルトン
+php_project_skeleton: slim/slim-skeleton
