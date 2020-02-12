@@ -9,15 +9,15 @@ dehydrated_cfg:
   openssl_cnf: ""
   openssl: openssl
   curl_opts: ""
-  hook_chain: no
+  hook_chain: false
   renew_days: 30
-  private_key_renew: yes
-  private_key_rollover: no
+  private_key_renew: true
+  private_key_rollover: false
   key_algo: rsa
   contact_email: ""
-  ocsp_must_staple: no
-  ocsp_fetch: no
-  auto_cleanup: no
+  ocsp_must_staple: false
+  ocsp_fetch: false
+  auto_cleanup: false
   api: auto
 
 dehydrated_domains: []
@@ -28,7 +28,7 @@ dehydrated_domains: []
   # - name: example.net
   #   domains: example.net
 
-dehydrated_auto_execute: no
+dehydrated_auto_execute: false
 
 dehydrated_cron:
   hour: 4
@@ -37,7 +37,9 @@ dehydrated_cron:
 dehydrated_hook_initialize: ""
 dehydrated_hook_deploy_challenge: ""
 dehydrated_hook_clean_challenge: ""
+dehydrated_hook_sync_cert: ""
 dehydrated_hook_deploy_cert: ""
+dehydrated_hook_deploy_ocsp: ""
 dehydrated_hook_unchanged_cert: ""
 dehydrated_hook_invalid_challenge: ""
 dehydrated_hook_request_failure: ""
