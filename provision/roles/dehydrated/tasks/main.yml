@@ -23,7 +23,13 @@
   register: result
 - name: register account key
   command: dehydrated --register --accept-terms
-  when: result.files|length == 0
+  when: result.files | length == 0
 - name: sign/renew non-existent/changed/expiring certificates
   command: dehydrated --cron
   when: dehydrated_auto_execute
+- name: register cron job
+  cron:
+    name: update SSL certificate
+    job: dehydrated --cron
+    hour: "{{ dehydrated_cron.hour | string }}"
+    minute: "{{ dehydrated_cron.minute | string }}"
