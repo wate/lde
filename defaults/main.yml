@@ -70,5 +70,63 @@ fail2ban_cfg: |
 
 sudo_require_password: no
 
+yum_cron_daily_cfg: []
+  # ## Update Setting
+  # - section: commands
+  #   name: update_cmd
+  #   # default / security / security-severity:Critical / minimal / minimal-security / minimal-security-severity:Critical
+  #   value: default
+  # - section: commands
+  #   name: update_messages
+  #   value: "yes"
+  # - section: commands
+  #   name: download_updates
+  #   value: "yes"
+  # - section: commands
+  #   name: apply_updates
+  #   value: "no"
+  # - section: commands
+  #   name: random_sleep
+  #   value: 360
+  # ## Email Setting
+  # - section: email
+  #   name: email_from
+  #   value: root@localhost
+  # - section: email
+  #   name: email_to
+  #   value: root
+  # - section: email
+  #   name: email_host
+  #   value: localhost
+
+yum_cron_hourly_cfg: []
+  # ## Update Setting
+  # - section: commands
+  #   name: update_cmd
+  #   # default / security / security-severity:Critical / minimal / minimal-security / minimal-security-severity:Critical
+  #   value: default
+  # - section: commands
+  #   name: update_messages
+  #   value: "no"
+  # - section: commands
+  #   name: download_updates
+  #   value: "no"
+  # - section: commands
+  #   name: apply_updates
+  #   value: "no"
+  # - section: commands
+  #   name: random_sleep
+  #   value: 15
+  # ## Email Setting
+  # - section: email
+  #   name: email_from
+  #   value: root
+  # - section: email
+  #   name: email_to
+  #   value: root
+  # - section: email
+  #   name: email_host
+  #   value: localhost
+
 common_swap_dest: /var/spool/swap/swapfile
 common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000)|round(1, 'floor')|float * 2)|int }}"
