@@ -18,6 +18,7 @@ common_packages:
   - vim-enhanced
   - bash-completion
   - tig
+  - postfix
 
 common_groups: []
   # - name: group1
@@ -32,7 +33,7 @@ common_groups: []
 common_users: []
   # - name: sample_user
   #   # Optional
-  #   password: "{{ 'password'|password_hash('sha512') }}"
+  #   password: "{{ 'password' | password_hash('sha512') }}"
   #   groups:
   #     - group1
   #     - group2
@@ -40,10 +41,32 @@ common_users: []
   #     - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
   #     - https://github.com/wate.keys
   #   shell: /bin/nologin
+  #   cron_jobs:
+  #     - name: display date
+  #       job: date
+  #       minute: 1
+  #       hour: 2
+  #       day: 3
+  #       month: 4
+  #       weekday: 5
+  #     - name: disable job
+  #       job: mkr wrap -- /path/to/your-batch
+  #       day: 2
+  #       disable: true
+  #     - name: remove job
+  #       job: mkr wrap -- /path/to/your-batch
+  #       day: 3
+  #       remove: true
+  #   cron_vars:
+  #     - name: EMAIL
+  #       value: test@example.com
+  #     - name: SOME_NAME
+  #       value: SOME_VALUE
+  #       remove: true
+  #       admin: false
+  #   system: true
   #   id: 100000
-  #   system: yes
-  #   admin: no
-  #   remove: yes
+  #   remove: true
 
 common_hostname: "{{ inventory_hostname }}"
 
