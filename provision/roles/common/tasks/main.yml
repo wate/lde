@@ -43,6 +43,9 @@
 - name: setup etckeeper
   import_tasks: etckeeper.yml
   tags: etckeeper
+- name: setup yum-cron
+  import_tasks: yum-cron.yml
+  tags: yum-cron
 - name: check ansible manage cron job file
   stat:
     path: /etc/cron.d/ansible_management_job

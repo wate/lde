@@ -4,15 +4,15 @@
   gather_facts: true
   become: true
   vars:
-    yum_cron_daily_cfg:
-      - section: commands
-        name: update_cmd
-        value: security
-      - section: commands
-        name: apply_updates
-        value: "yes"
+    mackerel_agent_api_key: abcdefg
+    mackerel_agent_active_and_enabled_on_system_startup: false
+    mackerel_agent_extra_setting: |
+      [plugin.checks.la]
+      command = "check-load -w 3,2,1 -c 3,2,1"
+      action = { command = "bash -c '[ \"$MACKEREL_STATUS\" != \"OK\" ]' && date >> /var/log/ps-auxf.txt && ps auxf >> /var/log/ps-auxf.txt", user = "root" }
+      memo = "LAをチェックし、高騰したときにはそのときの ps auxf の結果を出力します"
   roles:
-    - role: common
+    - role: mackerel-agent
   pre_tasks:
     - name: dump vars
       block:
