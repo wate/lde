@@ -15,7 +15,7 @@
 ; 5. The web server's directory (for SAPI modules), or directory of PHP
 ; (otherwise in Windows)
 ; 6. The directory from the --with-config-file-path compile time option, or the
-; Windows directory (C:\windows or C:\winnt)
+;  Windows directory (usually C:\windows)
 ; See the PHP docs for more specific information.
 ; http://php.net/configuration.file
 
@@ -83,7 +83,7 @@
 ; development version only in development environments, as errors shown to
 ; application users can inadvertently leak otherwise secure information.
 
-; This is php.ini-production INI file.
+; This is the php.ini-production INI file.
 
 ;;;;;;;;;;;;;;;;;;;
 ; Quick Reference ;
@@ -172,6 +172,10 @@
 ;;;;;;;;;;;;;;;;;;;;
 ; Name for user-defined php.ini (.htaccess) files. Default is ".user.ini"
 ;user_ini.filename = ".user.ini"
+
+; To disable this feature set this option to an empty value
+;user_ini.filename =
+
 {% if php_cfg.user_ini is defined and php_cfg.user_ini.filename is defined -%}
 user_ini.filename = {{ php_cfg.user_ini.filename }}
 {% endif %}
@@ -267,7 +271,7 @@ output_handler = {{ php_cfg.output_handler }}
 url_rewriter.tags = "{{ php_cfg.url_rewriter.tags }}"
 {% endif %}
 
-; URL rewriter will not rewrites absolute URL nor form by default. To enable
+; URL rewriter will not rewrite absolute URL nor form by default. To enable
 ; absolute URL rewrite, allowed hosts must be defined at RUNTIME.
 ; Refer to session.trans_sid_hosts for more details.
 ; Default Value: ""
@@ -322,7 +326,7 @@ implicit_flush = {{ 'On' if php_cfg.implicit_flush else 'Off' }}
 ; callback-function.
 unserialize_callback_func = {{ php_cfg.unserialize_callback_func }}
 
-; When floats & doubles are serialized store serialize_precision significant
+; When floats & doubles are serialized, store serialize_precision significant
 ; digits after the floating point. The default value ensures that when floats
 ; are decoded with unserialize, the data will remain the same.
 ; The value is also used for json_encode when encoding double values.
@@ -333,6 +337,7 @@ serialize_precision = {{ php_cfg.serialize_precision }}
 ; open_basedir, if set, limits all file operations to the defined directory
 ; and below.  This directive makes most sense if used in a per-directory
 ; or per-virtualhost web server configuration file.
+; Note: disables the realpath cache
 ; http://php.net/open-basedir
 ;open_basedir =
 {% if php_cfg.open_basedir is defined -%}
@@ -386,8 +391,9 @@ ignore_user_abort = {{ 'On' if php_cfg.ignore_user_abort else 'Off' }}
 ; Determines the size of the realpath cache to be used by PHP. This value should
 ; be increased on systems where PHP opens many files to reflect the quantity of
 ; the file operations performed.
+; Note: if open_basedir is set, the cache is disabled
 ; http://php.net/realpath-cache-size
-;realpath_cache_size = 16k
+;realpath_cache_size = 4096k
 {% if php_cfg.realpath_cache_size is defined -%}
 realpath_cache_size = {{ php_cfg.realpath_cache_size }}
 {% endif %}
@@ -595,8 +601,9 @@ report_zend_debug = {{ php_cfg.report_zend_debug }}
 ; Store the last error/warning message in $php_errormsg (boolean). Setting this value
 ; to On can assist in debugging and is appropriate for development servers. It should
 ; however be disabled on production servers.
+; This directive is DEPRECATED.
 ; Default Value: Off
-; Development Value: On
+; Development Value: Off
 ; Production Value: Off
 ; http://php.net/track-errors
 track_errors = {{ 'On' if php_cfg.track_errors else 'Off' }}
@@ -669,10 +676,38 @@ error_append_string = {{ php_cfg.error_append_string }}
 ; http://php.net/error-log
 ; Example:
 ;error_log = php_errors.log
-; Log errors to syslog.
+; Log errors to syslog (Event Log on Windows).
 ;error_log = syslog
 {% if php_cfg.error_log is defined -%}
 error_log = {{ php_cfg.error_log }}
+{% endif %}
+
+; The syslog ident is a string which is prepended to every message logged
+; to syslog. Only used when error_log is set to syslog.
+;syslog.ident = php
+{% if php_cfg.syslog is defined and php_cfg.syslog.ident is defined -%}
+syslog.ident = {{ php_cfg.syslog.ident }}
+{% endif %}
+
+; The syslog facility is used to specify what type of program is logging
+; the message. Only used when error_log is set to syslog.
+;syslog.facility = user
+{% if php_cfg.syslog is defined and php_cfg.syslog.facility is defined -%}
+syslog.facility = {{ php_cfg.syslog.facility }}
+{% endif %}
+
+; Set this to disable filtering control characters (the default).
+; Some loggers only accept NVT-ASCII, others accept anything that's not
+; control characters. If your logger accepts everything, then no filtering
+; is needed at all.
+; Allowed values are:
+;   ascii (all printable ASCII characters and NL)
+;   no-ctrl (all characters except control characters)
+;   all (all characters)
+; http://php.net/syslog.filter
+;syslog.filter = ascii
+{% if php_cfg.syslog is defined and php_cfg.syslog.filter is defined -%}
+syslog.filter = {{ php_cfg.syslog.filter }}
 {% endif %}
 
 ;windows.show_crt_warning
@@ -924,7 +959,7 @@ cgi.fix_pathinfo = {{ php_cfg.cgi.fix_pathinfo }}
 cgi.discard_path = {{ php_cfg.cgi.discard_path }}
 {% endif %}
 
-; FastCGI under IIS (on WINNT based OS) supports the ability to impersonate
+; FastCGI under IIS supports the ability to impersonate
 ; security tokens of the calling client.  This allows IIS to define the
 ; security context that the request runs under.  mod_fastcgi under Apache
 ; does not currently support this feature (03/17/2002)
@@ -1036,22 +1071,21 @@ auto_detect_line_endings = {{ 'On' if php_cfg.auto_detect_line_endings else 'Off
 ; If you wish to have an extension loaded automatically, use the following
 ; syntax:
 ;
-;   extension=modulename.extension
+;   extension=modulename
 ;
-; For example, on Windows:
+; For example:
 ;
-;   extension=msql.dll
+;   extension=mysqli
 ;
-; ... or under UNIX:
+; When the extension library to load is not located in the default extension
+; directory, You may specify an absolute path to the library file:
 ;
-;   extension=msql.so
+;   extension=/path/to/extension/mysqli.so
 ;
-; ... or with a path:
-;
-;   extension=/path/to/extension/msql.so
-;
-; If you only provide the name of the extension, PHP will look for it in its
-; default extension directory.
+; Note : The syntax used in previous PHP versions ('extension=<ext>.so' and
+; 'extension='php_<ext>.dll') is supported for legacy reasons and may be
+; deprecated in a future PHP major version. So, when it is possible, please
+; move to the new ('extension=<ext>) syntax.
 
 ;;;;
 ; Note: packaged extension modules are now loaded via the .ini files
@@ -1111,7 +1145,7 @@ filter.default_flags = {{ php_cfg.filter.default_flags }}
 [iconv]
 ; Use of this INI entry is deprecated, use global input_encoding instead.
 ; If empty, default_charset or input_encoding or iconv.input_encoding is used.
-; The precedence is: default_charset < intput_encoding < iconv.input_encoding
+; The precedence is: default_charset < input_encoding < iconv.input_encoding
 ;iconv.input_encoding =
 {% if php_cfg.iconv is defined and php_cfg.iconv.input_encoding is defined -%}
 iconv.input_encoding = {{ php_cfg.iconv.input_encoding }}
@@ -1135,6 +1169,16 @@ iconv.internal_encoding = {{ php_cfg.iconv.internal_encoding }}
 iconv.output_encoding = {{ php_cfg.iconv.output_encoding }}
 {% endif %}
 
+[imap]
+; rsh/ssh logins are disabled by default. Use this INI entry if you want to
+; enable them. Note that the IMAP library does not filter mailbox names before
+; passing them to rsh/ssh command, thus passing untrusted data to this function
+; with rsh/ssh enabled is insecure.
+;imap.enable_insecure_rsh=0
+{% if php_cfg.imap is defined and php_cfg.imap.enable_insecure_rsh is defined -%}
+imap.enable_insecure_rsh = {{ php_cfg.imap.enable_insecure_rsh }}
+{% endif %}
+
 [intl]
 ;intl.default_locale =
 {% if php_cfg.intl is defined and php_cfg.intl.default_locale is defined -%}
@@ -1150,31 +1194,45 @@ intl.error_level = {{ php_cfg.intl.error_level }}
 {% endif %}
 
 [sqlite3]
+; Directory pointing to SQLite3 extensions
+; http://php.net/sqlite3.extension-dir
 ;sqlite3.extension_dir =
 {% if php_cfg.sqlite3 is defined and php_cfg.sqlite3.extension_dir is defined -%}
 sqlite3.extension_dir = {{ php_cfg.sqlite3.extension_dir }}
 {% endif %}
 
+; SQLite defensive mode flag (only available from SQLite 3.26+)
+; When the defensive flag is enabled, language features that allow ordinary
+; SQL to deliberately corrupt the database file are disabled. This forbids
+; writing directly to the schema, shadow tables (eg. FTS data tables), or
+; the sqlite_dbpage virtual table.
+; https://www.sqlite.org/c3ref/c_dbconfig_defensive.html
+; (for older SQLite versions, this flag has no use)
+;sqlite3.defensive = 1
+{% if php_cfg.sqlite3 is defined and php_cfg.sqlite3.defensive is defined -%}
+sqlite3.defensive = {{ php_cfg.sqlite3.defensive }}
+{% endif %}
+
 [Pcre]
-;PCRE library backtracking limit.
+; PCRE library backtracking limit.
 ; http://php.net/pcre.backtrack-limit
 ;pcre.backtrack_limit=100000
 {% if php_cfg.pcre is defined and php_cfg.pcre.backtrack_limit is defined -%}
 pcre.backtrack_limit = {{ php_cfg.pcre.backtrack_limit }}
 {% endif %}
 
-;PCRE library recursion limit.
-;Please note that if you set this value to a high number you may consume all
-;the available process stack and eventually crash PHP (due to reaching the
-;stack size limit imposed by the Operating System).
+; PCRE library recursion limit.
+; Please note that if you set this value to a high number you may consume all
+; the available process stack and eventually crash PHP (due to reaching the
+; stack size limit imposed by the Operating System).
 ; http://php.net/pcre.recursion-limit
 ;pcre.recursion_limit=100000
 {% if php_cfg.pcre is defined and php_cfg.pcre.recursion_limit is defined -%}
 pcre.recursion_limit = {{ php_cfg.pcre.recursion_limit }}
 {% endif %}
 
-;Enables or disables JIT compilation of patterns. This requires the PCRE
-;library to be compiled with JIT support.
+; Enables or disables JIT compilation of patterns. This requires the PCRE
+; library to be compiled with JIT support.
 pcre.jit = {{ php_cfg.pcre.jit }}
 
 [Pdo]
@@ -1239,7 +1297,7 @@ mail.add_x_header = {{ 'On' if php_cfg.mail.add_x_header else 'Off' }}
 ; The path to a log file that will log all mail() calls. Log entries include
 ; the full path of the script, line number, To address and headers.
 ;mail.log =
-; Log mail to syslog;
+; Log mail to syslog (Event Log on Windows).
 ;mail.log = syslog
 {% if php_cfg.mail.log is defined -%}
 mail.log = {{ php_cfg.mail.log }}
@@ -1610,10 +1668,11 @@ session.save_path = {{ php_cfg.session.save_path }}
 {% endif %}
 
 ; Whether to use strict session mode.
-; Strict session mode does not accept uninitialized session ID and regenerate
-; session ID if browser sends uninitialized session ID. Strict mode protects
-; applications from session fixation via session adoption vulnerability. It is
-; disabled by default for maximum compatibility, but enabling it is encouraged.
+; Strict session mode does not accept an uninitialized session ID, and
+; regenerates the session ID if the browser sends an uninitialized session ID.
+; Strict mode protects applications from session fixation via a session adoption
+; vulnerability. It is disabled by default for maximum compatibility, but
+; enabling it is encouraged.
 ; https://wiki.php.net/rfc/strict_sessions
 session.use_strict_mode = {{ 'On' if php_cfg.session.use_strict_mode else 'Off' }}
 
@@ -1654,9 +1713,15 @@ session.cookie_path = {{ php_cfg.session.cookie_path }}
 ; http://php.net/session.cookie-domain
 session.cookie_domain = {{ php_cfg.session.cookie_domain }}
 
-; Whether or not to add the httpOnly flag to the cookie, which makes it inaccessible to browser scripting languages such as JavaScript.
+; Whether or not to add the httpOnly flag to the cookie, which makes it
+; inaccessible to browser scripting languages such as JavaScript.
 ; http://php.net/session.cookie-httponly
 session.cookie_httponly = {{ 'On' if php_cfg.session.cookie_httponly else 'Off' }}
+
+; Add SameSite attribute to cookie to help mitigate Cross-Site Request Forgery (CSRF/XSRF)
+; Current valid values are "Lax" or "Strict"
+; https://tools.ietf.org/html/draft-west-first-party-cookies-07
+session.cookie_samesite =
 
 ; Handler used to serialize data.  php is the standard serializer of PHP.
 ; http://php.net/session.serialize-handler
@@ -1667,7 +1732,7 @@ session.serialize_handler = {{ php_cfg.session.serialize_handler }}
 ; gc_probability/gc_divisor. Where session.gc_probability is the numerator
 ; and gc_divisor is the denominator in the equation. Setting this value to 1
 ; when the session.gc_divisor value is 100 will give you approximately a 1% chance
-; the gc will run on any give request.
+; the gc will run on any given request.
 ; Default Value: 1
 ; Development Value: 1
 ; Production Value: 1
@@ -1677,10 +1742,10 @@ session.gc_probability = {{ php_cfg.session.gc_probability }}
 ; Defines the probability that the 'garbage collection' process is started on every
 ; session initialization. The probability is calculated by using the following equation:
 ; gc_probability/gc_divisor. Where session.gc_probability is the numerator and
-; session.gc_divisor is the denominator in the equation. Setting this value to 1
-; when the session.gc_divisor value is 100 will give you approximately a 1% chance
-; the gc will run on any give request. Increasing this value to 1000 will give you
-; a 0.1% chance the gc will run on any give request. For high volume production servers,
+; session.gc_divisor is the denominator in the equation. Setting this value to 100
+; when the session.gc_probability value is 1 will give you approximately a 1% chance
+; the gc will run on any given request. Increasing this value to 1000 will give you
+; a 0.1% chance the gc will run on any given request. For high volume production servers,
 ; this is a more efficient approach.
 ; Default Value: 100
 ; Development Value: 1000
@@ -1776,7 +1841,7 @@ session.trans_sid_tags = "{{ php_cfg.session.trans_sid_tags }}"
 {% endif %}
 
 ; URL rewriter does not rewrite absolute URLs by default.
-; To enable rewrites for absolute pathes, target hosts must be specified
+; To enable rewrites for absolute paths, target hosts must be specified
 ; at RUNTIME. i.e. use ini_set()
 ; <form> tags is special. PHP will check action attribute's URL regardless
 ; of session.trans_sid_tags setting.
@@ -1911,7 +1976,7 @@ zend.assertions = {{ php_cfg.zend.assertions }}
 assert.active = {{ 'On' if php_cfg.assert.active else 'Off' }}
 {% endif %}
 
-; Throw an AssertationException on failed assertions
+; Throw an AssertionError on failed assertions
 ; http://php.net/assert.exception
 ;assert.exception = On
 {% if php_cfg.assert is defined and php_cfg.assert.exception is defined -%}
@@ -1968,9 +2033,9 @@ mbstring.internal_encoding = {{ php_cfg.mbstring.internal_encoding }}
 
 ; Use of this INI entry is deprecated, use global input_encoding instead.
 ; http input encoding.
-; mbstring.encoding_traslation = On is needed to use this setting.
+; mbstring.encoding_translation = On is needed to use this setting.
 ; If empty, default_charset or input_encoding or mbstring.input is used.
-; The precedence is: default_charset < intput_encoding < mbsting.http_input
+; The precedence is: default_charset < input_encoding < mbsting.http_input
 ; http://php.net/mbstring.http-input
 ;mbstring.http_input =
 {% if php_cfg.mbstring is defined and php_cfg.mbstring.http_input is defined -%}
