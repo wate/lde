@@ -51,7 +51,7 @@ php_cfg:
   #   default: #0000BB
   #   html: #000000
   # ignore_user_abort: true
-  # realpath_cache_size: 16k
+  # realpath_cache_size: 4096k
   # realpath_cache_ttl: 120
   zend:
     enable_gc: true
@@ -91,6 +91,10 @@ php_cfg:
   # error_prepend_string: ""
   # error_append_string: ""
   # error_log: ""
+  # syslog:
+  #   ident: php
+  #   facility: user
+  #   filter: ascii
   #################
   # Data Handling
   #################
@@ -165,6 +169,8 @@ php_cfg:
   #   input_encoding: ""
   #   internal_encoding: ""
   #   output_encoding: ""
+  # imap:
+  #   enable_insecure_rsh: 0
   # intl:
   #   default_locale: ""
   #   error_level: E_WARNING
@@ -172,6 +178,7 @@ php_cfg:
   #   assoc_case: 0
   # sqlite3:
   #   extension_dir: ""
+  #   defensive: 1
   pcre:
   #   backtrack_limit: 100000
   #   recursion_limit: 100000
@@ -189,7 +196,7 @@ php_cfg:
   sendmail_path: "/usr/sbin/sendmail -t -i"
   mail:
   #   force_extra_parameters: ""
-    add_x_header: true
+    add_x_header: false
   #   log:
   sql:
     safe_mode: false
@@ -275,6 +282,7 @@ php_cfg:
     cookie_path: /
     cookie_domain: ""
     cookie_httponly: false
+    cookie_samesite:
     serialize_handler: php
     gc_probability: 1
     gc_divisor: 1000
