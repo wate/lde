@@ -56,13 +56,13 @@
     - "*.conf"
 - name: set filterd virtualhosts variable
   set_fact:
-    virtualhosts: "{{ apache_vhosts | selectattr('removed', 'undefined') | list }}"
+    exist_virtualhosts: "{{ apache_vhosts | selectattr('removed', 'undefined') | list }}"
     removed_virtualhosts: "{{ apache_vhosts | selectattr('removed', 'defined') | list }}"
 - name: create virtualhost setting files
   template:
-    src: httpd/virtualhost.conf.j2
+    src: virtualhost.conf.j2
     dest: /etc/httpd/sites-available/{{ item.name | default(item.server_name) }}.conf
-  loop: "{{ exists_vhosts }}"
+  loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
   notify: reload apache
@@ -71,7 +71,7 @@
     path: /etc/httpd/sites-enabled/{{ item.name | default(item.server_name) }}.conf
     src: "{{ omit if item.disabled | default(false) else '/etc/httpd/sites-available/' + item.name | default(item.server_name) + '.conf' }}"
     state: "{{ 'absent' if item.disabled | default(false) else 'link' }}"
-  loop: "{{ exists_vhosts }}"
+  loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
   notify: reload apache
