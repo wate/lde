@@ -16,7 +16,7 @@
   notify: restart mailhog
 - name: MailHog is active and enabled on system startup
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
     name: mailhog
     state: started
-    enabled: yes
+    enabled: true
