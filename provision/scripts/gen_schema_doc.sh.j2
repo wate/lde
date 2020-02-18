@@ -1,8 +1,0 @@
-#!/bin/sh
-mkdir -p /vagrant/output/schema
-
-TBLS_PARAMS=''
-if [ -f /vagrant/.tbls.yml ]; then
-  TBLS_PARAMS='--config /vagrant/.tbls.yml'
-fi
-/usr/local/bin/tbls doc ${TBLS_PARAMS} -f
