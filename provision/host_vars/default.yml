@@ -96,7 +96,7 @@ php_packages:
 # その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
 # --------------
 php_cfg:
-  display_errors: yes
+  display_errors: true
   sendmail_path: /usr/local/bin/mhsendmail
   auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined and php_tideways_profiler_installed|default(false) else '' }}"
   memory_limit: 512M
@@ -210,8 +210,8 @@ xhgui_cfg:
   dot_binary: /usr/bin/dot
   dot_tempdir: /tmp
   dot_errfile: /tmp/xh_dot.err
-  display: no
-  doprofile: no
+  display: false
+  doprofile: false
   ignoreURLs: []
   ignoreDomains:
     - "profile.{{ domain }}"
@@ -221,7 +221,7 @@ xhgui_cfg:
   exceptionURLs: []
   exceptionPostURLs:
     - login
-  controlIPs: no
+  controlIPs: false
   # ignoredFunctions:
   #   - call_user_func
   #   - call_user_func_array
@@ -458,24 +458,24 @@ apache_vhosts:
 # その他の設定値は、「provision/roles/apache/defaults/main.yml」を参照
 # --------------
 apache_cfg:
-  enable_mmap: no
-  enable_sendfile: no
+  enable_mmap: false
+  enable_sendfile: false
 
 # 不要なモジュールを無効化
-apache_module_lua: no
+apache_module_lua: false
 apache_module_dav:
-  dav: no
-  dav_fs: no
-  dav_lock: no
+  dav: false
+  dav_fs: false
+  dav_lock: false
 apache_module_lbmethod:
-  bybusyness: no
-  byrequests: no
-  bytraffic: no
-  heartbeat: no
+  bybusyness: false
+  byrequests: false
+  bytraffic: false
+  heartbeat: false
 apache_module_proxy:
-  ajp: no
-  balancer: no
-  ftp: no
+  ajp: false
+  balancer: false
+  ftp: false
 
 # --------------
 # MariaDBの設定
@@ -489,14 +489,14 @@ mariadb_cfg:
       - ERROR_FOR_DIVISION_BY_ZERO
       - NO_AUTO_CREATE_USER
       - NO_ENGINE_SUBSTITUTION
-    slow_query_log: yes
+    slow_query_log: true
     long_query_time: 1
     # log_warnings: 0
     # min_examined_row_limit: 0
-    # log_queries_not_using_indexes: no
-    # log_slow_admin_statements: no
+    # log_queries_not_using_indexes: false
+    # log_slow_admin_statements: false
     slow_query_log_file: /var/log/mariadb/slow_query.log
-    general_log: no
+    general_log: false
     general_log_file: /var/log/mariadb/general.log
 
 # --------------
@@ -586,4 +586,4 @@ mycli_alias_dsn:
 #       - "{{ domain }}"
 #       - "*.{{ domain }}"
 #
-# dehydrated_auto_execute: yes
+# dehydrated_auto_execute: true

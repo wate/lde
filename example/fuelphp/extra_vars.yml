@@ -10,13 +10,13 @@ domain: "example.com"
 # ----------
 # Xdebugをインストールするか否かを指定します
 # ----------
-# php_xdebug_installed: no
+# php_xdebug_installed: false
 
 # ----------
 # Tideways XHProf Extensionをインストールするか否かを指定します
 # https://github.com/tideways/php-xhprof-extension
 # ----------
-# php_tideways_profiler_installed: no
+# php_tideways_profiler_installed: false
 
 # ----------
 # FuelPHP用の設定

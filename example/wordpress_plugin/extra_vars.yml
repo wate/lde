@@ -20,11 +20,11 @@ wordpress:
   ## インストールするプラグインの指定
   plugins:
     - name: "ssh-sftp-updater-support"
-      activate: yes
+      activate: true
   ## インストールするテーマの指定
   themes:
     - name: "myknowledgebase"
-      activate: yes
+      activate: true
 
 # ----------
 # PHPのバージョン
@@ -35,10 +35,10 @@ wordpress:
 # ----------
 # Xdebugをインストールするか否かを指定します
 # ----------
-# php_xdebug_installed: no
+# php_xdebug_installed: false
 
 # ----------
 # Tideways XHProf Extensionをインストールするか否かを指定します
 # https://github.com/tideways/php-xhprof-extension
 # ----------
-# php_tideways_profiler_installed: no
+# php_tideways_profiler_installed: false
