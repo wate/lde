@@ -7,7 +7,7 @@
     repo: "{{ wwwsqldesigner_repo }}"
     version: "{{ wwwsqldesigner_version }}"
     dest: "{{ wwwsqldesigner_dest }}"
-    force: yes
+    force: true
 - name: create WWW SQL Designer config file
   template:
     src: config.js.j2
