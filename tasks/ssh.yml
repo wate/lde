@@ -25,6 +25,6 @@
 - name: allow SSH port
   firewalld:
     port: "{{ common_ssh_port }}/tcp"
-    permanent: yes
+    permanent: true
     state: enabled
   notify: restart firewalld

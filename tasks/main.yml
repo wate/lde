@@ -28,7 +28,7 @@
   systemd:
     name: firewalld
     state: started
-    enabled: yes
+    enabled: true
 - name: get system locale
   shell: |
     set -o pipefail

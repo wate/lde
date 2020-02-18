@@ -23,12 +23,12 @@ common_packages:
 common_groups: []
   # - name: group1
   # - name: group2
-  #   remove: yes
+  #   remove: true
   # - name: system_group
-  #   system: yes
+  #   system: true
   # - name: system_group_with_id
   #   id: 1000
-  #   system: yes
+  #   system: true
 
 common_users: []
   # - name: sample_user
@@ -71,7 +71,7 @@ common_users: []
 common_hostname: "{{ inventory_hostname }}"
 
 common_ssh_port: 22
-common_ssh_use_geoip_filter: yes
+common_ssh_use_geoip_filter: true
 common_ssh_allow_countries:
   - JP
 
@@ -79,7 +79,7 @@ common_cron_geoip_update:
   hour: 4
   minute: 0
 
-# common_root_lock: no
+# common_root_lock: false
 
 fail2ban_cfg: |
   #[DEFAULT]
@@ -91,7 +91,7 @@ fail2ban_cfg: |
   [sshd]
   enabled = true
 
-sudo_require_password: no
+sudo_require_password: false
 
 yum_cron_daily_cfg: []
   # ## Update Setting
