@@ -4,4 +4,4 @@
     regexp: "^#?LoadModule proxy_{{ item.key }}_module modules/mod_proxy_{{ item.key }}.so"
     line: "{{ '' if item.value else '#' }}LoadModule proxy_{{ item.key }}_module modules/mod_proxy_{{ item.key }}.so"
   notify: restart apache
-  with_dict: "{{ apache_module_proxy }}"
+  loop: "{{ apache_module_proxy | dict2items }}"
