@@ -9,7 +9,7 @@
     repo: "{{ xhgui_repo }}"
     version: "{{ xhgui_version }}"
     dest: "{{ xhgui_dest }}"
-    force: yes
+    force: true
 - name: create XHGUI config file
   template:
     src: config.php.j2

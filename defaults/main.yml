@@ -14,14 +14,14 @@ xhgui_cfg:
   dot_binary: /usr/bin/dot
   dot_tempdir: /tmp
   dot_errfile: /tmp/xh_dot.err
-  display: no
-  doprofile: no
+  display: false
+  doprofile: false
   ignoreURLs: []
   ignoreDomains: []
   exceptionURLs: []
   exceptionPostURLs:
     - login
-  controlIPs: no
+  controlIPs: false
   # ignoredFunctions:
   #   - call_user_func
   #   - call_user_func_array
