@@ -49,8 +49,8 @@ SSLRandomSeed connect builtin
 SSLCryptoDevice builtin
 #SSLCryptoDevice ubsec
 
-SSLProtocol {{ apache_ssl_cfg.protocol|join(' ') }}
-SSLCipherSuite {{ apache_ssl_cfg.cipher_suite|join(':') }}
+SSLProtocol {{ apache_ssl_cfg.protocol | join(' ') }}
+SSLCipherSuite {{ apache_ssl_cfg.cipher_suite | join(':') }}
 SSLHonorCipherOrder {{ 'on' if apache_ssl_cfg.honor_cipher_order else 'off' }}
 SSLCompression {{ 'on' if apache_ssl_cfg.compression else 'off' }}
 
