@@ -4,4 +4,4 @@
     regexp: "^#?LoadModule {{ item.key }}_module modules/mod_{{ item.key }}.so"
     line: "{{ '' if item.value else '#' }}LoadModule {{ item.key }}_module modules/mod_{{ item.key }}.so"
   notify: restart apache
-  with_dict: "{{ apache_module_dav }}"
+  loop: "{{ apache_module_dav | dict2items }}"

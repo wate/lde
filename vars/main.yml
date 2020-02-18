@@ -1,3 +1,1 @@
 ---
-apache_virtualhost_conf_dir: /etc/httpd/vhost
-apache_snippet_dir: /etc/httpd/snippet
