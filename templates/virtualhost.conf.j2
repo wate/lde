@@ -1,3 +1,9 @@
+{% if item.ssl is defined -%}
+<VirtualHost *:80>
+    RewriteEngine On
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
+</VirtualHost>
+{% endif -%}
 {% set vhost_ip = item.ip if item.ip is defined else '*' -%}
 {% set vhost_port = 443 if item.ssl is defined else 80 -%}
 {% if item.port is defined -%}

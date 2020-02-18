@@ -20,7 +20,7 @@ if os.path.exists(role_var_file):
     role_vars.update(yaml.full_load(open(role_var_file, 'r')))
 
 ansible_host_vars = {}
-host_dump_var_dir = os.environ['MOLECULE_SCENARIO_DIRECTORY'] + '/__pycache__'
+host_dump_var_dir = os.environ['MOLECULE_SCENARIO_DIRECTORY'] + '/dump_vars'
 if os.path.exists(host_dump_var_dir):
     dump_var_files = glob.glob(host_dump_var_dir + '/*.yml')
     for dump_var_file in dump_var_files:
@@ -33,3 +33,7 @@ def test_config(host):
     assert hosts_file.user == 'root'
     assert hosts_file.group == 'root'
     assert hosts_file.mode == 0o644
+    # host_vars = role_vars
+    # inventory_hostname = host.ansible.get_variables()['inventory_hostname']
+    # if inventory_hostname in ansible_host_vars.keys():
+    #     host_vars = ansible_host_vars[inventory_hostname]
