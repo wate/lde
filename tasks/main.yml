@@ -12,8 +12,8 @@
     description: Node.js Packages for Enterprise Linux {{ ansible_distribution_major_version }} - $basearch
     baseurl: https://rpm.nodesource.com/pub_{{ nodejs_major_version }}.x/el/{{ ansible_distribution_major_version }}/$basearch
     failovermethod: priority
-    enabled: yes
-    gpgcheck: yes
+    enabled: true
+    gpgcheck: true
     gpgkey: file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
     file: nodesource-el
 - name: add nodesource repository(2/2)
@@ -22,8 +22,8 @@
     description: Node.js for Enterprise Linux {{ ansible_distribution_major_version }} - $basearch - Source
     baseurl: https://rpm.nodesource.com/pub_{{ nodejs_major_version }}.x/el/{{ ansible_distribution_major_version }}/SRPMS
     failovermethod: priority
-    enabled: no
-    gpgcheck: yes
+    enabled: false
+    gpgcheck: true
     gpgkey: file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
     file: nodesource-el
 - name: install nodejs
