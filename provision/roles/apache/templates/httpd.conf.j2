@@ -328,4 +328,4 @@ EnableSendfile {{ 'on' if apache_cfg.enable_sendfile else 'off' }}
 # Load config files in the "/etc/httpd/conf.d" directory, if any.
 IncludeOptional conf.d/*.conf
 
-Include {{ apache_virtualhost_conf_dir }}/*.conf
+IncludeOptional /etc/httpd/sites-enabled/*.conf

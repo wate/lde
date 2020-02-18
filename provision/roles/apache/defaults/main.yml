@@ -9,7 +9,7 @@ apache_vhosts:
     server_alias:
       - example.com
     # include:
-    #   - /path/to/file
+    #   -/etc/httpd/snippets/redirect_non_www.conf
     document_root: /var/www/html
     # directory_index:
     #   - index.html
@@ -64,22 +64,24 @@ apache_vhosts:
     #     - ECDHE-RSA-AES256-SHA384
     #     - ECDHE-ECDSA-AES128-SHA256
     #     - ECDHE-RSA-AES128-SHA256
-    #   honor_cipher_order: yes
-    #   compression: no
+    #   honor_cipher_order: true
+    #   compression: false
     #   stapling_responder_timeout: 5
-    #   stapling_return_responder_errors: no
+    #   stapling_return_responder_errors: false
     #   stapling_cache: "shmcb:/var/run/ocsp(128000)"
     #   hsts: "max-age=15768000"
     # ip: 127.0.0.1
     # port: 1080
+    # disabled: true
     # extra_setting: |
     #   <Location /server-status>
     #     SetHandler server-status
     #     Require ip 127.0.0.1
     #   </Location>
+    # # removed: true
 
 apache_secrity_cfg:
-  trace_enable: no
+  trace_enable: false
   server_tokens: Prod
   headers:
     "X-Frame-Options": SAMEORIGIN
@@ -88,8 +90,8 @@ apache_secrity_cfg:
 
 apache_cfg:
   server_admin: root@localhost
-  enable_mmap: yes
-  enable_sendfile: yes
+  enable_mmap: true
+  enable_sendfile: true
   # extra_setting: |
   #   ExtendedStatus On
 
@@ -99,7 +101,7 @@ apache_module_mpm: prefork
 
 apache_performance_cfg:
   timeout: 60
-  keep_alive: yes
+  keep_alive: true
   max_keep_alive_requests: 100
   keep_alive_timeout: 5
   max_connections_per_child: 0
@@ -144,48 +146,48 @@ apache_ssl_cfg:
     - ECDHE-RSA-AES256-SHA384
     - ECDHE-ECDSA-AES128-SHA256
     - ECDHE-RSA-AES128-SHA256
-  honor_cipher_order: yes
-  compression: no
-  use_stapling: yes
+  honor_cipher_order: true
+  compression: false
+  use_stapling: true
   stapling_responder_timeout: 5
-  stapling_return_responder_errors: no
+  stapling_return_responder_errors: false
   stapling_cache: "shmcb:/var/run/ocsp(128000)"
 
 apache_module_base:
-  buffer: no
-  watchdog: no
-  heartbeat: no
-  heartmonitor: no
-  usertrack: no
-  dialup: no
-  charset_lite: no
-  log_debug: no
-  ratelimit: no
-  reflector: no
-  request: no
-  sed: no
-  speling: no
+  buffer: false
+  watchdog: false
+  heartbeat: false
+  heartmonitor: false
+  usertrack: false
+  dialup: false
+  charset_lite: false
+  log_debug: false
+  ratelimit: false
+  reflector: false
+  request: false
+  sed: false
+  speling: false
 
 apache_module_dav:
-  dav: yes
-  dav_fs: yes
-  dav_lock: yes
+  dav: true
+  dav_fs: true
+  dav_lock: true
 
-apache_module_lua: yes
+apache_module_lua: true
 
 apache_module_lbmethod:
-  bybusyness: yes
-  byrequests: yes
-  bytraffic: yes
-  heartbeat: yes
+  bybusyness: true
+  byrequests: true
+  bytraffic: true
+  heartbeat: true
 
 apache_module_proxy:
-  ajp: yes
-  balancer: yes
-  connect: yes
-  express: yes
-  fcgi: yes
-  fdpass: yes
-  ftp: yes
-  http: yes
-  wstunnel: yes
+  ajp: true
+  balancer: true
+  connect: true
+  express: true
+  fcgi: true
+  fdpass: true
+  ftp: true
+  http: true
+  wstunnel: true

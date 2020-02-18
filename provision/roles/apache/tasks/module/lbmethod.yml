@@ -4,4 +4,4 @@
     regexp: "^#?LoadModule lbmethod_{{ item.key }}_module modules/mod_lbmethod_{{ item.key }}.so"
     line: "{{ '' if item.value else '#' }}LoadModule lbmethod_{{ item.key }}_module modules/mod_lbmethod_{{ item.key }}.so"
   notify: restart apache
-  with_dict: "{{ apache_module_lbmethod }}"
+  loop: "{{ apache_module_lbmethod | dict2items }}"
