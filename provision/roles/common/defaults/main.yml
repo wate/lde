@@ -153,3 +153,57 @@ yum_cron_hourly_cfg: []
 
 common_swap_dest: /var/spool/swap/swapfile
 common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000)|round(1, 'floor')|float * 2)|int }}"
+
+common_files:
+  # # ローカルにあるファイルをアップロード
+  # - dest: /usr/local/bin/upload-script
+  #   mode: "0755"
+  #   src: path/to/script
+  #   # owner: root
+  #   # group: root
+  #   # checksum: 1234567890abcdefghijklmnopqrstuvwxyz
+  # # リモートファイルをダウンロード
+  # - dest: /usr/local/bin/download-script
+  #   mode: "0755"
+  #   # owner: root
+  #   # group: root
+  #   url: http://www.example.com/path/to/script
+  #   # auth_basic_user: user
+  #   # auth_basic_password: password
+  #   # checksum: 1234567890abcdefghijklmnopqrstuvwxyz
+  # # 既存のファイルを削除
+  # - dest: /usr/local/bin/batch-script
+  #   ## ※この属性が指定されている場合は設定値の如何に関わらず、ファイルが存在する場合は削除する
+  #   removed: true
+
+common_cron_vars: []
+  # - name: PATH
+  #   value: /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+  # - name: MAILTO
+  #   value: root
+  # - name: SHELL
+  #   value: /usr/bin/bash
+  # - name: HOME
+  #   value: /
+  #   removed: true
+
+common_cron_jobs:
+- name: check ssl expiration date
+  ## 定期実行コマンド
+  job: cert -f json example.com
+  ## 定期実行日時(時)
+  hour: 1
+  ## 定期実行日時(分)
+  minute: 23
+  ## 定期実行日時(日)
+  # day: "*"
+  ## 定期実行日時(月)
+  # month: "*"
+  ## 定期実行日時(曜日)
+  # weekday: "*"
+  ## 実行ユーザー
+  # user: root
+  ## 定期実行設定は残したまま無効化するか否か
+  # disabled: true
+  ## 定期実行設定の存在の有無(これが指定された場合は値の如何に関わらず、設定が存在する場合は削除する)
+  # removed: true
