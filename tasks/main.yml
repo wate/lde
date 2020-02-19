@@ -46,15 +46,12 @@
 - name: setup yum-cron
   import_tasks: yum-cron.yml
   tags: yum-cron
-- name: check ansible manage cron job file
-  stat:
-    path: /etc/cron.d/ansible_management_job
-  register: result
-- name: create ansible manage cron job file
-  file:
-    path: /etc/cron.d/ansible_management_job
-    state: touch
-  when: not result.stat.exists
+- name: manage files
+  import_tasks: files.yml
+  tags: file
+- name: manage cron
+  import_tasks: cron.yml
+  tags: cron
 - name: setup ssh
   import_tasks: ssh.yml
   tags: swap
@@ -64,5 +61,7 @@
 - name: setup swap
   import_tasks: swap.yml
   when: ansible_memory_mb.swap is undefined or ansible_memory_mb.swap.total == 0
-  tags:
-    - swap
+  tags: swap
+- name: setup other tools
+  import_tasks: tools.yml
+  tags: tools
