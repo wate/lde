@@ -187,23 +187,23 @@ common_cron_vars: []
   #   value: /
   #   removed: true
 
-common_cron_jobs:
-- name: check ssl expiration date
-  ## 定期実行コマンド
-  job: cert -f json example.com
-  ## 定期実行日時(時)
-  hour: 1
-  ## 定期実行日時(分)
-  minute: 23
-  ## 定期実行日時(日)
-  # day: "*"
-  ## 定期実行日時(月)
-  # month: "*"
-  ## 定期実行日時(曜日)
-  # weekday: "*"
-  ## 実行ユーザー
-  # user: root
-  ## 定期実行設定は残したまま無効化するか否か
-  # disabled: true
-  ## 定期実行設定の存在の有無(これが指定された場合は値の如何に関わらず、設定が存在する場合は削除する)
-  # removed: true
+common_cron_jobs: []
+  # - name: check ssl expiration date
+  #   ## 定期実行コマンド
+  #   job: cert -f json example.com
+  #   ## 定期実行日時(時)
+  #   hour: 1
+  #   ## 定期実行日時(分)
+  #   minute: 23
+  #   ## 定期実行日時(日)
+  #   # day: "*"
+  #   ## 定期実行日時(月)
+  #   # month: "*"
+  #   ## 定期実行日時(曜日)
+  #   # weekday: "*"
+  #   ## 実行ユーザー
+  #   # user: root
+  #   ## 定期実行設定は残したまま無効化するか否か
+  #   # disabled: true
+  #   ## 定期実行設定の存在の有無(これが指定された場合は値の如何に関わらず、設定が存在する場合は削除する)
+  #   # removed: true
