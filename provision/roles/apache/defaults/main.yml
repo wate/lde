@@ -5,6 +5,7 @@ apache_packages:
 
 apache_vhosts:
   - name: 00-default
+    default: true
     server_name: www.example.com
     server_alias:
       - example.com
@@ -79,6 +80,17 @@ apache_vhosts:
     #     Require ip 127.0.0.1
     #   </Location>
     # # removed: true
+  - name: 99-status
+    ip: 127.0.0.1
+    port: 1080
+    virtualhost_before_setting: |
+      Listen 1080
+      ExtendedStatus On
+    extra_setting: |
+      <Location /server-status>
+        SetHandler server-status
+        Require ip 127.0.0.1
+      </Location>
 
 apache_secrity_cfg:
   trace_enable: false
