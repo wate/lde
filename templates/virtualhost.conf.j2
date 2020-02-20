@@ -1,14 +1,35 @@
-{% if item.ssl is defined -%}
-<VirtualHost *:80>
+# ------------------------
+# {{ ansible_managed }}
+# ------------------------
+{% if item.server_name is defined -%}
+# {{ item.server_name }} VirtualHost Setting
+{% endif -%}
+{% if item.virtualhost_before_setting is defined %}
+{{ item.virtualhost_before_setting }}
+{% endif %}
+{% if item.ssl is defined %}
+<VirtualHost {{ '_default_' if item.default |default(false) else '*' }}:80>
+    {% if item.server_name is defined -%}
+    ServerName {{ item.server_name }}
+    {% endif -%}
+    {% if item.server_alias is defined -%}
+    ServerAlias {{ item.server_alias if item.server_alias is string else item.server_alias | join(' ') }}
+    {% endif -%}
     RewriteEngine On
     RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
 </VirtualHost>
+{% endif %}
+
+{% set vhost_ip = '_default_' if item.default | default(false) else '*' -%}
+{% if item.ip is defined -%}
+{% set vhost_ip = item.ip -%}
 {% endif -%}
-{% set vhost_ip = item.ip if item.ip is defined else '*' -%}
-{% set vhost_port = 443 if item.ssl is defined else 80 -%}
+
+{% set vhost_port = "443" if item.ssl is defined else "80" -%}
 {% if item.port is defined -%}
 {% set vhost_port = item.port -%}
 {% endif -%}
+
 <VirtualHost {{ vhost_ip }}:{{ vhost_port }}>
   {% if item.server_name is defined -%}
   ServerName {{ item.server_name }}
@@ -135,7 +156,7 @@
   {% endif -%}
   {% endif -%}
 
-  {% if item.extra_param is defined -%}
-  {{ item.extra_param|indent(2) }}
+  {% if item.extra_setting is defined -%}
+  {{ item.extra_setting | indent(2) }}
   {% endif -%}
 </VirtualHost>
