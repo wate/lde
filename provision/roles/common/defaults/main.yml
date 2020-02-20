@@ -38,9 +38,19 @@ common_users: []
   #     - group1
   #     - group2
   #   authorized_keys:
-  #     - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-  #     - https://github.com/wate.keys
+  #     - key: https://github.com/wate.keys
+  #     - key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  #       remove: true
   #   shell: /bin/nologin
+  #   secret_vars:
+  #     - name: DB_HOST
+  #       value: localhost
+  #     - name: DB_NAME
+  #       value: app
+  #     - name: DB_USER
+  #       value: app_db_user
+  #     - name: DB_PASS
+  #       value: app_db_pass
   #   cron_jobs:
   #     - name: display date
   #       job: date
