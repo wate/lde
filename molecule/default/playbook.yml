@@ -12,12 +12,28 @@
         name: apply_updates
         value: "yes"
     common_users:
-      - name: wate
+      - name: simple
+        password: "{{ 'password' | password_hash('sha512') }}"
+      - name: full_set
         password: "{{ 'password' | password_hash('sha512') }}"
         authorized_keys:
-          - https://github.com/wate.keys
+          - key: https://github.com/wate.keys
+          - key: https://github.com/manno-k.keys
+            remove: true
         shell: /usr/bin/bash
         admin: true
+        secret_vars:
+          - name: DB_HOST
+            value: localhost
+          - name: DB_NAME
+            value: app
+          - name: DB_USER
+            value: app_db_user
+          - name: DB_PASS
+            value: app_db_pass
+          - name: REMOVE_VAR
+            value: removed
+            remove: true
         cron_jobs:
           - name: display date
             job: mkr wrap -- date
