@@ -18,7 +18,7 @@
         password: "{{ 'password' | password_hash('sha512') }}"
         authorized_keys:
           - key: https://github.com/wate.keys
-          - key: https://github.com/manno-k.keys
+          - key: https://github.com/nogajun.keys
             remove: true
         shell: /usr/bin/bash
         admin: true
