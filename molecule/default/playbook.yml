@@ -11,6 +11,15 @@
       - section: commands
         name: apply_updates
         value: "yes"
+    common_files:
+      - dest: /usr/local/bin/upload_file
+        src: files/test_script
+        mode: "0755"
+      - dest: /usr/local/bin/download_file
+        url: "https://dummyimage.com/600x400/000/fff"
+        mode: "0644"
+      - dest: /usr/local/bin/remove_file
+        removed: true
     common_users:
       - name: simple
         password: "{{ 'password' | password_hash('sha512') }}"
@@ -19,7 +28,7 @@
         authorized_keys:
           - key: https://github.com/wate.keys
           - key: https://github.com/nogajun.keys
-            remove: true
+            removed: true
         shell: /usr/bin/bash
         admin: true
         secret_vars:
@@ -33,7 +42,7 @@
             value: app_db_pass
           - name: REMOVE_VAR
             value: removed
-            remove: true
+            removed: true
         cron_jobs:
           - name: display date
             job: mkr wrap -- date
@@ -49,13 +58,13 @@
           - name: remove job
             job: echo "remove job"
             minute: 3
-            remove: true
+            removed: true
         cron_vars:
           - name: EMAIL
             value: test@example.com
           - name: SOME_NAME
             value: SOME_VALUE
-            remove: true
+            removed: true
   roles:
     - role: common
   pre_tasks:
