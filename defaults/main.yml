@@ -31,6 +31,7 @@ dehydrated_domains: []
 dehydrated_auto_execute: false
 
 dehydrated_cron:
+  job: dehydrated --cron
   hour: 4
   minute: 5
 
