@@ -1,0 +1,98 @@
+---
+wwwsqldesigner_cfg:
+  AVAILABLE_DBS:
+    - mysql
+    - sqlite
+    - web2py
+    - mssql
+    - postgresql
+    - oracle
+    - sqlalchemy
+    - vfp9
+    - cubrid
+    - web2py
+  DEFAULT_DB: mysql
+  AVAILABLE_LOCALES:
+    - ar
+    - cs
+    - de
+    - el
+    - en
+    - eo
+    - es
+    - fr
+    - hu
+    - it
+    - ja
+    - ko
+    - nl
+    - pl
+    - pt_BR
+    - ro
+    - ru
+    - sv
+    - zh
+  DEFAULT_LOCALE: ja
+  AVAILABLE_BACKENDS:
+    - php-mysql
+    - php-blank
+    - php-file
+    - php-sqlite
+    - php-mysql+file
+    - php-postgresql
+    - php-pdo
+    - perl-file
+    - php-cubrid
+    - asp-file
+    - web2py
+  DEFAULT_BACKEND:
+    - php-pdo
+  RELATION_THICKNESS: 2
+  RELATION_SPACING: 15
+  RELATION_COLORS:
+    - #000
+    - #800
+    - #080
+    - #008
+    - #088
+    - #808
+    - #088
+  STATIC_PATH: ""
+  XHR_PATH: ""
+  DROPBOX_KEY: null
+
+wwwsqldesigner_backend_pdo_cfg:
+  save:
+    type: mysql
+    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
+    user: wwwsqldesigner
+    password: xxxx
+  import:
+    type: mysql
+    dsn: "mysql:dbname=information_schema;host=localhost"
+    user: username
+    password: xxxx
+
+wwwsqldesigner_backend_mysql_cfg:
+  save:
+    host: localhost
+    database: wwwsqldesigner
+    user: wwwsqldesigner
+    password: xxxx
+  import:
+    host: localhost
+    database: information_schema
+    user: username
+    password: xxxx
+
+wwwsqldesigner_backend_postgresql_cfg:
+  save:
+    host: localhost
+    database: wwwsqldesigner
+    user: wwwsqldesigner
+    password: xxxx
+  import:
+    host: localhost
+    database: information_schema
+    user: username
+    password: xxxx

@@ -1,0 +1,7 @@
+- name: update load proxy module setting
+  lineinfile:
+    path: /etc/httpd/conf.modules.d/00-proxy.conf
+    regexp: "^#?LoadModule proxy_{{ item.key }}_module modules/mod_proxy_{{ item.key }}.so"
+    line: "{{ '' if item.value else '#' }}LoadModule proxy_{{ item.key }}_module modules/mod_proxy_{{ item.key }}.so"
+  notify: restart apache
+  loop: "{{ apache_module_proxy | dict2items }}"

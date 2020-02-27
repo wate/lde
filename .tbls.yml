@@ -1,0 +1,115 @@
+---
+# --------------
+# tbls config file
+# --------------
+docPath: /vagrant/output/schema
+### Data Source Name
+dsn: mysql://app_dev:app_dev_P455w0rd@localhost:3306/app_dev
+# dsn: postgres://app_dev:app_dev_P455w0rd@localhost:5432/app_dev
+# dsn: sqlite3:///vagrant/database.sqlite3
+# dsn: sqlite:///path/to/dbname.db
+### Table format
+format:
+  # Adjust the column width of Markdown format table
+  # Default is false
+  adjust: true
+  # Sort the order of table list and  columns
+  # Default is false
+  sort: false
+### ER diagram
+er:
+  # Skip generation of ER diagram
+  # Default is false
+  skip: false
+  # ER diagram format
+  # Default is `png`
+  format: png
+  # Add table/column comment to ER diagram
+  # Default is false
+  comment: true
+### Lint
+lint:
+  ## require table comment
+  requireTableComment:
+    enabled: true
+  ## require column comment
+  requireColumnComment:
+    enabled: true
+    ## exclude columns from warnings
+    # exclude:
+    #   - id
+    #   - created_at
+    #   - updated_at
+    ## exclude tables from warnings
+    # excludedTables:
+    #   - logs
+    #   - comment_stars
+  ## find a table that has no relation
+  # unrelatedTable:
+  #   enabled: true
+  #   ## exclude tables from warnings
+  #   exclude:
+  #     - logs
+  ## check max column count
+  # columnCount:
+  #   enabled: true
+  #   max: 10
+  #   ## exclude tables from warnings
+  #   exclude:
+  #     - user_options
+  ## require columns
+  # requireColumns:
+  #   enabled: true
+  #   columns:
+  #     - name: created
+  #     - name: updated
+  #       exclude:
+  #         - logs
+  #         - CamelizeTable
+### Exclude tables
+# exclude:
+#   - logs
+#   - CamelizeTable
+### Comments
+# comments:
+#   - table: posts
+#     columnComments:
+#       body: post body
+#   - table: logs
+#     tableComment: audit log table
+#   - table: post_comments
+#     tableComment: post and comments View table
+#     columnComments:
+#       id: comments.id
+#       title: posts.title
+#       post_user: posts.users.username
+#       comment_user: comments.users.username
+#       created: comments.created
+#       updated: comments.updated
+### Relations
+# relations:
+#   - table: logs
+#     columns:
+#       - user_id
+#     parentTable: users
+#     parentColumns:
+#       - id
+#     def: logs->users
+#   - table: logs
+#     columns:
+#       - post_id
+#     parentTable: posts
+#     parentColumns:
+#       - id
+#   - table: logs
+#     columns:
+#       - comment_id
+#     parentTable: comments
+#     parentColumns:
+#       - id
+#   - table: logs
+#     columns:
+#       - comment_star_id
+#     parentTable: comment_stars
+#     parentColumns:
+#       - id

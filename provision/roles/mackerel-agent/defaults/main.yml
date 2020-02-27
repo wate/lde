@@ -1,0 +1,14 @@
+---
+mackerel_agent_packages:
+  - mackerel-agent
+  - mackerel-agent-plugins
+  - mackerel-check-plugins
+  - mkr
+
+mackerel_agent_api_key: ""
+
+# mackerel_agent_host_id: "abcdefg"
+
+mackerel_agent_active_and_enabled_on_system_startup: true
+
+mackerel_agent_extra_setting: ""
