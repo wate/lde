@@ -17,7 +17,10 @@ mariadb_root_password: &db_root_password r00tP455w0rd
 # --------------
 php_version: 7.3
 
-# mariadb_allow_connect_other_host: false
+# --------------
+# MariaDB用のfirewalld設定
+# --------------
+mariadb_allow_host: "192.168.0.0/16"
 
 # --------------
 # データベース
