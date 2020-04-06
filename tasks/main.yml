@@ -49,6 +49,7 @@
       value: root
     - option: password
       value: "{{ mariadb_root_password }}"
+  no_log: true
 - name: create/remove databases
   mysql_db:
     name: "{{ item.name }}"
@@ -67,6 +68,7 @@
     - hosts
     - flags:
         skip_missing: true
+  no_log: true
 - name: import data
   mysql_db:
     name: "{{ item.name }}"
@@ -84,6 +86,7 @@
   with_subelements:
     - "{{ mariadb_users }}"
     - hosts
+  no_log: true
 - name: allow MariaDB port
   firewalld:
     service: mysql

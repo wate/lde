@@ -3,6 +3,15 @@
   hosts: all
   gather_facts: true
   become: true
+  vars:
+    mariadb_users:
+      - name: mackerel_agent
+        password: m4ckerel_4gent_p455w0rd
+        hosts:
+          - "127.0.0.1"
+          - "::1"
+          - localhost
+        priv: "*.*:PROCESS,REPLICATION CLIENT"
   roles:
     - role: mariadb
   pre_tasks:
