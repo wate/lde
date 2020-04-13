@@ -35,6 +35,9 @@
     tideware_version: "4.x"
     tideware_extension_name: tideways
   tasks:
+    - name: install Google Noto Fonts
+      yum:
+        name: google-noto-cjk-fonts
     - name: install php xdebug module
       yum:
         name: php-pecl-xdebug
