@@ -25,6 +25,10 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  if Vagrant.has_plugin?('vagrant-vbguest')
+    config.vbguest.auto_update = false
+  end
+
   # Merge Ansible Extra Variable file
   extra_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'extra_vars.yml'))
   ansible_custom_vars = {}
@@ -69,6 +73,7 @@ Vagrant.configure("2") do |config|
   if settings['vagrant'].key?('plugin') and settings['vagrant']['plugin'].key?('hostsupdater')
     plugin_setting = config['vagrant']['plugin']['hostsupdater']
   end
+
   if Vagrant.has_plugin?('vagrant-hostsupdater')
     config.hostsupdater.remove_on_suspend = plugin_setting.key?('remove_on_suspend') ? plugin_setting['remove_on_suspend'] : true
     config.hostsupdater.aliases = vm_host_aliases

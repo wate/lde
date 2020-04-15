@@ -31,13 +31,16 @@
     - role: xhgui
       tags: role_xhgui
   vars:
-    tbls_version: "1.29.3"
+    tbls_version: "1.31.2"
     tideware_version: "4.x"
     tideware_extension_name: tideways
   tasks:
     - name: install Google Noto Fonts
       yum:
-        name: google-noto-cjk-fonts
+        name:
+          - google-noto-cjk-fonts
+          - google-noto-sans-cjk-fonts
+          - google-noto-sans-japanese-fonts
     - name: install php xdebug module
       yum:
         name: php-pecl-xdebug
