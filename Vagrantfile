@@ -42,19 +42,25 @@ Vagrant.configure("2") do |config|
   settings['app_type'] = ansible_custom_vars['app_type'] if ansible_custom_vars.key?('app_type')
 
   # synced folders
-  app_type = 'default'
-  if settings['vagrant']['synced_folder']['type'].key?(settings['app_type'])
-    app_type = settings['app_type']
+  synced_folders = settings['vagrant']['synced_folders'];
+  if settings.key?('app_type') && settings['vagrant_synced_folder_types'].key?(settings['app_type'])
+    synced_folders.push settings['vagrant_synced_folder_types'][settings['app_type']]
   end
-  synced_folder_args = [
-    settings['vagrant']['synced_folder']['type'][app_type]['local'],
-    settings['vagrant']['synced_folder']['type'][app_type]['remote']
-  ]
-  settings['vagrant']['synced_folder'].delete('type')
-  unless settings['vagrant']['synced_folder'].empty?
-    synced_folder_args.push(settings['vagrant']['synced_folder'].map{|k,v| [k.to_sym, v] }.to_h)
+  synced_folders.each do |synced_folder_setting|
+    synced_folder_args = [
+      synced_folder_setting['local'],
+      synced_folder_setting['remote']
+    ]
+    synced_folder_options = settings['vagrant_synced_folder_default_options'].dup
+    synced_folder_setting.delete('local')
+    synced_folder_setting.delete('remote')
+    unless synced_folder_setting.empty?
+      synced_folder_options.merge!(synced_folder_setting);
+    end
+    # 共有ディレクトリの設定オプションを引数に追加
+    synced_folder_args.push(synced_folder_options.map{|k,v| [k.to_sym, v] }.to_h)
+    config.vm.send(:synced_folder, *synced_folder_args)
   end
-  config.vm.send(:synced_folder, *synced_folder_args)
 
   vm_host_aliases = [
     settings['domain'],
@@ -68,6 +74,12 @@ Vagrant.configure("2") do |config|
     # XHGUI
     'profile.' + settings['domain'],
   ]
+
+  if settings['vagrant'].key?('append_vm_hosts')
+    vm_host_aliases += settings['vagrant']['append_vm_hosts']
+  end
+  vm_host_aliases.uniq!
+
   # vagrant-hostsupdater
   plugin_setting = {}
   if settings['vagrant'].key?('plugin') and settings['vagrant']['plugin'].key?('hostsupdater')
@@ -99,7 +111,7 @@ Vagrant.configure("2") do |config|
   end
   # Provisioning
   ansible_extra_vars = {
-    'app_type' => app_type,
+    'app_type' => settings['app_type'],
     'domain' => settings['domain'],
     'php_version' => settings['php_version'],
     'doc_root_suffix' => settings['doc_root_suffix'],
