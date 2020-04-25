@@ -87,6 +87,9 @@
     - name: install graphviz
       yum:
         name: graphviz
+    - name: install nkf
+      yum:
+        name: nkf
     - name: download tbls
       get_url:
         url: "https://github.com/k1LoW/tbls/releases/download/v{{ tbls_version }}/tbls_v{{ tbls_version }}_linux_amd64.tar.gz"
