@@ -520,10 +520,10 @@ mycli_main_cfg:
   destructive_warning: false
 
 mycli_alias_dsn:
-  dev: "mysql://{{ mariadb_databases[0].user|default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}"
-  test: "mysql://{{ mariadb_databases[1].user|default(mariadb_databases[1].name) }}:{{ mariadb_databases[1].password }}@localhost/{{ mariadb_databases[1].name }}"
-  staging: "mysql://{{ mariadb_databases[2].user|default(mariadb_databases[2].name) }}:{{ mariadb_databases[2].password }}@localhost/{{ mariadb_databases[2].name }}"
-  prod: "mysql://{{ mariadb_databases[3].user|default(mariadb_databases[3].name) }}:{{ mariadb_databases[3].password }}@localhost/{{ mariadb_databases[3].name }}"
+  dev: "mysql://{{ mariadb_databases[0].user | default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}"
+  test: "mysql://{{ mariadb_databases[1].user | default(mariadb_databases[1].name) }}:{{ mariadb_databases[1].password }}@localhost/{{ mariadb_databases[1].name }}"
+  staging: "mysql://{{ mariadb_databases[2].user | default(mariadb_databases[2].name) }}:{{ mariadb_databases[2].password }}@localhost/{{ mariadb_databases[2].name }}"
+  prod: "mysql://{{ mariadb_databases[3].user | default(mariadb_databases[3].name) }}:{{ mariadb_databases[3].password }}@localhost/{{ mariadb_databases[3].name }}"
 
 
 # --------------
