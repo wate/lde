@@ -5,7 +5,7 @@ require 'yaml'
 
 Vagrant.configure("2") do |config|
   # Load Ansiblle host variable file
-  ansible_vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'provision','host_vars', 'default.yml'))
+  ansible_vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'provision', 'group_vars', 'all.yml'))
   settings = YAML.load_file(ansible_vars_file)
   # Merge Vagrant config file
   vagrant_setting_file = File.expand_path(File.join(File.dirname(__FILE__), 'config.yml'))
