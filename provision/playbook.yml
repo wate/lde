@@ -208,14 +208,66 @@
       systemd:
         name: "{{ item }}"
         state: restarted
-      with_items:
+      loop:
         - httpd
         - mariadb
+    - block:
+        - name: install github deploykey
+          copy:
+            src: "{{ github_deploykey_path }}"
+            dest: ~/.ssh/github_deploykey
+            mode: '0600'
+            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+          when: github_deploykey_path is defined
+        - name: install bitbucket deploykey
+          copy:
+            src: "{{ bitbucket_deploykey_path }}"
+            dest: ~/.ssh/bitbucket_deploykey
+            mode: '0600'
+            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+          when: bitbucket_deploykey_path is defined
+        - name: install gitlab deploykey
+          copy:
+            src: "{{ gitlab_deploykey_path }}"
+            dest: ~/.ssh/gitlab_deploykey
+            mode: '0600'
+            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+          when: gitlab_deploykey_path is defined
+        - name: Insert/Update ssh configuration block in ~/.ssh/config
+          blockinfile:
+            path: ~/.ssh/config
+            create: true
+            block: |
+              {% if github_deploykey_path is defined -%}
+              Host github.com
+                IdentityFile ~/.ssh/github_deploykey
+                StrictHostKeyChecking no
+                User git
+              {% endif %}
+              {% if bitbucket_deploykey_path is defined -%}
+              Host bitbucket.org
+                IdentityFile ~/.ssh/bitbucket_deploykey
+                StrictHostKeyChecking no
+                User git
+              {% endif %}
+              {% if gitlab_deploykey_path is defined -%}
+              Host gitlab.com
+                IdentityFile ~/.ssh/gitlab_deploykey
+                StrictHostKeyChecking no
+                User git
+              {% endif %}
+      become: false
     - name: set other task files
       set_fact:
-        app_setup_file: "{{ lookup('first_found', app_setup_files, errors='ignore') }}"
         post_task_file: "{{ lookup('first_found', post_task_files, errors='ignore') }}"
+        app_setup_file: "{{ lookup('first_found', app_setup_files, errors='ignore') }}"
       vars:
+        post_task_files:
+          files:
+            - post_task.yml
+          paths:
+            - ..
+            - .
         app_setup_files:
           files:
             - app.yml
@@ -226,15 +278,9 @@
           paths:
             - ..
             - .
-        post_task_files:
-          files:
-            - post_task.yml
-          paths:
-            - ..
-            - .
-    - name: setup application
-      include_tasks: "{{ app_setup_file }}"
-      when: (app_setup_file | length) > 0
     - name: execute post tasks
       include_tasks: "{{ post_task_file }}"
       when: (post_task_file | length) > 0
+    - name: setup application
+      include_tasks: "{{ app_setup_file }}"
+      when: (app_setup_file | length) > 0

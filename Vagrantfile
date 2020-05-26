@@ -132,6 +132,7 @@ Vagrant.configure("2") do |config|
 
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
     config.vm.provision "ansible_local" do |ansible|
+      ansible_extra_vars['vagrant_provisioner'] = 'ansible_local'
       ansible.playbook = "playbook.yml"
       ansible.provisioning_path = "/vagrant/provision"
       ansible.compatibility_mode = "2.0"
@@ -141,12 +142,15 @@ Vagrant.configure("2") do |config|
       end
     end
   else
+    # Install mitogen for Ansible
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision/install_mitogen.yml"
       ansible.config_file = "provision/ansible.cfg"
       ansible.compatibility_mode = "2.0"
     end
+
     config.vm.provision "ansible" do |ansible|
+      ansible_extra_vars['vagrant_provisioner'] = 'ansible'
       ansible.playbook = "provision/playbook.yml"
       ansible.config_file = "provision/ansible_with_mitogen.cfg"
       ansible.compatibility_mode = "2.0"
