@@ -233,10 +233,16 @@
             mode: '0600'
             remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
           when: gitlab_deploykey_path is defined
+        - name: install backlog ssh key
+          copy:
+            src: "{{ backlog_deploykey_path }}"
+            dest: ~/.ssh/backlog_deploykey
+            mode: '0600'
+            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+          when: backlog_deploykey_path is defined
         - name: Insert/Update ssh configuration block in ~/.ssh/config
           blockinfile:
             path: ~/.ssh/config
-            create: true
             block: |
               {% if github_deploykey_path is defined -%}
               Host github.com
@@ -256,6 +262,13 @@
                 StrictHostKeyChecking no
                 User git
               {% endif %}
+              {% if backlog_deploykey_path is defined -%}
+              Host *.git.backlog.jp
+                IdentityFile ~/.ssh/backlog_deploykey
+                StrictHostKeyChecking no
+              {% endif %}
+            create: true
+            mode: "0600"
       become: false
     - name: set other task files
       set_fact:
