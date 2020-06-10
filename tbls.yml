@@ -2,6 +2,10 @@
 # --------------
 # tbls config file
 # --------------
+### Name
+# name: mydatabase
+### Description
+# desc: This is My Database
 ### Document path
 docPath: /vagrant/output/schema
 ### DSN(Data Source Name)
@@ -30,11 +34,7 @@ er:
   comment: true
   # Distance between tables that display relations in the ER
   # Default is 1
-  distance: 2
-### Name
-# name: mydatabase
-### Description
-# desc: This is My Database
+  distance: 1
 ### Labels
 # labels:
 #   - cmdb
@@ -61,8 +61,6 @@ exclude:
   - phinxlog
 # include:
 #   - some_prefix_*
-# lintExclude:
-#   - CamelizeTable
 ### Lint
 lint:
   ## require table comment
@@ -74,12 +72,11 @@ lint:
     ## exclude columns from warnings
     # exclude:
     #   - id
-    #   - created_at
-    #   - updated_at
+    #   - created
+    #   - updated
     ## exclude tables from warnings
     # excludedTables:
     #   - logs
-    #   - comment_stars
   ## find a table that has no relation
   # unrelatedTable:
   #   enabled: true
@@ -113,6 +110,9 @@ lint:
 #       body: post body
 #   - table: logs
 #     tableComment: audit log table
+#     labels:
+#       - user
+#       - privacy data
 #   - table: post_comments
 #     tableComment: post and comments View table
 #     columnComments:
