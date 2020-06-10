@@ -31,7 +31,7 @@
     - role: xhgui
       tags: role_xhgui
   vars:
-    tbls_version: "1.36.0"
+    tbls_version: "1.38.3"
     tideware_version: "4.x"
     tideware_extension_name: tideways
   tasks:
@@ -90,47 +90,36 @@
     - name: install nkf
       yum:
         name: nkf
-    - name: download tbls
-      get_url:
-        url: "https://github.com/k1LoW/tbls/releases/download/v{{ tbls_version }}/tbls_v{{ tbls_version }}_linux_amd64.tar.gz"
-        dest: /usr/local/src/tbls_v{{ tbls_version }}_linux_amd64.tar.gz
-    - name: unarchive tbls archive file
-      unarchive:
-        src: /usr/local/src/tbls_v{{ tbls_version }}_linux_amd64.tar.gz
-        dest: /usr/local/bin
-        exclude:
-          - LICENSE
-          - README.md
-          - CHANGELOG.md
-        owner: root
-        group: root
-        remote_src: true
+    - name: install tbls
+      yum:
+        name: https://github.com/k1LoW/tbls/releases/download/v{{ tbls_version }}/tbls_{{ tbls_version }}-1_amd64.rpm
     - block:
       - name: create scripts
         template:
           src: "{{ item }}"
-          dest: ~/{{ item[:-3]|basename }}
+          dest: ~/{{ item[:-3] | basename }}
           mode: "0700"
         with_fileglob: scripts/*.j2
       become: false
     - block:
-      - name: check global composer setting
-        stat:
-          path: ~/.config/composer/composer.json
-        register: result
-      - name: install prestissimo(composer plugin) for vagrant
-        composer:
-          command: require
-          global_command: true
-          arguments: hirak/prestissimo
-        when: not result.stat.exists
-      - name: update global composer packages
-        composer:
-          command: update
-          global_command: true
-        when: result.stat.exists
+        - name: check global composer setting
+          stat:
+            path: ~/.config/composer/composer.json
+          register: result
+        - name: install prestissimo(composer plugin) for vagrant
+          composer:
+            command: require
+            global_command: true
+            arguments: hirak/prestissimo
+          when: not result.stat.exists
+        - name: update global composer packages
+          composer:
+            command: update
+            global_command: true
+          when: result.stat.exists
       become: false
       tags: prestissimo
+      when: install_prestissimo | default(false)
     - name: change owner on document root directory
       file:
         path: /var/www/html
@@ -153,7 +142,7 @@
         path: ~/.my.cnf
         create: true
         section: client
-        option: "{{ item.key|replace('_', '-') }}"
+        option: "{{ item.key | replace('_', '-') }}"
         value: "{{ item.value | string }}"
       with_dict:
         host: localhost
