@@ -1,4 +1,0 @@
-- name: install rclone(Rsync for cloud storage)
-  yum:
-    name: rclone
-  tags: rclone

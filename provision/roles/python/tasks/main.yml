@@ -1,5 +1,0 @@
----
-- name: install python packages
-  yum:
-    name: "{{ python_packages }}"
-    enablerepo: epel
