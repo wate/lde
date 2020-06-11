@@ -247,7 +247,11 @@ vagrant:
   # vm_cpu: 1
   ## 仮想マシンのメモリ
   # vm_memory: 1024
-  ## プロビジョニング実行時のタグ指定(実行部の指定)
+  # プロビジョニング実行時のタグ指定(スキップするタグの指定)
+  # provision_skip_tags:
+  #   - role_nodejs
+  #   - role_ruby
+  # プロビジョニング実行時のタグ指定(実行するタグの指定)
   # provision_only_tags:
   #   - role_mariadb
   #   - role_apache
