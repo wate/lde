@@ -131,6 +131,12 @@ Vagrant.configure("2") do |config|
   end
 
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
+    # Change Ansible global setting (on windows use)
+    # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
+    config.vm.provision "ansible_local" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "provision/ansible_local_provisioner_init.yml"
+    end
     config.vm.provision "ansible_local" do |ansible|
       ansible_extra_vars['vagrant_provisioner'] = 'ansible_local'
       ansible.playbook = "playbook.yml"
