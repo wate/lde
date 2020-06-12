@@ -7,7 +7,7 @@
         path: /etc/ansible/ansible.cfg
         section: defaults
         option: "{{ item.name }}"
-        value: "{{ item.value }}"
+        value: "{{ item.value | string }}"
       loop:
         - name: hash_behaviour
           value: merge
