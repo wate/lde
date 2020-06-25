@@ -66,13 +66,30 @@ apache_vhosts:
     #   hsts: "max-age=63072000"
     # ip: 127.0.0.1
     # port: 1080
-    # disabled: true
     # extra_setting: |
     #   <Location /server-status>
     #     SetHandler server-status
     #     Require ip 127.0.0.1
     #   </Location>
-    # # removed: true
+    ## -------------
+    ## バーチャルホストの無効化
+    ## -------------
+    # disabled: true
+    ## -------------
+    ## バーチャルホストの設定ファイル自体の削除
+    ## -------------
+    # removed: true
+    ## -------------
+    ## ドキュメントルートを作成する
+    ## -------------
+    # document_root_create: true
+    ## -------------
+    ## ドキュメントルートの作成オプション
+    ## ※document_root_createが指定されている場合のみ有効
+    ## -------------
+    # document_root_owner: root
+    # document_root_group: root
+    # document_root_mode: "0755"
   - name: 99-status
     ip: 127.0.0.1
     port: 1080
