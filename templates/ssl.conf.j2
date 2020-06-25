@@ -52,9 +52,18 @@ SSLCryptoDevice builtin
 SSLProtocol {{ apache_ssl_cfg.protocol | join(' ') }}
 SSLCipherSuite {{ apache_ssl_cfg.cipher_suite | join(':') }}
 SSLHonorCipherOrder {{ 'on' if apache_ssl_cfg.honor_cipher_order else 'off' }}
+{% if apache_ssl_cfg.compression is defined -%}
 SSLCompression {{ 'on' if apache_ssl_cfg.compression else 'off' }}
-
+{% endif %}
+{% if apache_ssl_cfg.use_stapling is defined -%}
 SSLUseStapling {{ 'on' if apache_ssl_cfg.use_stapling else 'off' }}
+{% endif %}
+{% if apache_ssl_cfg.stapling_responder_timeout is defined -%}
 SSLStaplingResponderTimeout {{ apache_ssl_cfg.stapling_responder_timeout }}
+{% endif %}
+{% if apache_ssl_cfg.stapling_return_responder_errors is defined -%}
 SSLStaplingReturnResponderErrors {{ 'on' if apache_ssl_cfg.stapling_return_responder_errors else 'off' }}
+{% endif %}
+{% if apache_ssl_cfg.stapling_cache is defined -%}
 SSLStaplingCache {{ apache_ssl_cfg.stapling_cache }}
+{% endif %}
