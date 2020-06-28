@@ -20,16 +20,16 @@
     path: /root/.my.cnf
   register: result
 - block:
-  - name: create mysql secure installation query file
-    template:
-      src: mysql_secure_installation.sql.j2
-      dest: /tmp/mysql_secure_installation.sql
-  - name: execute mysql secure installation
-    shell: mysql -u root mysql </tmp/mysql_secure_installation.sql
-  - name: remove mysql secure installation query file
-    file:
-      path: /tmp/mysql_secure_installation.sql
-      state: absent
+    - name: create mysql secure installation query file
+      template:
+        src: mysql_secure_installation.sql.j2
+        dest: /tmp/mysql_secure_installation.sql
+    - name: execute mysql secure installation
+      shell: mysql -u root mysql </tmp/mysql_secure_installation.sql
+    - name: remove mysql secure installation query file
+      file:
+        path: /tmp/mysql_secure_installation.sql
+        state: absent
   when: not result.stat.exists
 - name: change root password
   command: mysqladmin password "{{ mariadb_root_password }}" -u root
@@ -58,7 +58,7 @@
     state: "{{ 'present' if item.state | default(true) else 'absent' }}"
   with_items: "{{ mariadb_databases }}"
   loop_control:
-      label: "{{ item.name }}"
+    label: "{{ item.name }}"
 - name: create MariaDB users(on mariadb_databases variable)
   mysql_user:
     name: "{{ item.0.user | default(item.0.name) }}"
