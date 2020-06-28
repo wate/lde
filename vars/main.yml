@@ -1,3 +1,4 @@
+---
 mariadb_mysql55_default_sql_mode:
   - NO_ENGINE_SUBSTITUTION
 mariadb_mysql56_default_sql_mode:

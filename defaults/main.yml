@@ -73,7 +73,7 @@ mariadb_cfg:
     ## Cache
     query_cache_limit: 8M
     query_cache_size: 64M
-    query_cache_type:  1
+    query_cache_type: 1
     # ------------------
     # InnoDB
     # ------------------
