@@ -55,31 +55,41 @@ apache_vhosts:
     #     - "-TLSv1"
     #     - "-TLSv1.1"
     #   cipher_suite:
+    #     - ECDHE-ECDSA-AES128-GCM-SHA256
+    #     - ECDHE-RSA-AES128-GCM-SHA256
     #     - ECDHE-ECDSA-AES256-GCM-SHA384
     #     - ECDHE-RSA-AES256-GCM-SHA384
     #     - ECDHE-ECDSA-CHACHA20-POLY1305
     #     - ECDHE-RSA-CHACHA20-POLY1305
-    #     - ECDHE-ECDSA-AES128-GCM-SHA256
-    #     - ECDHE-RSA-AES128-GCM-SHA256
-    #     - ECDHE-ECDSA-AES256-SHA384
-    #     - ECDHE-RSA-AES256-SHA384
-    #     - ECDHE-ECDSA-AES128-SHA256
-    #     - ECDHE-RSA-AES128-SHA256
-    #   honor_cipher_order: true
-    #   compression: false
-    #   stapling_responder_timeout: 5
-    #   stapling_return_responder_errors: false
-    #   stapling_cache: "shmcb:/var/run/ocsp(128000)"
-    #   hsts: "max-age=15768000"
+    #     - DHE-RSA-AES128-GCM-SHA256
+    #     - DHE-RSA-AES256-GCM-SHA384
+    #   hsts: "max-age=63072000"
     # ip: 127.0.0.1
     # port: 1080
-    # disabled: true
     # extra_setting: |
     #   <Location /server-status>
     #     SetHandler server-status
     #     Require ip 127.0.0.1
     #   </Location>
-    # # removed: true
+    ## -------------
+    ## バーチャルホストの無効化
+    ## -------------
+    # disabled: true
+    ## -------------
+    ## バーチャルホストの設定ファイル自体の削除
+    ## -------------
+    # removed: true
+    ## -------------
+    ## ドキュメントルートを作成する
+    ## -------------
+    # document_root_create: true
+    ## -------------
+    ## ドキュメントルートの作成オプション
+    ## ※document_root_createが指定されている場合のみ有効
+    ## -------------
+    # document_root_owner: root
+    # document_root_group: root
+    # document_root_mode: "0755"
   - name: 99-status
     ip: 127.0.0.1
     port: 1080
@@ -148,22 +158,15 @@ apache_ssl_cfg:
     - "-TLSv1"
     - "-TLSv1.1"
   cipher_suite:
+    - ECDHE-ECDSA-AES128-GCM-SHA256
+    - ECDHE-RSA-AES128-GCM-SHA256
     - ECDHE-ECDSA-AES256-GCM-SHA384
     - ECDHE-RSA-AES256-GCM-SHA384
     - ECDHE-ECDSA-CHACHA20-POLY1305
     - ECDHE-RSA-CHACHA20-POLY1305
-    - ECDHE-ECDSA-AES128-GCM-SHA256
-    - ECDHE-RSA-AES128-GCM-SHA256
-    - ECDHE-ECDSA-AES256-SHA384
-    - ECDHE-RSA-AES256-SHA384
-    - ECDHE-ECDSA-AES128-SHA256
-    - ECDHE-RSA-AES128-SHA256
-  honor_cipher_order: true
-  compression: false
-  use_stapling: true
-  stapling_responder_timeout: 5
-  stapling_return_responder_errors: false
-  stapling_cache: "shmcb:/var/run/ocsp(128000)"
+    - DHE-RSA-AES128-GCM-SHA256
+    - DHE-RSA-AES256-GCM-SHA384
+  honor_cipher_order: false
 
 apache_module_base:
   buffer: false
