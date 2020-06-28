@@ -29,8 +29,32 @@
           - key: https://github.com/wate.keys
           - key: https://github.com/nogajun.keys
             removed: true
-        shell: /usr/bin/bash
         admin: true
+        shell: /usr/bin/bash
+        ssh_config:
+          - name: github.com
+            content: |
+              HostName github.com
+              User git
+              IdentityFile ~/.ssh/github_deploy_key
+              StrictHostKeyChecking no
+          - name: bitbucket.org
+            content: |
+              HostName bitbucket.org
+              User git
+              IdentityFile ~/.ssh/bitbucket_deploy_key
+              StrictHostKeyChecking no
+          - name: gitlab.com
+            content: |
+              HostName gitlab.com
+              User git
+              IdentityFile ~/.ssh/gitlab_deploy_key
+              StrictHostKeyChecking no
+        upload_private_keys:
+          - name: github_deploy_key
+            src: ~/.ssh/Github
+          - name: bitbucket_deploy_key
+            src: ~/.ssh/bitbucket
         secret_vars:
           - name: DB_HOST
             value: localhost

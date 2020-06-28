@@ -1,3 +1,4 @@
+---
 - name: install requrement packages
   yum:
     name: sudo
