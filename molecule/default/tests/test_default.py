@@ -33,7 +33,3 @@ def test_config(host):
     assert hosts_file.user == 'root'
     assert hosts_file.group == 'root'
     assert hosts_file.mode == 0o644
-    # host_vars = role_vars
-    # inventory_hostname = host.ansible.get_variables()['inventory_hostname']
-    # if inventory_hostname in ansible_host_vars.keys():
-    #     host_vars = ansible_host_vars[inventory_hostname]
