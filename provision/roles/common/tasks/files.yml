@@ -12,16 +12,20 @@
     url_username: "{{ item.auth_basic_user | default(omit) }}"
     url_password: "{{ item.auth_basic_password | default(omit) }}"
     mode: "{{ item.mode | default(omit) }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
   loop: "{{ common_download_files }}"
 - name: upload files
   copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     checksum: "{{ item.checksum | default(omit) }}"
-    mode:  "{{ item.mode | default(omit) }}"
+    mode: "{{ item.mode | default(omit) }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
   loop: "{{ common_upload_files }}"
 - name: remove files
   file:
     path: "{{ item.dest }}"
     state: absent
-  loop:  "{{ common_removed_files }}"
+  loop: "{{ common_removed_files }}"
