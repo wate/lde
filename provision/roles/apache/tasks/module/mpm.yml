@@ -1,3 +1,4 @@
+---
 - name: update load mpm module setting
   lineinfile:
     path: /etc/httpd/conf.modules.d/00-mpm.conf
