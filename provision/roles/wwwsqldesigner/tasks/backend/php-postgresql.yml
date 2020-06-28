@@ -1,3 +1,4 @@
+---
 - name: replace save action database setting
   blockinfile:
     path: "{{ wwwsqldesigner_dest }}/backend/{{ item }}/index.php"
