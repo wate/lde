@@ -42,6 +42,33 @@ common_users: []
   #     - key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
   #       removed: true
   #   shell: /bin/nologin
+  #   ssh_config:
+  #     - name: github.com
+  #       content: |
+  #         HostName github.com
+  #         User git
+  #         IdentityFile ~/.ssh/github_deploy_key
+  #         StrictHostKeyChecking no
+  #     - name: bitbucket.org
+  #       content: |
+  #         HostName bitbucket.org
+  #         User git
+  #         IdentityFile ~/.ssh/bitbucket_deploy_key
+  #         StrictHostKeyChecking no
+  #     - name: gitlab.com
+  #       content: |
+  #         HostName gitlab.com
+  #         User git
+  #         IdentityFile ~/.ssh/gitlab_deploy_key
+  #         StrictHostKeyChecking no
+  #   # コントロールマシン上の秘密鍵をターゲットマシンの該当ユーザーの~/.ssh/{name}に配置します
+  #   upload_private_keys:
+  #     - name: github_deploy_key
+  #       src: ~/.ssh/github
+  #     - name: bitbucket_deploy_key
+  #       src: ~/.ssh/bitbucket
+  #     - name: gitlab_deploy_key
+  #       src: ~/.ssh/gitlab
   #   secret_vars:
   #     - name: DB_HOST
   #       value: localhost
@@ -165,7 +192,7 @@ yum_cron_hourly_cfg: []
   #   value: localhost
 
 common_swap_dest: /var/spool/swap/swapfile
-common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000)|round(1, 'floor')|float * 2)|int }}"
+common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000) | round(1, 'floor') | float * 2) | int }}"
 
 common_files:
   # # ローカルにあるファイルをアップロード

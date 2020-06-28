@@ -1,3 +1,4 @@
+---
 - name: install etckeeper
   yum:
     name: etckeeper

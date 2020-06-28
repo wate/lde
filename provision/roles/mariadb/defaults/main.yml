@@ -14,7 +14,6 @@ mariadb_databases: []
   #   ## optional database setting
   #   encoding: utf8mb4
   #   collation: utf8mb4_general_ci
-  #   import_data: /tmp/sample.sql.bz2
   #   state: false
   #   ## optional user setting
   #   hosts:
@@ -30,7 +29,8 @@ mariadb_users: []
   #     - "127.0.0.1"
   #     - "::1"
   #     - localhost
-  #   priv: "sample.*:ALL"
+  #   privs:
+  #     - "sample.*:ALL"
   #   state: false
 
 mariadb_max_connections: 100
@@ -73,7 +73,7 @@ mariadb_cfg:
     ## Cache
     query_cache_limit: 8M
     query_cache_size: 64M
-    query_cache_type:  1
+    query_cache_type: 1
     # ------------------
     # InnoDB
     # ------------------

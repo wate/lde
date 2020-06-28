@@ -1,9 +1,11 @@
-## アプリケーション種別：default / wordpress_plugin / wordpress_theme
+## アプリケーション種別：default / wordpress_plugin / wordpress_theme / none
 app_type: "default"
 ## ドメイン
-domain: "example.com"
+domain: "example.local"
 ## PHPのバージョン：5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4
-php_version: 7.3
+php_version: 7.4
+### https://github.com/hirak/prestissimo
+install_prestissimo: false
 wordpress:
   ## ダウンロードするWordPressのバージョン
   version: "latest"
@@ -245,7 +247,11 @@ vagrant:
   # vm_cpu: 1
   ## 仮想マシンのメモリ
   # vm_memory: 1024
-  ## プロビジョニング実行時のタグ指定(実行部の指定)
+  # プロビジョニング実行時のタグ指定(スキップするタグの指定)
+  # provision_skip_tags:
+  #   - role_nodejs
+  #   - role_ruby
+  # プロビジョニング実行時のタグ指定(実行するタグの指定)
   # provision_only_tags:
   #   - role_mariadb
   #   - role_apache
@@ -260,30 +266,44 @@ vagrant:
     # - guest: 22
     #   host: 2240
     #   id: ssh
-  synced_folder:
-    type:
-      default:
-        local: ./source
-        remote: /var/www/html
-      wordpress:
-        local: ./source
-        remote: /var/www/html
-      wordpress_plugin:
-        local: ./source
-        remote: /var/www/html/wp-content/plugins/source
-      wordpress_theme:
-        local: ./source
-        remote: /var/www/html/wp-content/themes/source
-      "ec-cube":
-        local: ./source
-        remote: /var/www/html
-    owner: vagrant
-    group: vagrant
-    mount_options:
-      - dmode=777
-      - fmode=666
-    # type: rsync
-    # group: vagrant
-    # owner: vagrant
-    # create: false
-    # disabled: false
+  ## 共有ディレクトリの設定
+  synced_folders: []
+    # - local: ../source_1
+    #   remote: /var/www/system_1
+    # - local: ../source_2
+    #   remote: /var/www/system_2
+  ## 追加で設定するホスト名
+  # append_vm_hosts:
+  #   - example.localhost
+  #   - example.dev
+
+## アプリケーションタイプ毎の共有ディレクトリの設定
+vagrant_synced_folder_types:
+  default:
+    local: ./source
+    remote: /var/www/html
+  wordpress:
+    local: ./source
+    remote: /var/www/html
+  wordpress_plugin:
+    local: ./source
+    remote: /var/www/html/wp-content/plugins/source
+  wordpress_theme:
+    local: ./source
+    remote: /var/www/html/wp-content/themes/source
+  "ec-cube":
+    local: ./source
+    remote: /var/www/html
+
+## 共有ディレクトリのデフォルトのオプション設定
+vagrant_synced_folder_default_options:
+  owner: vagrant
+  group: vagrant
+  mount_options:
+    - dmode=777
+    - fmode=666
+  # type: rsync
+  # group: vagrant
+  # owner: vagrant
+  # create: false
+  # disabled: false

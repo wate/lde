@@ -5,7 +5,7 @@ require 'yaml'
 
 Vagrant.configure("2") do |config|
   # Load Ansiblle host variable file
-  ansible_vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'provision','host_vars', 'default.yml'))
+  ansible_vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'provision', 'group_vars', 'all.yml'))
   settings = YAML.load_file(ansible_vars_file)
   # Merge Vagrant config file
   vagrant_setting_file = File.expand_path(File.join(File.dirname(__FILE__), 'config.yml'))
@@ -25,6 +25,10 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  if Vagrant.has_plugin?('vagrant-vbguest')
+    config.vbguest.auto_update = false
+  end
+
   # Merge Ansible Extra Variable file
   extra_var_file = File.expand_path(File.join(File.dirname(__FILE__), 'extra_vars.yml'))
   ansible_custom_vars = {}
@@ -38,19 +42,25 @@ Vagrant.configure("2") do |config|
   settings['app_type'] = ansible_custom_vars['app_type'] if ansible_custom_vars.key?('app_type')
 
   # synced folders
-  app_type = 'default'
-  if settings['vagrant']['synced_folder']['type'].key?(settings['app_type'])
-    app_type = settings['app_type']
+  synced_folders = settings['vagrant']['synced_folders'];
+  if settings.key?('app_type') && settings['vagrant_synced_folder_types'].key?(settings['app_type'])
+    synced_folders.push settings['vagrant_synced_folder_types'][settings['app_type']]
   end
-  synced_folder_args = [
-    settings['vagrant']['synced_folder']['type'][app_type]['local'],
-    settings['vagrant']['synced_folder']['type'][app_type]['remote']
-  ]
-  settings['vagrant']['synced_folder'].delete('type')
-  unless settings['vagrant']['synced_folder'].empty?
-    synced_folder_args.push(settings['vagrant']['synced_folder'].map{|k,v| [k.to_sym, v] }.to_h)
+  synced_folders.each do |synced_folder_setting|
+    synced_folder_args = [
+      synced_folder_setting['local'],
+      synced_folder_setting['remote']
+    ]
+    synced_folder_options = settings['vagrant_synced_folder_default_options'].dup
+    synced_folder_setting.delete('local')
+    synced_folder_setting.delete('remote')
+    unless synced_folder_setting.empty?
+      synced_folder_options.merge!(synced_folder_setting);
+    end
+    # 共有ディレクトリの設定オプションを引数に追加
+    synced_folder_args.push(synced_folder_options.map{|k,v| [k.to_sym, v] }.to_h)
+    config.vm.send(:synced_folder, *synced_folder_args)
   end
-  config.vm.send(:synced_folder, *synced_folder_args)
 
   vm_host_aliases = [
     settings['domain'],
@@ -64,11 +74,18 @@ Vagrant.configure("2") do |config|
     # XHGUI
     'profile.' + settings['domain'],
   ]
+
+  if settings['vagrant'].key?('append_vm_hosts')
+    vm_host_aliases += settings['vagrant']['append_vm_hosts']
+  end
+  vm_host_aliases.uniq!
+
   # vagrant-hostsupdater
   plugin_setting = {}
   if settings['vagrant'].key?('plugin') and settings['vagrant']['plugin'].key?('hostsupdater')
     plugin_setting = config['vagrant']['plugin']['hostsupdater']
   end
+
   if Vagrant.has_plugin?('vagrant-hostsupdater')
     config.hostsupdater.remove_on_suspend = plugin_setting.key?('remove_on_suspend') ? plugin_setting['remove_on_suspend'] : true
     config.hostsupdater.aliases = vm_host_aliases
@@ -94,7 +111,7 @@ Vagrant.configure("2") do |config|
   end
   # Provisioning
   ansible_extra_vars = {
-    'app_type' => app_type,
+    'app_type' => settings['app_type'],
     'domain' => settings['domain'],
     'php_version' => settings['php_version'],
     'doc_root_suffix' => settings['doc_root_suffix'],
@@ -114,7 +131,14 @@ Vagrant.configure("2") do |config|
   end
 
   if Vagrant::Util::Platform.windows? or settings['vagrant']['provisioner'] == 'ansible_local'
+    # Change Ansible global setting (on windows use)
+    # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
     config.vm.provision "ansible_local" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "provision/ansible_local_provisioner_init.yml"
+    end
+    config.vm.provision "ansible_local" do |ansible|
+      ansible_extra_vars['vagrant_provisioner'] = 'ansible_local'
       ansible.playbook = "playbook.yml"
       ansible.provisioning_path = "/vagrant/provision"
       ansible.compatibility_mode = "2.0"
@@ -122,14 +146,20 @@ Vagrant.configure("2") do |config|
       if settings['vagrant'].key?('provision_only_tags')
         ansible.tags = settings['vagrant']['provision_only_tags']
       end
+      if settings['vagrant'].key?('provision_skip_tags')
+        ansible.skip_tags = settings['vagrant']['provision_skip_tags']
+      end
     end
   else
+    # Install mitogen for Ansible
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision/install_mitogen.yml"
       ansible.config_file = "provision/ansible.cfg"
       ansible.compatibility_mode = "2.0"
     end
+
     config.vm.provision "ansible" do |ansible|
+      ansible_extra_vars['vagrant_provisioner'] = 'ansible'
       ansible.playbook = "provision/playbook.yml"
       ansible.config_file = "provision/ansible_with_mitogen.cfg"
       ansible.compatibility_mode = "2.0"
@@ -139,6 +169,9 @@ Vagrant.configure("2") do |config|
       }
       if settings['vagrant'].key?('provision_only_tags')
         ansible.tags = settings['vagrant']['provision_only_tags']
+      end
+      if settings['vagrant'].key?('provision_skip_tags')
+        ansible.skip_tags = settings['vagrant']['provision_skip_tags']
       end
     end
   end
