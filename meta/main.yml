@@ -1,8 +1,9 @@
+---
 galaxy_info:
   author: yoshiaki tanaka
   description: install wp-cli
   license: MIT
-  min_ansible_version: 2.5
+  min_ansible_version: 2.9
   platforms:
     - name: EL
       versions:
