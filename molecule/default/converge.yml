@@ -4,6 +4,10 @@
   gather_facts: true
   become: true
   vars:
+    common_users:
+      - name: vagrant
+        groups:
+          - wheel
     apache_vhosts:
       - name: test-01
         default: true
@@ -107,20 +111,5 @@
         document_root_group: wheel
         document_root_mode: "0755"
   roles:
+    - role: common
     - role: apache
-  pre_tasks:
-    - name: dump vars
-      block:
-        - name: create dump directory
-          file:
-            path: dump_vars
-            state: directory
-          changed_when: false
-        - name: dump vars
-          blockinfile:
-            path: "dump_vars/{{ inventory_hostname }}.yml"
-            create: true
-            block: "{{ vars | to_json }}"
-          changed_when: false
-      connection: local
-      become: false
