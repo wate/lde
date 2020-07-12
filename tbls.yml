@@ -27,14 +27,17 @@ er:
   # Default is false
   skip: false
   # ER diagram format
-  # Default is `png`
+  # Default is `svg`
   format: svg
   # Add table/column comment to ER diagram
   # Default is false
   comment: true
   # Distance between tables that display relations in the ER
   # Default is 1
-  distance: 1
+  # distance: 1
+  # ER diagram (png/jpg) font (font name, font file, font path or keyword)
+  # Default is "" ( system default )
+  font: ""
 ### Labels
 # labels:
 #   - cmdb
