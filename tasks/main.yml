@@ -103,6 +103,9 @@
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
   notify: reload apache
+- name: install firewalld
+  yum:
+    name: firewalld
 - name: allow http port
   firewalld:
     service: http
