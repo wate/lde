@@ -6,4 +6,4 @@ memcached_cfg:
   cachesize: 64
   options: ""
 
-# memcached_allow_host: any
+# memcached_allow_connect_other_host: true
