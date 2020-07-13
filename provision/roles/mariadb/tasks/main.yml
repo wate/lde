@@ -24,6 +24,7 @@
       template:
         src: mysql_secure_installation.sql.j2
         dest: /tmp/mysql_secure_installation.sql
+      no_log: true
     - name: execute mysql secure installation
       shell: mysql -u root mysql </tmp/mysql_secure_installation.sql
     - name: remove mysql secure installation query file
