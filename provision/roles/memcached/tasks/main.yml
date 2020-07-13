@@ -12,10 +12,17 @@
     name: memcached
     state: started
     enabled: true
-- name: allow memcached port
-  firewalld:
-    port: "{{ memcached_cfg.port|default(11211) }}/tcp"
-    permanent: true
-    state: enabled
-  when: memcached_allow_host is defined
-  notify: restart firewalld
+- name: allow firewall
+  block:
+    - name: install firewalld
+      yum:
+        name: firewalld
+    - name: allow memcached port
+      firewalld:
+        port: "{{ memcached_cfg.port | default(11211) }}/tcp"
+        permanent: true
+        state: enabled
+      notify: restart firewalld
+  when:
+    - memcached_allow_connect_other_host is defined
+    - memcached_allow_connect_other_host

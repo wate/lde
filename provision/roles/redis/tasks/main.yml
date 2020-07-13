@@ -13,11 +13,17 @@
     name: redis
     state: started
     enabled: true
-- name: allow redis port
-  firewalld:
-    port: "{{ redis_cfg.port }}/tcp"
-    source: "{{ mariadb_allow_host }}"
-    permanent: true
-    state: enabled
-  when: redis_allow_host is defined
-  notify: restart firewalld
+- name: allow fiewwall
+  block:
+    - name: install firewalld
+      yum:
+        name: firewalld
+    - name: allow redis port
+      firewalld:
+        port: "{{ redis_cfg.port }}/tcp"
+        permanent: true
+        state: enabled
+      notify: restart firewalld
+  when:
+    - redis_allow_connect_other_host is defined
+    - redis_allow_connect_other_host

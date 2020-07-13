@@ -3,7 +3,7 @@
   systemd:
     name: memcached
     state: restarted
-- name: reload td-agent
+- name: restart firewalld
   systemd:
-    name: td-agent
-    state: reloaded
+    name: firewalld
+    state: restarted

@@ -13,7 +13,7 @@ Role Variables
 
 ```yaml
 lexicon_additional_packages:
-  - python2-boto3
+  - python2-dns-lexicon+route53
 ```
 
 Example Playbook
