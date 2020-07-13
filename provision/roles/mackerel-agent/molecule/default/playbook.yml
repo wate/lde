@@ -1,0 +1,31 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    mackerel_agent_api_key: abcdefg
+    mackerel_agent_active_and_enabled_on_system_startup: false
+    mackerel_agent_extra_setting: |
+      [plugin.checks.la]
+      command = "check-load -w 3,2,1 -c 3,2,1"
+      action = { command = "bash -c '[ \"$MACKEREL_STATUS\" != \"OK\" ]' && date >> /var/log/ps-auxf.txt && ps auxf >> /var/log/ps-auxf.txt", user = "root" }
+      memo = "LAをチェックし、高騰したときにはそのときの ps auxf の結果を出力します"
+  roles:
+    - role: mackerel-agent
+  pre_tasks:
+    - name: dump vars
+      block:
+        - name: create dump directory
+          file:
+            path: dump_vars
+            state: directory
+          changed_when: false
+        - name: dump vars
+          blockinfile:
+            path: "dump_vars/{{ inventory_hostname }}.yml"
+            create: true
+            block: "{{ vars | to_json }}"
+          changed_when: false
+      connection: local
+      become: false

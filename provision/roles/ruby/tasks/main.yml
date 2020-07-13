@@ -1,0 +1,4 @@
+---
+- name: install ruby packages
+  yum:
+    name: "{{ ruby_packages }}"
