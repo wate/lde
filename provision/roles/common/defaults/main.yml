@@ -3,7 +3,6 @@ common_packages:
   - unzip
   - zip
   - perl
-  - crontabs
   - cpp
   - make
   - autoconf
@@ -195,7 +194,7 @@ yum_cron_hourly_cfg: []
 common_swap_dest: /var/spool/swap/swapfile
 common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000) | round(1, 'floor') | float * 2) | int }}"
 
-common_files: []
+common_files:
   # # ローカルにあるファイルをアップロード
   # - dest: /usr/local/bin/upload-script
   #   src: path/to/script
