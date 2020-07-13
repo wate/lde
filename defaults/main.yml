@@ -106,4 +106,4 @@ redis_cfg:
   hz: 10
   aof_rewrite_incremental_fsync: true
 
-# redis_allow_host: any
+# redis_allow_connect_other_host: true
