@@ -1,0 +1,28 @@
+---
+xhgui_cfg:
+  dbtype: mysql
+  dbhost: localhost
+  dbuser: root
+  dbpass: password
+  dbname: xhprof
+  dbadapter: Pdo
+  servername: myserver
+  namespace: myapp
+  url: http://url/to/xhprof/xhprof_html
+  getparam: _profile
+  serializer: php
+  dot_binary: /usr/bin/dot
+  dot_tempdir: /tmp
+  dot_errfile: /tmp/xh_dot.err
+  display: false
+  doprofile: false
+  ignoreURLs: []
+  ignoreDomains: []
+  exceptionURLs: []
+  exceptionPostURLs:
+    - login
+  controlIPs: false
+  # ignoredFunctions:
+  #   - call_user_func
+  #   - call_user_func_array
+  #   - socket_select

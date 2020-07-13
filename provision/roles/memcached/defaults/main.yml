@@ -1,0 +1,9 @@
+---
+memcached_cfg:
+  # port: 11211
+  user: memcached
+  maxconn: 1024
+  cachesize: 64
+  options: ""
+
+# memcached_allow_host: any
