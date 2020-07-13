@@ -3,7 +3,6 @@
   yum:
     name: python2-dns-lexicon
     enablerepo: epel
-
 - name: install additional packages
   yum:
     name: "{{ lexicon_additional_packages }}"
