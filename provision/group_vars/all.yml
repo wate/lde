@@ -100,19 +100,6 @@ php_cfg:
   memory_limit: 512M
   max_execution_time: 180
   extra_setting: |
-    [tideways]
-    tideways.auto_prepend_library = 0
-    tideways.api_key =
-    tideways.auto_start = 1
-    tideways.connection = unix:///var/run/tideways/tidewaysd.sock
-    tideways.monitor_cli = 0
-    tideways.monitor = basic
-    tideways.collect = tracing
-    tideways.framework =
-    tideways.service =
-    tideways.timeout = 10000
-    tideways.distributed_tracing_hosts = 127.0.0.1
-    tideways.udp_connection = 127.0.0.1:8135
     [xdebug]
     xdebug.auto_trace = Off
     xdebug.cli_color = 0
@@ -189,42 +176,6 @@ wwwsqldesigner_backend_pdo_cfg:
     dsn: "mysql:dbname=information_schema;host=localhost"
     user: root
     password: *db_root_password
-
-# --------------
-# XHGUIの設定
-# --------------
-xhgui_cfg:
-  dbtype: mysql
-  dbhost: localhost
-  dbuser: xhprof
-  dbpass: *xhgui_db_password
-  dbname: xhprof
-  dbadapter: Pdo
-  servername: "{{ domain }}"
-  namespace: myapp
-  url: http://profile.{{ domain }}/
-  getparam: _profile
-  serializer: php
-  dot_binary: /usr/bin/dot
-  dot_tempdir: /tmp
-  dot_errfile: /tmp/xh_dot.err
-  display: false
-  doprofile: false
-  ignoreURLs: []
-  ignoreDomains:
-    - "profile.{{ domain }}"
-    - "db.{{ domain }}"
-    - "er.{{ domain }}"
-    - "mailhog.{{ domain }}"
-  exceptionURLs: []
-  exceptionPostURLs:
-    - login
-  controlIPs: false
-  # ignoredFunctions:
-  #   - call_user_func
-  #   - call_user_func_array
-  #   - socket_select
-
 
 # --------------
 # Apacheのバーチャルホストの設定
@@ -305,18 +256,6 @@ apache_vhosts:
     require:
       - type: ip
         value: 192.168.33
-  - name: 04-XHGUI
-    state: "{{ true if xhgui_dest is defined else false }}"
-    server_name: profile.{{ domain }}
-    document_root: "{{ xhgui_dest|default('/opt/xhgui') }}/xhprof_html"
-    directory_index:
-      - index.html
-      - index.htm
-      - index.php
-    custom_log:
-      path: /dev/null
-      format: combine
-      env: 0
 
 # --------------
 # Apacheのバーチャルホストの設定(SSL利用時)
@@ -431,23 +370,6 @@ apache_vhosts:
 #   - name: 03-WWWSQLDesigner_http
 #     state: "{{ true if wwwsqldesigner_dest is defined else false }}"
 #     server_name: er.{{ domain }}
-#     include:
-#       - "{{ apache_snippet_dir }}/redirect_https.conf"
-#   - name: 04-XHGUI
-#     state: "{{ true if xhgui_dest is defined else false }}"
-#     server_name: profile.{{ domain }}
-#     document_root: "{{ xhgui_dest|default('/opt/xhgui') }}/xhprof_html"
-#     custom_log:
-#       path: /dev/null
-#       format: combine
-#       env: 0
-#     ssl:
-#       certificate_file: "{{ dehydrated_cert_dir }}/{{ domain }}/cert.pem"
-#       certificate_key_file: "{{ dehydrated_cert_dir }}/{{ domain }}/privkey.pem"
-#       certificate_chain_file: "{{ dehydrated_cert_dir }}/{{ domain }}/fullchain.pem"
-#   - name: 04-XHGUI_http
-#     state: "{{ true if xhgui_dest is defined else false }}"
-#     server_name: profile.{{ domain }}
 #     include:
 #       - "{{ apache_snippet_dir }}/redirect_https.conf"
 

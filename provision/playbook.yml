@@ -28,8 +28,6 @@
       tags: role_phpmyadmin
     - role: wwwsqldesigner
       tags: role_wwwsqldesigner
-    - role: xhgui
-      tags: role_xhgui
   vars:
     tbls_version: "1.40.0"
     tideware_version: "4.x"
@@ -45,42 +43,6 @@
       yum:
         name: php-pecl-xdebug
       when: php_xdebug_installed | default(false)
-    - name: install php tideways module
-      block:
-        - name: install php-devel package
-          yum:
-            name: php-devel
-        - name: checkout source
-          git:
-            repo: https://github.com/tideways/php-profiler-extension.git
-            dest: /usr/local/src/php-profiler-extension
-            version: "{{ tideware_version }}"
-          register: result
-        - block:
-            - name: build extension(phpize)
-              command: phpize
-              args:
-                chdir: /usr/local/src/php-profiler-extension
-            - name: build extension(./configure)
-              command: ./configure
-              args:
-                chdir: /usr/local/src/php-profiler-extension
-            - name: build extension(make)
-              command: make
-              args:
-                chdir: /usr/local/src/php-profiler-extension
-            - name: build extension(make install)
-              command: make install
-              args:
-                chdir: /usr/local/src/php-profiler-extension
-          when: result is changed
-        - name: create extension config file
-          lineinfile:
-            path: /etc/php.d/20-tideways.ini
-            regexp: ^#?\s*extension=.*
-            line: "extension={{ tideware_extension_name }}{{ '.so' if php_version is version('7.2', '<') else '' }}"
-            create: true
-      when: php_tideways_profiler_installed|default(false)
     - name: install the silver searcher
       yum:
         name: the_silver_searcher
