@@ -40,9 +40,9 @@ common_users:
           StrictHostKeyChecking no
     upload_private_keys:
       - name: github_deploy_key
-        src: ~/.ssh/Github
+        src: keypair/dummy1
       - name: bitbucket_deploy_key
-        src: ~/.ssh/bitbucket
+        src: keypair/dummy2
     secret_vars:
       - name: DB_HOST
         value: localhost
