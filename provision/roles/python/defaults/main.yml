@@ -1,5 +1,0 @@
----
-python_packages:
-  - python-setuptools
-  - python2-pip
-  - python-devel
