@@ -1,8 +1,9 @@
 lexicon
 =========
 
-[lexicon](https://github.com/AnalogJ/lexicon)をインストールします
+[![Build Status](https://travis-ci.org/wate/ansible-role-lexicon.svg?branch=master)](https://travis-ci.org/wate/ansible-role-lexicon)
 
+[lexicon](https://github.com/AnalogJ/lexicon)をインストールします
 
 Role Variables
 --------------
@@ -22,7 +23,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: lexicon }
+     - role: lexicon
 ```
 
 License
