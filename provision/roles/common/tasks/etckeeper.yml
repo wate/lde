@@ -1,0 +1,17 @@
+---
+- name: install etckeeper
+  yum:
+    name: etckeeper
+    enablerepo: epel
+- name: check git repository directory
+  stat:
+    path: /etc/.git
+  register: result
+- block:
+    - name: initilize etckeeper
+      command: etckeeper init
+      args:
+        chdir: /etc
+    - name: initial commit
+      command: etckeeper commit "Initial commit"
+  when: not result.stat.exists
