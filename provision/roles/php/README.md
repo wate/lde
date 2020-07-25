@@ -1,6 +1,8 @@
 php
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-php.svg?branch=master)](https://travis-ci.org/wate/ansible-role-php)
+
 PHPのインストールとセットアップを行います
 
 Role Variables
@@ -11,7 +13,7 @@ Role Variables
 インストールするPHPのバージョンを指定します
 
 ```yaml
-php_version: 7.0
+php_version: 7.4
 ```
 
 ### php_packages
@@ -42,7 +44,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: php }
+    - role: php
 ```
 
 License
