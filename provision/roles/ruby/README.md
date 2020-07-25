@@ -1,6 +1,8 @@
 ruby
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-ruby.svg?branch=master)](https://travis-ci.org/wate/ansible-role-ruby)
+
 Rubyの基本パッケージをインストールします
 
 Role Variables
@@ -23,7 +25,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: ruby }
+     - role: ruby
 ```
 
 License
