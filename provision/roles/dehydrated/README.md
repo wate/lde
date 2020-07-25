@@ -1,6 +1,8 @@
 dehydrated
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-dehydrated.svg?branch=master)](https://travis-ci.org/wate/ansible-role-dehydrated)
+
 [dehydrated](https://github.com/lukas2511/dehydrated)のインストールとセットアップを行います。
 
 Role Variables
@@ -12,25 +14,25 @@ dehydratedの設定内容を指定します。
 
 ```yml
 dehydrated_cfg:
-  user: ""
-  group: ""
-  ca: https://acme-v02.api.letsencrypt.org/directory
-  oldca: ""
   challengetype: http-01
-  keysize: 4096
-  openssl_cnf:
-  openssl: openssl
-  curl_opts: ""
-  hook_chain: no
-  renew_days: 30
-  private_key_renew: yes
-  private_key_rollover: no
-  key_algo: rsa
-  contact_email: ""
-  ocsp_must_staple: no
-  ocsp_fetch: no
-  auto_cleanup: no
-  api: auto
+#   user: ""
+#   group: ""
+#   ca: https://acme-v02.api.letsencrypt.org/directory
+#   oldca: ""
+#   keysize: 4096
+#   openssl_cnf: ""
+#   openssl: openssl
+#   curl_opts: ""
+#   hook_chain: false
+#   renew_days: 30
+#   private_key_renew: true
+#   private_key_rollover: false
+#   key_algo: rsa
+#   contact_email: ""
+#   ocsp_must_staple: false
+#   ocsp_fetch: false
+#   auto_cleanup: false
+#   api: auto
 ```
 
 ### dehydrated_domains
@@ -52,7 +54,7 @@ dehydrated_domains:
 プロビジョニング実行時にdehydratedの実行を行うか否かを指定します。
 
 ```yml
-dehydrated_auto_execute: yes
+dehydrated_auto_execute: true
 ```
 
 ### dehydrated_cron

@@ -1,24 +1,24 @@
 ---
 dehydrated_cfg:
-  user: ""
-  group: ""
-  ca: https://acme-v02.api.letsencrypt.org/directory
-  oldca: ""
   challengetype: http-01
-  keysize: 4096
-  openssl_cnf: ""
-  openssl: openssl
-  curl_opts: ""
-  hook_chain: false
-  renew_days: 30
-  private_key_renew: true
-  private_key_rollover: false
-  key_algo: rsa
-  contact_email: ""
-  ocsp_must_staple: false
-  ocsp_fetch: false
-  auto_cleanup: false
-  api: auto
+#   user: ""
+#   group: ""
+#   ca: https://acme-v02.api.letsencrypt.org/directory
+#   oldca: ""
+#   keysize: 4096
+#   openssl_cnf: ""
+#   openssl: openssl
+#   curl_opts: ""
+#   hook_chain: false
+#   renew_days: 30
+#   private_key_renew: true
+#   private_key_rollover: false
+#   key_algo: rsa
+#   contact_email: ""
+#   ocsp_must_staple: false
+#   ocsp_fetch: false
+#   auto_cleanup: false
+#   api: auto
 
 dehydrated_domains: []
   # - name: example.com

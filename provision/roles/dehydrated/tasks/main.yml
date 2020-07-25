@@ -1,7 +1,9 @@
 ---
 - name: install packages
   yum:
-    name: dehydrated
+    name:
+      - dehydrated
+      - crontabs
     enablerepo: epel
 - name: create config file
   template:
