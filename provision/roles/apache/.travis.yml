@@ -1,0 +1,18 @@
+---
+language: python
+services: docker
+env:
+  global:
+    - ROLE_NAME: apache
+install:
+  - pip install molecule yamllint ansible-lint docker
+before_script:
+  - cd ../
+  - mv ansible-role-$ROLE_NAME $ROLE_NAME
+  - cd $ROLE_NAME
+script:
+  - molecule test
+notifications:
+  email: false
+  slack:
+    secure: rWGklIp7X+55QhJD2PmrlN8+JqY+ETxV3FFWDDAShEZyvtW+g9H8ZQYpLvq0Njyl7cmRFY2XxRzCoDsKHKhgY+yKTjEwvs4YtMiUIygSvJmNPC28UvTcFV6WK2Cq3BUr/51a0YDGMTLOH41QZuV0O2wGgHAnzxmnr6qnSgUVjo+BXm+Y8IQhIhGd7s9gv/bq3BHQpQBGlgDkb7XanHQzxuLWBqP42JO6sDMYwgXiDWVkj6GK55Kyo4ZW4Ve4PqiwP+0umfl14Qg+isbZyNTJuhuQMvA7URo//iQM14+GyLRvIYlgc26UxsT6snrnAUmRjvrsI8wi84fctUqVn+q3G8N9osBjo/ijK/DdI/BMWRb2Ll87KgN4Xf1KFFuGJ4ZQKXubP7Juo7dd+4oa9BbLbXMo06Iqvn+3MzV3c81tLyzR2dWFFdd2xka0T7wgP/sM2BXNF2GlEor4RKLjEvTnBPo0pvsJbctgIPGSGswaC2LI24WdN9ugH4fkWjqNXaHVB8yRlMJ+xMMSRfYv2vWYfPaqWvSlx/Uf77t5Rvghj/BDdqkYQZU3TvvD01ezsu/svigRPDbQvJR7THbWa1HmzYMDawyfdqznwRRlc38ZULLuw2KILRAULLJCnHP+JhNCkaA+JoLdSXDSq9dm9GqIDZoRyf97lPfZoh9xehUn4gc=

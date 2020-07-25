@@ -1,7 +1,0 @@
----
-xhgui_cfg:
-  dbtype: mysql
-  dbhost: localhost
-  dbuser: root
-  dbpass: "{{ mariadb_root_password }}"
-  dbname: xhprof

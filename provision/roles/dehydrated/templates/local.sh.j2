@@ -1,24 +1,59 @@
-HOOK=/etc/dehydrated/hook.sh
-
-HOOK=/etc/dehydrated/hook.sh
-
 # Additional config
+HOOK=/etc/dehydrated/hook.sh
+{% if dehydrated_cfg.user is defined -%}
 DEHYDRATED_USER={{ dehydrated_cfg.user }}
+{% endif %}
+{% if dehydrated_cfg.group is defined -%}
 DEHYDRATED_GROUP={{ dehydrated_cfg.group }}
+{% endif %}
+{% if dehydrated_cfg.ca is defined -%}
 CA="{{ dehydrated_cfg.ca }}"
+{% endif %}
+{% if dehydrated_cfg.oldca is defined -%}
 OLDCA="{{ dehydrated_cfg.oldca }}"
+{% endif %}
+{% if dehydrated_cfg.challengetype is defined -%}
 CHALLENGETYPE="{{ dehydrated_cfg.challengetype }}"
+{% endif %}
+{% if dehydrated_cfg.keysize is defined -%}
 KEYSIZE="{{ dehydrated_cfg.keysize }}"
+{% endif %}
+{% if dehydrated_cfg.openssl_cnf is defined -%}
 OPENSSL_CNF={{ dehydrated_cfg.openssl_cnf }}
+{% endif %}
+{% if dehydrated_cfg.openssl is defined -%}
 OPENSSL="{{ dehydrated_cfg.openssl }}"
+{% endif %}
+{% if dehydrated_cfg.curl_opts is defined -%}
 CURL_OPTS="{{ dehydrated_cfg.curl_opts }}"
+{% endif %}
+{% if dehydrated_cfg.hook_chain is defined -%}
 HOOK_CHAIN="{{ 'yes' if dehydrated_cfg.hook_chain else 'no' }}"
+{% endif %}
+{% if dehydrated_cfg.renew_days is defined -%}
 RENEW_DAYS="{{ dehydrated_cfg.renew_days }}"
+{% endif %}
+{% if dehydrated_cfg.private_key_renew is defined -%}
 PRIVATE_KEY_RENEW="{{ 'yes' if dehydrated_cfg.private_key_renew else 'no' }}"
+{% endif %}
+{% if dehydrated_cfg.private_key_rollover is defined -%}
 PRIVATE_KEY_ROLLOVER="{{ 'yes' if dehydrated_cfg.private_key_rollover else 'no' }}"
+{% endif %}
+{% if dehydrated_cfg.key_algo is defined -%}
 KEY_ALGO={{ dehydrated_cfg.key_algo }}
+{% endif %}
+{% if dehydrated_cfg.contact_email is defined -%}
 CONTACT_EMAIL={{ dehydrated_cfg.contact_email }}
+{% endif %}
+{% if dehydrated_cfg.ocsp_must_staple is defined -%}
 OCSP_MUST_STAPLE="{{ 'yes' if dehydrated_cfg.ocsp_must_staple else 'no' }}"
+{% endif %}
+{% if dehydrated_cfg.ocsp_fetch is defined -%}
 OCSP_FETCH="{{ 'yes' if dehydrated_cfg.ocsp_fetch else 'no' }}"
+{% endif %}
+{% if dehydrated_cfg.auto_cleanup is defined -%}
 AUTO_CLEANUP="{{ 'yes' if dehydrated_cfg.auto_cleanup else 'no' }}"
+{% endif %}
+{% if dehydrated_cfg.api is defined -%}
 API={{ dehydrated_cfg.api }}
+{% endif %}

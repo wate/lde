@@ -94,7 +94,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `http://mailhog.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
 * `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
 * `http://er.<設定したドメイン>/`：[WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)用のURLです。
-* `http://profile.<設定したドメイン>/`：[XHProf UI](https://github.com/preinheimer/xhprof)用のURLです。
 
 #### php_version
 
@@ -108,6 +107,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * 7.1
 * 7.2
 * 7.3
+* 7.4
 
 #### wordpress
 

@@ -1,6 +1,8 @@
 mariadb
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-mariadb.svg?branch=master)](https://travis-ci.org/wate/ansible-role-mariadb)
+
 MariaDBのインストールとセットアップを行います
 
 Role Variables
@@ -14,7 +16,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: mariadb }
+     - role: mariadb
 ```
 
 License

@@ -1,0 +1,21 @@
+language: python
+services: docker
+env:
+  global:
+    - ROLE_NAME: wwwsqldesigner
+install:
+  - pip install molecule yamllint ansible-lint docker
+before_script:
+  - cd ../
+  - git clone --depth=1 https://github.com/wate/ansible-role-repo-epel.git repo-epel
+  - git clone --depth=1 https://github.com/wate/ansible-role-repo-remi.git repo-remi
+  - git clone --depth=1 https://github.com/wate/ansible-role-php.git php
+  - git clone --depth=1 https://github.com/wate/ansible-role-mariadb.git mariadb
+  - mv ansible-role-$ROLE_NAME $ROLE_NAME
+  - cd $ROLE_NAME
+script:
+  - molecule test
+notifications:
+  email: false
+  slack:
+    secure: CakxX0htRxO7La4AJkhjMhK4+lOgmB9I8wC3jwUmv2zPw9x/tmJED9UWNPqgd57bHuKs50p/6byFU6vBd55XVF6gHauKeDjqUhrJb4/SvzSHtIP/MSrQDEoxwrlIC6mWbnb82/p3PdKmVkBvWpVbRl2TJwRe2GONqBQ2B0Ka0PK6P9s20EjL1QiKx925SVgbHvalFDeZbJrLl+SRnd3efzJgS+dzfKUxLcWfP++Ij5Hb6WLVUFklNy/K7dDUVKhur0y30yQU9RS90g+2boAvA1Fa0WOmGCI1RIAvv1+T+uYNUBL6I77+Rc3EXjR10Y7XRut2ggn0+QzEHnaZmV89E5TS3QOyQPeeHFb+lCpG5HeIhyHbQJJjmMA4z12iq9EP/nzk7h9o87WthYLMQ+t1jrg1scgANnm7rx1zgD59UuugeBc4lEOONu+/GovCIHpbpgcKbydNXaAk1/SK0tGmxG1n6C0Kwg+48rmWfvnmrRxyJQzMkUmCievsuTcNC1Fyejo6MaegP8PI8tTZXF4zDXT4fUJ1yh0wf0Ssv3pcnhzL5i9ZpwPBEn2eE4uck2PMhw9VZr/JpDAeOFktitB/1hTY/RyuVfdDrqgiZeR1fkeZUfR7h/u/GIpDaFiCxlUEbZ4NExJ1GL7js+kBnqgC7VoQDQG+uERFL92f7+nXPQc=

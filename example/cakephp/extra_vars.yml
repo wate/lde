@@ -3,20 +3,14 @@ domain: "example.com"
 
 # ----------
 # PHPのバージョン
-# 5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2 / 7.3
+# 5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4
 # ----------
-# php_version: 7.2
+# php_version: 7.4
 
 # ----------
 # Xdebugをインストールするか否かを指定します
 # ----------
 # php_xdebug_installed: false
-
-# ----------
-# Tideways XHProf Extensionをインストールするか否かを指定します
-# https://github.com/tideways/php-xhprof-extension
-# ----------
-# php_tideways_profiler_installed: false
 
 # ----------
 # CakePHP用の設定
