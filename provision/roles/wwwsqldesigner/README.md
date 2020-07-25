@@ -1,6 +1,8 @@
 wwwsqldesigner
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-wwwsqldesigner.svg?branch=master)](https://travis-ci.org/wate/ansible-role-wwwsqldesigner)
+
 [WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)をインストールします
 
 Role Variables
@@ -16,9 +18,11 @@ Dependencies
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-         - { role: wwwsqldesigner }
+```yml
+- hosts: servers
+  roles:
+    - role: wwwsqldesigner
+```
 
 License
 -------
