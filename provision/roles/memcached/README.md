@@ -1,6 +1,8 @@
 memcached
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-memcached.svg?branch=master)](https://travis-ci.org/wate/ansible-role-memcached)
+
 memcachedのインストールとセットアップを行います。
 
 Role Variables
@@ -25,7 +27,7 @@ Example Playbook
 ```yml
 - hosts: servers
   roles:
-     - { role: memcached }
+     - role: memcached
 ```
 
 License
