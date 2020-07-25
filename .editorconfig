@@ -12,7 +12,11 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 
-[*.php,*.py,*.sh]
+[*.py]
+indent_style = space
+indent_size = 4
+
+[*.php]
 indent_style = space
 indent_size = 4
 
@@ -20,25 +24,25 @@ indent_size = 4
 trim_trailing_whitespace = false
 indent_size = 4
 
-[*.yml,*,yaml]
-indent_style = space
-indent_size = 2
+# [*.yml,*.yaml]
+# indent_style = space
+# indent_size = 2
 
-[*.rb,Vagrantfile]
-indent_style = space
-indent_size = 2
+# [*.rb,Vagrantfile]
+# indent_style = space
+# indent_size = 2
 
-[*.json]
-indent_style = space
-indent_size = 2
+# [*.json]
+# indent_style = space
+# indent_size = 2
 
-[*.tf]
-indent_style = space
-indent_size = 2
+# [*.tf]
+# indent_style = space
+# indent_size = 2
 
-[*.css,*,scss]
-indent_style = space
-indent_size = 2
+# [*.css,*,scss]
+# indent_style = space
+# indent_size = 2
 
 [*.go]
 indent_style = tab

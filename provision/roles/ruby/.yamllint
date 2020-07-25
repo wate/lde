@@ -1,9 +1,0 @@
----
-extends: default
-ignore: |
-  dump_vars/
-rules:
-  line-length:
-    max: 150
-    level: warning
-  comments-indentation: disable
