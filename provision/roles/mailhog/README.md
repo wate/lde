@@ -1,6 +1,8 @@
 mailhog
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-mailhog.svg?branch=master)](https://travis-ci.org/wate/ansible-role-mailhog)
+
 HamilHogのインストールとセットアップを行います
 
 Role Variables
@@ -28,7 +30,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: mailhog }
+     - role: mailhog
 ```
 
 License
