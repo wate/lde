@@ -1,6 +1,8 @@
 common
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-common.svg?branch=master)](https://travis-ci.org/wate/ansible-role-common)
+
 ユーザーの追加や基本パッケージのインストールなど、サーバーの共通セットアップ処理を行います。
 
 Role Variables
