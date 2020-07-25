@@ -1,6 +1,8 @@
 redis
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-redis.svg?branch=master)](https://travis-ci.org/wate/ansible-role-redis)
+
 Redisのインストールとセットアップを行います
 
 Role Variables
@@ -14,7 +16,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: redis }
+     - role: redis
 ```
 
 License
