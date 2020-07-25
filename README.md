@@ -1,6 +1,8 @@
 nodejs
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-nodejs.svg?branch=master)](https://travis-ci.org/wate/ansible-role-nodejs)
+
 Node.jsをインストールします
 
 Role Variables
@@ -11,7 +13,7 @@ Role Variables
 インストールするNode.jsのメジャーバージョンを指定します
 
 ```yaml
-nodejs_major_version: 8
+nodejs_major_version: 12
 ```
 
 Example Playbook
@@ -20,7 +22,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: nodejs }
+     - role: nodejs
 ```
 
 License
