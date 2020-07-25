@@ -1,6 +1,8 @@
 apache
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-apache.svg?branch=master)](https://travis-ci.org/wate/ansible-role-apache)
+
 Apacheのインストールとセットアップを行います
 
 Role Variables
