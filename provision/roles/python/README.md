@@ -1,6 +1,8 @@
 python
 =========
 
+[![Build Status](https://travis-ci.org/wate/ansible-role-python.svg?branch=master)](https://travis-ci.org/wate/ansible-role-python)
+
 Pythonの基本パッケージをインストールします
 
 Role Variables
@@ -23,7 +25,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: python }
+     - role: python
 ```
 
 License
