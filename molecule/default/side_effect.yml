@@ -1,8 +1,9 @@
 ---
-- name: Converge
+- name: Side Effect
   hosts: all
   gather_facts: true
   become: true
+  check_mode: true
   tasks:
     - name: "Include common"
       include_role:
