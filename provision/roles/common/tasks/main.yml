@@ -37,9 +37,9 @@
   changed_when: false
 - name: set locale
   command: localectl set-locale LANG=ja_JP.utf8
-  when: "'LANG=ja_JP.utf8' not in result.stdout"
-  tags:
-    - skip_ansible_lint
+  when:
+    - result is not skipped
+    - "'LANG=ja_JP.utf8' not in result.stdout"
 - name: setup etckeeper
   import_tasks: etckeeper.yml
   tags: etckeeper
