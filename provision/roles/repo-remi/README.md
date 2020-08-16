@@ -1,8 +1,9 @@
 repo-remi
 =========
 
-remiリポジトリのインストールとセットアップを行います
+[![Build Status](https://travis-ci.org/wate/ansible-role-repo-remi.svg?branch=master)](https://travis-ci.org/wate/ansible-role-repo-remi)
 
+remiリポジトリのインストールとセットアップを行います
 
 Role Variables
 --------------
