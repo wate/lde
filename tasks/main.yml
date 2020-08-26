@@ -27,28 +27,28 @@
     src: httpd.conf.j2
     dest: /etc/httpd/conf/httpd.conf
     # validate: "/usr/sbin/httpd -t -f %s"
-  notify: reload apache
+  notify: restart apache
 - name: create security setting file
   template:
     src: security.conf.j2
     dest: /etc/httpd/conf.d/security.conf
-  notify: reload apache
+  notify: restart apache
 - name: create SSL setting file
   template:
     src: ssl.conf.j2
     dest: /etc/httpd/conf.d/ssl.conf
   when: "'mod_ssl' in apache_packages"
-  notify: reload apache
+  notify: restart apache
 - name: create performance setting file
   template:
     src: performance.conf.j2
     dest: /etc/httpd/conf.d/performance.conf
-  notify: reload apache
+  notify: restart apache
 - name: create extra setting file
   template:
     src: extra.conf.j2
     dest: /etc/httpd/conf.d/extra.conf
-  notify: reload apache
+  notify: restart apache
 - name: copy snippet files
   copy:
     src: "{{ item }}"
@@ -77,7 +77,7 @@
   loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
-  notify: reload apache
+  notify: restart apache
 - name: enable / disable virtualhost
   file:
     path: /etc/httpd/sites-enabled/{{ item.name | default(item.server_name) }}.conf
@@ -86,7 +86,7 @@
   loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
-  notify: reload apache
+  notify: restart apache
 - name: remove virtualhost setting symlink
   file:
     path: /etc/httpd/sites-enabled/{{ item.name | default(item.server_name) }}.conf
@@ -94,7 +94,7 @@
   loop: "{{ removed_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
-  notify: reload apache
+  notify: restart apache
 - name: remove virtualhost setting files
   file:
     path: /etc/httpd/sites-available/{{ item.name | default(item.server_name) }}.conf
@@ -102,7 +102,7 @@
   loop: "{{ removed_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
-  notify: reload apache
+  notify: restart apache
 - name: install firewalld
   yum:
     name: firewalld
