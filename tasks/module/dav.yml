@@ -4,5 +4,6 @@
     path: /etc/httpd/conf.modules.d/00-dav.conf
     regexp: "^#?LoadModule {{ item.key }}_module modules/mod_{{ item.key }}.so"
     line: "{{ '' if item.value else '#' }}LoadModule {{ item.key }}_module modules/mod_{{ item.key }}.so"
+    mode: preserve
   notify: restart apache
   loop: "{{ apache_module_dav | dict2items }}"

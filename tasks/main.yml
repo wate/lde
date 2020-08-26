@@ -5,6 +5,7 @@
 - name: create apache setting directories
   file:
     path: "{{ item }}"
+    mode: "0755"
     state: directory
   loop:
     - /etc/httpd/snippets
@@ -26,33 +27,39 @@
   template:
     src: httpd.conf.j2
     dest: /etc/httpd/conf/httpd.conf
+    mode: preserve
     # validate: "/usr/sbin/httpd -t -f %s"
   notify: restart apache
 - name: create security setting file
   template:
     src: security.conf.j2
     dest: /etc/httpd/conf.d/security.conf
+    mode: preserve
   notify: restart apache
 - name: create SSL setting file
   template:
     src: ssl.conf.j2
     dest: /etc/httpd/conf.d/ssl.conf
+    mode: preserve
   when: "'mod_ssl' in apache_packages"
   notify: restart apache
 - name: create performance setting file
   template:
     src: performance.conf.j2
     dest: /etc/httpd/conf.d/performance.conf
+    mode: preserve
   notify: restart apache
 - name: create extra setting file
   template:
     src: extra.conf.j2
     dest: /etc/httpd/conf.d/extra.conf
+    mode: preserve
   notify: restart apache
 - name: copy snippet files
   copy:
     src: "{{ item }}"
     dest: "/etc/httpd/snippets/{{ item | basename }}"
+    mode: preserve
   with_fileglob:
     - "*.conf"
 - name: set filterd virtualhosts variable
@@ -66,7 +73,7 @@
     state: directory
     owner: "{{ item.document_root_owner | default(omit) }}"
     group: "{{ item.document_root_group | default(omit) }}"
-    mode: "{{ item.document_root_mode | default(omit) }}"
+    mode: "{{ item.document_root_mode | default('preserve') }}"
   loop: "{{ create_doc_root_directoories }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
@@ -74,6 +81,7 @@
   template:
     src: virtualhost.conf.j2
     dest: /etc/httpd/sites-available/{{ item.name | default(item.server_name) }}.conf
+    mode: preserve
   loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
@@ -83,6 +91,7 @@
     path: /etc/httpd/sites-enabled/{{ item.name | default(item.server_name) }}.conf
     src: "{{ omit if item.disabled | default(false) else '/etc/httpd/sites-available/' + item.name | default(item.server_name) + '.conf' }}"
     state: "{{ 'absent' if item.disabled | default(false) else 'link' }}"
+    mode: preserve
   loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
