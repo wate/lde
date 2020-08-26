@@ -73,7 +73,7 @@
     state: directory
     owner: "{{ item.document_root_owner | default(omit) }}"
     group: "{{ item.document_root_group | default(omit) }}"
-    mode: "{{ item.document_root_mode | default('preserve') }}"
+    mode: "{{ item.document_root_mode | default('0644') }}"
   loop: "{{ create_doc_root_directoories }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
@@ -81,7 +81,7 @@
   template:
     src: virtualhost.conf.j2
     dest: /etc/httpd/sites-available/{{ item.name | default(item.server_name) }}.conf
-    mode: preserve
+    mode: "0644"
   loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
@@ -91,7 +91,7 @@
     path: /etc/httpd/sites-enabled/{{ item.name | default(item.server_name) }}.conf
     src: "{{ omit if item.disabled | default(false) else '/etc/httpd/sites-available/' + item.name | default(item.server_name) + '.conf' }}"
     state: "{{ 'absent' if item.disabled | default(false) else 'link' }}"
-    mode: preserve
+    mode: "0644"
   loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
