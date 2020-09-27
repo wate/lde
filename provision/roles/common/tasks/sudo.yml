@@ -7,3 +7,4 @@
     src: wheel.j2
     dest: /etc/sudoers.d/wheel
     validate: '/usr/sbin/visudo -cf %s'
+    mode: "0644"
