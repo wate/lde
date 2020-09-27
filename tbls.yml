@@ -62,8 +62,6 @@ dict:
 ### Filter tables
 exclude:
   - phinxlog
-# include:
-#   - some_prefix_*
 ### Lint
 lint:
   ## require table comment
@@ -102,10 +100,6 @@ lint:
   #       exclude:
   #         - logs
   #         - CamelizeTable
-### Exclude tables
-# exclude:
-#   - logs
-#   - CamelizeTable
 ### Comments
 # comments:
 #   - table: posts
