@@ -4,5 +4,4 @@
     path: /etc/httpd/conf.modules.d/00-lua.conf
     regexp: "^#?LoadModule lua_module modules/mod_lua.so"
     line: "{{ '' if apache_module_lua else '#' }}LoadModule lua_module modules/mod_lua.so"
-    mode: "0644"
   notify: restart apache

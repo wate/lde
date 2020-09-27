@@ -3,7 +3,5 @@
   hosts: all
   gather_facts: true
   become: true
-  tasks:
-    - name: "Include apache"
-      include_role:
-        name: apache
+  roles:
+    - role: apache

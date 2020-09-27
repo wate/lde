@@ -3,10 +3,10 @@
   systemd:
     name: httpd
     state: restarted
-- name: resart apache
+- name: reload apache
   systemd:
     name: httpd
-    state: restarted
+    state: reloaded
 - name: restart firewalld
   systemd:
     name: firewalld
