@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+    - name: "Include common"
+      include_role:
+        name: common

@@ -1,0 +1,22 @@
+- name: install Mitogen for Ansible
+  hosts: all
+  become: false
+  connection: local
+  vars:
+    mitogen_version: "0.2.9"
+  tasks:
+    - name: Create install directory
+      file:
+        path: mitogen
+        state: directory
+    - name: Download archive
+      get_url:
+        url: https://networkgenomics.com/try/mitogen-{{ mitogen_version }}.tar.gz
+        dest: mitogen/mitogen-{{ mitogen_version }}.tar.gz
+      register: result
+    - name: Extract archive
+      command: tar vxfz mitogen-{{ mitogen_version }}.tar.gz --strip=1
+      args:
+        chdir: mitogen
+        warn: false
+      when: result is changed

@@ -1,0 +1,19 @@
+---
+language: python
+services: docker
+env:
+  global:
+    - ROLE_NAME: python
+install:
+  - pip install molecule yamllint ansible-lint docker
+before_script:
+  - cd ../
+  - git clone --depth=1 https://github.com/wate/ansible-role-repo-epel.git repo-epel
+  - mv ansible-role-$ROLE_NAME $ROLE_NAME
+  - cd $ROLE_NAME
+script:
+  - molecule test
+notifications:
+  email: false
+  slack:
+    secure: NAOE5BngKq5ceZEX/xoFQyzrGXr6kZOUmxBkOfd8AG0D2g32chuAyvhqJBp8CkGEzBE7lOKj/fWFh64IN3meRrriDvgnLlNmqon58CIL4Wvgomt8/mamCDTEek4q4naHbQ0vOM0YaaHCFPDn2PiTtzRLY7sQvroxCQ6a42Q1GzcCQHcP5ibOb3qgPysS8i+O15qv/HwL6tt2+fc1OtjHPLS0jt/YQtQILJgk3VJgdyVoArKP3Vf39vHcdFYpRW7g6ZSJ3Z5PyEYifY3IJtOOQdAzD7v7vlAoE51+tgrjVCfXDwdgbdNl6P61+jzqpI2jIJBzkh1XcBTL8zS1kY2WCV0uGxvmLctV6mDyymi7XLaN6ZcEGLBk1KlpaBkQGs/7pljDSEiUfvYUQewaKyZqQ9gBLCS8Zs5+oxiCjr2xDDRdz6rWyi/pBoRymWdzhjIjDFQ73l/cVFCXmBDy5SpXjIk/stL2RxHBspCw9+/xLh7VratqtphCLiWZodVjHOJl/5L22hTEGcz0BnGg9E+U5CG/IdrCf+5V4RI2HcK2UXDV0ooimmlGj7OsdvswIZjXarXdsA+Su2sA/NFeUvRNdPAUOdJHRV1vq2iQBOnHTaTtXrl7lAF69DUujspZ7TSmEjsxVtfKogZQScu/frJQzPaN6W7JFbNckTm6T7RaXZ4=
