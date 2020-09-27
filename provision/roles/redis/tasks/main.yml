@@ -7,6 +7,7 @@
   template:
     src: redis.conf.j2
     dest: /etc/redis.conf
+    mode: "0644"
   notify: restart redis
 - name: redis is active and enabled on system startup
   systemd:
