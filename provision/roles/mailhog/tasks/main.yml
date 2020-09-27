@@ -12,8 +12,7 @@
 - name: create mailhog systemd unit file
   template:
     src: mailhog.service.j2
-    dest: /usr/lib/systemd/system/mailhog.service
-    mode: "0644"
+    dest: /etc/systemd/system/mailhog.service
   notify: restart mailhog
 - name: MailHog is active and enabled on system startup
   systemd:

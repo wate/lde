@@ -6,7 +6,6 @@
   template:
     src: memcached.j2
     dest: /etc/sysconfig/memcached
-    mode: "0644"
   notify: restart memcached
 - name: memcached is active and enabled on system startup
   systemd:

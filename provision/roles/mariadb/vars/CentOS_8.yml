@@ -1,2 +1,0 @@
-mariadb_dependency_packages:
-  - python3-PyMySQL
