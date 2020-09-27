@@ -8,3 +8,4 @@
     section: epel
     option: enabled
     value: "{{ '1' if repo_epel_enabled else '0' }}"
+    mode: "0644"
