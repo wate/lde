@@ -1,9 +1,12 @@
 ---
+sudo: required
 language: python
 services: docker
 env:
   global:
     - ROLE_NAME: apache
+before_install:
+  - sudo apt-get -qq update
 install:
   - pip install molecule yamllint ansible-lint docker
 before_script:
@@ -11,6 +14,10 @@ before_script:
   - mv ansible-role-$ROLE_NAME $ROLE_NAME
   - cd $ROLE_NAME
 script:
+  - molecule --version
+  - ansible --version
+  - ansible-lint --version
+  - yamllint --version
   - molecule test
 notifications:
   email: false
