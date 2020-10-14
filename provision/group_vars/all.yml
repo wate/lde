@@ -95,7 +95,7 @@ php_packages:
 # --------------
 php_cfg:
   display_errors: true
-  sendmail_path: /usr/sbin/sendmail -S mail:1025
+  sendmail_path: /usr/local/bin/mhsendmail
   auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined and php_tideways_profiler_installed|default(false) else '' }}"
   memory_limit: 512M
   max_execution_time: 180
