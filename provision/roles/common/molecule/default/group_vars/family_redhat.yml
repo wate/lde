@@ -77,3 +77,11 @@ common_users:
       - name: SOME_NAME
         value: SOME_VALUE
         removed: true
+  - name: pass_lock
+    password_lock: true
+  - name: update_pass_on_create
+    password: "{{ 'password2' | password_hash('sha512') }}"
+    update_password: on_create
+  - name: update_pass_always
+    password: "{{ 'password3' | password_hash('sha512') }}"
+    update_password: always
