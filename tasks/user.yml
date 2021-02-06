@@ -5,13 +5,15 @@
     gid: "{{ item.id | default(omit) }}"
     system: "{{ item.system | default(omit) }}"
     state: "{{ 'absent' if item.removed | default(false) else 'present' }}"
-  with_items: "{{ common_groups }}"
+  loop: "{{ common_groups }}"
   loop_control:
     label: "{{ item.name }}"
 - name: manage users
   user:
     name: "{{ item.name }}"
     password: "{{ item.password | default(omit) }}"
+    update_password: "{{ item.update_password | default('on_create') }}"
+    password_lock: "{{ item.password_lock | default(false) }}"
     shell: "{{ item.shell | default('/usr/bin/bash') }}"
     groups: "{{ item.groups | default(omit) }}"
     uid: "{{ item.id | default(omit) }}"
@@ -20,29 +22,26 @@
     state: "{{ 'absent' if item.removed | default(false) else 'present' }}"
     # `userdel` command `--remove` option
     remove: "{{ item.removed | default(false) }}"
-  with_items: "{{ common_users }}"
+  loop: "{{ common_users }}"
   loop_control:
     label: "{{ item.name }}"
+- name: filter removed users
+  set_fact:
+    existing_users: "{{ common_users | selectattr('removed', 'undefined') | list }}"
 - name: set authorized keys
   authorized_key:
     user: "{{ item.0.name }}"
     key: "{{ item.1.key }}"
     state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
-  with_subelements:
-    - "{{ common_users | selectattr('removed', 'undefined') | selectattr('authorized_keys', 'defined') | list }}"
-    - authorized_keys
+  loop: "{{ existing_users | subelements('authorized_keys', skip_missing=True) }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1 }}"
-- name: set temporary variables
-  set_fact:
-    ssh_config_users: "{{ common_users | selectattr('removed', 'undefined') | selectattr('ssh_config', 'defined') | list }}"
-    upload_key_users: "{{ common_users | selectattr('removed', 'undefined') | selectattr('upload_private_keys', 'defined') | list }}"
 - name: create ~/.ssh directory
   file:
     path: ~/.ssh
     state: directory
     mode: "0700"
-  loop: "{{ ssh_config_users }}"
+  loop: "{{ existing_users | selectattr('ssh_config', 'defined') | list }}"
   loop_control:
     label: "{{ item.name }}"
   become: true
@@ -57,7 +56,7 @@
       {% endfor -%}
     mode: "0600"
     create: true
-  loop: "{{ ssh_config_users }}"
+  loop: "{{ existing_users | selectattr('ssh_config', 'defined') | list }}"
   loop_control:
     label: "{{ item.name }}"
   become: true
@@ -67,9 +66,7 @@
     dest: ~/.ssh/{{ item.1.name }}
     src: "{{ item.1.src }}"
     mode: "0600"
-  with_subelements:
-    - "{{ common_users | selectattr('removed', 'undefined') | selectattr('upload_private_keys', 'defined') | list }}"
-    - upload_private_keys
+  loop: "{{ existing_users | subelements('upload_private_keys', skip_missing=True) }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1.name }}"
   become: true
@@ -84,9 +81,7 @@
     state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
   become_user: "{{ item.0.name }}"
   become: true
-  with_subelements:
-    - "{{ common_users | selectattr('removed', 'undefined') | selectattr('secret_vars', 'defined') | list }}"
-    - secret_vars
+  loop: "{{ existing_users | subelements('secret_vars', skip_missing=True) | list }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1.name }}"
   tags: secret
@@ -95,7 +90,7 @@
     name: "{{ item.name }}"
     groups: wheel
     append: true
-  with_items: "{{ common_users | selectattr('removed', 'undefined') | selectattr('admin', 'defined') | selectattr('admin', 'equalto', true) | list }}"
+  loop: "{{ existing_users | selectattr('admin', 'defined') | selectattr('admin', 'equalto', true) | list }}"
   loop_control:
     label: "{{ item.name }}"
 - name: Manage cron job variavle
@@ -104,9 +99,7 @@
     name: "{{ item.1.name }}"
     value: "{{ omit if item.1.removed | default(false) else item.1.value | default('') }}"
     state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
-  with_subelements:
-    - "{{ common_users | selectattr('removed', 'undefined') | selectattr('cron_vars', 'defined') | list }}"
-    - cron_vars
+  loop: "{{ existing_users | subelements('cron_vars', skip_missing=True) | list }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1.name }}"
 - name: Manage cron jobs
@@ -121,9 +114,7 @@
     weekday: "{{ item.1.weekday | default('*') | string }}"
     disabled: "{{ true if item.1.disable | default(false) else false }}"
     state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
-  with_subelements:
-    - "{{ common_users | selectattr('removed', 'undefined') | selectattr('cron_jobs', 'defined') | list }}"
-    - cron_jobs
+  loop: "{{ existing_users | subelements('cron_jobs', skip_missing=True) | list }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1.name }}"
 - name: set root lock status
