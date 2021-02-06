@@ -104,6 +104,10 @@ common_users: []
   #       value: SOME_VALUE
   #       removed: true
   #       admin: false
+  #   # パスワードの更新(on_create or always)
+  #   update_password: on_create
+  #   # パスワードのロック
+  #   password_lock: false
   #   system: true
   #   id: 100000
   #   removed: true
