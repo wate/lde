@@ -1,0 +1,3 @@
+---
+lexicon_additional_packages:
+  - python2-dns-lexicon+route53

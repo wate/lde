@@ -1,0 +1,5 @@
+---
+- name: install wp-cli
+  yum:
+    name: wp-cli
+    enablerepo: epel

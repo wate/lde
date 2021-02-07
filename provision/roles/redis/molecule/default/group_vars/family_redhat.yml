@@ -1,0 +1,2 @@
+---
+redis_allow_connect_other_host: true
