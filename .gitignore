@@ -1,11 +1,9 @@
+
+# Created by https://www.gitignore.io/api/ansible
+
 ### Ansible ###
 # Ansible retry files
 *.retry
 
-### Vagrant ###
-.vagrant/
-
-### Other ###
-source/
-wiki/
-provision/mitogen
+### Molecule ###
+.env.yml
