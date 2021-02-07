@@ -4,21 +4,14 @@ services: docker
 env:
   global:
     - ROLE_NAME: dehydrated
-before_install:
-  - sudo apt-get -qq update
 install:
-  - python3 -m pip install ansible
-  - python3 -m pip install molecule[docker,lint]
+  - pip install molecule yamllint ansible-lint docker
 before_script:
   - cd ../
   - git clone --depth=1 https://github.com/wate/ansible-role-repo-epel.git repo-epel
   - mv ansible-role-$ROLE_NAME $ROLE_NAME
   - cd $ROLE_NAME
 script:
-  - molecule --version
-  - ansible --version
-  - ansible-lint --version
-  - yamllint --version
   - molecule test
 notifications:
   email: false
