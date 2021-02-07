@@ -284,24 +284,23 @@ apache_module_proxy:
 # --------------
 # MariaDBの設定
 # --------------
-mariadb_cfg:
-  mysqld:
-    sql_mode:
-      - STRICT_TRANS_TABLES
-      - NO_ZERO_IN_DATE
-      - NO_ZERO_DATE
-      - ERROR_FOR_DIVISION_BY_ZERO
-      - NO_AUTO_CREATE_USER
-      - NO_ENGINE_SUBSTITUTION
-    slow_query_log: true
-    long_query_time: 1
-    # log_warnings: 0
-    # min_examined_row_limit: 0
-    # log_queries_not_using_indexes: false
-    # log_slow_admin_statements: false
-    slow_query_log_file: /var/log/mariadb/slow_query.log
-    general_log: false
-    general_log_file: /var/log/mariadb/general.log
+mariadb_mysqld_cfg:
+  sql_mode:
+    - STRICT_TRANS_TABLES
+    - NO_ZERO_IN_DATE
+    - NO_ZERO_DATE
+    - ERROR_FOR_DIVISION_BY_ZERO
+    - NO_AUTO_CREATE_USER
+    - NO_ENGINE_SUBSTITUTION
+  slow_query_log: true
+  long_query_time: 1
+  # log_warnings: 0
+  # min_examined_row_limit: 0
+  # log_queries_not_using_indexes: false
+  # log_slow_admin_statements: false
+  slow_query_log_file: /var/log/mariadb/slow_query.log
+  general_log: false
+  general_log_file: /var/log/mariadb/general.log
 
 # --------------
 # mycliの設定
