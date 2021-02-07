@@ -112,6 +112,7 @@ Vagrant.configure("2") do |config|
     'app_type' => settings['app_type'],
     'domain' => settings['domain'],
     'php_version' => settings['php_version'],
+    'mail_test_tool' => settings['mail_test_tool'],
     'doc_root_suffix' => settings['doc_root_suffix'],
     'wordpress' => settings['wordpress'],
     'ec_cube' => settings['ec_cube'],

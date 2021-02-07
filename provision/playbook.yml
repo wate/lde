@@ -20,7 +20,7 @@
       tags: role_apache
     - role: php
       tags: role_php
-    - role: "{{ mail_test_tool }}"
+    - role: "{{ mail_test_tool | default('mailhog') }}"
       tags: role_mailtest
     - role: wp-cli
       tags: role_wp-cli
