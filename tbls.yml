@@ -7,7 +7,7 @@
 ### Description
 # desc: This is My Database
 ### Document path
-docPath: /vagrant/output/schema
+docPath: /vagrant/source/docs/schema
 ### DSN(Data Source Name)
 dsn: mysql://app_dev:app_dev_P455w0rd@localhost:3306/app_dev
 # dsn: postgres://app_dev:app_dev_P455w0rd@localhost:5432/app_dev

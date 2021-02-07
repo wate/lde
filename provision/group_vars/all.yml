@@ -1,12 +1,8 @@
 # --------------
-# メール送信テストツール
-# 指定可能な値は以下の通り
-# - mailhog
-# - mailcatcher
+# メール送信テストツールのPHPおよびバーチャルホストの設定
 # --------------
-mail_test_tool: mailhog
-mail_test_tool_http_port: "{{ 8025 if mail_test_tool == 'mailhog' else 1080 }}"
-mail_test_tool_php_sendmail_path: "{{ '/usr/local/bin/mhsendmail' if mail_test_tool == 'mailhog' else '/usr/local/bin/catchmail' }}"
+mail_test_tool_http_port: "{{ 8025 if mail_test_tool | default('mailhog') == 'mailhog' else 1080 }}"
+mail_test_tool_php_sendmail_path: "{{ '/usr/local/bin/mhsendmail' if mail_test_tool | default('mailhog') == 'mailhog' else '/usr/local/bin/catchmail' }}"
 
 # --------------
 # MariaDBのrootパスワード
