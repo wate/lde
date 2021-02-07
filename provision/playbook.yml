@@ -20,8 +20,8 @@
       tags: role_apache
     - role: php
       tags: role_php
-    - role: mailhog
-      tags: role_mailhog
+    - role: "{{ mail_test_tool }}"
+      tags: role_mailtest
     - role: wp-cli
       tags: role_wp-cli
     - role: phpmyadmin
