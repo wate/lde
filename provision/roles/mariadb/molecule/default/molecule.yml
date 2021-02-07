@@ -16,17 +16,6 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
-  # - name: centos8
-  #   groups:
-  #     - family_redhat
-  #   children:
-  #     - centos
-  #   image: "geerlingguy/docker-centos8-ansible:latest"
-  #   command: ${MOLECULE_DOCKER_COMMAND:-""}
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   pre_build_image: true
 lint: |
   set -e
   yamllint .
