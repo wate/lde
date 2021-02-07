@@ -1,0 +1,8 @@
+---
+mailcatcher_dependency_packages:
+  - gcc
+  - gcc-c++
+  - make
+  - autoconf
+  - automake
+  - sqlite-devel

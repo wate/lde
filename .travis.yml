@@ -1,0 +1,21 @@
+language: python
+services: docker
+env:
+  global:
+    - ROLE_NAME: mailcatcher
+before_install:
+  - sudo apt-get -qq update
+install:
+  - python3 -m pip install ansible
+  - python3 -m pip install molecule[docker,lint]
+before_script:
+  - cd ../
+  - git clone --depth=1 https://github.com/wate/ansible-role-ruby.git ruby
+  - mv ansible-role-$ROLE_NAME $ROLE_NAME
+  - cd $ROLE_NAME
+script:
+  - molecule test
+notifications:
+  email: false
+  slack:
+    secure: Nrx6TI0lQirVYkRZM10yEIDrnE3urHTYD4VoHMEpyDWxwbpMKRxqT0Hc9o1EbE6BanmBCC8ZQ12QsEuBSmafvjDdAo3E5W2ADZCpcgkcV96d26Gy1GBBtAueR5ck9pKusbl+aLzeV6XMhWtJe/gJ8vweqwxMsVQ5eSdg5IdDfeByyJ78OeP/lbMDmw/ngYPNOcrWocQhwYMPPl1nPYyAs6FKG5J+kgMfLWyw1OtuRXApG3W0hN4WVzSM3OwOR0T1xMplvz0gxbCONEiw2Y+MexJDOE8bFm63aJLgQbWJeXRRkyhYjBWJeETPdP/7/7n2dT9Q5ir9qBhbRNYH/MJ36AO4iRWyVsSUxnz0lTe3PE3bXOAG8jOm3ZC/OGaDlxBpTDBrdPdhpCBmp5LdLHLnxbkdSa4HEzuBXIdOTIrjoqSSMEl9IGGYTgzOPVGyP6YCMK2tVe/8FwxgkRh9kZHBNMoRNEE1NoDw6qze1eauFx36yx83ULL+N27yZ487lU1vGiwvpuMZX2L7VuYrzGlLig6u6bJR/44tA8prDrV01o8iq32wW3cVRa6QfknNSep4JahuUA6gwLS0/gBDHaYyVtIrvIRzN/DY9c5QxJBRS1KahuASEtTOYBmejrE4SJ0oOgNHUMc0SfT0p6FlDWWJ4ts6FnH+VvsxoRlVlQ15FIc=
