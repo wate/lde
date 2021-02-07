@@ -4,6 +4,6 @@
   gather_facts: true
   become: true
   tasks:
-    - name: "Include apache"
+    - name: "Include role"
       include_role:
-        name: apache
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
