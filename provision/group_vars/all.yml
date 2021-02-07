@@ -1,4 +1,14 @@
 # --------------
+# メール送信テストツール
+# 指定可能な値は以下の通り
+# - mailhog
+# - mailcatcher
+# --------------
+mail_test_tool: mailhog
+mail_test_tool_http_port: "{{ 8025 if mail_test_tool == 'mailhog' else 1080 }}"
+mail_test_tool_php_sendmail_path: "{{ '/usr/local/bin/mhsendmail' if mail_test_tool == 'mailhog' else '/usr/local/bin/catchmail' }}"
+
+# --------------
 # MariaDBのrootパスワード
 # --------------
 mariadb_root_password: &db_root_password r00tP455w0rd
@@ -15,6 +25,7 @@ mariadb_root_password: &db_root_password r00tP455w0rd
 # - 7.2
 # - 7.3
 # - 7.4
+# - 8.0
 # --------------
 php_version: 7.4
 
@@ -95,8 +106,7 @@ php_packages:
 # --------------
 php_cfg:
   display_errors: true
-  sendmail_path: /usr/local/bin/mhsendmail
-  auto_prepend_file: "{{ xhgui_dest + '/external/header.php' if xhgui_dest is defined and php_tideways_profiler_installed|default(false) else '' }}"
+  sendmail_path: "{{ mail_test_tool_php_sendmail_path }}"
   memory_limit: 512M
   max_execution_time: 180
   extra_setting: |
@@ -186,7 +196,7 @@ apache_vhosts:
     # サーバー名
     server_name: "{{ domain }}"
     # ドキュメントルート
-    document_root: /var/www/html{{ doc_root_suffix|default('', true) }}
+    document_root: /var/www/html{{ doc_root_suffix | default('', true) }}
     # サーバー名の別名
     server_alias: "www.{{ domain }}"
     # AllowOverrideの設定値
@@ -200,7 +210,7 @@ apache_vhosts:
   - name: 01-phpMyAdmin
     state: "{{ true if phpmyadmin_dest is defined else false }}"
     server_name: db.{{ domain }}
-    document_root: "{{ phpmyadmin_dest|default('/usr/share/phpMyAdmin') }}"
+    document_root: "{{ phpmyadmin_dest | default('/usr/share/phpMyAdmin') }}"
     custom_log:
       path: /dev/null
       format: combine
@@ -221,9 +231,9 @@ apache_vhosts:
         value: 192.168.33
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   # https://github.com/mailhog/MailHog
-  - name: 02-MailHog
-    state: "{{ true if mailhog_http_port is defined else false }}"
-    server_name: mailhog.{{ domain }}
+  - name: 02-MailTest
+    state: "{{ true if mail_test_tool_http_port is defined else false }}"
+    server_name: mailtest.{{ domain }}
     custom_log:
       path: /dev/null
       format: combine
@@ -231,16 +241,16 @@ apache_vhosts:
     # リバースプロキシの設定
     proxy_pass:
       - from: /
-        to: "http://localhost:{{ mailhog_http_port|default(8025) }}/"
+        to: "http://localhost:{{ mail_test_tool_http_port }}/"
     proxy_pass_reverse:
       - from: /
-        to: "http://localhost:{{ mailhog_http_port|default(8025) }}/"
+        to: "http://localhost:{{ mail_test_tool_http_port }}/"
   # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
   # https://github.com/ondras/wwwsqldesigner
   - name: 03-WWWSQLDesigner
     state: "{{ true if wwwsqldesigner_dest is defined else false }}"
     server_name: er.{{ domain }}
-    document_root: "{{ wwwsqldesigner_dest|default('/opt/wwwsqldesigner') }}"
+    document_root: "{{ wwwsqldesigner_dest | default('/opt/wwwsqldesigner') }}"
     custom_log:
       path: /dev/null
       format: combine
@@ -284,50 +294,21 @@ apache_module_proxy:
 # --------------
 # MariaDBの設定
 # --------------
-mariadb_cfg:
-  mysqld:
-    sql_mode:
-      - STRICT_TRANS_TABLES
-      - NO_ZERO_IN_DATE
-      - NO_ZERO_DATE
-      - ERROR_FOR_DIVISION_BY_ZERO
-      - NO_AUTO_CREATE_USER
-      - NO_ENGINE_SUBSTITUTION
-    slow_query_log: true
-    long_query_time: 1
-    # log_warnings: 0
-    # min_examined_row_limit: 0
-    # log_queries_not_using_indexes: false
-    # log_slow_admin_statements: false
-    slow_query_log_file: /var/log/mariadb/slow_query.log
-    general_log: false
-    general_log_file: /var/log/mariadb/general.log
-
-# --------------
-# mycliの設定
-# https://www.mycli.net/config
-# --------------
-mycli_main_cfg:
-  # Multi-line mode allows breaking up the sql statements into multiple lines. If
-  # this is set to True, then the end of the statements must have a semi-colon.
-  # If this is set to False then sql statements can't be split into multiple
-  # lines. End of line (return) is considered as the end of the statement.
-  multi_line: false
-  # Syntax Style. Possible values: manni, igor, xcode, vim, autumn, vs, rrt,
-  # native, perldoc, borland, tango, emacs, friendly, monokai, paraiso-dark,
-  # colorful, murphy, bw, pastie, paraiso-light, trac, default, fruity
-  syntax_style: monokai
-  # Skip intro info on startup and outro info on exit
-  less_chatty: false
-  # Enable the pager on startup.
-  enable_pager: false
-  # Destructive warning mode will alert you before executing a sql statement
-  # that may cause harm to the database such as "drop table", "drop database" or "shutdown".
-  destructive_warning: false
-
-mycli_alias_dsn:
-  dev: "mysql://{{ mariadb_databases[0].user | default(mariadb_databases[0].name) }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}"
-  test: "mysql://{{ mariadb_databases[1].user | default(mariadb_databases[1].name) }}:{{ mariadb_databases[1].password }}@localhost/{{ mariadb_databases[1].name }}"
-  staging: "mysql://{{ mariadb_databases[2].user | default(mariadb_databases[2].name) }}:{{ mariadb_databases[2].password }}@localhost/{{ mariadb_databases[2].name }}"
-  prod: "mysql://{{ mariadb_databases[3].user | default(mariadb_databases[3].name) }}:{{ mariadb_databases[3].password }}@localhost/{{ mariadb_databases[3].name }}"
+mariadb_mysqld_cfg:
+  sql_mode:
+    - STRICT_TRANS_TABLES
+    - NO_ZERO_IN_DATE
+    - NO_ZERO_DATE
+    - ERROR_FOR_DIVISION_BY_ZERO
+    - NO_AUTO_CREATE_USER
+    - NO_ENGINE_SUBSTITUTION
+  slow_query_log: true
+  long_query_time: 1
+  # log_warnings: 0
+  # min_examined_row_limit: 0
+  # log_queries_not_using_indexes: false
+  # log_slow_admin_statements: false
+  slow_query_log_file: /var/log/mariadb/slow_query.log
+  general_log: false
+  general_log_file: /var/log/mariadb/general.log
 

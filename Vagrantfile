@@ -68,11 +68,9 @@ Vagrant.configure("2") do |config|
     # phpMyAdmin
     'db.' + settings['domain'],
     # MailCatcher
-    'mailhog.' + settings['domain'],
+    'mailtest.' + settings['domain'],
     # WWW SQL Designer
     'er.' + settings['domain'],
-    # XHGUI
-    'profile.' + settings['domain'],
   ]
 
   if settings['vagrant'].key?('append_vm_hosts')
