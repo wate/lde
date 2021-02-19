@@ -1,0 +1,14 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+    - name: add whell group
+      group:
+        name: wheel
+    - name: add vagrant user
+      user:
+        name: vagrant
+        groups:
+          - wheel

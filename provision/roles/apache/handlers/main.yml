@@ -1,0 +1,13 @@
+---
+- name: restart apache
+  systemd:
+    name: httpd
+    state: restarted
+- name: resart apache
+  systemd:
+    name: httpd
+    state: restarted
+- name: restart firewalld
+  systemd:
+    name: firewalld
+    state: restarted

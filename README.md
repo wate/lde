@@ -1,316 +1,210 @@
-common
+lde(Local Development Environment)
 =========
 
-[![Build Status](https://travis-ci.org/wate/ansible-role-common.svg?branch=master)](https://travis-ci.org/wate/ansible-role-common)
+Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
-ユーザーの追加や基本パッケージのインストールなど、サーバーの共通セットアップ処理を行います。
+必要なもの
+------------
 
-Role Variables
---------------
+* [Vagrant](https://www.vagrantup.com/)
+    * Ver 2.1.0以上
+* [VirtualBox](https://www.virtualbox.org/)
+* [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
+    * Vagrantのプラグインです。
+    * インストールしていなくても動作しますが、  
+    その場合はhostsファイルを手動書き換える必要があります。
 
-### common_groups
+その他、関連アプリ
+------------
 
-サーバーに登録/削除するグループを指定します。
+* [Vagrant Manager](http://vagrantmanager.com/)
+    * 作成済みのローカル開発環境をGUI上から操作できます。
+    * 黒い画面が苦手な人にお勧めです。
 
-```yml
-common_groups:
-  - name: group1
-  - name: group2
-    remove: true
-  - name: system_group
-    system: true
-  - name: system_group_with_id
-    id: 1000
-    system: true
+ディレクトリ構成
+------------
+
+ディレクトリ構成は以下の通りです。
+
+```
+├── LICENSE
+│        ライセンスファイルです。
+│        利用する場合はライセンスの内容を把握のうえご利用ください。
+├── README.md
+│        このファイルです。
+├── config.yml
+│        ローカル開発環境の設定ファイルです、利用する場合にはこのファイルを編集し利用します。
+│        (設定内容の詳細は「設定方法」を参照)
+├── source/
+│        開発するソースコードを格納するディレクトリです。
+│        (ここにソースコードを格納していきます)
+├── Vagrantfile
+│        Vagrantの設定ファイルです。
+│        (※通常は変更する必要はありません)
+└── provision/
+          ローカル開発環境を構築する設定ファイル一式を格納しています。
+          (※通常は変更する必要はありません)
 ```
 
-### common_users
+設定方法
+------------
 
-サーバーに登録/削除するユーザーを指定します。
+### config.yml
 
-```yaml
-common_users:
-  - name: sample_user
-    # Optional
-    password: "{{ 'password'|password_hash('sha512') }}"
-    groups:
-      - group1
-      - group2
-    authorized_keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      - https://github.com/hoge.keys
-    shell: /bin/nologin
-    id: 100000
-    system: true
-    admin: false
-    remove: true
-```
+ローカル開発環境の設定ファイルです。
 
-### common_packages
+| 設定項目    | 内容                                            |
+| ----------- | ----------------------------------------------- |
+| app_type    | ローカル開発環境の種別を設定します              |
+| domain      | ローカル開発環境のドメインを設定します          |
+| php_version | インストールするPHPのバージョンを指定します     |
+| wordpress   | WordPressのインストール時の各種設定を指定します |
+| ec_cube     | EC-CUBEのインストール時の各種設定を指定します   |
+| vagrant     | Vagrantで作成する仮想マシンの設定を指定します   |
 
-インストールする基本パッケージを指定します。
+#### app_type
 
-```yaml
-common_packages:
-  - unzip
-  - zip
-  - perl
-  - cpp
-  - make
-  - autoconf
-  - automake
-  - diffstat
-  - m4
-  - libtool
-  - gcc
-  - gcc-c++
-  - patch
-  - git
-  - yum-utils
-  - vim-enhanced
-  - bash-completion
-  - tig
-```
+ローカル開発環境の種別を設定します。
 
+指定できる値は以下の取りです。
 
-### common_hostname
+* `default`：
+    * 汎用的なPHPアプリケーション開発に利用できます。
+    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
+* `wordpress`：
+    * WordPress開発用の環境として利用できます。
+    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
+* `wordpress_theme`：
+    * WordPressのテーマ開発用の環境として利用できます。
+    * `source`ディレクトリ直下がWordPressのテーマ用ディレクトリとして設定されます。
+* `wordpress_plugin`：
+    * WordPressのプラグイン開発用の環境として利用できます。
+    * `source`ディレクトリ直下がWordPressのプラグイン用ディレクトリとして設定されます。
+* `ec-cube`：
+    * EC-CUBE開発用の環境として利用できます。
+    * **※この設定は実験的な機能です。**
+    + 初回表示時はキャッシュが効いていないため表示に時間がかかります。
 
-ホスト名を指定します。
+#### domain
 
-```yml
-common_hostname: "{{ inventory_hostname }}"
-```
+ローカル開発環境に設定するドメインを設定します。  
+設定内容に応じて、以下のURLでローカル開発環境にアクセスできます。
 
+* `http://<設定したドメイン>/`：ローカル開発環境の確認用URLです。
+* `http://mailtest.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
+* `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
+* `http://er.<設定したドメイン>/`：[WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)用のURLです。
 
+#### php_version
 
+インストールするPHPのバージョンを指定します。  
+設定可能なバージョンは以下の通りです。
 
-### common_ssh_port: 22
+* 8.0
+* 7.4
+* 7.3
+* 7.2
+* 7.1
+* 7.0
+* 5.6
+* 5.5
+* 5.4
 
-SSHのポート番号を指定します。
-※この設定はfirewalldのSSHのポート番号の解放に利用されます。
+#### wordpress
 
-```yml
-common_ssh_port: 22
-```
+`app_type`に`wordpress_theme`または`wordpress_plugin`を設定している場合に、  
+インストールするWordPressの情報を設定します。
 
-### common_ssh_use_geoip_filter
+設定可能な項目に関しては`config.yml`の`wordpress`部分のコメントを参照してください。
 
-GeoIPによるSSHの接続元制限を行うか否かを指定します。
+#### ec_cube
 
-```yml
-common_ssh_use_geoip_filter: true
-```
+`app_type`に`ec-cube`を設定している場合に、  
+インストールするEC-CUBEの情報を設定します。
 
-### common_ssh_allow_countries
-
-SSHの接続を許可する国コードを指定します。  
-この設定は`common_ssh_use_geoip_filter`が`true`に設定されている場合にのみ有効です。
-
-```yml
-common_ssh_allow_countries:
-  - JP
-```
-
-### common_cron_geoip_update
-
-GeoIPデータベースの更新を行う日時を指定します。
-
-```yml
-common_cron_geoip_update:
-  hour: 4
-  minute: 0
-```
-
-### fail2ban_jail_cfg
-
-fail2banの設定を定義します。
-
-```yaml
-fail2ban_jail_cfg:
-  sshd:
-    enabled: yes
-```
-
-### sudo_require_password
-
-sudoで実行を行う場合にパスワードを求めるか否かを指定します。
-
-```yaml
-sudo_require_password: no
-```
-
-### yum_cron_daily_cfg
-
-yum-cronの日次処理の設定を指定します。
-
-```yml
-yum_cron_daily_cfg: 
-  ## Update Setting
-  - section: commands
-    name: update_cmd
-    # default / security / security-severity:Critical / minimal / minimal-security / minimal-security-severity:Critical
-    value: default
-  - section: commands
-    name: update_messages
-    value: "yes"
-  - section: commands
-    name: download_updates
-    value: "yes"
-  - section: commands
-    name: apply_updates
-    value: "no"
-  - section: commands
-    name: random_sleep
-    value: 360
-  ## Email Setting
-  - section: email
-    name: email_from
-    value: root@localhost
-  - section: email
-    name: email_to
-    value: root
-  - section: email
-    name: email_host
-    value: localhost
-```
-
-### yum_cron_hourly_cfg
-
-yum-cronの毎時処理の設定を指定します。
-
-```yml
-yum_cron_hourly_cfg: 
-  ## Update Setting
-  - section: commands
-    name: update_cmd
-    # default / security / security-severity:Critical / minimal / minimal-security / minimal-security-severity:Critical
-    value: default
-  - section: commands
-    name: update_messages
-    value: "no"
-  - section: commands
-    name: download_updates
-    value: "no"
-  - section: commands
-    name: apply_updates
-    value: "no"
-  - section: commands
-    name: random_sleep
-    value: 15
-  ## Email Setting
-  - section: email
-    name: email_from
-    value: root
-  - section: email
-    name: email_to
-    value: root
-  - section: email
-    name: email_host
-    value: localhost
-```
+設定可能な項目に関しては`config.yml`の`ec_cube`部分のコメントを参照してください。
 
 
-### common_swap_dest
+### extra_vars.yml
 
-スワップファイルのパスを指定します。
-※この設定はスワップが存在しない場合のみ有効です。
+このファイルが存在する場合セットアップ時に読み込まれます。  
+ファイル内に記載された内容はセットアップ用変数として、セットアップ処理に渡すことができます。
 
-```yml
-common_swap_dest: /var/spool/swap/swapfile
-```
+また、既に定義されているセットアップ用変数と同じ変数を定義すれば、  
+セットアップ用変数を上書きできます。
 
-### common_swap_size
+### post_task.yml
 
-スワップのサイズを指定します。
-※この設定はスワップが存在しない場合のみ有効です。
+このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
+記載方法は[Ansible](https://www.ansible.com/)の記載フォーマットで記載します。
 
-```yml
-common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000) | round(1, 'floor') | float * 2) | int }}"
-```
+### post_task.sh
 
-### common_files
+このファイルが存在する場合、セットアップ時に自動で呼び出されます。  
+処理内容はシェルスクリプトで記載します。
 
-任意のファイルをアップロードまたはダウンロードし配置します。
+ローカル開発環境のサーバー情報
+------------
 
-```yml
-common_files: 
-  # ローカルにあるファイルをアップロード
-  - dest: /usr/local/bin/upload-script
-    src: path/to/script
-    mode: "0755"
-    # owner: root
-    # group: root
-    # checksum: 1234567890abcdefghijklmnopqrstuvwxyz
-  # リモートファイルをダウンロード
-  - dest: /usr/local/bin/download-script
-    url: http://www.example.com/path/to/script
-    mode: "0755"
-    # owner: root
-    # group: root
-    # auth_basic_user: user
-    # auth_basic_password: password
-    # checksum: 1234567890abcdefghijklmnopqrstuvwxyz
-  # 既存のファイルを削除
-  - dest: /usr/local/bin/batch-script
-    ## ※この属性が指定されている場合は設定値の如何に関わらず、ファイルが存在する場合は削除する
-    removed: true
-```
+### データベース情報
 
-### common_cron_jobs
+ローカル開発環境では以下の4つのデータベースが利用できます。
 
-cronジョブの設定を行います。
+| データベース名 | データベースユーザー名 | データベースパスワード |
+| -------------- | ---------------------- | ---------------------- |
+| app_dev        | app_dev                | app_dev_P455w0rd       |
+| app_test       | app_test               | app_test_P455w0rd      |
+| app_staging    | app_staging            | app_staging_P455w0rd   |
+| app_prod       | app_prod               | app_prod_P455w0rd      |
 
-```yml
-common_cron_jobs: 
-  - name: check ssl expiration date
-    ## 定期実行コマンド
-    job: cert -f json example.com
-    ## 定期実行日時(時)
-    hour: 1
-    ## 定期実行日時(分)
-    minute: 23
-    ## 定期実行日時(日)
-    # day: "*"
-    ## 定期実行日時(月)
-    # month: "*"
-    ## 定期実行日時(曜日)
-    # weekday: "*"
-    ## 実行ユーザー
-    # user: root
-    ## 定期実行設定は残したまま無効化するか否か
-    # disabled: true
-    ## 定期実行設定の存在の有無(これが指定された場合は値の如何に関わらず、設定が存在する場合は削除します)
-    # removed: true
-```
+※`app_type`に以下のいずれかが設定されている場合、  
+**app_dev** の接続設定が利用されています。
 
-### common_cron_vars
+* `wordpress`
+* `wordpress_theme`
+* `wordpress_plugin`
+* `ec-cube`
 
-cron用の変数を設定します。
+### Webサーバー
 
-```yml
-common_cron_vars: 
-  - name: PATH
-    value: /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
-  - name: MAILTO
-    value: root
-  - name: SHELL
-    value: /usr/bin/bash
-  - name: HOME
-    value: /
-    ## 以下が指定された場合は指定の変数を削除します
-    # removed: true
-```
+ドキュメントルートに`/var/www/html`を設定しています。
 
-Example Playbook
-----------------
+### 共有ディレクトリの割当先について
 
-```yaml
-- hosts: servers
-  roles:
-    - role: common
-```
+ローカル開発環境全体を仮想マシンの`/vagrant`に割り当てています。
 
-License
+また、`app_type`の設定に応じて`source`ディレクトリを  
+仮想マシンのディレクトリとして割り当てています。
+
+#### `wordpress_theme`または`wordpress_plugin`以外が設定されている場合
+
+仮想マシンの`/var/www/html`として割り当てています。
+
+#### `wordpress_theme`が設定されている場合
+
+仮想マシンの`/var/www/html/wp-content/themes/source`として割り当てています。
+
+#### `wordpress_plugin`が設定されている場合
+
+仮想マシンの`/var/www/html/wp-content/plugins/source`として割り当てています。
+
+
+WordPress用開発環境について
+------------
+
+### プラグインやテーマのインストール/アップデート方法
+
+プラグインのインストールやプラグインの更新を行う場合、  
+ダイアログに以下の情報を入力するとインストールまたはアップデートできます。
+
+* ホスト名：localhost
+* FTP/SSH ユーザー名：vagrant
+* FTP/SSH パスワード：vagrant
+* 接続形式：ssh2
+
+※「SSH Authentication Keys」の設定は不要です。
+
+ライセンス
 -------
 
 MIT
