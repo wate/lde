@@ -7,14 +7,15 @@
   block:
     - name: create swapfile directory
       file:
-        path: "{{ common_swap_dest|dirname }}"
+        path: "{{ common_swap_dest | dirname }}"
         state: directory
+        mode: "0700"
     - name: create swapfile
       file:
         path: "{{ common_swap_dest }}"
         owner: root
         group: root
-        mode: 0600
+        mode: "0600"
         state: touch
     - name: initilize swapfile
       command: "dd if=/dev/zero of={{ common_swap_dest }} bs=1M count={{ common_swap_size|int * 1024 }}"

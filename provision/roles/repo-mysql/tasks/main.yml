@@ -1,0 +1,4 @@
+---
+- name: install mysql repo
+  yum:
+    name: https://dev.mysql.com/get/mysql80-community-release-el{{ ansible_distribution_major_version }}-{{ repo_mysql_version }}.noarch.rpm

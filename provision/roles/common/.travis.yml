@@ -1,4 +1,5 @@
 ---
+sudo: required
 language: python
 services: docker
 env:
@@ -15,6 +16,10 @@ before_script:
   - mv ansible-role-$ROLE_NAME $ROLE_NAME
   - cd $ROLE_NAME
 script:
+  - molecule --version
+  - ansible --version
+  - ansible-lint --version
+  - yamllint --version
   - molecule test
 notifications:
   email: false

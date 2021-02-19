@@ -169,6 +169,7 @@ Vagrant.configure("2") do |config|
       if settings['vagrant'].key?('provision_only_tags')
         ansible.tags = settings['vagrant']['provision_only_tags']
       end
+      # ansible.raw_arguments = ['--diff']
       if settings['vagrant'].key?('provision_skip_tags')
         ansible.skip_tags = settings['vagrant']['provision_skip_tags']
       end
