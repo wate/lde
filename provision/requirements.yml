@@ -28,6 +28,9 @@
 - src: https://github.com/wate/ansible-role-memcached
   version: master
   name: memcached
+- src: https://github.com/wate/ansible-role-mysql
+  version: master
+  name: mysql
 - src: https://github.com/wate/ansible-role-nodejs
   version: master
   name: nodejs
@@ -46,6 +49,9 @@
 - src: https://github.com/wate/ansible-role-repo-epel
   version: master
   name: repo-epel
+- src: https://github.com/wate/ansible-role-repo-mysql
+  version: master
+  name: repo-mysql
 - src: https://github.com/wate/ansible-role-repo-remi
   version: master
   name: repo-remi

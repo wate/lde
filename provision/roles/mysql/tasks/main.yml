@@ -1,0 +1,165 @@
+---
+- name: include variable file
+  include_vars: "{{ mysql_version }}.yml"
+- name: enable repo repository
+  ini_file:
+    path: /etc/yum.repos.d/{{ mysql_repository_file }}.repo
+    section: "{{ item }}"
+    option: enabled
+    value: "{{ '1' if item == 'mysql' + mysql_version| replace('.', '') + '-community' else '0' }}"
+    mode: "0644"
+  loop: "{{ mysql_version_repository_names }}"
+- name: install MySQL packages
+  yum:
+    name: "{{ mysql_packages }}"
+- name: include package name vars
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}_{{ ansible_distribution_major_version }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      paths:
+        - 'vars'
+- name: install dependency packages
+  yum:
+    name: "{{ mysql_dependency_packages }}"
+- name: create MySQL custom setting file directory
+  file:
+    path: /etc/my.cnf.d
+    state: directory
+    mode: "0755"
+- name: Ensure includedir setting
+  lineinfile:
+    path: /etc/my.cnf
+    regexp: '^!includedir '
+    line: "!includedir /etc/my.cnf.d"
+  notify: restart mysql
+- name: create mysql setting file
+  template:
+    src: custom.cnf.j2
+    dest: /etc/my.cnf.d/custom.cnf
+    mode: "0644"
+  notify: restart mysql
+- name: create MySQL log directory
+  file:
+    path: /var/log/mysql
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: "0750"
+- name: MySQL is active and enabled on system startup
+  systemd:
+    name: mysqld
+    state: started
+    enabled: true
+- name: check root user connection setting
+  stat:
+    path: /root/.my.cnf
+  register: result
+- block:
+    - name: reset root passsword
+      block:
+        - name: get temporary password
+          shell:  |
+            set -o pipefail
+            cat /var/log/mysqld.log | grep "A temporary password is generated for root@localhost: "
+          register: mysql_default_password
+          failed_when: mysql_default_password.rc not in [0, 1]
+        - name: reset root password
+          block:
+            - name: change root password
+              shell: |
+                mysql -u root -p'{{ mysql_default_password.stdout.split('root@localhost: ') | last }}' \
+                --connect-expired-password \
+                -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+              no_log: true
+            - name: create root user connection setting
+              ini_file:
+                path: /root/.my.cnf
+                section: client
+                option: "{{ item.option }}"
+                value: "{{ item.value }}"
+                mode: "0600"
+                create: true
+              loop:
+                - option: host
+                  value: localhost
+                - option: user
+                  value: root
+                - option: password
+                  value: "{{ mysql_root_password }}"
+              loop_control:
+                label: "{{ item.option }}"
+          when: mysql_default_password.rc == 0
+      when: mysql_version is version('5.7', '>=')
+    - name: create mysql secure installation query file
+      template:
+        src: mysql_secure_installation.sql.j2
+        dest: /tmp/mysql_secure_installation.sql
+        mode: "0600"
+    - name: execute mysql secure installation
+      shell: mysql -u root mysql </tmp/mysql_secure_installation.sql
+    - name: remove mysql secure installation query file
+      file:
+        path: /tmp/mysql_secure_installation.sql
+        state: absent
+  when: not result.stat.exists
+- name: change root password
+  command: mysqladmin password "{{ mysql_root_password }}" -u root
+  when: result.stat.exists
+- name: create root user connection setting
+  ini_file:
+    path: /root/.my.cnf
+    section: client
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0600"
+    create: true
+  loop:
+    - option: host
+      value: localhost
+    - option: user
+      value: root
+    - option: password
+      value: "{{ mysql_root_password }}"
+  loop_control:
+    label: "{{ item.option }}"
+- name: create / remove databases
+  mysql_db:
+    name: "{{ item.name }}"
+    encoding: "{{ item.encoding | default(mysql_default_charset) }}"
+    collation: "{{ item.collation | default(mysql_default_collation) }}"
+    state: "{{ 'present' if item.state | default(true) else 'absent' }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
+  loop: "{{ mysql_databases }}"
+  loop_control:
+    label: "{{ item.name }}"
+- name: create MySQL users(on mysql_databases variable)
+  mysql_user:
+    name: "{{ item.0.user | default(item.0.name) }}"
+    password: "{{ item.0.password | default(omit) }}"
+    host: "{{ item.1 }}"
+    priv: "{{ item.0.name }}.*:ALL"
+    login_unix_socket: /var/lib/mysql/mysql.sock
+  loop: "{{ lookup('subelements', mysql_databases, 'hosts', {'skip_missing': True}) }}"
+  no_log: true
+- name: create / remove MySQL users
+  mysql_user:
+    name: "{{ item.0.name }}"
+    password: "{{ item.0.password }}"
+    host: "{{ item.1 }}"
+    priv: "{{ item.0.privs | join('/') }}"
+    state: "{{ 'present' if item.0.state | default(true) else 'absent' }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
+  loop: "{{ lookup('subelements', mysql_users, 'hosts') }}"
+  no_log: true
+- name: allow MySQL port
+  firewalld:
+    service: mysql
+    permanent: true
+    state: enabled
+  when: mysql_allow_connect_other_host | default(false)
+  notify: restart firewalld
