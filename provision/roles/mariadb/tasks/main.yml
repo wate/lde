@@ -2,13 +2,31 @@
 - name: install MariaDB packages
   yum:
     name: "{{ mariadb_packages }}"
+- name: include package name vars
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}_{{ ansible_distribution_major_version }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      paths:
+        - 'vars'
 - name: install dependency packages
   yum:
-    name: MySQL-python
+    name: "{{ mariadb_dependency_packages }}"
+- name: Ensure includedir setting
+  lineinfile:
+    path: /etc/my.cnf
+    regexp: '^!includedir '
+    line: "!includedir /etc/my.cnf.d"
+  notify: restart mariadb
 - name: create MariaDB setting files
   template:
     src: custom.cnf.j2
     dest: /etc/my.cnf.d/custom.cnf
+    mode: "0644"
   notify: restart mariadb
 - name: MariaDB is active and enabled on system startup
   systemd:
@@ -24,6 +42,7 @@
       template:
         src: mysql_secure_installation.sql.j2
         dest: /tmp/mysql_secure_installation.sql
+        mode: "0600"
       no_log: true
     - name: execute mysql secure installation
       shell: mysql -u root mysql </tmp/mysql_secure_installation.sql
@@ -43,7 +62,7 @@
     value: "{{ item.value }}"
     mode: "0600"
     create: true
-  with_items:
+  loop:
     - option: host
       value: localhost
     - option: user
@@ -57,7 +76,7 @@
     encoding: "{{ item.encoding | default(mariadb_default_charset) }}"
     collation: "{{ item.collation | default(mariadb_default_collation) }}"
     state: "{{ 'present' if item.state | default(true) else 'absent' }}"
-  with_items: "{{ mariadb_databases }}"
+  loop: "{{ mariadb_databases }}"
   loop_control:
     label: "{{ item.name }}"
 - name: create MariaDB users(on mariadb_databases variable)

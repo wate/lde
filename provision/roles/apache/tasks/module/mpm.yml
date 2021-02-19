@@ -4,6 +4,7 @@
     path: /etc/httpd/conf.modules.d/00-mpm.conf
     regexp: "^#?LoadModule mpm_{{ item }}_module modules/mod_mpm_{{ item }}.so"
     line: "{{ '' if apache_module_mpm == item else '#' }}LoadModule mpm_{{ item }}_module modules/mod_mpm_{{ item }}.so"
+    mode: "0644"
   notify: restart apache
   loop:
     - prefork

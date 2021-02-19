@@ -4,5 +4,6 @@
     path: /etc/httpd/conf.modules.d/00-base.conf
     regexp: "^#?LoadModule {{ item.key }}_module modules/mod_{{ item.key }}.so"
     line: "{{ '' if item.value else '#' }}LoadModule {{ item.key }}_module modules/mod_{{ item.key }}.so"
+    mode: "0644"
   notify: restart apache
   loop: "{{ apache_module_base | dict2items }}"
