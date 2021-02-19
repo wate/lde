@@ -8,6 +8,7 @@
     - RPM-GPG-KEY-remi2018
     - RPM-GPG-KEY-remi2019
     - RPM-GPG-KEY-remi2020
+    - RPM-GPG-KEY-remi2021
 - name: install remi repository
   yum:
     name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm

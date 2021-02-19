@@ -8,6 +8,7 @@
     path: /etc/fail2ban/jail.local
     block: "{{ fail2ban_cfg }}"
     create: true
+    mode: "0644"
   notify: restart fail2ban
 - name: fail2ban is active and enabled on system startup
   systemd:

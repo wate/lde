@@ -3,8 +3,11 @@ services: docker
 env:
   global:
     - ROLE_NAME: wp-cli
+before_install:
+  - sudo apt-get -qq update
 install:
-  - pip install molecule yamllint ansible-lint docker
+  - python3 -m pip install ansible
+  - python3 -m pip install molecule[docker,lint]
 before_script:
   - cd ../
   - git clone --depth=1 https://github.com/wate/ansible-role-repo-epel.git repo-epel

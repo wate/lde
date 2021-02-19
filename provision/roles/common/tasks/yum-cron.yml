@@ -2,12 +2,13 @@
 - name: install yum-cron
   yum:
     name: yum-cron
-- name: yum-cron hourly setting
+- name: yum-cron daily setting
   ini_file:
     path: /etc/yum/yum-cron.conf
     section: "{{ item.section }}"
     option: "{{ item.name }}"
     value: "{{ item.value | string }}"
+    mode: "0644"
   loop: "{{ yum_cron_daily_cfg }}"
 - name: yum-cron hourly setting
   ini_file:
@@ -15,6 +16,7 @@
     section: "{{ item.section }}"
     option: "{{ item.name }}"
     value: "{{ item.value | string }}"
+    mode: "0644"
   loop: "{{ yum_cron_hourly_cfg }}"
 - name: yum-cron is active and enabled on system startup service
   systemd:

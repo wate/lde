@@ -7,6 +7,7 @@
     section: "{{ php_repository_id }}"
     option: enabled
     value: "1"
+    mode: "0644"
 - name: install php packages
   yum:
     name: "{{ php_packages }}"
@@ -18,6 +19,7 @@
   template:
     src: php.ini.j2
     dest: /etc/php.ini
+    mode: "0644"
 - name: php-fpm is active and enabled on system startup
   systemd:
     name: php-fpm
