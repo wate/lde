@@ -26,8 +26,6 @@
       tags: role_wp-cli
     - role: phpmyadmin
       tags: role_phpmyadmin
-    - role: wwwsqldesigner
-      tags: role_wwwsqldesigner
   vars:
     tbls_last_release: "{{ lookup('url', 'https://api.github.com/repos/k1LoW/tbls/releases/latest', split_lines=False) | from_json }}"
     tbls_version: "{{ tbls_last_release.tag_name }}"
