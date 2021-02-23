@@ -40,6 +40,12 @@
 - src: https://github.com/wate/ansible-role-phpmyadmin
   version: master
   name: phpmyadmin
+- src: https://github.com/wate/ansible-role-phpredisadmin
+  version: master
+  name: phpredisadmin
+- src: https://github.com/wate/ansible-role-phpmemcachedadmin
+  version: master
+  name: phpmemcachedadmin
 - src: https://github.com/wate/ansible-role-python
   version: master
   name: python
@@ -61,6 +67,3 @@
 - src: https://github.com/wate/ansible-role-wp-cli
   version: master
   name: wp-cli
-- src: https://github.com/wate/ansible-role-wwwsqldesigner
-  version: master
-  name: wwwsqldesigner
