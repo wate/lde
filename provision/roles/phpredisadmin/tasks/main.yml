@@ -1,0 +1,22 @@
+---
+- name: install git
+  yum:
+    name: git
+- name: install php redis extension
+  yum:
+    name: php-pecl-redis
+- name: checkout phpRedisAdmin
+  git:
+    repo: https://github.com/ErikDubbelboer/phpRedisAdmin.git
+    version: master
+    dest: "{{ phpredisadmin_dest }}"
+- name: create dependency pachage install directory
+  file:
+    path: "{{ phpredisadmin_dest }}/vendor"
+    state: directory
+    mode: "0755"
+- name: checkout dependency pachage
+  git:
+    repo: https://github.com/nrk/predis.git
+    version: main
+    dest: "{{ phpredisadmin_dest }}/vendor"
