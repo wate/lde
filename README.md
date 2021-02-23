@@ -88,7 +88,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `http://<設定したドメイン>/`：ローカル開発環境の確認用URLです。
 * `http://mailtest.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
 * `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
-* `http://cache.<設定したドメイン>/`：[phpRedisAdmin](https://github.com/erikdubbelboer/phpRedisAdmin)用のURLです。
+* `http://cache.<設定したドメイン>/`：[phpRedisAdmin](https://github.com/erikdubbelboer/phpRedisAdmin)または[phpMemcachedAdmin](https://github.com/elijaa/phpmemcachedadmin)用のURLです。
 
 #### php_version
 

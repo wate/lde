@@ -1,0 +1,23 @@
+language: python
+services: docker
+env:
+  global:
+    - ROLE_NAME: phpmemcachedadmin
+before_install:
+  - sudo apt-get -qq update
+install:
+  - python3 -m pip install ansible
+  - python3 -m pip install molecule[docker,lint]
+before_script:
+  - cd ../
+  - git clone --depth=1 https://github.com/wate/ansible-role-repo-epel.git repo-epel
+  - git clone --depth=1 https://github.com/wate/ansible-role-repo-remi.git repo-remi
+  - git clone --depth=1 https://github.com/wate/ansible-role-php.git php
+  - mv ansible-role-$ROLE_NAME $ROLE_NAME
+  - cd $ROLE_NAME
+script:
+  - molecule test
+notifications:
+  email: false
+  slack:
+    secure: oQtXPkPy5ApXyeKvZs6ZDdEYGPdjbCxpajwL8/f0IU3LgxHM+vg/I3hD9BrIBwearjezttQWV9CNAiDtjM7aivckHevQhLK0ciYnzX+Ps0qcNN5VqAApzWXkcFOy5MQk1x4kLIpbuDUeownjXZx9VcLIbU48ZYl/D91qgRBv4r+onfHNTmzO6HcW9hZKSMHsIsE4fi2LjhXIiQheAPQyQR6O9moc4AociHyCwkafTp8ZFhs30zl9gDwTNn2XDnlUiV9dzwltviQihisPM89cmzvrCs0DrEeofWiff+6eiz8XZiPx7gwpcgcdE+Fwz4go5ZkS7zfWqmYZHv/xvzNAEDIlZTs+2dSpda1z+sj/4foSNwYfRg+VP9NBlSGnvT3mCX6tRyrJBxKMoKdK84xcflh7AQPaOZHDqfzgKyFqW80+4GcAUZBV3tYhWvreCOJVpNcFE70X2n3GjA+dU0p0tb/ImZCt2yIoLFWvcvg3DVCRSbfFYKEKWow01Ip4K9xZdN2gA/sS9TH9rNr26MHZKS7FLgkxMHelhi3w1LZRlRD31fGm48BZAaB6AP0mkmDkt3yFDNzD8hmX+IZugz6nJAgbhWVTETmrLg2C0AAK5mzePUKrAu39RG8MJxBWNnM2ilnO0DAW7u6bus0ZZzzkXBpAanhJbPF0tFAgLHrmeGs=

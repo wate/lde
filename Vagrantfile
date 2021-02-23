@@ -70,7 +70,7 @@ Vagrant.configure("2") do |config|
     # MailCatcher
     'mailtest.' + settings['domain'],
     # WWW SQL Designer
-    'er.' + settings['domain'],
+    'cache.' + settings['domain'],
   ]
 
   if settings['vagrant'].key?('append_vm_hosts')
