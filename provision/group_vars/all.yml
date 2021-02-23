@@ -162,21 +162,6 @@ php_cfg:
 cache_server: redis
 
 # --------------
-# WWW SQL Designerのバックエンドの設定
-# --------------
-wwwsqldesigner_backend_pdo_cfg:
-  save:
-    type: mysql
-    dsn: "mysql:dbname=wwwsqldesigner;host=localhost"
-    user: wwwsqldesigner
-    password: *wwwsqldesigner_db_password
-  import:
-    type: mysql
-    dsn: "mysql:dbname=information_schema;host=localhost"
-    user: root
-    password: *db_root_password
-
-# --------------
 # Apacheのバーチャルホストの設定
 # --------------
 apache_vhosts:
@@ -197,7 +182,7 @@ apache_vhosts:
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   # https://www.phpmyadmin.net/
   - name: 01-phpMyAdmin
-    state: "{{ true if phpmyadmin_dest is defined else false }}"
+    disabled: "{{ true if phpmyadmin_dest is undefined else false }}"
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest | default('/usr/share/phpMyAdmin') }}"
     custom_log:
@@ -221,7 +206,7 @@ apache_vhosts:
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   # https://github.com/mailhog/MailHog
   - name: 02-MailTest
-    state: "{{ true if mail_test_tool_http_port is defined else false }}"
+    disabled: "{{ true if mail_test_tool_http_port is undefined else false }}"
     server_name: mailtest.{{ domain }}
     custom_log:
       path: /dev/null
@@ -236,10 +221,29 @@ apache_vhosts:
         to: "http://localhost:{{ mail_test_tool_http_port }}/"
   # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
   # https://github.com/ondras/wwwsqldesigner
-  - name: 03-WWWSQLDesigner
-    state: "{{ true if wwwsqldesigner_dest is defined else false }}"
-    server_name: er.{{ domain }}
-    document_root: "{{ wwwsqldesigner_dest | default('/opt/wwwsqldesigner') }}"
+  - name: 03-phpRedisAdmin
+    disabled: "{{ true if cache_server | default(None) != 'redis' else false }}"
+    server_name: cache.{{ domain }}
+    document_root: "{{ phpredisadmin_dest | default('/opt/phpRedisAdmin') }}"
+    custom_log:
+      path: /dev/null
+      format: combine
+      env: 0
+    directory_index:
+      - index.html
+      - index.htm
+      - index.php
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    require:
+      - type: ip
+        value: 192.168.33
+  - name: 04-phpMemcachedAdmin
+    disabled: "{{ true if cache_server | default(None) != 'memcached' else false }}"
+    server_name: cache.{{ domain }}
+    document_root: "{{ phpmemcachedadmin_dest | default('/opt/phpMemcachedAdmin') }}"
     custom_log:
       path: /dev/null
       format: combine
