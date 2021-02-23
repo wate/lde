@@ -33,6 +33,13 @@
     tbls_version: "{{ tbls_last_release.tag_name }}"
     tbls_download_url: https://github.com/k1LoW/tbls/releases/download/{{ tbls_version }}/tbls_{{ tbls_version | regex_replace('^v', '') }}-1_amd64.rpm
   tasks:
+    - name: install cache server
+      include_role:
+        name: "{{ cache_server }}"
+      tags: role_cache
+      when:
+        - cache_server is defined
+        - cache_server in ['redis', 'memcached']
     - name: install Google Noto Fonts
       yum:
         name:
@@ -121,6 +128,13 @@
       loop:
         - httpd
         - mariadb
+    - name: restart service(cache server)
+      systemd:
+        name: "{{ cache_server }}"
+        state: restarted
+      when:
+        - cache_server is defined
+        - cache_server in ['redis', 'memcached']
     - block:
         - name: install github deploykey
           copy:
