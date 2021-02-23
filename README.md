@@ -59,7 +59,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 | domain      | ローカル開発環境のドメインを設定します          |
 | php_version | インストールするPHPのバージョンを指定します     |
 | wordpress   | WordPressのインストール時の各種設定を指定します |
-| ec_cube     | EC-CUBEのインストール時の各種設定を指定します   |
 | vagrant     | Vagrantで作成する仮想マシンの設定を指定します   |
 
 #### app_type
@@ -80,10 +79,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `wordpress_plugin`：
     * WordPressのプラグイン開発用の環境として利用できます。
     * `source`ディレクトリ直下がWordPressのプラグイン用ディレクトリとして設定されます。
-* `ec-cube`：
-    * EC-CUBE開発用の環境として利用できます。
-    * **※この設定は実験的な機能です。**
-    + 初回表示時はキャッシュが効いていないため表示に時間がかかります。
 
 #### domain
 
@@ -93,7 +88,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `http://<設定したドメイン>/`：ローカル開発環境の確認用URLです。
 * `http://mailtest.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
 * `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
-* `http://er.<設定したドメイン>/`：[WWW SQL Designer](https://github.com/ondras/wwwsqldesigner)用のURLです。
+* `http://cache.<設定したドメイン>/`：[phpRedisAdmin](https://github.com/erikdubbelboer/phpRedisAdmin)用のURLです。
 
 #### php_version
 
@@ -116,14 +111,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 インストールするWordPressの情報を設定します。
 
 設定可能な項目に関しては`config.yml`の`wordpress`部分のコメントを参照してください。
-
-#### ec_cube
-
-`app_type`に`ec-cube`を設定している場合に、  
-インストールするEC-CUBEの情報を設定します。
-
-設定可能な項目に関しては`config.yml`の`ec_cube`部分のコメントを参照してください。
-
 
 ### extra_vars.yml
 
@@ -163,7 +150,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 * `wordpress`
 * `wordpress_theme`
 * `wordpress_plugin`
-* `ec-cube`
 
 ### Webサーバー
 
