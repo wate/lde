@@ -95,6 +95,9 @@ php_packages:
   - php-pdo
   - php-gd
   - php-xml
+  - php-pecl-apcu
+  - php-pecl-memcached
+  - php-pecl-redis
 
 # --------------
 # php.iniの初期値を上書きする項目
@@ -167,6 +170,11 @@ php_cfg:
     xdebug.var_display_max_children = 128
     xdebug.var_display_max_data = 512
     xdebug.var_display_max_depth = 3
+
+# --------------
+# キャッシュサーバー(redis / memcached)
+# --------------
+cache_server: redis
 
 # --------------
 # WWW SQL Designerのバックエンドの設定
