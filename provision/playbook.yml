@@ -30,6 +30,20 @@
     tbls_last_release: "{{ lookup('url', 'https://api.github.com/repos/k1LoW/tbls/releases/latest', split_lines=False) | from_json }}"
     tbls_version: "{{ tbls_last_release.tag_name }}"
     tbls_download_url: https://github.com/k1LoW/tbls/releases/download/{{ tbls_version }}/tbls_{{ tbls_version | regex_replace('^v', '') }}-1_amd64.rpm
+  pre_tasks:
+    - name: set pre task files
+      set_fact:
+        pre_task_file: "{{ lookup('first_found', pre_task_files, errors='ignore') }}"
+      vars:
+        pre_task_files:
+          files:
+            - pre_task.yml
+          paths:
+            - ..
+            - .
+    - name: execute pre task
+      include_tasks: "{{ pre_task_file }}"
+      when: pre_task_file | length > 0
   tasks:
     - name: install cache server and admin tool
       block:
@@ -194,7 +208,8 @@
             create: true
             mode: "0600"
       become: false
-    - name: set other task files
+  post_tasks:
+    - name: set other post task files
       set_fact:
         post_task_file: "{{ lookup('first_found', post_task_files, errors='ignore') }}"
         app_setup_file: "{{ lookup('first_found', app_setup_files, errors='ignore') }}"
@@ -215,9 +230,9 @@
           paths:
             - ..
             - .
-    - name: execute post tasks
+    - name: execute post task
       include_tasks: "{{ post_task_file }}"
-      when: (post_task_file | length) > 0
+      when: post_task_file | length > 0
     - name: setup application
       include_tasks: "{{ app_setup_file }}"
-      when: (app_setup_file | length) > 0
+      when: app_setup_file | length > 0
