@@ -194,6 +194,7 @@
             create: true
             mode: "0600"
       become: false
+  post_tasks:
     - name: set other task files
       set_fact:
         post_task_file: "{{ lookup('first_found', post_task_files, errors='ignore') }}"
@@ -217,7 +218,7 @@
             - .
     - name: execute post tasks
       include_tasks: "{{ post_task_file }}"
-      when: (post_task_file | length) > 0
+      when: post_task_file | length > 0
     - name: setup application
       include_tasks: "{{ app_setup_file }}"
-      when: (app_setup_file | length) > 0
+      when: app_setup_file | length > 0
