@@ -69,8 +69,10 @@ Vagrant.configure("2") do |config|
     'db.' + settings['domain'],
     # MailCatcher
     'mailtest.' + settings['domain'],
-    # WWW SQL Designer
+    # redis or memcached admin tool
     'cache.' + settings['domain'],
+    # rtail
+    'log.' + settings['domain'],
   ]
 
   if settings['vagrant'].key?('append_vm_hosts')
