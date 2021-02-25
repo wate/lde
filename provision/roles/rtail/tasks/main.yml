@@ -1,0 +1,17 @@
+---
+- name: install rtail
+  npm:
+    name: rtail
+    global: true
+- name: create rtail-server systemd unit file
+  template:
+    src: rtail.service.j2
+    dest: /usr/lib/systemd/system/rtail.service
+    mode: "0644"
+  notify: restart rtail
+- name: rtail-server is active and enabled on system startup
+  systemd:
+    daemon_reload: true
+    name: rtail
+    state: started
+    enabled: true
