@@ -22,6 +22,8 @@
       tags: role_php
     - role: "{{ mail_test_tool | default('mailhog') }}"
       tags: role_mailtest
+    - role: rtail
+      tags: role_rtail
     - role: wp-cli
       tags: role_wp-cli
     - role: phpmyadmin

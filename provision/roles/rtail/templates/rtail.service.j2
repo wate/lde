@@ -1,0 +1,16 @@
+[Unit]
+Description=rtail Service
+After=network.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rtail-server \
+  --udp-host {{ rtail_udp_host }} \
+  --udp-port {{ rtail_udp_port }} \
+  --web-host {{ rtail_web_host }} \
+  --web-port {{ rtail_web_port }}
+StandardOutput=journal
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

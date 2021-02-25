@@ -64,6 +64,9 @@
 - src: https://github.com/wate/ansible-role-ruby
   version: master
   name: ruby
+- src: https://github.com/wate/ansible-role-rtail
+  version: master
+  name: rtail
 - src: https://github.com/wate/ansible-role-wp-cli
   version: master
   name: wp-cli

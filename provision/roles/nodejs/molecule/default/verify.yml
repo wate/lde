@@ -1,0 +1,27 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: get package insatll states
+      package:
+        name: nodejs
+        state: installed
+      check_mode: true
+      register: result
+    - name: assert nodejs installed
+      assert:
+        that: result.changed is false
+        fail_msg: "「nodejs」はインストールされていません"
+        success_msg: "「nodejs」はインストール済みです"
+    - name: get node.js version
+      command: node --version
+      changed_when: false
+      register: result
+    - name: load variable file
+      include_vars: "{{ molecule_scenario_directory | dirname | dirname }}/defaults/main.yml"
+    - name: assert install version
+      assert:
+        that: result.stdout.split('.') | first | regex_replace('^v', '') | int == nodejs_major_version
+        fail_msg: "「nodejs」のバージョンは「{{ nodejs_major_version }}」ではありません"
+        success_msg: "「nodejs」のバージョンは「{{ nodejs_major_version }}」です"
