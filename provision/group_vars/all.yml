@@ -7,7 +7,7 @@ mail_test_tool_php_sendmail_path: "{{ '/usr/local/bin/mhsendmail' if mail_test_t
 # --------------
 # MariaDBのrootパスワード
 # --------------
-mariadb_root_password: &db_root_password r00tP455w0rd
+mariadb_root_password: r00t_P455w0rd
 
 # --------------
 # PHPのバージョン
