@@ -1,21 +1,8 @@
-# --------------
-# メール送信テストツールのPHPおよびバーチャルホストの設定
-# --------------
-mail_test_tool_http_port: "{{ 8025 if mail_test_tool | default('mailhog') == 'mailhog' else 1080 }}"
-mail_test_tool_php_sendmail_path: "{{ '/usr/local/bin/mhsendmail' if mail_test_tool | default('mailhog') == 'mailhog' else '/usr/local/bin/catchmail' }}"
-
-# --------------
-# MariaDBのrootパスワード
-# --------------
-mariadb_root_password: r00t_P455w0rd
 
 # --------------
 # PHPのバージョン
 #
 # 指定可能な値は以下の通り
-# - 5.4
-# - 5.5
-# - 5.6
 # - 7.0
 # - 7.1
 # - 7.2
@@ -25,7 +12,45 @@ mariadb_root_password: r00t_P455w0rd
 # --------------
 php_version: 7.4
 
-# mariadb_allow_connect_other_host: false
+# --------------
+# インストールするPHPのパッケージ
+# --------------
+php_packages:
+  - php{{ php_version }}-common
+  - php{{ php_version }}-cli
+  - php{{ php_version }}-dev
+  - php{{ php_version }}-curl
+  - php{{ php_version }}-gd
+  - php{{ php_version }}-bcmath
+  - php{{ php_version }}-imagick
+  - php{{ php_version }}-mbstring
+  - php{{ php_version }}-mcrypt
+  - php{{ php_version }}-gettext
+  - php{{ php_version }}-sqlite3
+  - php{{ php_version }}-mysqlnd
+  - php{{ php_version }}-json
+  - php{{ php_version }}-pdo
+  - php{{ php_version }}-opcache
+  - php{{ php_version }}-intl
+  - php{{ php_version }}-xml
+  - php{{ php_version }}-zip
+  - php{{ php_version }}-apcu
+  - php{{ php_version }}-redis
+
+# --------------
+# php.iniの初期値を上書きする項目
+# その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
+# --------------
+php_cfg: |
+  display_errors = On
+  memory_limit = 512M
+  date.timezone = Asia/Tokyo
+  sendmail_path =/usr/local/bin/mhsendmail
+
+# --------------
+# MariaDBのrootパスワード
+# --------------
+mariadb_root_password: r00t_P455w0rd
 
 # --------------
 # データベース
@@ -38,6 +63,7 @@ mariadb_databases:
       - "127.0.0.1"
       - localhost
       - "192.168.%"
+      - "10.%"
   # テスト用データベース
   - name: app_test
     # import_data: /vagrant/source/test_data.sql
@@ -45,128 +71,42 @@ mariadb_databases:
     hosts:
       - "127.0.0.1"
       - localhost
-      - "10.%"
       - "192.168.%"
+      - "10.%"
   # ステージング用データベース
   - name: app_staging
     password: app_staging_P455w0rd
     hosts:
       - "127.0.0.1"
       - localhost
-      - "10.%"
       - "192.168.%"
+      - "10.%"
   # 本番用データベース
   - name: app_prod
     password: app_prod_P455w0rd
     hosts:
       - "127.0.0.1"
       - localhost
-      - "10.%"
       - "192.168.%"
-
-
-# --------------
-# インストールするPHPのパッケージ
-# --------------
-php_packages:
-  - php
-  - php-common
-  - php-cli
-  - php-devel
-  - php-opcache
-  - php-mbstring
-  - php-mysqlnd
-  - php-json
-  - php-pdo
-  - php-gd
-  - php-xml
-  - php-pecl-apcu
-  - php-pecl-memcached
-  - php-pecl-redis
+      - "10.%"
 
 # --------------
-# php.iniの初期値を上書きする項目
-# その他の設定値は、「provision/roles/php/defaults/main.yml」の「php_cfg」の項目を参照
+# 外部のホストからのMariaDBへの接続を許可
 # --------------
-php_cfg:
-  display_errors: true
-  sendmail_path: "{{ mail_test_tool_php_sendmail_path }}"
-  memory_limit: 512M
-  max_execution_time: 180
-  extra_setting: |
-    [xdebug]
-    xdebug.auto_trace = Off
-    xdebug.cli_color = 0
-    xdebug.collect_assignments = Off
-    xdebug.collect_includes = On
-    xdebug.collect_params = 0
-    xdebug.collect_return = Off
-    xdebug.collect_vars = Off
-    xdebug.coverage_enable = On
-    xdebug.default_enable = On
-    xdebug.dump.COOKIE = ""
-    xdebug.dump.ENV = ""
-    xdebug.dump.FILES = ""
-    xdebug.dump.GET = ""
-    xdebug.dump.POST = ""
-    xdebug.dump.REQUEST = ""
-    xdebug.dump.SERVER = ""
-    xdebug.dump.SESSION = ""
-    xdebug.dump_globals = On
-    xdebug.dump_once = On
-    xdebug.dump_undefined = Off
-    xdebug.extended_info = On
-    xdebug.file_link_format = ""
-    xdebug.force_display_errors = Off
-    xdebug.force_error_reporting = 0
-    xdebug.halt_level = 0
-    xdebug.idekey = ""
-    xdebug.max_nesting_level = 256
-    xdebug.max_stack_frames = -1
-    xdebug.overload_var_dump = 2
-    xdebug.profiler_aggregate = Off
-    xdebug.profiler_append = Off
-    xdebug.profiler_enable = Off
-    xdebug.profiler_enable_trigger = Off
-    xdebug.profiler_enable_trigger_value = ""
-    xdebug.profiler_output_dir = /vagrant/output/profile
-    xdebug.profiler_output_name = cachegrind.out.%p
-    xdebug.remote_addr_header = ""
-    xdebug.remote_autostart = Off
-    xdebug.remote_connect_back = Off
-    xdebug.remote_cookie_expire_time = 3600
-    xdebug.remote_enable = Off
-    xdebug.remote_handler = dbgp
-    xdebug.remote_host = localhost
-    xdebug.remote_log = ""
-    xdebug.remote_mode = req
-    xdebug.remote_port = 9000
-    xdebug.scream = Off
-    xdebug.show_error_trace = Off
-    xdebug.show_exception_trace = Off
-    xdebug.show_local_vars = Off
-    xdebug.show_mem_delta = Off
-    xdebug.trace_enable_trigger = Off
-    xdebug.trace_enable_trigger_value = ""
-    xdebug.trace_format = 0
-    xdebug.trace_options = 0
-    xdebug.trace_output_dir = /vagrant/output/trace
-    xdebug.trace_output_name = trace.%c
-    xdebug.var_display_max_children = 128
-    xdebug.var_display_max_data = 512
-    xdebug.var_display_max_depth = 3
+mariadb_allow_connect_other_host: true
 
-# --------------
-# キャッシュサーバー(redis / memcached)
-# --------------
-cache_server: redis
+apache_extra_cfg: |
+  EnableSendfile Off
+
+nginx_extra_cfg: |
+  sendfile off;
 
 # --------------
 # Apacheのバーチャルホストの設定
 # --------------
 apache_vhosts:
   # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
-  - name: 00-default
+  - name: 000-default
     # サーバー名
     server_name: "{{ domain }}"
     # ドキュメントルート
@@ -177,37 +117,11 @@ apache_vhosts:
     allow_override: All
     directory_index:
       - index.html
-      - index.htm
       - index.php
-  # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
-  # https://www.phpmyadmin.net/
-  - name: 01-phpMyAdmin
-    disabled: "{{ true if phpmyadmin_dest is undefined else false }}"
-    server_name: db.{{ domain }}
-    document_root: "{{ phpmyadmin_dest | default('/usr/share/phpMyAdmin') }}"
-    custom_log:
-      path: /dev/null
-      format: combine
-      env: 0
-    directory_index:
-      - index.html
-      - index.htm
-      - index.php
-    # Optionsの設定値
-    options:
-      - "-Indexes"
-      - "+FollowSymLinks"
-    # AllowOverrideの設定値
-    allow_override: All
-    # Requireの設定値
-    require:
-      - type: ip
-        value: 192.168.33
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   # https://github.com/mailhog/MailHog
-  - name: 02-MailTest
-    disabled: "{{ true if mail_test_tool_http_port is undefined else false }}"
-    server_name: mailtest.{{ domain }}
+  - name: 001-MailHog
+    server_name: mailhog.{{ domain }}
     custom_log:
       path: /dev/null
       format: combine
@@ -215,91 +129,10 @@ apache_vhosts:
     # リバースプロキシの設定
     proxy_pass:
       - from: /
-        to: "http://localhost:{{ mail_test_tool_http_port }}/"
+        to: "http://localhost:8025/"
     proxy_pass_reverse:
       - from: /
-        to: "http://localhost:{{ mail_test_tool_http_port }}/"
-  # WWW SQL Designer用のバーチャルホスト ( http://er.<ドメイン>/ )
-  # https://github.com/ondras/wwwsqldesigner
-  - name: 03-phpRedisAdmin
-    disabled: "{{ true if cache_server | default(None) != 'redis' else false }}"
-    server_name: cache.{{ domain }}
-    document_root: "{{ phpredisadmin_dest | default('/opt/phpRedisAdmin') }}"
-    custom_log:
-      path: /dev/null
-      format: combine
-      env: 0
-    directory_index:
-      - index.html
-      - index.htm
-      - index.php
-    options:
-      - "-Indexes"
-      - "+FollowSymLinks"
-    allow_override: All
-    require:
-      - type: ip
-        value: 192.168.33
-  - name: 04-phpMemcachedAdmin
-    disabled: "{{ true if cache_server | default(None) != 'memcached' else false }}"
-    server_name: cache.{{ domain }}
-    document_root: "{{ phpmemcachedadmin_dest | default('/opt/phpMemcachedAdmin') }}"
-    custom_log:
-      path: /dev/null
-      format: combine
-      env: 0
-    directory_index:
-      - index.html
-      - index.htm
-      - index.php
-    options:
-      - "-Indexes"
-      - "+FollowSymLinks"
-    allow_override: All
-    require:
-      - type: ip
-        value: 192.168.33
-  - name: 05-rtail
-    disabled: "{{ true if rtail_web_port is undefined else false }}"
-    server_name: log.{{ domain }}
-    custom_log:
-      path: /dev/null
-      format: combine
-      env: 0
-    proxy_pass:
-      - from: /
-        to: "http://127.0.0.1:{{ rtail_web_port | default(8888) }}/"
-    proxy_pass_reverse:
-      - from: /
-        to: "http://127.0.0.1:{{ rtail_web_port | default(8888) }}/"
-    allow_override: All
-    require:
-      - type: ip
-        value: 192.168.33
-
-# --------------
-# Apacheの設定
-# その他の設定値は、「provision/roles/apache/defaults/main.yml」を参照
-# --------------
-apache_cfg:
-  enable_mmap: false
-  enable_sendfile: false
-
-# 不要なモジュールを無効化
-apache_module_lua: false
-apache_module_dav:
-  dav: false
-  dav_fs: false
-  dav_lock: false
-apache_module_lbmethod:
-  bybusyness: false
-  byrequests: false
-  bytraffic: false
-  heartbeat: false
-apache_module_proxy:
-  ajp: false
-  balancer: false
-  ftp: false
+        to: "http://localhost:8025/"
 
 # --------------
 # MariaDBの設定
