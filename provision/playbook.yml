@@ -35,14 +35,6 @@
       include_tasks: "{{ pre_task_file }}"
       when: pre_task_file | length > 0
   tasks:
-    - block:
-        - name: create scripts
-          template:
-            src: "{{ item }}"
-            dest: ~/{{ item[:-3] | basename }}
-            mode: "0700"
-          loop: "{{ lookup('fileglob', 'scripts/*.j2', wantlist=True)  }}"
-      become: false
     - name: change owner on document root directory
       file:
         path: /var/www/html
@@ -58,7 +50,6 @@
       loop:
         - apache2
         - mariadb
-        - redis
     - name: add/update user setting
       import_tasks: my.yml
   post_tasks:

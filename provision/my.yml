@@ -1,4 +1,15 @@
-- block:
+- name: user setting
+  block:
+    - name: create bin directory
+      file:
+        path: ~/bin
+        state: directory
+    - name: create scripts
+      template:
+        src: "{{ item }}"
+        dest: ~/bin/{{ item[:-3] | basename }}
+        mode: "0700"
+      loop: "{{ lookup('fileglob', 'scripts/*.j2', wantlist=True)  }}"
     - name: install bash git prompt
       block:
         - name: chackout source
