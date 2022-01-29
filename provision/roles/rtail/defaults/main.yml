@@ -1,5 +1,0 @@
----
-rtail_udp_host: 127.0.0.1
-rtail_udp_port: 9999
-rtail_web_host: 127.0.0.1
-rtail_web_port: 8888

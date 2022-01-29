@@ -1,6 +1,0 @@
----
-- name: restart rtail
-  systemd:
-    name: rtail
-    state: restarted
-    daemon_reload: true

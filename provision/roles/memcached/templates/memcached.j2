@@ -1,5 +1,0 @@
-PORT="{{ memcached_cfg.port | default(11211) }}"
-USER="{{ memcached_cfg.user }}"
-MAXCONN="{{ memcached_cfg.maxconn }}"
-CACHESIZE="{{ memcached_cfg.cachesize }}"
-OPTIONS="{{ memcached_cfg.options if memcached_cfg.options is string else memcached_cfg.options | join(' ') }}"

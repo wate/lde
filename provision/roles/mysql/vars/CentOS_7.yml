@@ -1,2 +1,0 @@
-mysql_dependency_packages:
-  - python2-PyMySQL
