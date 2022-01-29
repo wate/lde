@@ -65,12 +65,8 @@ Vagrant.configure("2") do |config|
   vm_host_aliases = [
     settings['domain'],
     'www.' + settings['domain'],
-    # phpMyAdmin
-    'db.' + settings['domain'],
-    # MailCatcher
+    # mailhog
     'mailhog.' + settings['domain'],
-    # redis or memcached admin tool
-    'cache.' + settings['domain'],
   ]
 
   if settings['vagrant'].key?('append_vm_hosts')
@@ -131,6 +127,7 @@ Vagrant.configure("2") do |config|
     config.vm.provision "ansible" do |ansible|
       ansible_extra_vars['vagrant_provisioner'] = 'ansible'
       ansible.playbook = "provision/playbook.yml"
+      ansible.config_file = "provision/ansible.cfg"
       ansible.extra_vars = ansible_extra_vars
       ansible.groups = {
         "vagrant" => ["default"],
