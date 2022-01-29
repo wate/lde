@@ -12,6 +12,7 @@ php_packages:
   - php{{ php_version }}-imagick
   - php{{ php_version }}-mbstring
   - php{{ php_version }}-mcrypt
+  - php{{ php_version }}-bz2
   - php{{ php_version }}-gettext
   - php{{ php_version }}-sqlite3
   - php{{ php_version }}-mysqlnd
