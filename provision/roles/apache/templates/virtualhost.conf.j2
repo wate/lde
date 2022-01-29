@@ -1,0 +1,163 @@
+# ------------------------
+# {{ ansible_managed }}
+# ------------------------
+{% if item.server_name is defined -%}
+# {{ item.server_name }} VirtualHost Setting
+{% endif -%}
+{% if item.virtualhost_before_setting is defined %}
+{{ item.virtualhost_before_setting }}
+{% endif %}
+{% if item.ssl is defined %}
+<VirtualHost {{ item.default |default(false) | ternary('_default_', "*") }}:80>
+    {% if item.server_name is defined -%}
+    ServerName {{ item.server_name }}
+    {% endif -%}
+    {% if item.server_alias is defined -%}
+    ServerAlias {{ item.server_alias is string | ternary(item.server_alias, item.server_alias | join(' ')) }}
+    {% endif -%}
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !(^/\.well-known/acme-challenge/)
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
+</VirtualHost>
+{% endif %}
+
+{% set vhost_ip = item.default | default(false) | ternary('_default_', "*") -%}
+{% if item.ip is defined -%}
+{% set vhost_ip = item.ip -%}
+{% endif -%}
+
+{% set vhost_port = item.ssl is defined | ternary('443', "80") -%}
+{% if item.port is defined -%}
+{% set vhost_port = item.port -%}
+{% endif -%}
+
+<VirtualHost {{ vhost_ip }}:{{ vhost_port }}>
+  {% if item.server_name is defined -%}
+  ServerName {{ item.server_name }}
+  {% endif -%}
+  {% if item.server_alias is defined -%}
+  ServerAlias {{ item.server_alias is string | ternary(item.server_alias, item.server_alias | join(' ')) }}
+  {% endif -%}
+  {% if item.include is defined -%}
+  {% for include_file in item.include -%}
+  Include {{ include_file }}
+  {% endfor -%}
+  {% endif -%}
+  {% if item.document_root is defined -%}
+  DocumentRoot {{ item.document_root }}
+  <Directory {{ item.document_root }}>
+    {% if item.options is defined -%}
+    Options {{ item.options is string | ternary(item.options, item.options | join(' ')) }}
+    {% endif -%}
+
+    {% if item.allow_override is defined -%}
+    AllowOverride {{ item.allow_override }}
+    {% endif -%}
+
+    {% if item.require is defined -%}
+    {% for directive in item.require -%}
+    Require {{ directive.not | default(false) | ternary('not ', '') }}{{ directive.type }} {{ directive.value }}
+    {% endfor -%}
+    {% else -%}
+    Require all granted
+    {% endif -%}
+  </Directory>
+  {% endif -%}
+
+  {% if item.alias is defined -%}
+  {% for directive in item.alias -%}
+  Alias {{ directive.from }} {{ directive.to }}
+  {% endfor -%}
+  {% endif -%}
+
+  {% if item.directory_index is defined -%}
+  DirectoryIndex {{ item.directory_index is string | ternary(item.directory_index, item.directory_index | join(' ')) }}
+  {% endif -%}
+
+  {% if item.custom_log is defined -%}
+  {% if item.custom_log.env is defined %}
+  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }} env={{ item.custom_log.env }}
+  {% else -%}
+  CustomLog {{ item.custom_log.path }} {{ item.custom_log.format }}
+  {% endif -%}
+  {% endif -%}
+
+  {% if item.error_log is defined -%}
+  ErrorLog {{ item.error_log.path }}
+  LogLevel {{ item.error_log.log_level | default('warn') }}
+  {% endif -%}
+
+  {% if item.transfer_log is defined -%}
+  {% if item.transfer_log.format is defined -%}
+  LogFormat "{{ item.transfer_log.format }}"
+  {% endif -%}
+  TransferLog {{ item.transfer_log.path }}
+  {% endif -%}
+
+  {% if item.proxy_pass is defined -%}
+  {% for directive in item.proxy_pass -%}
+  ProxyPass {{ directive.from }} {{ directive.to }}
+  {% endfor -%}
+  {% endif -%}
+
+  {% if item.proxy_pass_reverse is defined -%}
+  {% for directive in item.proxy_pass_reverse -%}
+  ProxyPassReverse {{ directive.from }} {{ directive.to }}
+  {% endfor -%}
+  {% endif -%}
+
+  {% if item.proxy_pass_match is defined -%}
+  {% for directive in item.proxy_pass_match -%}
+  ProxyPassMatch {{ directive.pattern }} {{ directive.to }}
+  {% endfor -%}
+  {% endif -%}
+
+  {% if item.ssl is defined -%}
+  SSLEngine on
+  # Server Certificate:
+  SSLCertificateFile {{ item.ssl.certificate_file }}
+  # Server Private Key:
+  SSLCertificateKeyFile {{ item.ssl.certificate_key_file }}
+
+  {% if item.ssl.certificate_chain_file is defined -%}
+  # Server Certificate Chain:
+  SSLCertificateChainFile {{ item.ssl.certificate_chain_file }}
+  {% endif -%}
+
+  {% if item.ssl.protocol is defined -%}
+  SSLProtocol {{ item.ssl.protocol | join(' ') }}
+  {% endif -%}
+
+  {% if item.ssl.cipher_suite is defined -%}
+  SSLCipherSuite {{ item.ssl.cipher_suite | join(':') }}
+  {% endif -%}
+
+  {% if item.ssl.honor_cipher_order is defined -%}
+  SSLHonorCipherOrder {{ item.ssl.honor_cipher_order | ternary('on', 'off') }}
+  {% endif -%}
+
+  {% if item.ssl.compression is defined -%}
+  SSLCompression {{ item.ssl.compression | ternary('on', 'off') }}
+  {% endif -%}
+
+  {% if item.ssl.stapling_responder_timeout is defined -%}
+  SSLStaplingResponderTimeout {{ item.ssl.stapling_responder_timeout }}
+  {% endif -%}
+
+  {% if item.ssl.stapling_return_responder_errors is defined -%}
+  SSLStaplingReturnResponderErrors {{ item.ssl.stapling_return_responder_errors | ternary('on', 'off') }}
+  {% endif -%}
+
+  {% if item.ssl.stapling_cache is defined -%}
+  SSLStaplingCache {{ item.ssl.stapling_cache }}
+  {% endif -%}
+
+  {% if item.ssl.hsts is defined -%}
+  Header always set Strict-Transport-Security "{{ item.ssl.hsts }}"
+  {% endif -%}
+  {% endif -%}
+
+  {% if item.extra_setting is defined -%}
+  {{ item.extra_setting | indent(2) }}
+  {% endif -%}
+</VirtualHost>

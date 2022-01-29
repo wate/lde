@@ -1,0 +1,107 @@
+---
+- name: install apache
+  apt:
+    name: "{{ apache_packages }}"
+- name: create apache setting directories
+  file:
+    path: "{{ item }}"
+    mode: "0755"
+    state: directory
+  loop:
+    - "{{ apache_module_available_dir }}"
+    - "{{ apache_module_enabled_dir }}"
+    - "{{ apache_conf_available_dir }}"
+    - "{{ apache_conf_enabled_dir }}"
+    - "{{ apache_site_available_dir }}"
+    - "{{ apache_site_enabled_dir }}"
+    - "{{ apache_snippet_dir }}"
+- name: append include settings on base config
+  lineinfile:
+    path: "{{ apache_config_base_dir }}/apache2.conf"
+    line: "{{ item }}"
+  loop:
+    - "IncludeOptional mods-enabled/*.load"
+    - "IncludeOptional mods-enabled/*.conf"
+    - "IncludeOptional conf-enabled/*.conf"
+    - "IncludeOptional sites-enabled/*.conf"
+- name: update load base module
+  apache2_module:
+    name: "{{ item.name }}"
+    state: "{{ item.disabled | default(false) | ternary('present', 'absent') }}"
+  loop: "{{ apache_modules }}"
+- name: create custom setting file
+  template:
+    src: custom.conf.j2
+    dest: "{{ apache_conf_available_dir }}/z-custom.conf"
+    mode: "0644"
+  notify: restart apache
+- name: enable custom setting
+  command: a2enconf z-custom
+  args:
+    creates: "{{ apache_conf_enabled_dir }}/z-custom.conf"
+  notify: restart apache
+- name: copy snippet files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ apache_snippet_dir }}/{{ item | basename }}"
+    mode: preserve
+  loop: "{{ lookup('fileglob', 'files/*.conf', wantlist=True) }}"
+- name: set virtualhosts variables
+  set_fact:
+    exist_virtualhosts: "{{ apache_vhosts | selectattr('removed', 'undefined') | list }}"
+    removed_virtualhosts: "{{ apache_vhosts | selectattr('removed', 'defined') | list }}"
+    create_doc_root_directoories: "{{ apache_vhosts | selectattr('document_root', 'defined') | selectattr('document_root_create', 'defined') | list }}"
+- name: create document root directory
+  file:
+    path: "{{ item.document_root }}"
+    state: directory
+    owner: "{{ item.document_root_owner | default(omit) }}"
+    group: "{{ item.document_root_group | default(omit) }}"
+    mode: "{{ item.document_root_mode | default('0644') }}"
+  loop: "{{ create_doc_root_directoories }}"
+  loop_control:
+    label: "{{ item.name | default(item.server_name) }}"
+- name: create virtualhost setting files
+  template:
+    src: virtualhost.conf.j2
+    dest: "{{ apache_site_available_dir }}/{{ item.name | default(item.server_name) }}.conf"
+    mode: "0644"
+  loop: "{{ exist_virtualhosts }}"
+  loop_control:
+    label: "{{ item.name | default(item.server_name) }}"
+  notify: restart apache
+- name: enable / disable virtualhost
+  file:
+    path: "{{ apache_site_enabled_dir }}/{{ item.name | default(item.server_name) }}.conf"
+    src: "{{ omit if item.disabled | default(false) | ternary(apache_site_available_dir + '/' + item.name | default(item.server_name) + '.conf', omit) }}"
+    state: "{{ item.disabled | default(false) | ternary('absent', 'link') }}"
+    mode: "0644"
+  loop: "{{ exist_virtualhosts }}"
+  loop_control:
+    label: "{{ item.name | default(item.server_name) }}"
+  notify: restart apache
+- name: remove virtualhost setting symlink
+  file:
+    path: "{{ apache_site_enabled_dir }}/{{ item.name | default(item.server_name) }}.conf"
+    state: absent
+  loop: "{{ removed_virtualhosts }}"
+  loop_control:
+    label: "{{ item.name | default(item.server_name) }}"
+  notify: restart apache
+- name: remove virtualhost setting files
+  file:
+    path: "{{ apache_site_available_dir }}/{{ item.name | default(item.server_name) }}.conf"
+    state: absent
+  loop: "{{ removed_virtualhosts }}"
+  loop_control:
+    label: "{{ item.name | default(item.server_name) }}"
+  notify: restart apache
+- name: allow http and https port
+  ufw:
+    rule: allow
+    name: "WWW Full"
+- name: Apache is active and enabled on system startup
+  systemd:
+    name: apache2
+    state: started
+    enabled: true

@@ -1,0 +1,133 @@
+---
+apache_packages:
+  - apache2
+  - libapache2-mod-php
+  - goaccess
+  # - libapache2-mod-perl2
+  # - libapache2-mod-fcgid
+  # - libapache2-mod-python
+  # - libapache2-mod-log-slow
+  # - libapache2-mod-geoip
+  # - dehydrated-apache2
+
+apache_modules:
+  - name: headers
+  - name: ssl
+
+apache_vhosts:
+  - name: 000-default
+    default: true
+    server_name: www.example.com
+    server_alias:
+      - example.com
+    # include:
+    #   - "{{ apache_snippet_dir }}/redirect_non_www.conf"
+    document_root: /var/www/html
+    # directory_index:
+    #   - index.html
+    #   - index.php
+    # options:
+    #   - "-Indexes"
+    #   - "+FollowSymLinks"
+    # allow_override: None
+    # require:
+    #   - type: ip
+    #     value: "192.168.33.0/24"
+    # custom_log:
+    #   path: logs/access_log
+    #   format: combined
+    # error_log:
+    #   path: logs/error_log
+    #   log_level: warn
+    # transfer_log:
+    #   path: logs/transfer_log
+    #   format: '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"'
+    # alias:
+    #   - from: /.well-known/acme-challenge/
+    #     to: /var/lib/dehydrated/acme-challenges/
+    # proxy_pass:
+    #   - from: /
+    #     to: "http://127.0.0.1:8080/"
+    # proxy_pass_reverse:
+    #   - from: /
+    #     to: "http://127.0.0.1:8080/"
+    # proxy_pass_match:
+    #   - pattern: ^(.*\.php(/.*)?)$
+    #     to: unix:/path/to/socket.sock | fcgi://127.0.0.1:9000/path/to/your/documentroot/"
+    # ssl:
+    #   certificate_file: /path/to/signed_certificate_followed_by_intermediate_certs
+    #   certificate_key_file: /path/to/private/key
+    #   certificate_chain_file: /path/to/ca_certs_for_client_authentication
+    #   protocol:
+    #     - all
+    #     - "-SSLv3"
+    #     - "-TLSv1"
+    #     - "-TLSv1.1"
+    #   cipher_suite:
+    #     - ECDHE-ECDSA-AES128-GCM-SHA256
+    #     - ECDHE-RSA-AES128-GCM-SHA256
+    #     - ECDHE-ECDSA-AES256-GCM-SHA384
+    #     - ECDHE-RSA-AES256-GCM-SHA384
+    #     - ECDHE-ECDSA-CHACHA20-POLY1305
+    #     - ECDHE-RSA-CHACHA20-POLY1305
+    #     - DHE-RSA-AES128-GCM-SHA256
+    #     - DHE-RSA-AES256-GCM-SHA384
+    #   hsts: "max-age=63072000"
+    # ip: 127.0.0.1
+    # port: 1080
+    # extra_setting: |
+    #   <Location /server-status>
+    #     SetHandler server-status
+    #     Require ip 127.0.0.1
+    #   </Location>
+    ## -------------
+    ## バーチャルホストの無効化
+    ## -------------
+    # disabled: true
+    ## -------------
+    ## バーチャルホストの設定ファイル自体の削除
+    ## -------------
+    # removed: true
+    ## -------------
+    ## ドキュメントルートを作成する
+    ## -------------
+    # document_root_create: true
+    ## -------------
+    ## ドキュメントルートの作成オプション
+    ## ※document_root_createが指定されている場合のみ有効
+    ## -------------
+    # document_root_owner: root
+    # document_root_group: root
+    # document_root_mode: "0755"
+  - name: 999-status
+    ip: 127.0.0.1
+    port: 1080
+    virtualhost_before_setting: |
+      Listen 1080
+      ExtendedStatus On
+    extra_setting: |
+      <Location /server-status>
+        SetHandler server-status
+        Require ip 127.0.0.1
+      </Location>
+
+apache_secrity_cfg:
+  trace_enable: false
+  server_tokens: Prod
+  headers:
+    "X-Frame-Options": SAMEORIGIN
+    "X-Content-Type-Options": nosniff
+    "X-XSS-Protection": '"1; mode=block"'
+
+apache_extra_cfg: |
+  ## Security
+  <DirectoryMatch "/\.git">
+      Require all denied
+  </DirectoryMatch>
+  # Header set X-Content-Type-Options: "nosniff"
+  # Header set X-Frame-Options: "sameorigin"
+  # Header set X-XSS-Protection "1; mode=block" always;
+  # <IfModule mod_ssl.c>
+  #     SSLProtocol all -SSLv3
+  # </IfModule>
+
