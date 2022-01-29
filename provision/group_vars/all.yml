@@ -117,16 +117,24 @@ apache_vhosts:
     # AllowOverrideの設定値
     allow_override: All
     directory_index:
-      - index.html
       - index.php
+      - index.html
+    custom_log:
+      path: /var/log/apache2/access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/error.log
+      log_level: warn
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   # https://github.com/mailhog/MailHog
   - name: 001-MailHog
     server_name: mailhog.{{ domain }}
     custom_log:
-      path: /dev/null
+      path: /var/log/apache2/mailhog_access.log
       format: combine
-      env: 0
+    error_log:
+      path: /var/log/apache2/mailhog_error.log
+      log_level: warn
     # リバースプロキシの設定
     proxy_pass:
       - from: /
