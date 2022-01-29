@@ -54,7 +54,7 @@ vagrant:
 ## アプリケーションタイプ毎の共有ディレクトリの設定
 vagrant_synced_folder_types:
   default:
-    local: ./source
+    local: ./src
     remote: /var/www/html
 
 ## 共有ディレクトリのデフォルトのオプション設定
