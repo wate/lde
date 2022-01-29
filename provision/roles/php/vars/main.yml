@@ -1,0 +1,4 @@
+php_conf_dir: "/etc/php/{{ php_version }}"
+php_cli_conf_dir: "{{ php_conf_dir }}/cli/conf.d"
+php_fpm_conf_dir: "{{ php_conf_dir }}/fpm/conf.d"
+php_apache_conf_dir: "{{ php_conf_dir }}/apache2/conf.d"

@@ -1,13 +1,9 @@
 ---
 - name: restart apache
   systemd:
-    name: httpd
+    name: apache2
     state: restarted
-- name: resart apache
+- name: reload apache
   systemd:
-    name: httpd
-    state: restarted
-- name: restart firewalld
-  systemd:
-    name: firewalld
-    state: restarted
+    name: apache2
+    state: reloaded

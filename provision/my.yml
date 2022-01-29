@@ -1,0 +1,99 @@
+- name: user setting
+  block:
+    - name: create bin directory
+      file:
+        path: ~/bin
+        state: directory
+    - name: create scripts
+      template:
+        src: "{{ item }}"
+        dest: ~/bin/{{ item[:-3] | basename }}
+        mode: "0700"
+      loop: "{{ lookup('fileglob', 'scripts/*.j2', wantlist=True)  }}"
+    - name: install bash git prompt
+      block:
+        - name: chackout source
+          git:
+            repo: https://github.com/magicmonty/bash-git-prompt.git
+            dest: ~/.bash-git-prompt
+            version: master
+            depth: 1
+        - name: append bash git prompt setting on .bashrc
+          blockinfile:
+            path: ~/.bashrc
+            block: |
+              if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+                  GIT_PROMPT_ONLY_IN_REPO=1
+                  source $HOME/.bash-git-prompt/gitprompt.sh
+              fi
+    - name: create mysql connection file
+      blockinfile:
+        path: ~/.my.cnf
+        create: true
+        mode: "0600"
+        block: |
+          [client]
+          host=localhost
+          database="{{ mariadb_databases[0].name }}
+          user={{ mariadb_databases[0].user | default(mariadb_databases[0].name) }}
+          password={{ mariadb_databases[0].password | default(mariadb_databases[0].user) }}
+          default_character_set={{ mariadb_databases[0].encoding | default('utf8mb4') }}
+      when: mariadb_databases[0] is defined
+    - name: install github deploykey
+      copy:
+        src: "{{ github_deploykey_path }}"
+        dest: ~/.ssh/github_deploykey
+        mode: '0600'
+        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+      when: github_deploykey_path is defined
+    - name: install bitbucket deploykey
+      copy:
+        src: "{{ bitbucket_deploykey_path }}"
+        dest: ~/.ssh/bitbucket_deploykey
+        mode: '0600'
+        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+      when: bitbucket_deploykey_path is defined
+    - name: install gitlab deploykey
+      copy:
+        src: "{{ gitlab_deploykey_path }}"
+        dest: ~/.ssh/gitlab_deploykey
+        mode: '0600'
+        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+      when: gitlab_deploykey_path is defined
+    - name: install backlog ssh key
+      copy:
+        src: "{{ backlog_deploykey_path }}"
+        dest: ~/.ssh/backlog_deploykey
+        mode: '0600'
+        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+      when: backlog_deploykey_path is defined
+    - name: Insert/Update ssh configuration block in ~/.ssh/config
+      blockinfile:
+        path: ~/.ssh/config
+        block: |
+          {% if github_deploykey_path is defined -%}
+          Host github.com
+            IdentityFile ~/.ssh/github_deploykey
+            StrictHostKeyChecking no
+            User git
+          {% endif %}
+          {% if bitbucket_deploykey_path is defined -%}
+          Host bitbucket.org
+            IdentityFile ~/.ssh/bitbucket_deploykey
+            StrictHostKeyChecking no
+            User git
+          {% endif %}
+          {% if gitlab_deploykey_path is defined -%}
+          Host gitlab.com
+            IdentityFile ~/.ssh/gitlab_deploykey
+            StrictHostKeyChecking no
+            User git
+          {% endif %}
+          {% if backlog_deploykey_path is defined -%}
+          Host *.git.backlog.jp
+            IdentityFile ~/.ssh/backlog_deploykey
+            StrictHostKeyChecking no
+          {% endif %}
+        create: true
+        mode: "0600"
+  become: false

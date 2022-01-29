@@ -1,0 +1,9 @@
+apache_config_base_dir: /etc/apache2
+
+apache_module_available_dir: "{{ apache_config_base_dir }}/mods-available"
+apache_module_enabled_dir: "{{ apache_config_base_dir }}/mods-enabled"
+apache_conf_available_dir: "{{ apache_config_base_dir }}/conf-available"
+apache_conf_enabled_dir: "{{ apache_config_base_dir }}/conf-enabled"
+apache_site_available_dir: "{{ apache_config_base_dir }}/sites-available"
+apache_site_enabled_dir: "{{ apache_config_base_dir }}/sites-enabled"
+apache_snippet_dir: "{{ apache_config_base_dir }}/snippets"

@@ -1,27 +1,30 @@
 ---
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
+  check_mode: true
   tasks:
-    - name: get package insatll states
-      package:
+    - name: test apt signing key
+      apt_key:
+        url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+        state: present
+      register: result
+    - name: assert apt signing key
+      assert:
+        that: result is not changed
+    - name: test repository
+      apt_repository:
+        filename: influxdb
+        repo: deb https://deb.nodesource.com/node_12.x {{ ansible_facts.distribution_release }} main
+        state: present
+      register: result
+    - name: assert repository
+      assert:
+        that: result is not changed
+    - name: test package
+      apt:
         name: nodejs
-        state: installed
-      check_mode: true
       register: result
-    - name: assert nodejs installed
+    - name: assert package
       assert:
-        that: result.changed is false
-        fail_msg: "「nodejs」はインストールされていません"
-        success_msg: "「nodejs」はインストール済みです"
-    - name: get node.js version
-      command: node --version
-      changed_when: false
-      register: result
-    - name: load variable file
-      include_vars: "{{ molecule_scenario_directory | dirname | dirname }}/defaults/main.yml"
-    - name: assert install version
-      assert:
-        that: result.stdout.split('.') | first | regex_replace('^v', '') | int == nodejs_major_version
-        fail_msg: "「nodejs」のバージョンは「{{ nodejs_major_version }}」ではありません"
-        success_msg: "「nodejs」のバージョンは「{{ nodejs_major_version }}」です"
+        that: result is not changed

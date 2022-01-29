@@ -11,9 +11,9 @@ Vagrant.configure("2") do |config|
   vagrant_setting_file = File.expand_path(File.join(File.dirname(__FILE__), 'config.yml'))
   settings.merge!(YAML.load_file(vagrant_setting_file));
 
-  config.vm.box = settings['vagrant']['box'] || 'wate/centos-7'
+  config.vm.box = settings['vagrant']['box'] || 'wate/debian-11'
 
-  config.vm.network "private_network", ip: settings['vagrant']['ipaddress'] || '192.168.33.10'
+  config.vm.network "private_network", ip: settings['vagrant']['ipaddress'] || '192.168.56.10'
 
   # port Forwarding
   if settings['vagrant'].key?('forwarded_ports')
@@ -65,14 +65,10 @@ Vagrant.configure("2") do |config|
   vm_host_aliases = [
     settings['domain'],
     'www.' + settings['domain'],
-    # phpMyAdmin
-    'db.' + settings['domain'],
-    # MailCatcher
-    'mailtest.' + settings['domain'],
-    # redis or memcached admin tool
+    # mailhog
+    'mailhog.' + settings['domain'],
+    # phpRedisAdmin
     'cache.' + settings['domain'],
-    # rtail
-    'log.' + settings['domain'],
   ]
 
   if settings['vagrant'].key?('append_vm_hosts')
@@ -101,33 +97,13 @@ Vagrant.configure("2") do |config|
     config.hostmanager.manage_guest = plugin_setting.key?('manage_guest') ? plugin_setting['manage_guest'] : true
     config.hostmanager.aliases = vm_host_aliases
   end
-  if Vagrant.has_plugin?('vagrant-exec')
-    # WordPress
-    config.exec.commands 'wp', directory: '/var/www/html'
-    # PHP
-    config.exec.commands 'composer', directory: '/vagrant/source'
-    # CakePHP
-    config.exec.commands 'bin/cake', directory: '/vagrant/source'
-  end
   # Provisioning
   ansible_extra_vars = {
-    'app_type' => settings['app_type'],
     'domain' => settings['domain'],
     'php_version' => settings['php_version'],
-    'mail_test_tool' => settings['mail_test_tool'],
     'doc_root_suffix' => settings['doc_root_suffix'],
-    'wordpress' => settings['wordpress'],
-    'ec_cube' => settings['ec_cube'],
   }
   unless ansible_custom_vars.empty?()
-    if ansible_custom_vars.key?('wordpress')
-      ansible_extra_vars['wordpress'].merge!(ansible_custom_vars['wordpress']);
-      ansible_custom_vars.delete('wordpress')
-    end
-    if ansible_custom_vars.key?('ec_cube')
-      ansible_extra_vars['ec_cube'].merge!(ansible_custom_vars['ec_cube']);
-      ansible_custom_vars.delete('ec_cube')
-    end
     ansible_extra_vars.merge!(ansible_custom_vars);
   end
 
@@ -135,14 +111,12 @@ Vagrant.configure("2") do |config|
     # Change Ansible global setting (on windows use)
     # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
     config.vm.provision "ansible_local" do |ansible|
-      ansible.compatibility_mode = "2.0"
       ansible.playbook = "provision/ansible_local_provisioner_init.yml"
     end
     config.vm.provision "ansible_local" do |ansible|
       ansible_extra_vars['vagrant_provisioner'] = 'ansible_local'
       ansible.playbook = "playbook.yml"
       ansible.provisioning_path = "/vagrant/provision"
-      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
       if settings['vagrant'].key?('provision_only_tags')
         ansible.tags = settings['vagrant']['provision_only_tags']
@@ -152,18 +126,10 @@ Vagrant.configure("2") do |config|
       end
     end
   else
-    # Install mitogen for Ansible
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "provision/install_mitogen.yml"
-      ansible.config_file = "provision/ansible.cfg"
-      ansible.compatibility_mode = "2.0"
-    end
-
     config.vm.provision "ansible" do |ansible|
       ansible_extra_vars['vagrant_provisioner'] = 'ansible'
       ansible.playbook = "provision/playbook.yml"
-      ansible.config_file = "provision/ansible_with_mitogen.cfg"
-      ansible.compatibility_mode = "2.0"
+      ansible.config_file = "provision/ansible.cfg"
       ansible.extra_vars = ansible_extra_vars
       ansible.groups = {
         "vagrant" => ["default"],

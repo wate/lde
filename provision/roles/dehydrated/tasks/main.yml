@@ -1,33 +1,32 @@
 ---
-- name: install packages
-  yum:
+- name: install dehydrated
+  apt:
     name:
       - dehydrated
-      - crontabs
-    enablerepo: epel
-- name: create config file
+      - cron
+- name: install lexicon
+  apt:
+    name: lexicon
+  when: dehydrated_with_lexicon
+- name: create addtitional config file
   template:
     src: local.sh.j2
-    dest: "{{ dehydrated_config_dir }}//conf.d/local.sh"
+    dest: "{{ dehydrated_config_dir }}/local.sh"
     mode: "0644"
 - name: create domain file
   template:
     src: domains.txt.j2
-    dest: "{{ dehydrated_config_dir }}/domains.txt"
+    dest: "{{ dehydrated_domains_txt }}"
     mode: "0644"
 - name: create hook file
   template:
     src: hook.sh.j2
-    dest: "{{ dehydrated_config_dir }}/hook.sh"
+    dest: "{{ dehydrated_config_base_dir }}/hook.sh"
     mode: "0750"
-- name: check registered
-  find:
-    paths: "{{ dehydrated_account_dir }}"
-    file_type: directory
-  register: result
 - name: register account key
   command: dehydrated --register --accept-terms
-  when: result.files | length == 0
+  args:
+    creates: "{{ dehydrated_base_dir }}/accounts"
 - name: create auth file directory
   file:
     path: /var/www/dehydrated
@@ -38,7 +37,7 @@
   when: dehydrated_auto_execute
 - name: register cron job
   cron:
-    name: update SSL certificate
+    name: Update SSL certificate
     job: "{{ dehydrated_cron.job }}"
     hour: "{{ dehydrated_cron.hour | string }}"
     minute: "{{ dehydrated_cron.minute | string }}"

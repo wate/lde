@@ -1,25 +1,35 @@
 ---
 common_packages:
+  - lsb-release
+  - build-essential
+  - cpp
+  - curl
+  - rsync
+  - make
   - unzip
   - zip
+  - cron
   - perl
-  - crontabs
-  - cpp
-  - make
+  - patch
   - autoconf
   - automake
+  - vim
+  - bash-completion
+  - git
+  - git-completion
+  - man-db
   - diffstat
+  - vnstat
   - m4
   - libtool
   - gcc
-  - gcc-c++
-  - patch
-  - git
-  - yum-utils
-  - vim-enhanced
-  - bash-completion
-  - tig
+  - bison
+  - flex
+  - acl
+  - pkg-config
+  - imagemagick
   - postfix
+  - ca-certificates
 
 common_groups: []
   # - name: group1
@@ -28,7 +38,7 @@ common_groups: []
   # - name: system_group
   #   system: true
   # - name: system_group_with_id
-  #   id: 1000
+  #   id: 1010
   #   system: true
 
 common_users: []
@@ -116,9 +126,13 @@ common_users: []
 common_hostname: "{{ inventory_hostname }}"
 
 common_ssh_port: 22
+common_ssh_ufw_rule: allow
+
 common_ssh_use_geoip_filter: true
 common_ssh_allow_countries:
   - JP
+
+common_repository_enable: true
 
 common_cron_geoip_update:
   hour: 4
@@ -136,68 +150,22 @@ fail2ban_cfg: |
   [sshd]
   enabled = true
 
-sudo_require_password: false
+rsyslog_custom_cfg: |
+  cron.*				/var/log/cron.log
 
-yum_cron_daily_cfg: []
-  # ## Update Setting
-  # - section: commands
-  #   name: update_cmd
-  #   # default / security / security-severity:Critical / minimal / minimal-security / minimal-security-severity:Critical
-  #   value: default
-  # - section: commands
-  #   name: update_messages
-  #   value: "yes"
-  # - section: commands
-  #   name: download_updates
-  #   value: "yes"
-  # - section: commands
-  #   name: apply_updates
-  #   value: "no"
-  # - section: commands
-  #   name: random_sleep
-  #   value: 360
-  # ## Email Setting
-  # - section: email
-  #   name: email_from
-  #   value: root@localhost
-  # - section: email
-  #   name: email_to
-  #   value: root
-  # - section: email
-  #   name: email_host
-  #   value: localhost
+admin_group_name: server_admin
+admin_group_sudo_require_password: false
 
-yum_cron_hourly_cfg: []
-  # ## Update Setting
-  # - section: commands
-  #   name: update_cmd
-  #   # default / security / security-severity:Critical / minimal / minimal-security / minimal-security-severity:Critical
-  #   value: default
-  # - section: commands
-  #   name: update_messages
-  #   value: "no"
-  # - section: commands
-  #   name: download_updates
-  #   value: "no"
-  # - section: commands
-  #   name: apply_updates
-  #   value: "no"
-  # - section: commands
-  #   name: random_sleep
-  #   value: 15
-  # ## Email Setting
-  # - section: email
-  #   name: email_from
-  #   value: root
-  # - section: email
-  #   name: email_to
-  #   value: root
-  # - section: email
-  #   name: email_host
-  #   value: localhost
+auto_update_cfg:
+  HOSTNAME: "{{ inventory_hostname }}"
+  # MAILTO: root
+  # SUBJECTPREFIX: CRON-APT
+  # MAILON: error
+  # SYSLOGON: upgrade
+  # EXITON: error
 
-common_swap_dest: /var/spool/swap/swapfile
-common_swap_size: "{{ (((ansible_memtotal_mb + 50) / 1000) | round(1, 'floor') | float * 2) | int }}"
+common_swapfile_path: /var/spool/swap/swapfile
+common_swap_size: "{{ (((ansible_facts.memtotal_mb + 50) / 1000) | round(1, 'floor') | float * 2) | int }}"
 
 common_files: []
   # # ローカルにあるファイルをアップロード
@@ -206,7 +174,6 @@ common_files: []
   #   mode: "0755"
   #   # owner: root
   #   # group: root
-  #   # checksum: 1234567890abcdefghijklmnopqrstuvwxyz
   # # リモートファイルをダウンロード
   # - dest: /usr/local/bin/download-script
   #   url: http://www.example.com/path/to/script
@@ -252,3 +219,68 @@ common_cron_jobs: []
   #   # disabled: true
   #   ## 定期実行設定の存在の有無(これが指定された場合は値の如何に関わらず、設定が存在する場合は削除する)
   #   # removed: true
+
+
+# バックアップスクリプト保存先ディレクトリ
+backup_script_dir: /backup/scripts
+
+# バックアップデータ保存先ディレクトリ
+backup_dir: /backup/data
+
+# バックアップ設定
+backup_settings: []
+  # - name: backup setting
+  #   ## バックアップコマンド
+  #   command: mysqldump -u ${DB_USER} -p${DB_PASS} -h ${DB_HOST} --single-transaction ${DB_NAME} | gzip >{{ backup_dir }}/${DB_NAME}-$(date +"%Y-%m-%d_%H%M%S").sql.gz
+  #   ## バックアップ実行日時(時)
+  #   hour: 1
+  #   ## バックアップ実行日時(分)
+  #   minute: 23
+  #   ## バックアップ実行日時(日)
+  #   # day: "*"
+  #   ## バックアップ実行日時(月)
+  #   # month: "*"
+  #   ## バックアップ実行日時(曜日)
+  #   # weekday: "*"
+  #   ## バックアップ設定の存在の有無(true:設定が存在しない場合は登録/false:設定が存在する場合は削除)
+  #   # state: true
+  #   ## 実行ユーザー
+  #   # user: root
+  #   ## バックアップ設定は残したまま無効化するか否か
+  #   # disabled: true
+  # - name: backup setting with upload backup script
+  #   command: "{{ backup_script_dir }}/script_file"
+  #   ## アップロードするファイル
+  #   file: /path/to/script_file
+  #   ## バックアップスクリプトのチェックサム
+  #   # checksome: 6e642bb8dd5c2e027bf21dd923337cbb4214f827
+  #   hour: 2
+  #   minute: 34
+  # - name: backup setting with download backup script
+  #   command: "{{ backup_script_dir }}/backup.sh"
+  #   ## ダウンロールするファイル
+  #   url: http://example.com/sucripts/backup.sh
+  #   ## バックアップスクリプトのチェックサム
+  #   # checksome: 6e642bb8dd5c2e027bf21dd923337cbb4214f827
+  #   ## Basic認証(ユーザー名)
+  #   # auth_basic_user: user
+  #   ## Basic認証(パスワード)
+  #   # auth_basic_password: common_requre_sudo_password
+  #   hour: 3
+  #   minute: 45
+
+common_install_tools:
+  - silversearcher-ag
+  - tig
+  - rclone
+  - nkf
+  - vnstati
+  - glances
+
+common_japanese_fonts:
+  - fonts-umeplus
+  - fonts-yozvox-yozfont
+  - fonts-ipaexfont
+  - fonts-ipafont
+  - fonts-noto-cjk
+  - fonts-noto-cjk-extra

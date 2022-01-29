@@ -13,7 +13,7 @@ Role Variables
 インストールするNode.jsのメジャーバージョンを指定します
 
 ```yaml
-nodejs_major_version: 12
+nodejs_version: 12
 ```
 
 Example Playbook
@@ -22,7 +22,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - role: nodejs
+    - role: nodejs
 ```
 
 License

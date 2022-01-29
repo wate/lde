@@ -8,24 +8,25 @@
 {{ item.virtualhost_before_setting }}
 {% endif %}
 {% if item.ssl is defined %}
-<VirtualHost {{ '_default_' if item.default |default(false) else '*' }}:80>
+<VirtualHost {{ item.default |default(false) | ternary('_default_', "*") }}:80>
     {% if item.server_name is defined -%}
     ServerName {{ item.server_name }}
     {% endif -%}
     {% if item.server_alias is defined -%}
-    ServerAlias {{ item.server_alias if item.server_alias is string else item.server_alias | join(' ') }}
+    ServerAlias {{ item.server_alias is string | ternary(item.server_alias, item.server_alias | join(' ')) }}
     {% endif -%}
     RewriteEngine On
+    RewriteCond %{REQUEST_URI} !(^/\.well-known/acme-challenge/)
     RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
 </VirtualHost>
 {% endif %}
 
-{% set vhost_ip = '_default_' if item.default | default(false) else '*' -%}
+{% set vhost_ip = item.default | default(false) | ternary('_default_', "*") -%}
 {% if item.ip is defined -%}
 {% set vhost_ip = item.ip -%}
 {% endif -%}
 
-{% set vhost_port = "443" if item.ssl is defined else "80" -%}
+{% set vhost_port = item.ssl is defined | ternary('443', "80") -%}
 {% if item.port is defined -%}
 {% set vhost_port = item.port -%}
 {% endif -%}
@@ -35,7 +36,7 @@
   ServerName {{ item.server_name }}
   {% endif -%}
   {% if item.server_alias is defined -%}
-  ServerAlias {{ item.server_alias if item.server_alias is string else item.server_alias|join(' ') }}
+  ServerAlias {{ item.server_alias is string | ternary(item.server_alias, item.server_alias | join(' ')) }}
   {% endif -%}
   {% if item.include is defined -%}
   {% for include_file in item.include -%}
@@ -46,7 +47,7 @@
   DocumentRoot {{ item.document_root }}
   <Directory {{ item.document_root }}>
     {% if item.options is defined -%}
-    Options {{ item.options if item.options is string else item.options|join(' ') }}
+    Options {{ item.options is string | ternary(item.options, item.options | join(' ')) }}
     {% endif -%}
 
     {% if item.allow_override is defined -%}
@@ -55,7 +56,7 @@
 
     {% if item.require is defined -%}
     {% for directive in item.require -%}
-    Require {{ 'not ' if directive.not|default(false) else '' }}{{ directive.type }} {{ directive.value }}
+    Require {{ directive.not | default(false) | ternary('not ', '') }}{{ directive.type }} {{ directive.value }}
     {% endfor -%}
     {% else -%}
     Require all granted
@@ -70,7 +71,7 @@
   {% endif -%}
 
   {% if item.directory_index is defined -%}
-  DirectoryIndex {{ item.directory_index if item.directory_index is string else item.directory_index|join(' ') }}
+  DirectoryIndex {{ item.directory_index is string | ternary(item.directory_index, item.directory_index | join(' ')) }}
   {% endif -%}
 
   {% if item.custom_log is defined -%}
@@ -83,7 +84,7 @@
 
   {% if item.error_log is defined -%}
   ErrorLog {{ item.error_log.path }}
-  LogLevel {{ item.error_log.log_level|default('warn') }}
+  LogLevel {{ item.error_log.log_level | default('warn') }}
   {% endif -%}
 
   {% if item.transfer_log is defined -%}
@@ -124,19 +125,19 @@
   {% endif -%}
 
   {% if item.ssl.protocol is defined -%}
-  SSLProtocol {{ item.ssl.protocol|join(' ') }}
+  SSLProtocol {{ item.ssl.protocol | join(' ') }}
   {% endif -%}
 
   {% if item.ssl.cipher_suite is defined -%}
-  SSLCipherSuite {{ item.ssl.cipher_suite|join(':') }}
+  SSLCipherSuite {{ item.ssl.cipher_suite | join(':') }}
   {% endif -%}
 
   {% if item.ssl.honor_cipher_order is defined -%}
-  SSLHonorCipherOrder {{ 'on' if item.ssl.honor_cipher_order else 'off' }}
+  SSLHonorCipherOrder {{ item.ssl.honor_cipher_order | ternary('on', 'off') }}
   {% endif -%}
 
   {% if item.ssl.compression is defined -%}
-  SSLCompression {{ 'on' if item.ssl.compression else 'off' }}
+  SSLCompression {{ item.ssl.compression | ternary('on', 'off') }}
   {% endif -%}
 
   {% if item.ssl.stapling_responder_timeout is defined -%}
@@ -144,7 +145,7 @@
   {% endif -%}
 
   {% if item.ssl.stapling_return_responder_errors is defined -%}
-  SSLStaplingReturnResponderErrors {{ 'on' if item.ssl.stapling_return_responder_errors else 'off' }}
+  SSLStaplingReturnResponderErrors {{ item.ssl.stapling_return_responder_errors | ternary('on', 'off') }}
   {% endif -%}
 
   {% if item.ssl.stapling_cache is defined -%}

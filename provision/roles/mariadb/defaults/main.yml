@@ -1,12 +1,16 @@
 ---
 mariadb_packages:
-  - mariadb
+  - mariadb-client
   - mariadb-server
+  - mariadb-backup
+  - mariadb-plugin-mroonga
+  - groonga-tokenizer-mecab
+  - mysqltuner
 
 mariadb_root_password: rootP@55w0rd
 
-mariadb_default_charset: utf8
-mariadb_default_collation: utf8_general_ci
+mariadb_default_charset: utf8mb4
+mariadb_default_collation: utf8mb4_general_ci
 
 mariadb_databases: []
   # - name: sample
@@ -40,16 +44,15 @@ mariadb_myisam_key_baffer_rate: 15
 mariadb_mysqld_cfg:
   ## General
   sql_mode:
-    - ONLY_FULL_GROUP_BY
     - STRICT_TRANS_TABLES
     - NO_ZERO_IN_DATE
     - NO_ZERO_DATE
     - ERROR_FOR_DIVISION_BY_ZERO
     - NO_AUTO_CREATE_USER
     - NO_ENGINE_SUBSTITUTION
+    # - ONLY_FULL_GROUP_BY
   # bind_address: 127.0.0.1
   # datadir: /var/lib/mysql
-  # socket: /var/lib/mysql/mysql.sock
   # innodb_data_home_dir: /var/lib/mysql
   ## Network
   max_connections: "{{ mariadb_max_connections }}"

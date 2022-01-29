@@ -1,8 +1,7 @@
 ---
 - name: install etckeeper
-  yum:
+  apt:
     name: etckeeper
-    enablerepo: epel
 - name: check git repository directory
   stat:
     path: /etc/.git

@@ -8,6 +8,7 @@
         section: defaults
         option: "{{ item.name }}"
         value: "{{ item.value | string }}"
+        mode: "0644"
       loop:
         - name: hash_behaviour
           value: merge

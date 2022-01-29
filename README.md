@@ -35,7 +35,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ├── config.yml
 │        ローカル開発環境の設定ファイルです、利用する場合にはこのファイルを編集し利用します。
 │        (設定内容の詳細は「設定方法」を参照)
-├── source/
+├── src/
 │        開発するソースコードを格納するディレクトリです。
 │        (ここにソースコードを格納していきます)
 ├── Vagrantfile
@@ -55,30 +55,9 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 | 設定項目    | 内容                                            |
 | ----------- | ----------------------------------------------- |
-| app_type    | ローカル開発環境の種別を設定します              |
 | domain      | ローカル開発環境のドメインを設定します          |
 | php_version | インストールするPHPのバージョンを指定します     |
-| wordpress   | WordPressのインストール時の各種設定を指定します |
 | vagrant     | Vagrantで作成する仮想マシンの設定を指定します   |
-
-#### app_type
-
-ローカル開発環境の種別を設定します。
-
-指定できる値は以下の取りです。
-
-* `default`：
-    * 汎用的なPHPアプリケーション開発に利用できます。
-    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
-* `wordpress`：
-    * WordPress開発用の環境として利用できます。
-    * `source`ディレクトリ直下がドキュメントルートとして設定されます。
-* `wordpress_theme`：
-    * WordPressのテーマ開発用の環境として利用できます。
-    * `source`ディレクトリ直下がWordPressのテーマ用ディレクトリとして設定されます。
-* `wordpress_plugin`：
-    * WordPressのプラグイン開発用の環境として利用できます。
-    * `source`ディレクトリ直下がWordPressのプラグイン用ディレクトリとして設定されます。
 
 #### domain
 
@@ -86,31 +65,21 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 設定内容に応じて、以下のURLでローカル開発環境にアクセスできます。
 
 * `http://<設定したドメイン>/`：ローカル開発環境の確認用URLです。
-* `http://mailtest.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
-* `http://db.<設定したドメイン>/`：[phpMyAdmin](https://www.phpmyadmin.net/)用のURLです。
-* `http://cache.<設定したドメイン>/`：[phpRedisAdmin](https://github.com/erikdubbelboer/phpRedisAdmin)または[phpMemcachedAdmin](https://github.com/elijaa/phpmemcachedadmin)用のURLです。
+* `http://mailhog.<設定したドメイン>/`：[MailHog](https://github.com/mailhog/MailHog)用のURLです。
+* `http://cache.<設定したドメイン>/`：[phpRedisAdmin](https://github.com/erikdubbelboer/phpRedisAdmin)用のURLです。
 
 #### php_version
 
 インストールするPHPのバージョンを指定します。  
 設定可能なバージョンは以下の通りです。
 
+* 8.1
 * 8.0
 * 7.4
 * 7.3
 * 7.2
 * 7.1
 * 7.0
-* 5.6
-* 5.5
-* 5.4
-
-#### wordpress
-
-`app_type`に`wordpress_theme`または`wordpress_plugin`を設定している場合に、  
-インストールするWordPressの情報を設定します。
-
-設定可能な項目に関しては`config.yml`の`wordpress`部分のコメントを参照してください。
 
 ### extra_vars.yml
 
@@ -142,10 +111,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 ※`app_type`に以下のいずれかが設定されている場合、  
 **app_dev** の接続設定が利用されています。
 
-* `wordpress`
-* `wordpress_theme`
-* `wordpress_plugin`
-
 ### Webサーバー
 
 ドキュメントルートに`/var/www/html`を設定しています。
@@ -156,34 +121,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 また、`app_type`の設定に応じて`source`ディレクトリを  
 仮想マシンのディレクトリとして割り当てています。
-
-#### `wordpress_theme`または`wordpress_plugin`以外が設定されている場合
-
-仮想マシンの`/var/www/html`として割り当てています。
-
-#### `wordpress_theme`が設定されている場合
-
-仮想マシンの`/var/www/html/wp-content/themes/source`として割り当てています。
-
-#### `wordpress_plugin`が設定されている場合
-
-仮想マシンの`/var/www/html/wp-content/plugins/source`として割り当てています。
-
-
-WordPress用開発環境について
-------------
-
-### プラグインやテーマのインストール/アップデート方法
-
-プラグインのインストールやプラグインの更新を行う場合、  
-ダイアログに以下の情報を入力するとインストールまたはアップデートできます。
-
-* ホスト名：localhost
-* FTP/SSH ユーザー名：vagrant
-* FTP/SSH パスワード：vagrant
-* 接続形式：ssh2
-
-※「SSH Authentication Keys」の設定は不要です。
 
 ライセンス
 -------

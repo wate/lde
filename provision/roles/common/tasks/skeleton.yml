@@ -10,7 +10,7 @@
         path: /etc/skel/{{ item }}
         mode: "0700"
         state: directory
-      with_items:
+      loop:
         - Maildir
         - Maildir/new
         - Maildir/cur
