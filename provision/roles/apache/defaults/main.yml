@@ -14,6 +14,9 @@ apache_modules:
   - name: headers
   - name: ssl
   - name: proxy
+  - name: proxy_http
+  - name: proxy_http2
+  - name: proxy_fcgi
 
 apache_vhosts:
   - name: 000-default
@@ -35,13 +38,13 @@ apache_vhosts:
     #   - type: ip
     #     value: "192.168.33.0/24"
     # custom_log:
-    #   path: logs/access_log
+    #   path: /var/log/apache2/access.log
     #   format: combined
     # error_log:
-    #   path: logs/error_log
+    #   path: /var/log/apache2/error.log
     #   log_level: warn
     # transfer_log:
-    #   path: logs/transfer_log
+    #   path: /var/log/apache2/transfer.log
     #   format: '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"'
     # alias:
     #   - from: /.well-known/acme-challenge/
