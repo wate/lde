@@ -142,15 +142,18 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:8025/"
-  # - name: 002-phpRedisAdmin
-  #   server_name: chache.{{ domain }}
-  #   document_root: /opt/phpRedisAdmin
-  #   custom_log:
-  #     path: /var/log/apache2/phpredisadmin_access.log
-  #     format: combine
-  #   error_log:
-  #     path: /var/log/apache2/phpredisadmin_error.log
-  #     log_level: warn
+  - name: 002-phpRedisAdmin
+    server_name: cache.{{ domain }}
+    document_root: "{{ phpredisadmin_dest }}"
+    allow_override: All
+    directory_index:
+      - index.php
+    custom_log:
+      path: /var/log/apache2/phpredisadmin_access.log
+      format: combine
+    error_log:
+      path: /var/log/apache2/phpredisadmin_error.log
+      log_level: warn
 
 # --------------
 # MariaDBの設定

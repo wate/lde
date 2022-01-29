@@ -18,6 +18,8 @@
       tags: role_redis
     - name: tools
       tags: role_tools
+    - name: phpredisadmin
+      tags: role_phpredisadmin
   pre_tasks:
     - name: set pre task files
       set_fact:
