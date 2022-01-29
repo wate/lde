@@ -1,8 +1,25 @@
 - block:
+    - name: install bash git prompt
+      block:
+        - name: chackout source
+          git:
+            repo: https://github.com/magicmonty/bash-git-prompt.git
+            dest: ~/.bash-git-prompt
+            version: master
+            depth: 1
+        - name: append bash git prompt setting on .bashrc
+          blockinfile:
+            path: ~/.bashrc
+            block: |
+              if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+                  GIT_PROMPT_ONLY_IN_REPO=1
+                  source $HOME/.bash-git-prompt/gitprompt.sh
+              fi
     - name: create mysql connection file
       blockinfile:
         path: ~/.my.cnf
         create: true
+        mode: "0600"
         block: |
           [client]
           host=localhost
