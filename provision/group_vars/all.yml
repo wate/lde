@@ -107,6 +107,7 @@ nginx_extra_cfg: |
 apache_vhosts:
   # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
   - name: 000-default
+    default: true
     # サーバー名
     server_name: "{{ domain }}"
     # ドキュメントルート
@@ -154,4 +155,3 @@ mariadb_mysqld_cfg:
   slow_query_log_file: /var/log/mariadb/slow_query.log
   general_log: false
   general_log_file: /var/log/mariadb/general.log
-

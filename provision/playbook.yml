@@ -34,12 +34,12 @@
       when: pre_task_file | length > 0
   tasks:
     - block:
-      - name: create scripts
-        template:
-          src: "{{ item }}"
-          dest: ~/{{ item[:-3] | basename }}
-          mode: "0700"
-        with_fileglob: scripts/*.j2
+        - name: create scripts
+          template:
+            src: "{{ item }}"
+            dest: ~/{{ item[:-3] | basename }}
+            mode: "0700"
+          loop: "{{ lookup('fileglob', 'scripts/*.j2', wantlist=True)  }}"
       become: false
     - name: change owner on document root directory
       file:
@@ -49,94 +49,16 @@
         owner: vagrant
         group: vagrant
         state: directory
-    # - name: create mysql connection file
-    #   ini_file:
-    #     path: ~/.my.cnf
-    #     create: true
-    #     section: client
-    #     option: "{{ item.key | replace('_', '-') }}"
-    #     value: "{{ item.value | string }}"
-    #   with_dict:
-    #     host: localhost
-    #     database: "{{ mariadb_databases[0].name }}"
-    #     user: "{{ mariadb_databases[0].user | default(mariadb_databases[0].name) }}"
-    #     password: "{{ mariadb_databases[0].password | default(mariadb_databases[0].user) }}"
-    #     default_character_set: "{{ mariadb_databases[0].encoding | default(mariadb_default_charset) }}"
-    #   become: false
-    #   tags: my.cnf
-    # - name: restart service
-    #   systemd:
-    #     name: "{{ item }}"
-    #     state: restarted
-    #   loop:
-    #     - httpd
-    #     - mariadb
-    # - name: restart service(cache server)
-    #   systemd:
-    #     name: "{{ cache_server }}"
-    #     state: restarted
-    #   when:
-    #     - cache_server is defined
-    #     - cache_server in ['redis', 'memcached']
-    # - block:
-    #     - name: install github deploykey
-    #       copy:
-    #         src: "{{ github_deploykey_path }}"
-    #         dest: ~/.ssh/github_deploykey
-    #         mode: '0600'
-    #         remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-    #       when: github_deploykey_path is defined
-    #     - name: install bitbucket deploykey
-    #       copy:
-    #         src: "{{ bitbucket_deploykey_path }}"
-    #         dest: ~/.ssh/bitbucket_deploykey
-    #         mode: '0600'
-    #         remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-    #       when: bitbucket_deploykey_path is defined
-    #     - name: install gitlab deploykey
-    #       copy:
-    #         src: "{{ gitlab_deploykey_path }}"
-    #         dest: ~/.ssh/gitlab_deploykey
-    #         mode: '0600'
-    #         remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-    #       when: gitlab_deploykey_path is defined
-    #     - name: install backlog ssh key
-    #       copy:
-    #         src: "{{ backlog_deploykey_path }}"
-    #         dest: ~/.ssh/backlog_deploykey
-    #         mode: '0600'
-    #         remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-    #       when: backlog_deploykey_path is defined
-    #     - name: Insert/Update ssh configuration block in ~/.ssh/config
-    #       blockinfile:
-    #         path: ~/.ssh/config
-    #         block: |
-    #           {% if github_deploykey_path is defined -%}
-    #           Host github.com
-    #             IdentityFile ~/.ssh/github_deploykey
-    #             StrictHostKeyChecking no
-    #             User git
-    #           {% endif %}
-    #           {% if bitbucket_deploykey_path is defined -%}
-    #           Host bitbucket.org
-    #             IdentityFile ~/.ssh/bitbucket_deploykey
-    #             StrictHostKeyChecking no
-    #             User git
-    #           {% endif %}
-    #           {% if gitlab_deploykey_path is defined -%}
-    #           Host gitlab.com
-    #             IdentityFile ~/.ssh/gitlab_deploykey
-    #             StrictHostKeyChecking no
-    #             User git
-    #           {% endif %}
-    #           {% if backlog_deploykey_path is defined -%}
-    #           Host *.git.backlog.jp
-    #             IdentityFile ~/.ssh/backlog_deploykey
-    #             StrictHostKeyChecking no
-    #           {% endif %}
-    #         create: true
-    #         mode: "0600"
-    #   become: false
+    - name: restart service
+      systemd:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - redis
+        - apache2
+        - mariadb
+    - name: add/update user setting
+      import_tasks: my.yml
   post_tasks:
     - name: set other post task files
       set_fact:
