@@ -3,16 +3,17 @@ apache_packages:
   - apache2
   - libapache2-mod-php
   - goaccess
+  - dehydrated-apache2
   # - libapache2-mod-perl2
   # - libapache2-mod-fcgid
   # - libapache2-mod-python
   # - libapache2-mod-log-slow
   # - libapache2-mod-geoip
-  # - dehydrated-apache2
 
 apache_modules:
   - name: headers
   - name: ssl
+  - name: proxy
 
 apache_vhosts:
   - name: 000-default

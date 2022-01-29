@@ -24,10 +24,11 @@
     - "IncludeOptional mods-enabled/*.conf"
     - "IncludeOptional conf-enabled/*.conf"
     - "IncludeOptional sites-enabled/*.conf"
-- name: update load base module
-  apache2_module:
-    name: "{{ item.name }}"
-    state: "{{ item.disabled | default(false) | ternary('present', 'absent') }}"
+- name: update load module
+  command: "{{ item.disabled | default(false) | ternary('a2dismod', 'a2enmod') }} {{ item.name }}"
+  args:
+    creates: "{{ item.disabled | default(false) | ternary(omit, apache_module_enabled_dir + '/' + item.name + '.load') }}"
+    removes: "{{ item.disabled | default(false) | ternary(apache_module_enabled_dir + '/' + item.name + '.load', omit) }}"
   loop: "{{ apache_modules }}"
 - name: create custom setting file
   template:
@@ -71,11 +72,10 @@
     label: "{{ item.name | default(item.server_name) }}"
   notify: restart apache
 - name: enable / disable virtualhost
-  file:
-    path: "{{ apache_site_enabled_dir }}/{{ item.name | default(item.server_name) }}.conf"
-    src: "{{ omit if item.disabled | default(false) | ternary(apache_site_available_dir + '/' + item.name | default(item.server_name) + '.conf', omit) }}"
-    state: "{{ item.disabled | default(false) | ternary('absent', 'link') }}"
-    mode: "0644"
+  command: "{{ item.disabled | default(false) | ternary('a2dissite', 'a2ensite') }} {{ item.name | default(item.server_name) }}"
+  args:
+    creates: "{{ item.disabled | default(false) | ternary(omit, apache_site_enabled_dir + '/' + (item.name | default(item.server_name)) + '.conf') }}"
+    removes: "{{ item.disabled | default(false) | ternary(apache_site_enabled_dir + '/' + (item.name | default(item.server_name)) + '.conf', omit) }}"
   loop: "{{ exist_virtualhosts }}"
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
