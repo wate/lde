@@ -37,7 +37,7 @@
   when: stat_result.stat.exists
 - name: php-fpm is active and enabled on system startup
   systemd:
-    name: php{{ php_version }}-fpm
+    name: php{{ php_version | string }}-fpm
     state: started
     enabled: true
-  when: "'php' + php_version + '-fpm' in php_packages"
+  when: "'php' + (php_version | string) + '-fpm' in php_packages"
