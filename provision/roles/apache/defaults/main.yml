@@ -12,6 +12,7 @@ apache_packages:
 
 apache_modules:
   - name: headers
+  - name: rewrite
   - name: ssl
   - name: proxy
   - name: proxy_http
