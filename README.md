@@ -6,13 +6,13 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 必要なもの
 ------------
 
+* [Ansible](https://www.ansible.com/)
 * [Vagrant](https://www.vagrantup.com/)
     * Ver 2.1.0以上
 * [VirtualBox](https://www.virtualbox.org/)
 * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
     * Vagrantのプラグインです。
-    * インストールしていなくても動作しますが、  
-    その場合はhostsファイルを手動書き換える必要があります。
+    * インストールしていなくても動作しますが、その場合はhostsファイルを手動書き換える必要があります。
 
 その他、関連アプリ
 ------------
@@ -109,9 +109,6 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 | app_staging    | app_staging            | app_staging_P455w0rd   |
 | app_prod       | app_prod               | app_prod_P455w0rd      |
 
-※`app_type`に以下のいずれかが設定されている場合、  
-**app_dev** の接続設定が利用されています。
-
 ### Webサーバー
 
 ドキュメントルートに`/var/www/html`を設定しています。
@@ -120,8 +117,7 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 ローカル開発環境全体を仮想マシンの`/vagrant`に割り当てています。
 
-また、`app_type`の設定に応じて`source`ディレクトリを  
-仮想マシンのディレクトリとして割り当てています。
+また、`app_type`の設定に応じて`src`ディレクトリを仮想マシンのディレクトリとして割り当てています。
 
 ライセンス
 -------

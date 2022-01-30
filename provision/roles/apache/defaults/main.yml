@@ -11,9 +11,13 @@ apache_packages:
   # - libapache2-mod-geoip
 
 apache_modules:
+  # - name: mpm_prefork
+  #   disabled: true
+  # - name: mpm_event
   - name: headers
-  - name: rewrite
   - name: ssl
+  - name: auth_basic
+  - name: rewrite
   - name: proxy
   - name: proxy_http
   - name: proxy_http2
