@@ -26,6 +26,32 @@
                   GIT_PROMPT_ONLY_IN_REPO=1
                   source $HOME/.bash-git-prompt/gitprompt.sh
               fi
+    - name: user git setting
+      git_config:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        scope: global
+      loop:
+        - name: alias.au
+          value: add --update
+        - name: alias.br
+          value: branch
+        - name: alias.ca
+          value: commit --amend
+        - name: alias.ci
+          value: commit
+        - name: alias.co
+          value: checkout
+        - name: alias.dc
+          value: diff --cached
+        - name: alias.st
+          value: status -s
+        - name: alias.lg
+          value: log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=iso --all --decorate
+        - name: fetch.prune
+          value: "true"
+        - name: pull.rebase
+          value: "true"
     - name: create mysql connection file
       blockinfile:
         path: ~/.my.cnf
