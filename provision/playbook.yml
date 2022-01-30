@@ -18,6 +18,8 @@
       tags: role_redis
     - name: tools
       tags: role_tools
+    - name: phpmyadmin
+      tags: role_phpmyadmin
     - name: phpredisadmin
       tags: role_phpredisadmin
   pre_tasks:

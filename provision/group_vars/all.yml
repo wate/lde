@@ -142,7 +142,36 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:8025/"
-  - name: 002-phpRedisAdmin
+  - name: 002-phpMyAdmin
+    server_name: db.{{ domain }}
+    document_root: "{{ phpmyadmin_dest }}"
+    allow_override: All
+    directory_index:
+      - index.php
+    custom_log:
+      path: /var/log/apache2/phpmyadmin_access.log
+      format: combine
+    error_log:
+      path: /var/log/apache2/phpmyadmin_error.log
+      log_level: warn
+    extra_setting: |
+      <Directory {{ phpmyadmin_dest }}/templates>
+          Require all denied
+      </Directory>
+      <Directory {{ phpmyadmin_dest }}/libraries>
+          Require all denied
+      </Directory>
+      <Directory {{ phpmyadmin_dest }}/setup>
+          Require all denied
+      </Directory>
+      <Directory {{ phpmyadmin_upload_dir }}>
+          Require all denied
+      </Directory>
+      <Directory {{ phpmyadmin_save_dir }}>
+          Require all denied
+      </Directory>
+
+  - name: 003-phpRedisAdmin
     server_name: cache.{{ domain }}
     document_root: "{{ phpredisadmin_dest }}"
     allow_override: All

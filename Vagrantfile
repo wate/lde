@@ -67,6 +67,8 @@ Vagrant.configure("2") do |config|
     'www.' + settings['domain'],
     # mailhog
     'mailhog.' + settings['domain'],
+    # phpmyAdmin
+    'db.' + settings['domain'],
     # phpRedisAdmin
     'cache.' + settings['domain'],
   ]
