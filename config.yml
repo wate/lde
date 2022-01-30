@@ -3,6 +3,7 @@
 domain: "example.local"
 ## PHPのバージョン： 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0
 php_version: 7.4
+## Webサーバー： apache / nginx
 web_server: apache
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
