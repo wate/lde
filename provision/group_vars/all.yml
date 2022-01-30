@@ -36,6 +36,7 @@ php_packages:
   - php{{ php_version }}-zip
   - php{{ php_version }}-apcu
   - php{{ php_version }}-redis
+  - php{{ php_version }}-fpm
 
 # --------------
 # php.iniの初期値を上書きする項目
@@ -170,7 +171,9 @@ apache_vhosts:
       <Directory {{ phpmyadmin_save_dir }}>
           Require all denied
       </Directory>
-
+      <Directory {{ phpmyadmin_tmp_dir }}>
+          Require all denied
+      </Directory>
   - name: 003-phpRedisAdmin
     server_name: cache.{{ domain }}
     document_root: "{{ phpredisadmin_dest }}"
@@ -183,6 +186,116 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/phpredisadmin_error.log
       log_level: warn
+
+# --------------
+# Nginxのバーチャルホストの設定
+# --------------
+nginx_vhosts:
+  - name: default
+    default: true
+    server_name:
+      - "{{ domain }}"
+      - "www.{{ domain }}"
+    access_log: /var/log/nginx/access.log
+    error_log: /var/log/nginx/error.log
+    document_root: /var/www/html{{ doc_root_suffix | default('', true) }}
+    index:
+      - index.php
+      - index.html
+    client_max_body_size: 20M
+    locations:
+      - pattern: "/"
+        content:
+          try_files $uri $uri/ =404;
+      - pattern: "\\.php$"
+        match_type: "~"
+        content: |
+          include snippets/fastcgi-php.conf;
+          fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: |
+          deny all;
+  # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
+  - name: mailhog
+    server_name: mailhog.{{ domain }}
+    access_log: /var/log/nginx/mailhog_access.log
+    error_log: /var/log/nginx/mailhog_error.log
+    locations:
+      - pattern: /
+        content: |
+          proxy_pass http://localhost:8025/;
+          include proxy_params;
+  # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
+  - name: phpMyAdmin
+    server_name: db.{{ domain }}
+    document_root: "{{ phpmyadmin_dest }}"
+    index:
+      - index.php
+      - index.html
+    client_max_body_size: 20M
+    access_log: /var/log/nginx/phpmyadmin_access.log
+    error_log: /var/log/nginx/phpmyadmin_error.log
+    locations:
+      - pattern: "/"
+        content:
+          try_files $uri $uri/ =404;
+      - pattern: "\\.php$"
+        match_type: "~"
+        content: |
+          include snippets/fastcgi-php.conf;
+          fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: |
+          deny all;
+      - pattern: "/templates"
+        match_type: "^~"
+        content: |
+          deny all;
+      - pattern: "/libraries"
+        match_type: "^~"
+        content: |
+          deny all;
+      - pattern: "/setup"
+        match_type: "^~"
+        content: |
+          deny all;
+      - pattern: "/{{ phpmyadmin_upload_dir | replace(phpmyadmin_dest, '') }}"
+        match_type: "^~"
+        content: |
+          deny all;
+      - pattern: "/{{ phpmyadmin_save_dir | replace(phpmyadmin_dest, '') }}"
+        match_type: "^~"
+        content: |
+          deny all;
+      - pattern: "/{{ phpmyadmin_tmp_dir | replace(phpmyadmin_dest, '') }}"
+        match_type: "^~"
+        content: |
+          deny all;
+  # phpRedisAdmin用のバーチャルホスト ( http://cache.<ドメイン>/ )
+  - name: phpRedisAdmin
+    server_name: cache.{{ domain }}
+    document_root: "{{ phpredisadmin_dest }}"
+    index:
+      - index.php
+      - index.html
+    client_max_body_size: 20M
+    access_log: /var/log/nginx/phpredisadmin_access.log
+    error_log: /var/log/nginx/phpredisadmin_error.log
+    locations:
+      - pattern: "/"
+        content:
+          try_files $uri $uri/ =404;
+      - pattern: "\\.php$"
+        match_type: "~"
+        content: |
+          include snippets/fastcgi-php.conf;
+          fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: |
+          deny all;
 
 # --------------
 # MariaDBの設定

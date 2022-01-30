@@ -3,6 +3,7 @@
 domain: "example.local"
 ## PHPのバージョン： 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0
 php_version: 7.4
+web_server: apache
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
 # ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
@@ -32,8 +33,8 @@ vagrant:
   #   - role_php
   # プロビジョニング実行時のタグ指定(実行するタグの指定)
   # provision_only_tags:
-  #   - role_mariadb
-  #   - role_apache
+  #   - role_database_server
+  #   - role_web_server
   #   - role_php
   ## ポートフォワーディングの設定
   forwarded_ports:

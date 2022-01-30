@@ -1,7 +1,10 @@
-- name: remove default install index.html
+- name: remove default install index file
   file:
-    path: /var/www/html/index.html
+    path: /var/www/html/{{ item }}
     state: absent
+  loop:
+    - index.html
+    - index.nginx-debian.html
   become: true
 - name: install php dependency package
   block:

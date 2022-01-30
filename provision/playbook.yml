@@ -7,11 +7,11 @@
     - name: nodejs
       tags: role_nodejs
     - name: mariadb
-      tags: role_mariadb
+      tags: role_database_server
     - name: dehydrated
       tags: role_dehydrated
-    - name: apache
-      tags: role_apache
+    - name: "{{ 'apache' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
+      tags: role_web_server
     - name: php
       tags: role_php
     - name: redis
@@ -45,12 +45,15 @@
         owner: vagrant
         group: vagrant
         state: directory
+    - name: set service name variable
+      set_fact:
+        web_server_service: "{{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
     - name: restart service
       systemd:
         name: "{{ item }}"
         state: restarted
       loop:
-        - apache2
+        - "{{ web_server_service }}"
         - mariadb
     - name: add/update user setting
       import_tasks: my.yml
