@@ -103,6 +103,7 @@ Vagrant.configure("2") do |config|
   ansible_extra_vars = {
     'domain' => settings['domain'],
     'php_version' => settings['php_version'],
+    'web_server' => settings['web_server'],
     'doc_root_suffix' => settings['doc_root_suffix'],
   }
   unless ansible_custom_vars.empty?()
