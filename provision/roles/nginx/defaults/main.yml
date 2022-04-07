@@ -109,7 +109,7 @@ nginx_vhosts:
   #   upstream:
   #     name: backend
   #     content: |
-  #       server unix:///path/to/app.sock;
+  #       server unix:/path/to/app.sock;
   #   client_max_body_size: 50M
   #   locations:
   #     - pattern: /
