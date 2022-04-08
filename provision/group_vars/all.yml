@@ -117,6 +117,9 @@ apache_vhosts:
     server_alias: "www.{{ domain }}"
     # AllowOverrideの設定値
     allow_override: All
+    options:
+      - "-Indexes"
+      - "+SymLinksIfOwnerMatch"
     directory_index:
       - index.php
       - index.html
