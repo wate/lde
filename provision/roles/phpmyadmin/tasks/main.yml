@@ -1,9 +1,46 @@
 ---
-- name: install phpMyAdmin
-  yum:
-    name: phpMyAdmin
-    enablerepo: epel
-- name: remove phpMyAdmin default setting file
+- name: create phpMyAdmin directory
   file:
-    path: /etc/httpd/conf.d/phpMyAdmin.conf
-    state: absent
+    path: "{{ phpmyadmin_dest }}"
+    state: directory
+    mode: "0755"
+- name: download phpMyAdmin
+  unarchive:
+    src: https://files.phpmyadmin.net/phpMyAdmin/{{ phpmyadmin_version }}/phpMyAdmin-{{ phpmyadmin_version }}-all-languages.tar.gz
+    dest: "{{ phpmyadmin_dest }}"
+    extra_opts:
+      - "--strip-components=1"
+    remote_src: true
+- name: create phpMyAdmin working directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0777"
+  loop:
+    - "{{ phpmyadmin_tmp_dir }}"
+    - "{{ phpmyadmin_upload_dir }}"
+    - "{{ phpmyadmin_save_dir }}"
+- name: create phpMyAdmin config
+  template:
+    src: config.inc.php.j2
+    dest: "{{ phpmyadmin_dest }}/config.inc.php"
+    mode: "0644"
+- name: create phpMyAdmin storage database
+  mysql_db:
+    name: "{{ phpmyadmin_database_name }}"
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_ci
+    login_unix_socket: /run/mysqld/mysqld.sock
+- name: create phpMyAdmin storage database user
+  mysql_user:
+    name: "{{ phpmyadmin_database_user }}"
+    password: "{{ phpmyadmin_database_password }}"
+    host: "{{ item }}"
+    priv: "{{ phpmyadmin_database_name }}.*:ALL"
+    login_unix_socket: /run/mysqld/mysqld.sock
+  loop:
+    - "127.0.0.1"
+    - localhost
+  no_log: true
+
+#

@@ -1,2 +1,6 @@
 ---
-phpmyadmin_dest: /usr/share/phpMyAdmin
+phpmyadmin_dest: /opt/phpMyAdmin
+phpmyadmin_tmp_dir: "{{ phpmyadmin_dest }}/tmp"
+phpmyadmin_upload_dir: "{{ phpmyadmin_dest }}/upload"
+phpmyadmin_save_dir: "{{ phpmyadmin_dest }}/save"
+

@@ -3,12 +3,13 @@ galaxy_info:
   author: yoshiaki tanaka
   description: setup php
   license: MIT
-  min_ansible_version: 2.9
+  namespace: wate
+  role_name: php
+  min_ansible_version: 2.11
   platforms:
-    - name: EL
+    - name: Debian
       versions:
-        - 7
+        - bullseye
+        - buster
   galaxy_tags: []
-
-dependencies:
-  - repo-remi
+dependencies: []

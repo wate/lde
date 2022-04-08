@@ -2,36 +2,26 @@
   hosts: all
   become: true
   roles:
-    - role: common
+    - name: common
       tags: role_common
-    - role: python
-      tags: role_python
-    - role: ruby
-      tags: role_ruby
-    - role: nodejs
+    - name: nodejs
       tags: role_nodejs
-    - role: mariadb
-      tags: role_mariadb
-    - role: lexicon
-      tags: role_lexicon
-    - role: dehydrated
+    - name: mariadb
+      tags: role_database_server
+    - name: dehydrated
       tags: role_dehydrated
-    - role: apache
-      tags: role_apache
-    - role: php
+    - name: "{{ 'apache' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
+      tags: role_web_server
+    - name: php
       tags: role_php
-    - role: "{{ mail_test_tool | default('mailhog') }}"
-      tags: role_mailtest
-    - role: rtail
-      tags: role_rtail
-    - role: wp-cli
-      tags: role_wp-cli
-    - role: phpmyadmin
+    - name: redis
+      tags: role_redis
+    - name: tools
+      tags: role_tools
+    - name: phpmyadmin
       tags: role_phpmyadmin
-  vars:
-    tbls_last_release: "{{ lookup('url', 'https://api.github.com/repos/k1LoW/tbls/releases/latest', split_lines=False) | from_json }}"
-    tbls_version: "{{ tbls_last_release.tag_name }}"
-    tbls_download_url: https://github.com/k1LoW/tbls/releases/download/{{ tbls_version }}/tbls_{{ tbls_version | regex_replace('^v', '') }}-1_amd64.rpm
+    - name: phpredisadmin
+      tags: role_phpredisadmin
   pre_tasks:
     - name: set pre task files
       set_fact:
@@ -47,68 +37,6 @@
       include_tasks: "{{ pre_task_file }}"
       when: pre_task_file | length > 0
   tasks:
-    - name: install cache server and admin tool
-      block:
-        - name: install cache server
-          include_role:
-            name: "{{ cache_server }}"
-          tags: role_cache_server
-        - name: install cache server
-          include_role:
-            name: "php{{ cache_server }}admin"
-          tags: role_cache_admin_tool
-      when:
-        - cache_server is defined
-        - cache_server in ['redis', 'memcached']
-    - name: install Google Noto Fonts
-      yum:
-        name:
-          - google-noto-cjk-fonts
-          - google-noto-sans-cjk-fonts
-          - google-noto-sans-japanese-fonts
-    - name: install php xdebug module
-      yum:
-        name: php-pecl-xdebug
-      when: php_xdebug_installed | default(false)
-    - name: install the silver searcher
-      yum:
-        name: the_silver_searcher
-    - name: install graphviz
-      yum:
-        name: graphviz
-    - name: install nkf
-      yum:
-        name: nkf
-    - name: install tbls
-      yum:
-        name: "{{ tbls_download_url }}"
-    - block:
-      - name: create scripts
-        template:
-          src: "{{ item }}"
-          dest: ~/{{ item[:-3] | basename }}
-          mode: "0700"
-        with_fileglob: scripts/*.j2
-      become: false
-    - block:
-        - name: check global composer setting
-          stat:
-            path: ~/.config/composer/composer.json
-          register: result
-        - name: install prestissimo(composer plugin) for vagrant
-          composer:
-            command: require
-            global_command: true
-            arguments: hirak/prestissimo
-          when: not result.stat.exists
-        - name: update global composer packages
-          composer:
-            command: update
-            global_command: true
-          when: result.stat.exists
-      become: false
-      tags: prestissimo
-      when: install_prestissimo | default(false)
     - name: change owner on document root directory
       file:
         path: /var/www/html
@@ -117,99 +45,18 @@
         owner: vagrant
         group: vagrant
         state: directory
-    - name: setup WordPress
-      import_tasks: wordpress.yml
-      become: false
-      when: app_type.startswith('wordpress')
-      tags: wordpress
-    - name: create mysql connection file
-      ini_file:
-        path: ~/.my.cnf
-        create: true
-        section: client
-        option: "{{ item.key | replace('_', '-') }}"
-        value: "{{ item.value | string }}"
-      with_dict:
-        host: localhost
-        database: "{{ mariadb_databases[0].name }}"
-        user: "{{ mariadb_databases[0].user | default(mariadb_databases[0].name) }}"
-        password: "{{ mariadb_databases[0].password | default(mariadb_databases[0].user) }}"
-        default_character_set: "{{ mariadb_databases[0].encoding | default(mariadb_default_charset) }}"
-      become: false
-      tags: my.cnf
+    - name: set service name variable
+      set_fact:
+        web_server_service: "{{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
     - name: restart service
       systemd:
         name: "{{ item }}"
         state: restarted
       loop:
-        - httpd
+        - "{{ web_server_service }}"
         - mariadb
-    - name: restart service(cache server)
-      systemd:
-        name: "{{ cache_server }}"
-        state: restarted
-      when:
-        - cache_server is defined
-        - cache_server in ['redis', 'memcached']
-    - block:
-        - name: install github deploykey
-          copy:
-            src: "{{ github_deploykey_path }}"
-            dest: ~/.ssh/github_deploykey
-            mode: '0600'
-            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-          when: github_deploykey_path is defined
-        - name: install bitbucket deploykey
-          copy:
-            src: "{{ bitbucket_deploykey_path }}"
-            dest: ~/.ssh/bitbucket_deploykey
-            mode: '0600'
-            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-          when: bitbucket_deploykey_path is defined
-        - name: install gitlab deploykey
-          copy:
-            src: "{{ gitlab_deploykey_path }}"
-            dest: ~/.ssh/gitlab_deploykey
-            mode: '0600'
-            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-          when: gitlab_deploykey_path is defined
-        - name: install backlog ssh key
-          copy:
-            src: "{{ backlog_deploykey_path }}"
-            dest: ~/.ssh/backlog_deploykey
-            mode: '0600'
-            remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
-          when: backlog_deploykey_path is defined
-        - name: Insert/Update ssh configuration block in ~/.ssh/config
-          blockinfile:
-            path: ~/.ssh/config
-            block: |
-              {% if github_deploykey_path is defined -%}
-              Host github.com
-                IdentityFile ~/.ssh/github_deploykey
-                StrictHostKeyChecking no
-                User git
-              {% endif %}
-              {% if bitbucket_deploykey_path is defined -%}
-              Host bitbucket.org
-                IdentityFile ~/.ssh/bitbucket_deploykey
-                StrictHostKeyChecking no
-                User git
-              {% endif %}
-              {% if gitlab_deploykey_path is defined -%}
-              Host gitlab.com
-                IdentityFile ~/.ssh/gitlab_deploykey
-                StrictHostKeyChecking no
-                User git
-              {% endif %}
-              {% if backlog_deploykey_path is defined -%}
-              Host *.git.backlog.jp
-                IdentityFile ~/.ssh/backlog_deploykey
-                StrictHostKeyChecking no
-              {% endif %}
-            create: true
-            mode: "0600"
-      become: false
+    - name: add/update user setting
+      import_tasks: my.yml
   post_tasks:
     - name: set other post task files
       set_fact:

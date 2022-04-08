@@ -4,7 +4,7 @@
     name: "{{ item.name }}"
     gid: "{{ item.id | default(omit) }}"
     system: "{{ item.system | default(omit) }}"
-    state: "{{ 'absent' if item.removed | default(false) else 'present' }}"
+    state: "{{ item.removed | default(false) | ternary('absent', 'present') }}"
   loop: "{{ common_groups }}"
   loop_control:
     label: "{{ item.name }}"
@@ -19,7 +19,7 @@
     uid: "{{ item.id | default(omit) }}"
     system: "{{ item.system | default(omit) }}"
     home: "{{ item.home | default(omit) }}"
-    state: "{{ 'absent' if item.removed | default(false) else 'present' }}"
+    state: "{{ item.removed | default(false) | ternary('absent', 'present') }}"
     # `userdel` command `--remove` option
     remove: "{{ item.removed | default(false) }}"
   loop: "{{ common_users }}"
@@ -32,7 +32,7 @@
   authorized_key:
     user: "{{ item.0.name }}"
     key: "{{ item.1.key }}"
-    state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
+    state: "{{ item.1.removed | default(false) | ternary('absent', 'present') }}"
   loop: "{{ existing_users | subelements('authorized_keys', skip_missing=True) }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1 }}"
@@ -78,7 +78,7 @@
     line: 'export {{ item.1.name }}="{{ item.1.value | default("") }}"'
     create: true
     mode: "0600"
-    state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
+    state: "{{ item.1.removed | default(false) | ternary('absent', 'present') }}"
   become_user: "{{ item.0.name }}"
   become: true
   loop: "{{ existing_users | subelements('secret_vars', skip_missing=True) | list }}"
@@ -98,7 +98,7 @@
     user: "{{ item.0.name }}"
     name: "{{ item.1.name }}"
     value: "{{ omit if item.1.removed | default(false) else item.1.value | default('') }}"
-    state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
+    state: "{{ item.1.removed | default(false) | ternary('absent', 'present') }}"
   loop: "{{ existing_users | subelements('cron_vars', skip_missing=True) | list }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1.name }}"
@@ -112,8 +112,8 @@
     hour: "{{ item.1.hour | default('*') | string }}"
     minute: "{{ item.1.minute | default('*') | string }}"
     weekday: "{{ item.1.weekday | default('*') | string }}"
-    disabled: "{{ true if item.1.disable | default(false) else false }}"
-    state: "{{ 'absent' if item.1.removed | default(false) else 'present' }}"
+    disabled: "{{ item.1.disable | default(false) }}"
+    state: "{{ item.1.removed | default(false) | ternary('absent', 'present') }}"
   loop: "{{ existing_users | subelements('cron_jobs', skip_missing=True) | list }}"
   loop_control:
     label: "{{ item.0.name }} : {{ item.1.name }}"

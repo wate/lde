@@ -3,11 +3,12 @@ galaxy_info:
   author: yoshiaki tanaka
   description: install Node.js
   license: MIT
-  min_ansible_version: 2.9
+  namespace: wate
+  role_name: nodejs
+  min_ansible_version: 2.11
   platforms:
-    - name: EL
+    - name: Debian
       versions:
-        - 7
-
-dependencies:
-  - repo-epel
+        - bullseye
+        - buster
+dependencies: []

@@ -1,8 +1,7 @@
 ---
 - name: install fail2ban
-  yum:
+  apt:
     name: fail2ban
-    enablerepo: epel
 - name: set fail2ban setting
   blockinfile:
     path: /etc/fail2ban/jail.local

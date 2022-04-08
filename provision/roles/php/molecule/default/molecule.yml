@@ -4,21 +4,34 @@ dependency:
 driver:
   name: ${DRIVER_NAME:-docker}
 platforms:
-  ## https://hub.docker.com/u/geerlingguy
-  - name: centos7
+  - name: buster
     groups:
-      - family_redhat
+      - family_debian
     children:
-      - centos
+      - debian
     # driver:docker
-    image: "geerlingguy/docker-centos7-ansible:latest"
+    image: "geerlingguy/docker-debian10-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
     # driver:vagrant
-    box: wate/centos-7
+    box: wate/debian-10
+  - name: bullseye
+    groups:
+      - family_debian
+    children:
+      - debian
+    # driver:docker
+    image: "geerlingguy/docker-debian11-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+    # driver:vagrant
+    box: wate/debian-11
 lint: |
   set -e
   yamllint .

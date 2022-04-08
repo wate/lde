@@ -1,72 +1,27 @@
-- src: https://github.com/wate/ansible-role-repo-epel
-  version: master
-  name: repo-epel
 - src: https://github.com/wate/ansible-role-common
-  version: master
+  version: develop
   name: common
 - src: https://github.com/wate/ansible-role-apache
-  version: master
+  version: develop
   name: apache
+- src: https://github.com/wate/ansible-role-nginx
+  version: develop
+  name: nginx
 - src: https://github.com/wate/ansible-role-dehydrated
-  version: master
+  version: develop
   name: dehydrated
-- src: https://github.com/wate/ansible-role-lexicon
-  version: master
-  name: lexicon
-- src: https://github.com/wate/ansible-role-mackerel-agent
-  version: master
-  name: mackerel-agent
-- src: https://github.com/wate/ansible-role-mailcatcher
-  version: master
-  name: mailcatcher
-- src: https://github.com/wate/ansible-role-mailhog
-  version: master
-  name: mailhog
 - src: https://github.com/wate/ansible-role-mariadb
-  version: master
+  version: develop
   name: mariadb
-- src: https://github.com/wate/ansible-role-memcached
-  version: master
-  name: memcached
-- src: https://github.com/wate/ansible-role-mysql
-  version: master
-  name: mysql
 - src: https://github.com/wate/ansible-role-nodejs
-  version: master
+  version: develop
   name: nodejs
 - src: https://github.com/wate/ansible-role-php
-  version: master
+  version: develop
   name: php
-- src: https://github.com/wate/ansible-role-phpmyadmin
-  version: master
-  name: phpmyadmin
-- src: https://github.com/wate/ansible-role-phpredisadmin
-  version: master
-  name: phpredisadmin
-- src: https://github.com/wate/ansible-role-phpmemcachedadmin
-  version: master
-  name: phpmemcachedadmin
-- src: https://github.com/wate/ansible-role-python
-  version: master
-  name: python
 - src: https://github.com/wate/ansible-role-redis
-  version: master
+  version: develop
   name: redis
-- src: https://github.com/wate/ansible-role-repo-epel
-  version: master
-  name: repo-epel
-- src: https://github.com/wate/ansible-role-repo-mysql
-  version: master
-  name: repo-mysql
-- src: https://github.com/wate/ansible-role-repo-remi
-  version: master
-  name: repo-remi
-- src: https://github.com/wate/ansible-role-ruby
-  version: master
-  name: ruby
-- src: https://github.com/wate/ansible-role-rtail
-  version: master
-  name: rtail
-- src: https://github.com/wate/ansible-role-wp-cli
-  version: master
-  name: wp-cli
+- src: https://github.com/wate/ansible-role-tools
+  version: develop
+  name: tools

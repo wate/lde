@@ -1,101 +1,17 @@
-## アプリケーション種別：default / wordpress_plugin / wordpress_theme / none
-app_type: "default"
+---
 ## ドメイン
 domain: "example.local"
-## PHPのバージョン：5.4 / 5.5 / 5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0
+## PHPのバージョン： 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0
 php_version: 7.4
-## メール送信用テストツール ： mailhog / mailcatcher
-mail_test_tool: mailhog
-### https://github.com/hirak/prestissimo
-install_prestissimo: false
-wordpress:
-  ## ダウンロードするWordPressのバージョン
-  version: "latest"
-  ## ダウンロードするWordPressの言語設定
-  locale: "ja"
-  ## サイトのタイトル
-  title: "サンプルサイト"
-  ## 管理者名
-  admin_user: "admin"
-  ## 管理者パスワード
-  admin_password: "str0ngp455w0rd"
-  ## 管理者メールアドレス
-  admin_email: "info@example.com"
-  ## wp-config.phpに追記するWordPressの拡張設定の内容
-  extra_setting: |
-    define('WP_DEBUG', true);
-    define('WP_DEBUG_DISPLAY', true);
-    define('WP_POST_REVISIONS', false);
-    define('DISALLOW_FILE_EDIT', true);
-  # ## WordPressの設定内容
-  # options:
-  #   WPLANG: ja
-  #   timezone_string: Asia/Tokyo
-  # ## WordPressのパーマリンク設定の内容
-  # rewrite_structure: /%category%/%postname%/
-  # ## WordPressにインポートするデータの設定
-  # import:
-  #   file: https://raw.githubusercontent.com/jawordpressorg/theme-test-data-ja/master/wordpress-theme-test-date-ja.xml
-  #   authors: create
-  ## インストールするプラグイン
-  plugins:
-    - name: "ssh-sftp-updater-support"
-      activate: true
-    # - name: "wp-multibyte-patch"
-    #   activate: true
-    # - name: "classic-editor"
-    #   activate: false
-    # - name: "contact-form-7"
-    #   activate: true
-    # - name: "all-in-one-seo-pack"
-    #   activate: true
-    # - name: some-plugin-name
-    #   activate: true (optional)
-    #   version: 1.2.3 (optional)
-  ## インストールするテーマ
-  themes: []
-    # - name: some-theme-name
-    #   version: 1.2.3 (optional)
-    #   active: true (optional)
-  ## .htaccessに記述する内容
-  htaccess: |
-    <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /
-    RewriteRule ^index\.php$ - [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.php [L]
-    </IfModule>
-  # ------------------------------
-  # ボイラープレートを利用するか否か
-  # ※「app_type」に「wordpress_theme」が設定されている場合のみ評価されます
-  # ------------------------------
-  use_boilerplate: true
-  # ------------------------------
-  # ボイラープレート(_s)の設定
-  # ※「use_boilerplate」にtrueが設定されている場合のみ評価されます
-  # ------------------------------
-  boilerplate:
-    # テーマのスラッグ(必須)
-    slug: "your_theme_slug"
-    # テーマ名(必須)
-    name: "テーマ名"
-    # 作者 (任意)
-    author: ""
-    # 作者のURL (任意)
-    author_uri: ""
-    # テーマの説明 (任意)
-    description: ""
-    # Sassを利用するか否か
-    sassify: false
-    # WooCommerceのボイラープレートを生成するか否か
-    woocommerce: false
+## Webサーバー： apache / nginx
+web_server: apache
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
 # 「/var/www/html」以下のディレクトリを設定します(※「/」で始まる必要があります)
 # ※「app_type」が「default」に設定されており、Webシステムのドキュメントルートを、
 # 「/var/www/html」よりも下に割り当てたい場合に設定します。
 doc_root_suffix: ""
+## アプリケーション種別：default
+app_type: "default"
 vagrant:
   ## プロビジョナーに「ansible_local」を利用する場合は以下のコメントアウトを外す
   ## ※Ansibleがインストールできない/されていない人向け
@@ -103,7 +19,7 @@ vagrant:
   ## ベースのイメージ
   # box: wate/centos-7
   ## 仮想マシンのIPアドレス
-  # ipaddress: 192.168.33.10
+  # ipaddress: 192.168.56.10
   ## 仮想マシン名(初期値は「provision/host_vars/default.yml」の「domain」の値を利用)
   # vm_name: dev.local
   ## 仮想マシン名
@@ -115,22 +31,17 @@ vagrant:
   # プロビジョニング実行時のタグ指定(スキップするタグの指定)
   # provision_skip_tags:
   #   - role_nodejs
-  #   - role_ruby
+  #   - role_php
   # プロビジョニング実行時のタグ指定(実行するタグの指定)
   # provision_only_tags:
-  #   - role_mariadb
-  #   - role_apache
+  #   - role_database_server
+  #   - role_web_server
   #   - role_php
-  #   - wordpress
   ## ポートフォワーディングの設定
   forwarded_ports:
     - guest: 80
       host: 8080
     - guest: 3306
-    # - guest: 5432
-    # - guest: 22
-    #   host: 2240
-    #   id: ssh
   ## 共有ディレクトリの設定
   synced_folders: []
     # - local: ../source_1
@@ -145,19 +56,7 @@ vagrant:
 ## アプリケーションタイプ毎の共有ディレクトリの設定
 vagrant_synced_folder_types:
   default:
-    local: ./source
-    remote: /var/www/html
-  wordpress:
-    local: ./source
-    remote: /var/www/html
-  wordpress_plugin:
-    local: ./source
-    remote: /var/www/html/wp-content/plugins/source
-  wordpress_theme:
-    local: ./source
-    remote: /var/www/html/wp-content/themes/source
-  "ec-cube":
-    local: ./source
+    local: ./src
     remote: /var/www/html
 
 ## 共有ディレクトリのデフォルトのオプション設定

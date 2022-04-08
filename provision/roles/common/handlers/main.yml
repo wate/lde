@@ -7,3 +7,11 @@
   systemd:
     name: fail2ban
     state: restarted
+- name: restart rsyslog
+  systemd:
+    name: rsyslog
+    state: restarted
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted
