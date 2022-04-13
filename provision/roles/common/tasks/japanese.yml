@@ -1,7 +1,9 @@
 ---
 - name: install japanese environment package
   apt:
-    name: task-japanese
+    name:
+      - task-japanese
+      - fontforge
 - name: install font packages
   apt:
     name: "{{ common_japanese_fonts }}"
