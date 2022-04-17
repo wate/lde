@@ -16,3 +16,5 @@
           value: 'False'
         - name: host_key_checking
           value: 'False'
+        - name: stdout_callback
+          value: yaml

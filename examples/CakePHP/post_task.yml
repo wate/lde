@@ -1,0 +1,149 @@
+---
+- name: allow xdebug port
+  ufw:
+    rule: allow
+    port: "9000"
+    proto: tcp
+- name: remove default install index file
+  file:
+    path: /var/www/html/{{ item }}
+    state: absent
+  loop:
+    - index.html
+    - index.nginx-debian.html
+- block:
+    - name: check exists composer.json
+      stat:
+        path: /vagrant/src/composer.json
+      register: composer_json_result
+    - name: check exists vendor directory
+      stat:
+        path: /vagrant/src/vendor
+      register: vendor_dir_result
+    - name: remove temporary project directory
+      file:
+        path: /tmp/cake_project
+        state: absent
+    - name: create cakephp project
+      block:
+        - name: create temporary cakephp project
+          composer:
+            command: create-project
+            arguments: '"cakephp/app:^{{ cake_version | default(4) | string }}" cake_project'
+            no_dev: false
+            prefer_dist: true
+            working_dir: /tmp
+      when: not composer_json_result.stat.exists
+    - name: create cakephp project
+      block:
+        - name: create temporary project directory
+          file:
+            path: /tmp/cake_project
+            state: directory
+        - name: synchronize project files(shard directory => working directory)
+          synchronize:
+            src: /vagrant/src/
+            dest: /tmp/cake_project
+          delegate_to: "{{ inventory_hostname }}"
+        - name: install php dependency packages
+          composer:
+            command: install
+            no_dev: false
+            working_dir: /tmp/cake_project
+      when:
+        - composer_json_result.stat.exists
+        - not vendor_dir_result.stat.exists
+    - name: add php project dependency packages
+      composer:
+        command: require
+        arguments: "{{ item.name }}"
+        no_dev: "{{ item.dev | default(false) | ternary(false, true) }}"
+        working_dir: /tmp/cake_project
+      loop: "{{ cake_project_addtitinal_packages | default([]) }}"
+    - name: check exists tcpdf
+      stat:
+        path: /tmp/cake_project/vendor/tecnickcom/tcpdf
+      register: tcpdf_result
+    - name: henerate tcpdf font files
+      block:
+        - block:
+            - name: install fontforge
+              apt:
+                name: fontforge
+            - name: get ttc to ttf convert script
+              get_url:
+                url: https://gist.githubusercontent.com/lilydjwg/8877450/raw/e834ec4e08b1ce195fd38b157fcf62e565370a68/ttc2ttf
+                dest: /usr/local/bin/ttc2ttf
+                mode: '0755'
+          become: true
+        - name: create fonts directory
+          file:
+            path: /tmp/cake_project/resources/fonts
+            state: directory
+        - name: synchronize tcpdf original font files
+          synchronize:
+            src: /tmp/cake_project/vendor/tecnickcom/tcpdf/fonts/
+            dest: /tmp/cake_project/resources/fonts
+          delegate_to: "{{ inventory_hostname }}"
+        - name: find ttc files
+          find:
+            paths: /usr/share/fonts/opentype/noto
+            patterns:
+              - '*.ttc'
+          register: find_result
+        - name: set variables
+          set_fact:
+            ttc_files: "{{ find_result.files | map(attribute='path') | list }}"
+            ttf_output_dir: "{{ ttf_output_dir | default('/tmp/ttc2ttf') }}"
+        - name: create ttf file output directory
+          file:
+            path: "{{ ttf_output_dir }}"
+            state: directory
+            mode: '0750'
+        - name: convert ttc to ttf
+          command: /usr/bin/fontforge -lang=py -script /usr/local/bin/ttc2ttf {{ item }}
+          args:
+            chdir: "{{ ttf_output_dir }}"
+          register: fontforge_result
+          failed_when: fontforge_result['rc'] != -9
+          loop: "{{ ttc_files }}"
+        - name: find all ttf files
+          find:
+            paths:
+              - /usr/share/fonts/opentype/ipaexfont-gothic
+              - /usr/share/fonts/opentype/ipaexfont-gothic
+              - /usr/share/fonts/opentype/ipafont-gothic
+              - /usr/share/fonts/opentype/ipafont-mincho
+              - "{{ ttf_output_dir }}"
+            patterns:
+              - '*.ttf'
+          register: find_result
+        - name: generate font file
+          command: |
+            vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php \
+            --outpath /tmp/cake_project/resources/fonts \
+            --fonts "{{ item }}"
+          args:
+            chdir: /tmp/cake_project
+          loop: "{{ find_result.files | map(attribute='path') | list }}"
+        - name: dump all ttf files
+          debug:
+            msg: |
+              TCPDFのフォントディレクトリ示す以下の定数を設定
+              ```
+              define ('PDF_FONT_NAME_MAIN', 'NotoSansCJKjp');
+              define ('K_PATH_FONTS', ROOT . 'resources'. DS . 'fonts' . DS);
+              ```
+              その他TCPDFの定数に関しては、以下のURLを参照
+              https://github.com/tecnickcom/TCPDF/blob/main/tcpdf_autoconfig.php
+      when: tcpdf_result.stat.exists
+    - name: synchronize project files(working directory => shard directory)
+      synchronize:
+        src: /tmp/cake_project/
+        dest: /vagrant/src
+      delegate_to: "{{ inventory_hostname }}"
+    - name: remove temporary project directory
+      file:
+        path: /tmp/cake_project
+        state: absent
+  become: false

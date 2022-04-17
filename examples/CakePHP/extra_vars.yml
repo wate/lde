@@ -1,0 +1,9 @@
+cake_version: 4
+cake_project_addtitinal_packages:
+  - name: "josegonzalez/dotenv:^3.2"
+  - name: maiconpinto/cakephp-adminlte-theme
+  - name: phpoffice/phpspreadsheet
+  - name: tecnickcom/tcpdf
+  - name: markstory/asset_compress
+  - name: dereuromark/cakephp-ide-helper
+    dev: true
