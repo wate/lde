@@ -1,3 +1,4 @@
+domain: example.local
 cake_version: 4
 cake_project_addtitinal_packages:
   - name: "josegonzalez/dotenv:^3.2"
