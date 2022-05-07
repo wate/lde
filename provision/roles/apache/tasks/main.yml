@@ -1,4 +1,7 @@
 ---
+- name: install ufw
+  apt:
+    name: ufw
 - name: install apache
   apt:
     name: "{{ apache_packages }}"

@@ -139,4 +139,3 @@ apache_extra_cfg: |
   # <IfModule mod_ssl.c>
   #     SSLProtocol all -SSLv3
   # </IfModule>
-
