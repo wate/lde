@@ -24,7 +24,7 @@
       tags: role_phpredisadmin
   pre_tasks:
     - name: set pre task files
-      set_fact:
+      ansible.builtin.set_fact:
         pre_task_file: "{{ lookup('first_found', pre_task_files, errors='ignore') }}"
       vars:
         pre_task_files:
@@ -34,11 +34,11 @@
             - ..
             - .
     - name: execute pre task
-      include_tasks: "{{ pre_task_file }}"
+      ansible.builtin.include_tasks: "{{ pre_task_file }}"
       when: pre_task_file | length > 0
   tasks:
     - name: change owner on document root directory
-      file:
+      ansible.builtin.file:
         path: /var/www/html
         recurse: true
         follow: false
@@ -46,20 +46,20 @@
         group: vagrant
         state: directory
     - name: set service name variable
-      set_fact:
+      ansible.builtin.set_fact:
         web_server_service: "{{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
     - name: restart service
-      systemd:
+      ansible.builtin.systemd:
         name: "{{ item }}"
         state: restarted
       loop:
         - "{{ web_server_service }}"
         - mariadb
     - name: add/update user setting
-      import_tasks: my.yml
+      ansible.builtin.import_tasks: my.yml
   post_tasks:
     - name: set other post task files
-      set_fact:
+      ansible.builtin.set_fact:
         post_task_file: "{{ lookup('first_found', post_task_files, errors='ignore') }}"
         app_setup_file: "{{ lookup('first_found', app_setup_files, errors='ignore') }}"
       vars:
@@ -75,13 +75,12 @@
             - setup.yml
             - setup_app.yml
             - app_setup.yml
-            - deploy.yml
           paths:
             - ..
             - .
     - name: execute post task
-      include_tasks: "{{ post_task_file }}"
+      ansible.builtin.include_tasks: "{{ post_task_file }}"
       when: post_task_file | length > 0
     - name: setup application
-      include_tasks: "{{ app_setup_file }}"
+      ansible.builtin.include_tasks: "{{ app_setup_file }}"
       when: app_setup_file | length > 0
