@@ -1,22 +1,22 @@
 ---
 - name: allow xdebug port
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "9000"
     proto: tcp
 - name: remove default install index file
-  file:
+  ansible.builtin.file:
     path: /var/www/html/{{ item }}
     state: absent
   loop:
     - index.html
     - index.nginx-debian.html
 - name: check exists bash completion setting directory
-  stat:
+  ansible.builtin.stat:
     path: /etc/bash_completion.d
   register: bash_completion_dir_result
 - name: create bash completion setting
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/bash_completion.d/cake
     create: true
     block: |
@@ -38,7 +38,6 @@
               else
                   opts=$(${cake} Completion options "${COMP_WORDS[1]}" "${COMP_WORDS[2]}")
               fi
-
               COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
               return 0
           fi
@@ -67,7 +66,7 @@
       complete -F _cake cake bin/cake
   when: bash_completion_dir_result.stat.exists
 - name: create CakePHP tomprary directory
-  file:
+  ansible.builtin.file:
     path: /var/log/cake/{{ item }}
     state: directory
     mode: "0755"
@@ -77,22 +76,25 @@
     - tmp/tests
     - logs
 - block:
+    - name: set variable
+      ansible.builtin.set_fact:
+        tmp_project_dir: /tmp/cake_project
     - name: remove dummy file
-      file:
+      ansible.builtin.file:
         path: /vagrant/src/.gitkeep
         state: absent
     - name: check exists composer.json
-      stat:
+      ansible.builtin.stat:
         path: /vagrant/src/composer.json
       register: composer_json_result
     - name: remove temporary project directory
-      file:
-        path: /tmp/cake_project
+      ansible.builtin.file:
+        path: "{{ tmp_project_dir }}"
         state: absent
     - name: create cakephp project
       block:
         - name: create temporary cakephp project
-          composer:
+          community.general.composer:
             command: create-project
             arguments: '"cakephp/app:^{{ cake_version | default(4) | string }}" cake_project'
             no_dev: false
@@ -102,78 +104,161 @@
     - name: create cakephp project
       block:
         - name: create temporary project directory
-          file:
-            path: /tmp/cake_project
+          ansible.builtin.file:
+            path: "{{ tmp_project_dir }}"
             state: directory
         - name: synchronize project files(shard directory => working directory)
-          synchronize:
+          ansible.posix.synchronize:
             src: /vagrant/src/
-            dest: /tmp/cake_project
+            dest: "{{ tmp_project_dir }}"
           delegate_to: "{{ inventory_hostname }}"
         - name: install php dependency packages
-          composer:
+          community.general.composer:
             command: install
             no_dev: false
-            working_dir: /tmp/cake_project
+            working_dir: "{{ tmp_project_dir }}"
       when: composer_json_result.stat.exists
     - name: add php project dependency packages
-      composer:
+      community.general.composer:
         command: require
         arguments: "{{ item.name }}"
         no_dev: "{{ item.dev | default(false) | ternary(false, true) }}"
-        working_dir: /tmp/cake_project
+        working_dir: "{{ tmp_project_dir }}"
       loop: "{{ cake_project_addtitinal_packages | default([]) }}"
+    - name: check exists Cakelte
+      ansible.builtin.stat:
+        path: "{{ tmp_project_dir }}/vendor/arodu/cakelte"
+      register: cakelte_result
+    - name: set Cakelte setting
+      block:
+        - name: load plugin setting
+          ansible.builtin.lineinfile:
+            path: "{{ tmp_project_dir }}/src/Application.php"
+            regexp: "this->addPlugin\\('CakeLte'\\)"
+            line: "        $this->addPlugin('CakeLte');"
+            insertafter: "^\\s+parent::bootstrap\\(\\);"
+        - name: load CakeLteTrait(1)
+          ansible.builtin.lineinfile:
+            path: "{{ tmp_project_dir }}/src/View/AppView.php"
+            line: 'use CakeLte\View\CakeLteTrait;'
+            insertafter: '^use Cake\\View\\View;'
+        - name: load CakeLteTrait(2)
+          ansible.builtin.lineinfile:
+            path: "{{ tmp_project_dir }}/src/View/AppView.php"
+            line: '    use CakeLteTrait;'
+            insertafter: "^\\{"
+        - name: change default layout
+          ansible.builtin.lineinfile:
+            path: "{{ tmp_project_dir }}/src/View/AppView.php"
+            line: "    public $layout = 'CakeLte.default';"
+            insertafter: "^\\s+use CakeLteTrait;"
+        - name: add parent::initialize() statement
+          ansible.builtin.lineinfile:
+            path: "{{ tmp_project_dir }}/src/View/AppView.php"
+            line: "        parent::initialize();"
+            insertafter: "^\\s+{"
+        - name: add CakeLte::initializeCakeLte() statement
+          ansible.builtin.lineinfile:
+            path: "{{ tmp_project_dir }}/src/View/AppView.php"
+            line: "        $this->initializeCakeLte($options = []);"
+            insertafter: "^\\s+parent::initialize\\(\\);"
+        - name: check exists plugin template directory
+          ansible.builtin.stat:
+            path: "{{ tmp_project_dir }}/templates/plugin/CakeLte"
+          register: plugin_template_dir_result
+        - block:
+            - name: create plugin template directory
+              ansible.builtin.file:
+                path: "{{ tmp_project_dir }}/templates/plugin/CakeLte/{{ item }}"
+                state: directory
+              loop:
+                - layout
+                - element/content
+                - element/header
+                - element/footer
+                - element/sidebar
+                - element/aside
+            - name: copy CakeLte template files
+              ansible.builtin.copy:
+                src: "{{ tmp_project_dir }}/vendor/arodu/cakelte/templates/{{ item }}"
+                dest: "{{ tmp_project_dir }}/templates/plugin/CakeLte/{{ item }}"
+                remote_src: true
+              loop:
+                # Layouts
+                - layout/default.php
+                - layout/login.php
+                - layout/top-nav.php
+                # Content
+                - element/content/header.php
+                # Header navbar
+                - element/header/main.php
+                - element/header/menu.php
+                - element/header/messages.php
+                - element/header/notifications.php
+                - element/header/search-default.php
+                - element/header/search-block.php
+                # Footer
+                - element/footer/main.php
+                # Left sidebar
+                - element/sidebar/main.php
+                - element/sidebar/menu.php
+                - element/sidebar/search.php
+                - element/sidebar/user.php
+                # Right sidebar
+                - element/aside/main.php
+          when: not plugin_template_dir_result.stat.exists
+      when: cakelte_result.stat.exists
     - name: check exists tcpdf
-      stat:
-        path: /tmp/cake_project/vendor/tecnickcom/tcpdf
+      ansible.builtin.stat:
+        path: "{{ tmp_project_dir }}/vendor/tecnickcom/tcpdf"
       register: tcpdf_result
     - name: generate tcpdf font files
       block:
         - name: create fonts directory
-          file:
-            path: /tmp/cake_project/resources/fonts
+          ansible.builtin.file:
+            path: "{{ tmp_project_dir }}/resources/fonts"
             state: directory
           register: resource_font_dir_result
         - block:
             - block:
                 - name: install fontforge
-                  apt:
+                  ansible.builtin.apt:
                     name: fontforge
                 - name: get ttc to ttf convert script
-                  get_url:
+                  ansible.builtin.get_url:
                     url: https://gist.githubusercontent.com/lilydjwg/8877450/raw/e834ec4e08b1ce195fd38b157fcf62e565370a68/ttc2ttf
                     dest: /usr/local/bin/ttc2ttf
                     mode: '0755'
               become: true
             - name: synchronize tcpdf original font files
-              synchronize:
-                src: /tmp/cake_project/vendor/tecnickcom/tcpdf/fonts/
-                dest: /tmp/cake_project/resources/fonts
+              ansible.posix.synchronize:
+                src: "{{ tmp_project_dir }}/vendor/tecnickcom/tcpdf/fonts/"
+                dest: "{{ tmp_project_dir }}/resources/fonts"
               delegate_to: "{{ inventory_hostname }}"
             - name: find ttc files
-              find:
+              ansible.builtin.find:
                 paths: /usr/share/fonts/opentype/noto
                 patterns:
                   - '*.ttc'
               register: find_result
             - name: set variables
-              set_fact:
+              ansible.builtin.set_fact:
                 ttc_files: "{{ find_result.files | map(attribute='path') | list }}"
                 ttf_output_dir: "{{ ttf_output_dir | default('/tmp/fonts') }}"
             - name: create ttf file output directory
-              file:
+              ansible.builtin.file:
                 path: "{{ ttf_output_dir }}"
                 state: directory
                 mode: '0750'
             - name: convert ttc to ttf
-              command: /usr/bin/fontforge -lang=py -script /usr/local/bin/ttc2ttf {{ item }}
+              ansible.builtin.command: /usr/bin/fontforge -lang=py -script /usr/local/bin/ttc2ttf {{ item }}
               args:
                 chdir: "{{ ttf_output_dir }}"
               register: fontforge_result
               failed_when: fontforge_result['rc'] != -9
               loop: "{{ ttc_files }}"
             - name: find all ttf files
-              find:
+              ansible.builtin.find:
                 paths:
                   - /usr/share/fonts/opentype/ipaexfont-gothic
                   - /usr/share/fonts/opentype/ipaexfont-gothic
@@ -185,40 +270,37 @@
                   - '*.ttf'
               register: find_result
             - name: generate tcpdf font file
-              command: |
+              ansible.builtin.command:
                 vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php \
-                --outpath /tmp/cake_project/resources/fonts \
+                --outpath {{ tmp_project_dir }}/resources/fonts \
                 --fonts "{{ item }}"
               args:
-                chdir: /tmp/cake_project
+                chdir: "{{ tmp_project_dir }}"
               loop: "{{ find_result.files | map(attribute='path') | list }}"
+            - name: add TCPDF setting
+              ansible.builtin.blockinfile:
+                path: "{{ tmp_project_dir }}/config/paths.php"
+                marker: "// {mark} ANSIBLE MANAGED BLOCK"
+                content: |
+                  define ('K_PATH_FONTS', ROOT . 'resources'. DS . 'fonts' . DS);
+                  define ('PDF_FONT_NAME_MAIN', 'NotoSansCJKjp');
           when: resource_font_dir_result is changed
-        - name: display TCPDF setting
-          debug:
-            msg: |
-              TCPDFのフォントディレクトリ示す以下の定数を設定
-              ```
-              define ('PDF_FONT_NAME_MAIN', 'NotoSansCJKjp');
-              define ('K_PATH_FONTS', ROOT . 'resources'. DS . 'fonts' . DS);
-              ```
-              その他TCPDFの定数に関しては、以下のURLを参照
-              https://github.com/tecnickcom/TCPDF/blob/main/tcpdf_autoconfig.php
       when: tcpdf_result.stat.exists
     - name: synchronize project files(working directory => shard directory)
-      synchronize:
-        src: /tmp/cake_project/
+      ansible.posix.synchronize:
+        src: "{{ tmp_project_dir }}/"
         dest: /vagrant/src
       delegate_to: "{{ inventory_hostname }}"
     - name: remove temporary project directory
-      file:
-        path: /tmp/cake_project
+      ansible.builtin.file:
+        path: "{{ tmp_project_dir }}"
         state: absent
     - name: regenerate dummy file
-      file:
+      ansible.builtin.file:
         path: /vagrant/src/.gitkeep
         state: touch
     - name: set variables
-      set_fact:
+      ansible.builtin.set_fact:
         dot_envrc_value: |
           layout php
           layout node
@@ -230,26 +312,26 @@
           export DATABASE_URL="mysql://app_dev:app_dev_P455w0rd@localhost/app_dev?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
           export DATABASE_TEST_URL="mysql://app_test:app_test_P455w0rd@localhost/app_test?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
     - name: create direnv setting
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: /vagrant/src/.envrc
         create: true
         block: "{{ dot_envrc_value }}"
     - name: display direnv setting
-      debug:
+      ansible.builtin.debug:
         msg: |
           自動生成したdirenvの設定(.envrc)は以下の通りです
           ```
           {{ dot_envrc_value -}}
           ```
     - name: create CakePHP setting
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: /vagrant/src/config/.env
         create: true
         block: "{{ dot_env_value }}"
     - name: display direnv setting
-      debug:
+      ansible.builtin.debug:
         msg: |
-          自動生成したPcakePHPの設定(config/.env)は以下の通りです
+          自動生成したCakePHPの設定(config/.env)は以下の通りです
           ```
           {{ dot_env_value -}}
           ```
