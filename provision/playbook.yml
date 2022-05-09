@@ -61,7 +61,6 @@
     - name: set other post task files
       ansible.builtin.set_fact:
         post_task_file: "{{ lookup('first_found', post_task_files, errors='ignore') }}"
-        app_setup_file: "{{ lookup('first_found', app_setup_files, errors='ignore') }}"
       vars:
         post_task_files:
           files:
@@ -69,18 +68,11 @@
           paths:
             - ..
             - .
-        app_setup_files:
-          files:
-            - app.yml
-            - setup.yml
-            - setup_app.yml
-            - app_setup.yml
-          paths:
-            - ..
-            - .
     - name: execute post task
-      ansible.builtin.include_tasks: "{{ post_task_file }}"
+      block:
+        - name: set variable for post task file base directory
+          ansible.builtin.set_fact:
+            post_task_base_dir: "{{ post_task_file | dirname }}"
+        - name: execute post task
+          ansible.builtin.include_tasks: "{{ post_task_file }}"
       when: post_task_file | length > 0
-    - name: setup application
-      ansible.builtin.include_tasks: "{{ app_setup_file }}"
-      when: app_setup_file | length > 0
