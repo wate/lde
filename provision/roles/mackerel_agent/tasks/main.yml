@@ -1,0 +1,13 @@
+---
+- name: add repository
+  ansible.builtin.import_tasks: repository.yml
+  tags: repository
+- name: add repository
+  ansible.builtin.import_tasks: package.yml
+  tags: package
+- name: create/update setting
+  ansible.builtin.import_tasks: setting.yml
+  tags: setting
+- name: setup service
+  ansible.builtin.import_tasks: service.yml
+  tags: service

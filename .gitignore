@@ -9,3 +9,7 @@
 src/
 wiki/
 provision/roles/*/meta/.galaxy_install_info
+
+### direnv ###
+.envrc
+.env

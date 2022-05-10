@@ -10,7 +10,7 @@
 # - 7.4
 # - 8.0
 # --------------
-php_version: 7.4
+php_version: "7.4"
 
 # --------------
 # インストールするPHPのパッケージ
@@ -37,9 +37,6 @@ php_packages:
   - php{{ php_version }}-apcu
   - php{{ php_version }}-redis
   - php{{ php_version }}-fpm
-
-dehydrated_cfg:
-  CA: https://acme-staging-v02.api.letsencrypt.org/directory
 
 # --------------
 # php.iniの初期値を上書きする項目
@@ -302,6 +299,13 @@ nginx_vhosts:
         match_type: "~"
         content: |
           deny all;
+  - name: status
+    server_name: localhost
+    listen: 8080
+    locations:
+      - pattern: "/nginx_status"
+        content: |
+          stub_status on;
 
 # --------------
 # MariaDBの設定
@@ -323,3 +327,8 @@ mariadb_mysqld_cfg:
   slow_query_log_file: /var/log/mariadb/slow_query.log
   general_log: false
   general_log_file: /var/log/mariadb/general.log
+
+dehydrated_cfg:
+  CA: https://acme-staging-v02.api.letsencrypt.org/directory
+
+mackerel_agent_active_and_enabled_on_system_startup: false

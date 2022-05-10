@@ -1,0 +1,85 @@
+- name: check exists CakeLte
+  ansible.builtin.stat:
+    path: "{{ project_dir }}/vendor/arodu/cakelte"
+  register: package_result
+- block:
+    - name: load plugin setting
+      ansible.builtin.lineinfile:
+        path: "{{ project_dir }}/src/Application.php"
+        regexp: "this->addPlugin\\('CakeLte'\\)"
+        line: "        $this->addPlugin('CakeLte');"
+        insertafter: "^\\s+parent::bootstrap\\(\\);"
+    - name: load CakeLteTrait(1)
+      ansible.builtin.lineinfile:
+        path: "{{ project_dir }}/src/View/AppView.php"
+        line: 'use CakeLte\View\CakeLteTrait;'
+        insertafter: '^use Cake\\View\\View;'
+    - name: load CakeLteTrait(2)
+      ansible.builtin.lineinfile:
+        path: "{{ project_dir }}/src/View/AppView.php"
+        line: '    use CakeLteTrait;'
+        insertafter: "^\\{"
+    - name: change default layout
+      ansible.builtin.lineinfile:
+        path: "{{ project_dir }}/src/View/AppView.php"
+        line: "    public $layout = 'CakeLte.default';"
+        insertafter: "^\\s+use CakeLteTrait;"
+    - name: add parent::initialize() statement
+      ansible.builtin.lineinfile:
+        path: "{{ project_dir }}/src/View/AppView.php"
+        line: "        parent::initialize();"
+        insertafter: "^\\s+{"
+    - name: add CakeLte::initializeCakeLte() statement
+      ansible.builtin.lineinfile:
+        path: "{{ project_dir }}/src/View/AppView.php"
+        regexp: "this->initializeCakeLte"
+        line: "        $this->initializeCakeLte([]);"
+        insertafter: "^\\s+parent::initialize\\(\\);"
+    - name: check exists plugin template directory
+      ansible.builtin.stat:
+        path: "{{ project_dir }}/templates/plugin/CakeLte"
+      register: plugin_template_dir_result
+    - block:
+        - name: create plugin template directory
+          ansible.builtin.file:
+            path: "{{ project_dir }}/templates/plugin/CakeLte/{{ item }}"
+            state: directory
+            mode: "0755"
+          loop:
+            - layout
+            - element/content
+            - element/header
+            - element/footer
+            - element/sidebar
+            - element/aside
+        - name: copy CakeLte template files
+          ansible.builtin.copy:
+            src: "{{ project_dir }}/vendor/arodu/cakelte/templates/{{ item }}"
+            dest: "{{ project_dir }}/templates/plugin/CakeLte/{{ item }}"
+            mode: "0644"
+            remote_src: true
+          loop:
+            # Layouts
+            - layout/default.php
+            - layout/login.php
+            - layout/top-nav.php
+            # Content
+            - element/content/header.php
+            # Header navbar
+            - element/header/main.php
+            - element/header/menu.php
+            - element/header/messages.php
+            - element/header/notifications.php
+            - element/header/search-default.php
+            - element/header/search-block.php
+            # Footer
+            - element/footer/main.php
+            # Left sidebar
+            - element/sidebar/main.php
+            - element/sidebar/menu.php
+            - element/sidebar/search.php
+            - element/sidebar/user.php
+            # Right sidebar
+            - element/aside/main.php
+      when: not plugin_template_dir_result.stat.exists
+  when: package_result.stat.exists

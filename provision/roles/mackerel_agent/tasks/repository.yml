@@ -1,0 +1,17 @@
+---
+- name: install dependency packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+- name: add apt signing key
+  apt_key:
+    url: https://mackerel.io/file/cert/GPG-KEY-mackerel-v2
+    state: present
+- name: Add repository
+  apt_repository:
+    filename: mackerel
+    repo: deb [arch=amd64,arm64] http://apt.mackerel.io/v2/ mackerel contrib
+    state: present
