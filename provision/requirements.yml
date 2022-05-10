@@ -22,6 +22,9 @@
 - src: https://github.com/wate/ansible-role-redis
   version: develop
   name: redis
+- src: https://github.com/wate/ansible-role-mackerel_agent
+  version: develop
+  name: mackerel_agent
 - src: https://github.com/wate/ansible-role-tools
   version: develop
   name: tools

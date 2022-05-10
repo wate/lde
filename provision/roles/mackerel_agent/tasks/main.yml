@@ -1,0 +1,29 @@
+---
+- name: add repository
+  import_tasks: repository.yml
+  tags: repository
+- name: install packages
+  apt:
+    name: "{{ mackerel_agent_packages }}"
+- name: set host id
+  template:
+    src: id.j2
+    dest: /var/lib/mackerel-agent/id
+    mode: "0644"
+  when: mackerel_agent_host_id is defined
+  notify: restart mackerel-agent
+- name: set api key
+  lineinfile:
+    path: /etc/mackerel-agent/mackerel-agent.conf
+    regexp: '^#? *apikey = .+'
+    line: 'apikey = "{{ mackerel_agent_api_key }}"'
+- name: add extra setting
+  blockinfile:
+    path: /etc/mackerel-agent/mackerel-agent.conf
+    block: "{{ mackerel_agent_extra_setting }}"
+  notify: restart mackerel-agent
+- name: mackerel-agent is active and enabled on system startup service
+  systemd:
+    name: mackerel-agent
+    enabled: "{{ mackerel_agent_active_and_enabled_on_system_startup }}"
+    state: "{{ mackerel_agent_active_and_enabled_on_system_startup | ternary('started', 'stopped') }}"
