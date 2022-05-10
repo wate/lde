@@ -1,0 +1,6 @@
+---
+- name: mackerel-agent is active and enabled on system startup service
+  ansible.builtin.systemd:
+    name: mackerel-agent
+    enabled: "{{ mackerel_agent_active_and_enabled_on_system_startup }}"
+    state: "{{ mackerel_agent_active_and_enabled_on_system_startup | ternary('started', 'stopped') }}"

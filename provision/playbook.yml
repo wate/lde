@@ -4,6 +4,8 @@
   roles:
     - name: common
       tags: role_common
+    - name: mackerel_agent
+      tags: role_mackerel_agent
     - name: nodejs
       tags: role_nodejs
     - name: mariadb
