@@ -1,6 +1,6 @@
 ---
 - name: allow xdebug port
-  community.general.ufw:
+  ufw:
     rule: allow
     port: "9000"
     proto: tcp
