@@ -1,14 +1,14 @@
 ---
 - name: install redis
-  apt:
+  ansible.builtin.apt:
     name: redis
 - name: create redis setting file
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "{{ redis_config_dir }}/redis.conf"
     block: "{{ redis_extra_cfg  }}"
   notify: restart redis
 - name: redis is active and enabled on system startup
-  systemd:
+  ansible.builtin.systemd:
     name: redis-server
     state: started
     enabled: true

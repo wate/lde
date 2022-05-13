@@ -1,0 +1,4 @@
+---
+- name: install apache
+  ansible.builtin.apt:
+    name: "{{ apache_packages }}"

@@ -1,0 +1,7 @@
+---
+- name: install php packages
+  ansible.builtin.apt:
+    name: "{{ php_packages }}"
+- name: install composer
+  ansible.builtin.apt:
+    name: composer

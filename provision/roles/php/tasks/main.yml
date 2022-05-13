@@ -1,43 +1,13 @@
 ---
 - name: add repository
-  import_tasks: repository.yml
+  ansible.builtin.import_tasks: repository.yml
   tags: repository
-- name: install php packages
-  apt:
-    name: "{{ php_packages }}"
-- name: install composer
-  apt:
-    name: composer
-- name: create addtitional php setting file(cli)
-  blockinfile:
-    path: "{{ php_cli_conf_dir }}/99-custom.ini"
-    create: true
-    mode: "0644"
-    block: "{{ php_cli_cfg }}"
-- name: check config directory(apache)
-  stat:
-    path: "{{ php_fpm_conf_dir }}"
-  register: stat_result
-- name: create addtitional php setting file(fpm)
-  blockinfile:
-    path: "{{ php_fpm_conf_dir }}/99-custom.ini"
-    create: true
-    mode: "0644"
-    block: "{{ php_fpm_cfg }}"
-- name: check config directory(apache)
-  stat:
-    path: "{{ php_apache_conf_dir }}"
-  register: stat_result
-- name: create addtitional php setting file(apache)
-  blockinfile:
-    path: "{{ php_apache_conf_dir }}/99-custom.ini"
-    create: true
-    mode: "0644"
-    block: "{{ php_apache_cfg }}"
-  when: stat_result.stat.exists
-- name: php-fpm is active and enabled on system startup
-  systemd:
-    name: php{{ php_version | string }}-fpm
-    state: started
-    enabled: true
-  when: "'php' + (php_version | string) + '-fpm' in php_packages"
+- name: install packages
+  ansible.builtin.import_tasks: package.yml
+  tags: package
+- name: create/update setting
+  ansible.builtin.import_tasks: setting.yml
+  tags: setting
+- name: setup service
+  ansible.builtin.import_tasks: service.yml
+  tags: service

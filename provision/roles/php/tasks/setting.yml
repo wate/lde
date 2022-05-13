@@ -1,0 +1,28 @@
+---
+- name: create addtitional php setting file(cli)
+  ansible.builtin.blockinfile:
+    path: "{{ php_cli_conf_dir }}/99-custom.ini"
+    create: true
+    mode: "0644"
+    block: "{{ php_cli_cfg }}"
+- name: check config directory(apache)
+  ansible.builtin.stat:
+    path: "{{ php_fpm_conf_dir }}"
+  register: stat_result
+- name: create addtitional php setting file(fpm)
+  ansible.builtin.blockinfile:
+    path: "{{ php_fpm_conf_dir }}/99-custom.ini"
+    create: true
+    mode: "0644"
+    block: "{{ php_fpm_cfg }}"
+- name: check config directory(apache)
+  ansible.builtin.stat:
+    path: "{{ php_apache_conf_dir }}"
+  register: stat_result
+- name: create addtitional php setting file(apache)
+  ansible.builtin.blockinfile:
+    path: "{{ php_apache_conf_dir }}/99-custom.ini"
+    create: true
+    mode: "0644"
+    block: "{{ php_apache_cfg }}"
+  when: stat_result.stat.exists
