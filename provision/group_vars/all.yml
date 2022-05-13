@@ -209,12 +209,12 @@ nginx_vhosts:
     locations:
       - pattern: "/"
         content:
-          try_files $uri $uri/ =404;
+          try_files $uri $uri/ /index.php?$args;
       - pattern: "\\.php$"
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+          fastcgi_pass unix:/run/php/php-fpm.sock;
       - pattern: "/\\.ht"
         match_type: "~"
         content: |
@@ -247,7 +247,7 @@ nginx_vhosts:
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+          fastcgi_pass unix:/run/php/php-fpm.sock;
       - pattern: "/\\.ht"
         match_type: "~"
         content: |
@@ -294,7 +294,7 @@ nginx_vhosts:
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+          fastcgi_pass unix:/run/php/php-fpm.sock;
       - pattern: "/\\.ht"
         match_type: "~"
         content: |
