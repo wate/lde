@@ -336,11 +336,19 @@ dehydrated_cfg:
   CA: https://acme-staging-v02.api.letsencrypt.org/directory
   CHALLENGETYPE: dns-01
 
-lexicon_provider: ""
-lexicon_provider_username: ""
-lexicon_provider_password: ""
-lexicon_provider_token: ""
+lexicon_provider: "{{ lookup('env', 'LEXICON_PROVIDER') }}"
+lexicon_provider_username: "{{ lookup('env', lexicon_provider.upper() + '_USERNAME') }}"
+lexicon_provider_password: "{{ lookup('env', lexicon_provider.upper() + '_PASSWORD') }}"
+lexicon_provider_token: "{{ lookup('env', lexicon_provider.upper() + '_TOKEN') }}"
 lexicon_provider_update_delay: 30
+
+lets_encrypt_domains:
+  - name: "{{ domain }}"
+    domains:
+      - "{{ domain }}"
+      - "*.{{ domain }}"
+
+dehydrated_domains: "{{ lets_encrypt_domains if lexicon_provider is defined and lexicon_provider | length > 0 else []  }}"
 
 dehydrated_hook_initialize: |
   {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
@@ -367,6 +375,7 @@ dehydrated_hook_deploy_challenge: |
     local chain=($@)
     for ((i=0; i < $#; i+=3)); do
         local DOMAIN="${chain[i]}" TOKEN_FILENAME="${chain[i+1]}" TOKEN_VALUE="${chain[i+2]}"
+        echo "deploy_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
         lexicon {{ lexicon_provider }} create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
     done
     local DELAY_COUNTDOWN=$PROVIDER_UPDATE_DELAY
@@ -429,3 +438,4 @@ mackerel_agent_extra_setting: |
   {% endif %}
 
 mackerel_agent_active_and_enabled_on_system_startup: "{{ mackerel_agent_api_key | length > 0 | ternary(true, false) }}"
+
