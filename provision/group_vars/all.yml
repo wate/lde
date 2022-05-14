@@ -332,10 +332,6 @@ mariadb_mysqld_cfg:
 # --------------------------
 # dehydrated
 # --------------------------
-dehydrated_cfg:
-  CA: https://acme-staging-v02.api.letsencrypt.org/directory
-  CHALLENGETYPE: dns-01
-
 lexicon_provider: "{{ lookup('env', 'LEXICON_PROVIDER') }}"
 lexicon_provider_username: "{{ lookup('env', lexicon_provider.upper() + '_USERNAME') }}"
 lexicon_provider_password: "{{ lookup('env', lexicon_provider.upper() + '_PASSWORD') }}"
@@ -347,6 +343,10 @@ lets_encrypt_domains:
     domains:
       - "{{ domain }}"
       - "*.{{ domain }}"
+
+dehydrated_cfg:
+  CA: https://acme-staging-v02.api.letsencrypt.org/directory
+  CHALLENGETYPE: "{{ 'dns-01' if lexicon_provider is defined and lexicon_provider | length > 0 else 'http-01'  }}"
 
 dehydrated_domains: "{{ lets_encrypt_domains if lexicon_provider is defined and lexicon_provider | length > 0 else []  }}"
 
