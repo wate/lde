@@ -206,6 +206,8 @@ nginx_vhosts:
       - index.php
       - index.html
     client_max_body_size: 20M
+    include:
+      - snippets/letsencrypt_dehydrated.conf
     locations:
       - pattern: "/"
         content:
@@ -327,8 +329,103 @@ mariadb_mysqld_cfg:
   slow_query_log_file: /var/log/mariadb/slow_query.log
   general_log: false
   general_log_file: /var/log/mariadb/general.log
-
+# --------------------------
+# dehydrated
+# --------------------------
 dehydrated_cfg:
   CA: https://acme-staging-v02.api.letsencrypt.org/directory
+  CHALLENGETYPE: dns-01
 
-mackerel_agent_active_and_enabled_on_system_startup: false
+lexicon_provider: ""
+lexicon_provider_username: ""
+lexicon_provider_password: ""
+lexicon_provider_token: ""
+lexicon_provider_update_delay: 30
+
+dehydrated_hook_initialize: |
+  {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
+  set -e
+  set -u
+  set -o pipefail
+  {% if lexicon_provider_username is defined and lexicon_provider_username | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_USERNAME="{{ lexicon_provider_username }}"
+  {% endif %}
+  {% if lexicon_provider_password is defined and lexicon_provider_password | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_PASSWORD="{{ lexicon_provider_password }}"
+  {% endif %}
+  {% if lexicon_provider_token is defined and lexicon_provider_token | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_TOKEN="{{ lexicon_provider_token }}"
+  {% endif %}
+  export PROVIDER_UPDATE_DELAY={{ lexicon_provider_update_delay | default('30') }}
+  {% endif %}
+
+## --------
+## @see https://github.com/AnalogJ/lexicon/blob/master/examples/dehydrated.default.sh#L11
+## --------
+dehydrated_hook_deploy_challenge: |
+  {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
+    local chain=($@)
+    for ((i=0; i < $#; i+=3)); do
+        local DOMAIN="${chain[i]}" TOKEN_FILENAME="${chain[i+1]}" TOKEN_VALUE="${chain[i+2]}"
+        lexicon {{ lexicon_provider }} create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+    done
+    local DELAY_COUNTDOWN=$PROVIDER_UPDATE_DELAY
+    while [ $DELAY_COUNTDOWN -gt 0 ]; do
+        echo -ne "${DELAY_COUNTDOWN}\033[0K\r"
+        sleep 1
+        : $((DELAY_COUNTDOWN--))
+    done
+  {% endif %}
+
+## --------
+## @see https://github.com/AnalogJ/lexicon/blob/master/examples/dehydrated.default.sh#L11
+## --------
+dehydrated_hook_clean_challenge: |
+  {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
+    local chain=($@)
+    for ((i=0; i < $#; i+=3)); do
+        local DOMAIN="${chain[i]}" TOKEN_FILENAME="${chain[i+1]}" TOKEN_VALUE="${chain[i+2]}"
+        echo "clean_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
+        lexicon {{ lexicon_provider }} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+    done
+  {% endif %}
+
+dehydrated_hook_deploy_cert: |
+  systemctl restart {{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}
+
+# --------------------------
+# Mackerel
+# --------------------------
+## データベース設定
+mackerel_db_user: "{{ lookup('env', 'MACKEREL_DB_USER') | default('mackerel', true) }}"
+mackerel_db_password: "{{ lookup('env', 'MACKEREL_DB_PASSWORD') | default('mackerel_password', true) }}"
+
+mariadb_users:
+  - name: "{{ mackerel_db_user }}"
+    password: "{{ mackerel_db_password }}"
+    hosts:
+      - "127.0.0.1"
+      - "::1"
+      - localhost
+    privs:
+      - "*.*:SUPER"
+
+mackerel_agent_api_key: "{{ lookup('env', 'MACKEREL_API_KEY') }}"
+mackerel_agent_host_id: "{{ lookup('env', 'MACKEREL_HOST_ID') }}"
+mackerel_agent_extra_setting: |
+  roles = [ "test:web", "test:db" ]
+  [plugin.metrics.linux]
+  command = "/usr/bin/mackerel-plugin-linux"
+  [plugin.metrics.mysql]
+  command = "/usr/bin/mackerel-plugin-mysql -username={{ mackerel_db_user }} -password={{ mackerel_db_password }}"
+  [plugin.metrics.mailq]
+  command = "/usr/bin/mackerel-plugin-mailq -M postfix"
+  {% if (web_server | default('apache')) == 'apache' -%}
+  [plugin.metrics.apache]
+  command = "/usr/bin/mackerel-plugin-apache"
+  {% else %}
+  [plugin.metrics.nginx]
+  command = "/usr/bin/mackerel-plugin-nginx"
+  {% endif %}
+
+mackerel_agent_active_and_enabled_on_system_startup: "{{ mackerel_agent_api_key | length > 0 | ternary(true, false) }}"
