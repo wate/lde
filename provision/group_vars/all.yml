@@ -112,6 +112,9 @@ lexicon_provider_token: "{{ lookup('env', lexicon_provider.upper() + '_TOKEN') }
 lexicon_provider_secret: "{{ lookup('env', lexicon_provider.upper() + '_SECRET') }}"
 lexicon_provider_update_delay: 30
 
+letsencrypt_enable_dns_auth: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) }}"
+letsencrypt_use_staging: true
+
 # --------------
 # Apacheのバーチャルホストの設定
 # --------------
@@ -238,7 +241,7 @@ nginx_vhosts:
         match_type: "~"
         content: |
           deny all;
-    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   - name: mailhog
     server_name: mailhog.{{ domain }}
@@ -249,7 +252,7 @@ nginx_vhosts:
         content: |
           proxy_pass http://localhost:8025/;
           include proxy_params;
-    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   - name: phpMyAdmin
     server_name: db.{{ domain }}
@@ -297,7 +300,7 @@ nginx_vhosts:
         match_type: "^~"
         content: |
           deny all;
-    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # phpRedisAdmin用のバーチャルホスト ( http://cache.<ドメイン>/ )
   - name: phpRedisAdmin
     server_name: cache.{{ domain }}
@@ -321,7 +324,7 @@ nginx_vhosts:
         match_type: "~"
         content: |
           deny all;
-    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   - name: status
     server_name: localhost
     listen: 8080
@@ -361,12 +364,12 @@ lets_encrypt_domains:
       - "*.{{ domain }}"
 
 dehydrated_cfg:
-  CA: https://acme{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary('', '-staging') }}-v02.api.letsencrypt.org/directory
-  CHALLENGETYPE: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary('dns-01', 'http-01') }}"
+  CA: https://acme{{ letsencrypt_use_staging | ternary('-staging', '') }}-v02.api.letsencrypt.org/directory
+  CHALLENGETYPE: "{{ letsencrypt_enable_dns_auth | ternary('dns-01', 'http-01') }}"
 
-dehydrated_auto_execute: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) }}"
+dehydrated_auto_execute: "{{ letsencrypt_enable_dns_auth }}"
 
-dehydrated_domains: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(lets_encrypt_domains, [])  }}"
+dehydrated_domains: "{{ letsencrypt_enable_dns_auth | ternary(lets_encrypt_domains, [])  }}"
 
 dehydrated_hook_initialize: |
   {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
