@@ -103,6 +103,16 @@ nginx_extra_cfg: |
   sendfile off;
 
 # --------------
+# let's EncryptのDNS認証の設定
+# --------------
+lexicon_provider: "{{ lookup('env', 'LEXICON_PROVIDER') }}"
+lexicon_provider_username: "{{ lookup('env', lexicon_provider.upper() + '_USERNAME') }}"
+lexicon_provider_password: "{{ lookup('env', lexicon_provider.upper() + '_PASSWORD') }}"
+lexicon_provider_token: "{{ lookup('env', lexicon_provider.upper() + '_TOKEN') }}"
+lexicon_provider_secret: "{{ lookup('env', lexicon_provider.upper() + '_SECRET') }}"
+lexicon_provider_update_delay: 30
+
+# --------------
 # Apacheのバーチャルホストの設定
 # --------------
 apache_vhosts:
@@ -193,6 +203,13 @@ apache_vhosts:
 # --------------
 # Nginxのバーチャルホストの設定
 # --------------
+
+## Les't Encryptの設定
+nginx_vhost_lets_encrypt_ssl_setting:
+  certificate: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+  certificate_key: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+  trusted_certificate: /var/lib/dehydrated/certs/{{ domain }}/cert.pem
+
 nginx_vhosts:
   - name: default
     default: true
@@ -221,6 +238,7 @@ nginx_vhosts:
         match_type: "~"
         content: |
           deny all;
+    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   - name: mailhog
     server_name: mailhog.{{ domain }}
@@ -231,6 +249,7 @@ nginx_vhosts:
         content: |
           proxy_pass http://localhost:8025/;
           include proxy_params;
+    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   - name: phpMyAdmin
     server_name: db.{{ domain }}
@@ -278,6 +297,7 @@ nginx_vhosts:
         match_type: "^~"
         content: |
           deny all;
+    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # phpRedisAdmin用のバーチャルホスト ( http://cache.<ドメイン>/ )
   - name: phpRedisAdmin
     server_name: cache.{{ domain }}
@@ -301,6 +321,7 @@ nginx_vhosts:
         match_type: "~"
         content: |
           deny all;
+    ssl: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   - name: status
     server_name: localhost
     listen: 8080
@@ -332,12 +353,6 @@ mariadb_mysqld_cfg:
 # --------------------------
 # dehydrated
 # --------------------------
-lexicon_provider: "{{ lookup('env', 'LEXICON_PROVIDER') }}"
-lexicon_provider_username: "{{ lookup('env', lexicon_provider.upper() + '_USERNAME') }}"
-lexicon_provider_password: "{{ lookup('env', lexicon_provider.upper() + '_PASSWORD') }}"
-lexicon_provider_token: "{{ lookup('env', lexicon_provider.upper() + '_TOKEN') }}"
-lexicon_provider_secret: "{{ lookup('env', lexicon_provider.upper() + '_SECRET') }}"
-lexicon_provider_update_delay: 30
 
 lets_encrypt_domains:
   - name: "{{ domain }}"
@@ -346,10 +361,12 @@ lets_encrypt_domains:
       - "*.{{ domain }}"
 
 dehydrated_cfg:
-  CA: https://acme-staging-v02.api.letsencrypt.org/directory
-  CHALLENGETYPE: "{{ 'dns-01' if lexicon_provider is defined and lexicon_provider | length > 0 else 'http-01'  }}"
+  CA: https://acme{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary('', '-staging') }}-v02.api.letsencrypt.org/directory
+  CHALLENGETYPE: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary('dns-01', 'http-01') }}"
 
-dehydrated_domains: "{{ lets_encrypt_domains if lexicon_provider is defined and lexicon_provider | length > 0 else []  }}"
+dehydrated_auto_execute: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) }}"
+
+dehydrated_domains: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) | ternary(lets_encrypt_domains, [])  }}"
 
 dehydrated_hook_initialize: |
   {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
