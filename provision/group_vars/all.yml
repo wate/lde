@@ -113,7 +113,7 @@ lexicon_provider_secret: "{{ lookup('env', lexicon_provider.upper() + '_SECRET')
 lexicon_provider_update_delay: 30
 
 letsencrypt_enable_dns_auth: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) }}"
-letsencrypt_use_staging: true
+letsencrypt_use_staging: false
 
 # --------------
 # Apacheのバーチャルホストの設定
