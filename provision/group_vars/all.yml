@@ -336,6 +336,7 @@ lexicon_provider: "{{ lookup('env', 'LEXICON_PROVIDER') }}"
 lexicon_provider_username: "{{ lookup('env', lexicon_provider.upper() + '_USERNAME') }}"
 lexicon_provider_password: "{{ lookup('env', lexicon_provider.upper() + '_PASSWORD') }}"
 lexicon_provider_token: "{{ lookup('env', lexicon_provider.upper() + '_TOKEN') }}"
+lexicon_provider_secret: "{{ lookup('env', lexicon_provider.upper() + '_SECRET') }}"
 lexicon_provider_update_delay: 30
 
 lets_encrypt_domains:
@@ -363,6 +364,9 @@ dehydrated_hook_initialize: |
   {% endif %}
   {% if lexicon_provider_token is defined and lexicon_provider_token | length > 0 -%}
   export LEXICON_{{ lexicon_provider.upper()  }}_TOKEN="{{ lexicon_provider_token }}"
+  {% endif %}
+  {% if lexicon_provider_secret is defined and lexicon_provider_secret | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_SECRET="{{ lexicon_provider_secret }}"
   {% endif %}
   export PROVIDER_UPDATE_DELAY={{ lexicon_provider_update_delay | default('30') }}
   {% endif %}
