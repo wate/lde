@@ -372,7 +372,7 @@ dehydrated_auto_execute: "{{ letsencrypt_enable_dns_auth }}"
 dehydrated_domains: "{{ letsencrypt_enable_dns_auth | ternary(lets_encrypt_domains, [])  }}"
 
 dehydrated_hook_initialize: |
-  {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
+  {% if letsencrypt_enable_dns_auth -%}
   set -e
   set -u
   set -o pipefail
@@ -424,7 +424,9 @@ dehydrated_hook_clean_challenge: |
   {% endif %}
 
 dehydrated_hook_deploy_cert: |
-  systemctl restart {{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}
+  if [ -e /usr/sbin/{{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }} ]; then
+      systemctl restart {{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}
+  fi
 
 # --------------------------
 # Mackerel
