@@ -118,6 +118,12 @@ letsencrypt_use_staging: false
 # --------------
 # Apacheのバーチャルホストの設定
 # --------------
+## Les't Encryptの設定
+apache_vhost_lets_encrypt_ssl_setting:
+  certificate_file: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+  certificate_key_file: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+  certificate_chain_file: /var/lib/dehydrated/certs/{{ domain }}/chain.pem
+
 apache_vhosts:
   # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
   - name: 000-default
@@ -142,6 +148,7 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/error.log
       log_level: warn
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   # https://github.com/mailhog/MailHog
   - name: 001-MailHog
@@ -159,6 +166,7 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:8025/"
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
   - name: 002-phpMyAdmin
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest }}"
@@ -171,6 +179,7 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/phpmyadmin_error.log
       log_level: warn
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
     extra_setting: |
       <Directory {{ phpmyadmin_dest }}/templates>
           Require all denied
@@ -202,6 +211,7 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/phpredisadmin_error.log
       log_level: warn
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
 
 # --------------
 # Nginxのバーチャルホストの設定
