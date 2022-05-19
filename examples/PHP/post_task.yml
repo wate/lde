@@ -1,0 +1,31 @@
+- name: allow xdebug port
+  ufw:
+    rule: allow
+    port: "9000"
+    proto: tcp
+- name: remove default install index file
+  file:
+    path: /var/www/html/{{ item }}
+    state: absent
+  loop:
+    - index.nginx-debian.html
+  become: true
+- name: setup php
+  block:
+    - name: check exists composer.json
+      stat:
+        path: /vagrant/src/composer.json
+      register: composer_json_result
+    - name: check exists vendor directory
+      stat:
+        path: /vagrant/src/vendor
+      register: vendor_dir_result
+    - name: install dependency packages
+      composer:
+        command: install
+        working_dir: /vagrant/src/
+        no_dev: false
+      when:
+        - composer_json_result.stat.exists
+        - not vendor_dir_result.stat.exists
+  become: false

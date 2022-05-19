@@ -103,8 +103,27 @@ nginx_extra_cfg: |
   sendfile off;
 
 # --------------
+# let's EncryptのDNS認証の設定
+# --------------
+lexicon_provider: "{{ lookup('env', 'LEXICON_PROVIDER') }}"
+lexicon_provider_username: "{{ lookup('env', lexicon_provider.upper() + '_USERNAME') }}"
+lexicon_provider_password: "{{ lookup('env', lexicon_provider.upper() + '_PASSWORD') }}"
+lexicon_provider_token: "{{ lookup('env', lexicon_provider.upper() + '_TOKEN') }}"
+lexicon_provider_secret: "{{ lookup('env', lexicon_provider.upper() + '_SECRET') }}"
+lexicon_provider_update_delay: 30
+
+letsencrypt_enable_dns_auth: "{{ (lexicon_provider is defined and lexicon_provider | length > 0) }}"
+letsencrypt_use_staging: false
+
+# --------------
 # Apacheのバーチャルホストの設定
 # --------------
+## Les't Encryptの設定
+apache_vhost_lets_encrypt_ssl_setting:
+  certificate_file: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+  certificate_key_file: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+  certificate_chain_file: /var/lib/dehydrated/certs/{{ domain }}/chain.pem
+
 apache_vhosts:
   # ローカルのPCと共有している領域 ( http://www.<ドメイン>/ )
   - name: 000-default
@@ -129,6 +148,7 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/error.log
       log_level: warn
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   # https://github.com/mailhog/MailHog
   - name: 001-MailHog
@@ -146,6 +166,7 @@ apache_vhosts:
     proxy_pass_reverse:
       - from: /
         to: "http://localhost:8025/"
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
   - name: 002-phpMyAdmin
     server_name: db.{{ domain }}
     document_root: "{{ phpmyadmin_dest }}"
@@ -158,6 +179,7 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/phpmyadmin_error.log
       log_level: warn
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
     extra_setting: |
       <Directory {{ phpmyadmin_dest }}/templates>
           Require all denied
@@ -189,10 +211,18 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/phpredisadmin_error.log
       log_level: warn
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
 
 # --------------
 # Nginxのバーチャルホストの設定
 # --------------
+
+## Les't Encryptの設定
+nginx_vhost_lets_encrypt_ssl_setting:
+  certificate: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+  certificate_key: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+  trusted_certificate: /var/lib/dehydrated/certs/{{ domain }}/cert.pem
+
 nginx_vhosts:
   - name: default
     default: true
@@ -206,19 +236,22 @@ nginx_vhosts:
       - index.php
       - index.html
     client_max_body_size: 20M
+    include:
+      - snippets/letsencrypt_dehydrated.conf
     locations:
       - pattern: "/"
         content:
-          try_files $uri $uri/ =404;
+          try_files $uri $uri/ /index.php?$args;
       - pattern: "\\.php$"
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+          fastcgi_pass unix:/run/php/php-fpm.sock;
       - pattern: "/\\.ht"
         match_type: "~"
         content: |
           deny all;
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # MailHog用のバーチャルホスト ( http://mailhog.<ドメイン>/ )
   - name: mailhog
     server_name: mailhog.{{ domain }}
@@ -229,6 +262,7 @@ nginx_vhosts:
         content: |
           proxy_pass http://localhost:8025/;
           include proxy_params;
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # phpMyAdmin用のバーチャルホスト ( http://db.<ドメイン>/ )
   - name: phpMyAdmin
     server_name: db.{{ domain }}
@@ -247,7 +281,7 @@ nginx_vhosts:
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+          fastcgi_pass unix:/run/php/php-fpm.sock;
       - pattern: "/\\.ht"
         match_type: "~"
         content: |
@@ -276,6 +310,7 @@ nginx_vhosts:
         match_type: "^~"
         content: |
           deny all;
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   # phpRedisAdmin用のバーチャルホスト ( http://cache.<ドメイン>/ )
   - name: phpRedisAdmin
     server_name: cache.{{ domain }}
@@ -294,11 +329,12 @@ nginx_vhosts:
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+          fastcgi_pass unix:/run/php/php-fpm.sock;
       - pattern: "/\\.ht"
         match_type: "~"
         content: |
           deny all;
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
   - name: status
     server_name: localhost
     listen: 8080
@@ -327,8 +363,115 @@ mariadb_mysqld_cfg:
   slow_query_log_file: /var/log/mariadb/slow_query.log
   general_log: false
   general_log_file: /var/log/mariadb/general.log
+# --------------------------
+# dehydrated
+# --------------------------
+
+lets_encrypt_domains:
+  - name: "{{ domain }}"
+    domains:
+      - "{{ domain }}"
+      - "*.{{ domain }}"
 
 dehydrated_cfg:
-  CA: https://acme-staging-v02.api.letsencrypt.org/directory
+  CA: https://acme{{ letsencrypt_use_staging | ternary('-staging', '') }}-v02.api.letsencrypt.org/directory
+  CHALLENGETYPE: "{{ letsencrypt_enable_dns_auth | ternary('dns-01', 'http-01') }}"
 
-mackerel_agent_active_and_enabled_on_system_startup: false
+dehydrated_auto_execute: "{{ letsencrypt_enable_dns_auth }}"
+
+dehydrated_domains: "{{ letsencrypt_enable_dns_auth | ternary(lets_encrypt_domains, [])  }}"
+
+dehydrated_hook_initialize: |
+  {% if letsencrypt_enable_dns_auth -%}
+  set -e
+  set -u
+  set -o pipefail
+  {% if lexicon_provider_username is defined and lexicon_provider_username | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_USERNAME="{{ lexicon_provider_username }}"
+  {% endif %}
+  {% if lexicon_provider_password is defined and lexicon_provider_password | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_PASSWORD="{{ lexicon_provider_password }}"
+  {% endif %}
+  {% if lexicon_provider_token is defined and lexicon_provider_token | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_TOKEN="{{ lexicon_provider_token }}"
+  {% endif %}
+  {% if lexicon_provider_secret is defined and lexicon_provider_secret | length > 0 -%}
+  export LEXICON_{{ lexicon_provider.upper()  }}_SECRET="{{ lexicon_provider_secret }}"
+  {% endif %}
+  export PROVIDER_UPDATE_DELAY={{ lexicon_provider_update_delay | default('30') }}
+  {% endif %}
+
+## --------
+## @see https://github.com/AnalogJ/lexicon/blob/master/examples/dehydrated.default.sh#L11
+## --------
+dehydrated_hook_deploy_challenge: |
+  {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
+    local chain=($@)
+    for ((i=0; i < $#; i+=3)); do
+        local DOMAIN="${chain[i]}" TOKEN_FILENAME="${chain[i+1]}" TOKEN_VALUE="${chain[i+2]}"
+        echo "deploy_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
+        lexicon {{ lexicon_provider }} create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+    done
+    local DELAY_COUNTDOWN=$PROVIDER_UPDATE_DELAY
+    while [ $DELAY_COUNTDOWN -gt 0 ]; do
+        echo -ne "${DELAY_COUNTDOWN}\033[0K\r"
+        sleep 1
+        : $((DELAY_COUNTDOWN--))
+    done
+  {% endif %}
+
+## --------
+## @see https://github.com/AnalogJ/lexicon/blob/master/examples/dehydrated.default.sh#L11
+## --------
+dehydrated_hook_clean_challenge: |
+  {% if lexicon_provider is defined and lexicon_provider | length > 0 -%}
+    local chain=($@)
+    for ((i=0; i < $#; i+=3)); do
+        local DOMAIN="${chain[i]}" TOKEN_FILENAME="${chain[i+1]}" TOKEN_VALUE="${chain[i+2]}"
+        echo "clean_challenge called: ${DOMAIN}, ${TOKEN_FILENAME}, ${TOKEN_VALUE}"
+        lexicon {{ lexicon_provider }} delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+    done
+  {% endif %}
+
+dehydrated_hook_deploy_cert: |
+  if [ -e /usr/sbin/{{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }} ]; then
+      systemctl restart {{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}
+  fi
+
+# --------------------------
+# Mackerel
+# --------------------------
+## データベース設定
+mackerel_db_user: "{{ lookup('env', 'MACKEREL_DB_USER') | default('mackerel', true) }}"
+mackerel_db_password: "{{ lookup('env', 'MACKEREL_DB_PASSWORD') | default('mackerel_password', true) }}"
+
+mariadb_users:
+  - name: "{{ mackerel_db_user }}"
+    password: "{{ mackerel_db_password }}"
+    hosts:
+      - "127.0.0.1"
+      - "::1"
+      - localhost
+    privs:
+      - "*.*:SUPER"
+
+mackerel_agent_api_key: "{{ lookup('env', 'MACKEREL_API_KEY') }}"
+mackerel_agent_host_id: "{{ lookup('env', 'MACKEREL_HOST_ID') }}"
+mackerel_agent_extra_setting: |
+  roles = [ "test:web", "test:db" ]
+  [plugin.metrics.linux]
+  command = "/usr/bin/mackerel-plugin-linux"
+  [plugin.metrics.mysql]
+  command = "/usr/bin/mackerel-plugin-mysql -username={{ mackerel_db_user }} -password={{ mackerel_db_password }}"
+  [plugin.metrics.mailq]
+  command = "/usr/bin/mackerel-plugin-mailq -M postfix"
+  {% if (web_server | default('apache')) == 'apache' -%}
+  [plugin.metrics.apache]
+  command = "/usr/bin/mackerel-plugin-apache"
+  {% else %}
+  [plugin.metrics.nginx]
+  command = "/usr/bin/mackerel-plugin-nginx"
+  {% endif %}
+
+mackerel_agent_active_and_enabled_on_system_startup: "{{ mackerel_agent_api_key | length > 0 | ternary(true, false) }}"
+

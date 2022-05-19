@@ -7,7 +7,7 @@
 {% if item.virtualhost_before_setting is defined %}
 {{ item.virtualhost_before_setting }}
 {% endif %}
-{% if item.ssl is defined %}
+{% if item.ssl.certificate_file is defined %}
 <VirtualHost {{ item.default |default(false) | ternary('_default_', "*") }}:80>
     {% if item.server_name is defined -%}
     ServerName {{ item.server_name }}
@@ -26,7 +26,7 @@
 {% set vhost_ip = item.ip -%}
 {% endif -%}
 
-{% set vhost_port = item.ssl is defined | ternary('443', "80") -%}
+{% set vhost_port = item.ssl.certificate_file is defined | ternary('443', "80") -%}
 {% if item.port is defined -%}
 {% set vhost_port = item.port -%}
 {% endif -%}
@@ -112,13 +112,12 @@
   {% endfor -%}
   {% endif -%}
 
-  {% if item.ssl is defined -%}
+  {% if item.ssl.certificate_file is defined -%}
   SSLEngine on
   # Server Certificate:
   SSLCertificateFile {{ item.ssl.certificate_file }}
   # Server Private Key:
   SSLCertificateKeyFile {{ item.ssl.certificate_key_file }}
-
   {% if item.ssl.certificate_chain_file is defined -%}
   # Server Certificate Chain:
   SSLCertificateChainFile {{ item.ssl.certificate_chain_file }}

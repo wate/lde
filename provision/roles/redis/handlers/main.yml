@@ -1,9 +1,9 @@
 ---
 - name: restart redis
-  systemd:
+  ansible.builtin.systemd:
     name: redis-server
     state: restarted
 - name: reload redis
-  systemd:
+  ansible.builtin.systemd:
     name: redis-server
     state: reloaded
