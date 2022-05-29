@@ -1,6 +1,6 @@
 ---
-# 7.0 OR 7.1 OR 7.2 OR 7.3 OR 7.4 OR 8.0
-php_version: "7.4"
+# 7.0 OR 7.1 OR 7.2 OR 7.3 OR 7.4 OR 8.0 OR 8.1
+php_version: "8.1"
 
 php_packages:
   - php{{ php_version }}-common
@@ -16,8 +16,6 @@ php_packages:
   - php{{ php_version }}-gettext
   - php{{ php_version }}-sqlite3
   - php{{ php_version }}-mysqlnd
-  # - php{{ php_version }}-pgsql
-  - php{{ php_version }}-json
   - php{{ php_version }}-pdo
   - php{{ php_version }}-opcache
   - php{{ php_version }}-intl
@@ -28,8 +26,6 @@ php_packages:
   # - php{{ php_version }}-redis
   # - php{{ php_version }}-memcached
   # - php{{ php_version }}-xdebug
-  # - php{{ php_version }}-xhprof
-  # - php{{ php_version }}-phalcon4
 
 php_cfg: |
   date.timezone = Asia/Tokyo
