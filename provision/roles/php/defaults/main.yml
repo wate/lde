@@ -1,6 +1,6 @@
 ---
 # 7.0 OR 7.1 OR 7.2 OR 7.3 OR 7.4 OR 8.0 OR 8.1
-php_version: "8.1"
+php_version: "7.4"
 
 php_packages:
   - php{{ php_version }}-common
