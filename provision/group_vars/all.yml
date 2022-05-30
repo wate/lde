@@ -28,7 +28,6 @@ php_packages:
   - php{{ php_version }}-gettext
   - php{{ php_version }}-sqlite3
   - php{{ php_version }}-mysqlnd
-  - php{{ php_version }}-json
   - php{{ php_version }}-pdo
   - php{{ php_version }}-opcache
   - php{{ php_version }}-intl
