@@ -25,7 +25,7 @@
   ansible.builtin.file:
     path: /var/log/cake/{{ item }}
     state: directory
-    mode: "0755"
+    mode: "0777"
   loop:
     - tmp/cache
     - tmp/session
@@ -123,6 +123,13 @@
           export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
           export DATABASE_URL="mysql://app_dev:app_dev_P455w0rd@localhost/app_dev?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
           export DATABASE_TEST_URL="mysql://app_test:app_test_P455w0rd@localhost/app_test?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+          export LOG_DEBUG_URL=file:///var/log/cake/logs/
+          export LOG_ERROR_URL=file:///var/log/cake/logs/
+          export LOG_QUERIES_URL=file:///var/log/cake/logs/
+          export CACHE_DEFAULT_URL=redis://localhost
+          export CACHE_CAKECORE_URL=redis://localhost
+          export CACHE_CAKEMODEL_URL=redis://localhost
+          export CACHE_CAKEROUTES_URL=redis://localhost
     - name: create direnv setting
       ansible.builtin.blockinfile:
         path: "{{ lde_web_root_dir }}/.envrc"
