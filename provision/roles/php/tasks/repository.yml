@@ -16,3 +16,6 @@
     filename: php
     repo: deb https://packages.sury.org/php/ {{ ansible_facts.distribution_release }} main
     state: present
+- name: update package cach
+  ansible.builtin.apt:
+    update_cache: true
