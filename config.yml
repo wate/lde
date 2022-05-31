@@ -1,8 +1,8 @@
 ---
 ## ドメイン
 domain: "example.local"
-## PHPのバージョン： 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0
-php_version: 7.4
+## PHPのバージョン： 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0 / 8.1
+php_version: '7.4'
 ## Webサーバー： apache / nginx
 web_server: apache
 # Webサーバーのドキュメントルールの階層を下げたい場合に設定します。
@@ -17,7 +17,7 @@ vagrant:
   ## ※Ansibleがインストールできない/されていない人向け
   # provisioner: ansible_local
   ## ベースのイメージ
-  # box: wate/centos-7
+  # box: wate/debian-11
   ## 仮想マシンのIPアドレス
   # ipaddress: 192.168.56.10
   ## 仮想マシン名(初期値は「provision/host_vars/default.yml」の「domain」の値を利用)

@@ -1,7 +1,35 @@
 ---
 - name: install php packages
   ansible.builtin.apt:
-    name: "{{ php_packages }}"
+    name: "{{ item }}"
+  loop: "{{ php_packages }}"
 - name: install composer
-  ansible.builtin.apt:
-    name: composer
+  ansible.builtin.get_url:
+    url: https://getcomposer.org/download/{{ php_composer_version }}/composer.phar
+    dest: /usr/local/bin/composer
+    mode: "0755"
+- name: execute update alternatives(php)
+  community.general.alternatives:
+    name: "{{ item }}"
+    path: /usr/bin/{{ item }}{{ php_version }}
+  loop:
+    - php
+    - phar
+    - phar.phar
+- name: execute update alternatives(php-dev)
+  block:
+    - name: execute update alternatives(php-dev)
+      community.general.alternatives:
+        name: "{{ item }}"
+        path: /usr/bin/{{ item }}{{ php_version }}
+      loop:
+        - phpize
+        - php-config
+  when: "'php' + (php_version | string) + '-dev' in php_packages"
+- name: execute update alternatives(php-fpm)
+  block:
+    - name: execute update alternatives(php-fpm)
+      community.general.alternatives:
+        name: php-fpm.sock
+        path: /run/php/php{{ php_version }}-fpm.sock
+  when: "'php' + (php_version | string) + '-fpm' in php_packages"

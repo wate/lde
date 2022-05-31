@@ -16,8 +16,8 @@ php_version: "7.4"
 # インストールするPHPのパッケージ
 # --------------
 php_packages:
-  - php{{ php_version }}-common
   - php{{ php_version }}-cli
+  - php{{ php_version }}-common
   - php{{ php_version }}-dev
   - php{{ php_version }}-curl
   - php{{ php_version }}-gd
@@ -28,7 +28,6 @@ php_packages:
   - php{{ php_version }}-gettext
   - php{{ php_version }}-sqlite3
   - php{{ php_version }}-mysqlnd
-  - php{{ php_version }}-json
   - php{{ php_version }}-pdo
   - php{{ php_version }}-opcache
   - php{{ php_version }}-intl
@@ -90,11 +89,6 @@ mariadb_databases:
       - localhost
       - "192.168.%"
       - "10.%"
-
-# --------------
-# 外部のホストからのMariaDBへの接続を許可
-# --------------
-mariadb_allow_connect_other_host: true
 
 apache_extra_cfg: |
   EnableSendfile Off
@@ -356,6 +350,7 @@ mariadb_mysqld_cfg:
     - NO_ENGINE_SUBSTITUTION
   slow_query_log: true
   long_query_time: 1
+  bind_address: 0.0.0.0
   # log_warnings: 0
   # min_examined_row_limit: 0
   # log_queries_not_using_indexes: false
@@ -363,10 +358,12 @@ mariadb_mysqld_cfg:
   slow_query_log_file: /var/log/mariadb/slow_query.log
   general_log: false
   general_log_file: /var/log/mariadb/general.log
+
+mariadb_allow_connect_other_host: true
+
 # --------------------------
 # dehydrated
 # --------------------------
-
 lets_encrypt_domains:
   - name: "{{ domain }}"
     domains:
