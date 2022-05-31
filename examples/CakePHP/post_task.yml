@@ -34,14 +34,15 @@
 - block:
     - name: set variable
       ansible.builtin.set_fact:
-        tmp_project_dir: /tmp/cake_project
+        tmp_project_dir: /tmp/php_project
+        lde_web_root_dir: /vagrant/src
     - name: remove dummy file
       ansible.builtin.file:
-        path: /vagrant/src/.gitkeep
+        path: "{{ lde_web_root_dir }}/.gitkeep"
         state: absent
     - name: check exists composer.json
       ansible.builtin.stat:
-        path: /vagrant/src/composer.json
+        path: "{{ lde_web_root_dir }}/composer.json"
       register: composer_json_result
     - name: remove temporary project directory
       ansible.builtin.file:
@@ -52,7 +53,7 @@
         - name: create temporary cakephp project
           community.general.composer:
             command: create-project
-            arguments: '"cakephp/app:^{{ cake_version | default(4) | string }}" cake_project'
+            arguments: '"cakephp/app:^{{ cake_version | default(4) | string }}" {{ tmp_project_dir }}'
             no_dev: false
             prefer_dist: true
             working_dir: /tmp
@@ -65,7 +66,7 @@
             state: directory
         - name: synchronize project files(shard directory => working directory)
           ansible.posix.synchronize:
-            src: /vagrant/src/
+            src: "{{ lde_web_root_dir }}/"
             dest: "{{ tmp_project_dir }}"
             rsync_opts:
               - "--exclude=.git"
@@ -100,7 +101,7 @@
     - name: synchronize project files(working directory => shard directory)
       ansible.posix.synchronize:
         src: "{{ tmp_project_dir }}/"
-        dest: /vagrant/src
+        dest: "{{ lde_web_root_dir }}"
       delegate_to: "{{ inventory_hostname }}"
     - name: remove temporary project directory
       ansible.builtin.file:
@@ -108,7 +109,7 @@
         state: absent
     - name: regenerate dummy file
       ansible.builtin.file:
-        path: /vagrant/src/.gitkeep
+        path: "{{ lde_web_root_dir }}/.gitkeep"
         state: touch
     - name: set variables
       ansible.builtin.set_fact:
@@ -124,7 +125,7 @@
           export DATABASE_TEST_URL="mysql://app_test:app_test_P455w0rd@localhost/app_test?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
     - name: create direnv setting
       ansible.builtin.blockinfile:
-        path: /vagrant/src/.envrc
+        path: "{{ lde_web_root_dir }}/.envrc"
         create: true
         block: "{{ dot_envrc_value }}"
     - name: display direnv setting
@@ -136,7 +137,7 @@
           ```
     - name: create CakePHP setting
       ansible.builtin.blockinfile:
-        path: /vagrant/src/config/.env
+        path: "{{ lde_web_root_dir }}/config/.env"
         create: true
         block: "{{ dot_env_value }}"
     - name: display direnv setting
