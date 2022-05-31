@@ -16,8 +16,8 @@ php_version: "7.4"
 # インストールするPHPのパッケージ
 # --------------
 php_packages:
-  - php{{ php_version }}-common
   - php{{ php_version }}-cli
+  - php{{ php_version }}-common
   - php{{ php_version }}-dev
   - php{{ php_version }}-curl
   - php{{ php_version }}-gd

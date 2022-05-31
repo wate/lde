@@ -1,6 +1,6 @@
 ---
 # 7.0 OR 7.1 OR 7.2 OR 7.3 OR 7.4 OR 8.0 OR 8.1
-php_version: '8.1'
+php_version: '7.4'
 
 php_packages:
   - php{{ php_version }}-common
@@ -9,7 +9,6 @@ php_packages:
   - php{{ php_version }}-curl
   - php{{ php_version }}-gd
   - php{{ php_version }}-bcmath
-  - php{{ php_version }}-imagick
   - php{{ php_version }}-mbstring
   - php{{ php_version }}-bz2
   - php{{ php_version }}-gettext
@@ -18,6 +17,7 @@ php_packages:
   - php{{ php_version }}-pdo
   - php{{ php_version }}-opcache
   - php{{ php_version }}-intl
+  - php{{ php_version }}-imagick
   - php{{ php_version }}-xml
   - php{{ php_version }}-zip
   - php{{ php_version }}-apcu
@@ -31,3 +31,5 @@ php_cfg: |
 php_cli_cfg: "{{ php_cfg }}"
 php_fpm_cfg: "{{ php_cfg }}"
 php_apache_cfg: "{{ php_cfg }}"
+
+php_composer_version: latest-stable
