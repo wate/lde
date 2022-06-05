@@ -35,14 +35,14 @@
     - name: set variable
       ansible.builtin.set_fact:
         tmp_project_dir: /tmp/php_project
-        lde_web_root_dir: /vagrant/src
+        lde_source_code_dir: /vagrant/src
     - name: remove dummy file
       ansible.builtin.file:
-        path: "{{ lde_web_root_dir }}/.gitkeep"
+        path: "{{ lde_source_code_dir }}/.gitkeep"
         state: absent
     - name: check exists composer.json
       ansible.builtin.stat:
-        path: "{{ lde_web_root_dir }}/composer.json"
+        path: "{{ lde_source_code_dir }}/composer.json"
       register: composer_json_result
     - name: remove temporary project directory
       ansible.builtin.file:
@@ -66,7 +66,7 @@
             state: directory
         - name: synchronize project files(shard directory => working directory)
           ansible.posix.synchronize:
-            src: "{{ lde_web_root_dir }}/"
+            src: "{{ lde_source_code_dir }}/"
             dest: "{{ tmp_project_dir }}"
             rsync_opts:
               - "--exclude=.git"
@@ -101,7 +101,7 @@
     - name: synchronize project files(working directory => shard directory)
       ansible.posix.synchronize:
         src: "{{ tmp_project_dir }}/"
-        dest: "{{ lde_web_root_dir }}"
+        dest: "{{ lde_source_code_dir }}"
       delegate_to: "{{ inventory_hostname }}"
     - name: remove temporary project directory
       ansible.builtin.file:
@@ -109,7 +109,7 @@
         state: absent
     - name: regenerate dummy file
       ansible.builtin.file:
-        path: "{{ lde_web_root_dir }}/.gitkeep"
+        path: "{{ lde_source_code_dir }}/.gitkeep"
         state: touch
     - name: set variables
       ansible.builtin.set_fact:
@@ -132,9 +132,13 @@
           export CACHE_CAKEROUTES_URL=redis://localhost
     - name: create direnv setting
       ansible.builtin.blockinfile:
-        path: "{{ lde_web_root_dir }}/.envrc"
+        path: "{{ lde_source_code_dir }}/.envrc"
         create: true
         block: "{{ dot_envrc_value }}"
+    - name: add .gitignore direnv setting file
+      ansible.builtin.lineinfile:
+        path: "{{ lde_source_code_dir }}/.gitignore"
+        line: .envrc
     - name: display direnv setting
       ansible.builtin.debug:
         msg: |
@@ -144,7 +148,7 @@
           ```
     - name: create CakePHP setting
       ansible.builtin.blockinfile:
-        path: "{{ lde_web_root_dir }}/config/.env"
+        path: "{{ lde_source_code_dir }}/config/.env"
         create: true
         block: "{{ dot_env_value }}"
     - name: display direnv setting

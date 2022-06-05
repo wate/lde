@@ -60,6 +60,12 @@
     - name: add/update user setting
       ansible.builtin.import_tasks: my.yml
   post_tasks:
+    - name: create sorce directory symlink
+      ansible.builtin.file:
+        path: ~/src
+        src: /vagrant/src
+        state: link
+      become: false
     - name: set other post task files
       ansible.builtin.set_fact:
         post_task_file: "{{ lookup('first_found', post_task_files, errors='ignore') }}"
