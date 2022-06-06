@@ -66,7 +66,7 @@
         block: |
           [client]
           host=localhost
-          database="{{ lde_db_name }}
+          database={{ lde_db_name }}
           user={{ lde_db_user }}
           password={{ lde_db_password }}
           default_character_set={{ lde_db_encoding }}
