@@ -10,22 +10,28 @@
         dest: ~/bin/{{ item[:-3] | basename }}
         mode: "0700"
       loop: "{{ lookup('fileglob', 'scripts/*.j2', wantlist=True)  }}"
+    - name: set tbls enviromnet variables
+      ansible.builtin.blockinfile:
+        path: ~/.bashrc
+        marker: "# {mark} tbls setting ANSIBLE MANAGED BLOCK"
+        block: |
+          export TBLS_DSN=my://{{ lde_db_user }}:{{ lde_db_password }}@{{ lde_db_host }}:3306/{{ lde_db_name }}
+          export TBLS_DOC_PATH=/vagrant/src/docs/schema
     - name: install bash git prompt
-      block:
-        - name: chackout source
-          git:
-            repo: https://github.com/magicmonty/bash-git-prompt.git
-            dest: ~/.bash-git-prompt
-            version: master
-            depth: 1
-        - name: append bash git prompt setting on .bashrc
-          blockinfile:
-            path: ~/.bashrc
-            block: |
-              if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-                  GIT_PROMPT_ONLY_IN_REPO=1
-                  source $HOME/.bash-git-prompt/gitprompt.sh
-              fi
+      git:
+        repo: https://github.com/magicmonty/bash-git-prompt.git
+        dest: ~/.bash-git-prompt
+        version: master
+        depth: 1
+    - name: append bash git prompt setting on .bashrc
+      blockinfile:
+        path: ~/.bashrc
+        marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
+        block: |
+          if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+              GIT_PROMPT_ONLY_IN_REPO=1
+              source $HOME/.bash-git-prompt/gitprompt.sh
+          fi
     - name: user git setting
       git_config:
         name: "{{ item.name }}"
@@ -60,10 +66,10 @@
         block: |
           [client]
           host=localhost
-          database="{{ mariadb_databases[0].name }}
-          user={{ mariadb_databases[0].user | default(mariadb_databases[0].name) }}
-          password={{ mariadb_databases[0].password | default(mariadb_databases[0].user) }}
-          default_character_set={{ mariadb_databases[0].encoding | default('utf8mb4') }}
+          database="{{ lde_db_name }}
+          user={{ lde_db_user }}
+          password={{ lde_db_password }}
+          default_character_set={{ lde_db_encoding }}
       when: mariadb_databases[0] is defined
     - name: install github deploykey
       copy:

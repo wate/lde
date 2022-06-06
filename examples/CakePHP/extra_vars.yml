@@ -4,6 +4,7 @@ cake_project_addtitinal_packages:
   - name: "josegonzalez/dotenv:^3.2"
   - name: arodu/cakelte
   - name: cakephp/localized
+  - name: robotusers/cakephp-table-inheritance
   - name: phpoffice/phpspreadsheet
   - name: tecnickcom/tcpdf
   - name: markstory/asset_compress
