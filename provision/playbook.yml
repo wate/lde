@@ -57,6 +57,13 @@
       loop:
         - "{{ web_server_service }}"
         - mariadb
+    - name: set variables(database connection_setting)
+      ansible.builtin.set_fact:
+        lde_db_host: localhost
+        lde_db_name: "{{ mariadb_databases[0]['name'] }}"
+        lde_db_user: "{{ mariadb_databases[0]['user'] | default(mariadb_databases[0]['name']) }}"
+        lde_db_password: "{{ mariadb_databases[0]['password'] }}"
+        lde_db_encoding: "{{ mariadb_databases[0].encoding | default('utf8mb4') }}"
     - name: add/update user setting
       ansible.builtin.import_tasks: my.yml
   post_tasks:
