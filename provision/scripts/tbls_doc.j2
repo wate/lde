@@ -1,12 +1,11 @@
 #!/bin/sh
-mkdir -p /vagrant/source/docs/schema
 
 TBLS_PARAMS=''
-if [ -f /vagrant/.tbls.yml ]; then
-  TBLS_PARAMS='--config /vagrant/.tbls.yml'
+if [ -f /vagrant/src/.tbls.yml ]; then
+  TBLS_PARAMS='--config /vagrant/src/.tbls.yml'
 else
-  if [ -f /vagrant/tbls.yml ]; then
-    TBLS_PARAMS='--config /vagrant/tbls.yml'
+  if [ -f /vagrant/src/tbls.yml ]; then
+    TBLS_PARAMS='--config /vagrant/src/tbls.yml'
   fi
 fi
 /usr/bin/tbls doc ${TBLS_PARAMS} --rm-dist
