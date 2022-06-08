@@ -2,6 +2,7 @@ domain: example.local
 cake_version: 4
 cake_project_addtitinal_packages:
   - name: "josegonzalez/dotenv:^3.2"
+  - name: "cakephp/authentication:^2.0"
   - name: symfony/yaml
   - name: arodu/cakelte
   - name: cakephp/localized
