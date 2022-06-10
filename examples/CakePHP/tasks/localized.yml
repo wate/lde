@@ -11,9 +11,12 @@
         insertafter: "^\\s+parent::bootstrap\\(\\);"
     - name: create plugin resource directory
       ansible.builtin.file:
-        path: "{{ project_dir }}/resources/locales/ja_JP"
+        path: "{{ project_dir }}/resources/{{ item }}"
         state: directory
         mode: "0755"
+      loop:
+        - locales
+        - locales/ja_JP
       register: resource_locales_dir_result
     - name: copy po files
       ansible.builtin.copy:
