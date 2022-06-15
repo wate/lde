@@ -11,5 +11,7 @@ cake_project_addtitinal_packages:
   - name: phpoffice/phpspreadsheet
   - name: tecnickcom/tcpdf
   - name: markstory/asset_compress
+  - name: phpstan/phpstan
+    dev: true
   - name: dereuromark/cakephp-ide-helper
     dev: true
