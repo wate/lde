@@ -32,6 +32,12 @@
               GIT_PROMPT_ONLY_IN_REPO=1
               source $HOME/.bash-git-prompt/gitprompt.sh
           fi
+    - name: set .inputrc
+      ansible.builtin.lineinfile:
+        path: ~/.inputrc
+        regexp: "^set completion-ignore-case"
+        line: set completion-ignore-case on
+        create: true
     - name: user git setting
       git_config:
         name: "{{ item.name }}"
@@ -76,28 +82,28 @@
         src: "{{ github_deploykey_path }}"
         dest: ~/.ssh/github_deploykey
         mode: '0600'
-        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+        remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: github_deploykey_path is defined
     - name: install bitbucket deploykey
       copy:
         src: "{{ bitbucket_deploykey_path }}"
         dest: ~/.ssh/bitbucket_deploykey
         mode: '0600'
-        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+        remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: bitbucket_deploykey_path is defined
     - name: install gitlab deploykey
       copy:
         src: "{{ gitlab_deploykey_path }}"
         dest: ~/.ssh/gitlab_deploykey
         mode: '0600'
-        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+        remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: gitlab_deploykey_path is defined
     - name: install backlog ssh key
       copy:
         src: "{{ backlog_deploykey_path }}"
         dest: ~/.ssh/backlog_deploykey
         mode: '0600'
-        remote_src: "{{ true if vagrant_provisioner == 'anslble_local' else false }}"
+        remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: backlog_deploykey_path is defined
     - name: Insert/Update ssh configuration block in ~/.ssh/config
       blockinfile:
