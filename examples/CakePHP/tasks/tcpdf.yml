@@ -76,7 +76,6 @@
             path: "{{ project_dir }}/config/paths.php"
             marker: "// {mark} ANSIBLE MANAGED BLOCK"
             content: |
-              define ('K_PATH_FONTS', ROOT . 'resources'. DS . 'fonts' . DS);
-              define ('PDF_FONT_NAME_MAIN', 'NotoSansCJKjp');
+              define ('K_PATH_FONTS', ROOT . DS . 'resources'. DS . 'fonts' . DS);
       when: resource_font_dir_result is changed
   when: package_result.stat.exists

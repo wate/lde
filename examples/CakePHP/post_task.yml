@@ -82,8 +82,7 @@
     - name: add php project dependency packages
       community.general.composer:
         command: require
-        arguments: "{{ item.name }}"
-        no_dev: "{{ item.dev | default(false) | ternary(false, true) }}"
+        arguments: '"{{ item.name }}" {{ item.dev | default(false) | ternary("--dev", "") }}'
         working_dir: "{{ tmp_project_dir }}"
       loop: "{{ cake_project_addtitinal_packages | default([]) }}"
     - name: setup localized plugin setting
