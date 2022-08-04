@@ -11,6 +11,7 @@
   vars:
     other_japanese_fonts:
       - morisawa-biz-ud-gothic
+  when: install_other_japanese_fonts
 - name: Ensure a locale exists
   locale_gen:
     name: ja_JP.UTF-8
