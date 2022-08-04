@@ -10,45 +10,11 @@
         mode: "0755"
       register: resource_font_dir_result
     - block:
-        - block:
-            - name: install fontforge
-              ansible.builtin.apt:
-                name: fontforge
-            - name: get ttc to ttf convert script
-              ansible.builtin.get_url:
-                url: https://gist.githubusercontent.com/lilydjwg/8877450/raw/e834ec4e08b1ce195fd38b157fcf62e565370a68/ttc2ttf
-                dest: /usr/local/bin/ttc2ttf
-                mode: '0755'
-          become: true
         - name: synchronize tcpdf original font files
           ansible.posix.synchronize:
             src: "{{ project_dir }}/vendor/tecnickcom/tcpdf/fonts/"
             dest: "{{ project_dir }}/resources/fonts"
           delegate_to: "{{ inventory_hostname }}"
-        - name: find ttc files
-          ansible.builtin.find:
-            paths: /usr/share/fonts/opentype/noto
-            patterns:
-              - '*.ttc'
-          register: find_result
-        - name: set variables
-          ansible.builtin.set_fact:
-            ttc_files: "{{ find_result.files | map(attribute='path') | list }}"
-            ttf_output_dir: "{{ ttf_output_dir | default('/tmp/fonts') }}"
-        - name: create ttf file output directory
-          ansible.builtin.file:
-            path: "{{ ttf_output_dir }}"
-            state: directory
-            mode: '0750'
-        - name: convert ttc to ttf
-          ansible.builtin.command: /usr/bin/fontforge -lang=py -script /usr/local/bin/ttc2ttf {{ item }}
-          args:
-            chdir: "{{ ttf_output_dir }}"
-          register: fontforge_result
-          failed_when: fontforge_result['rc'] != -9
-          loop: "{{ ttc_files }}"
-          tags:
-            - skip_ansible_lint
         - name: find all ttf files
           ansible.builtin.find:
             paths:
@@ -57,16 +23,12 @@
               - /usr/share/fonts/opentype/ipafont-gothic
               - /usr/share/fonts/opentype/ipafont-mincho
               - /usr/local/share/fonts/morisawa-biz-ud-gothic
-              - "{{ ttf_output_dir }}"
             patterns:
               - '*.ttf'
           register: find_result
         - name: generate tcpdf font file
           ansible.builtin.command:
-            vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php \
-            --outpath {{ project_dir }}/resources/fonts \
-            --fonts "{{ item }}"
-          args:
+            cmd: vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php --outpath {{ project_dir }}/resources/fonts --fonts "{{ item }}"
             chdir: "{{ project_dir }}"
           loop: "{{ find_result.files | map(attribute='path') | list }}"
           tags:

@@ -44,7 +44,10 @@ common_groups: []
 
 common_users: []
   # - name: sample_user
+  #   # ------
   #   # Optional
+  #   # ------
+  #   # ※パスワードの設定を省略した場合ロックされた状態でユーザーが追加されます
   #   password: "{{ 'password' | password_hash('sha512') }}"
   #   groups:
   #     - group1
@@ -116,7 +119,7 @@ common_users: []
   #       value: SOME_VALUE
   #       removed: true
   #       admin: false
-  #   # パスワードの更新(on_create or always)
+  #   # パスワードの更新(always or on_create)
   #   update_password: on_create
   #   # パスワードのロック
   #   password_lock: false
@@ -336,3 +339,6 @@ common_japanese_fonts:
   - fonts-ipafont
   - fonts-noto-cjk
   - fonts-noto-cjk-extra
+
+# その他日本語フォントのインストール
+install_other_japanese_fonts: false
