@@ -1,6 +1,6 @@
 ---
 - name: checkout source
-  git:
+  ansible.builtin.git:
     repo: https://github.com/erikdubbelboer/phpRedisAdmin.git
     dest: "{{ phpredisadmin_dest }}"
     version: master
