@@ -12,10 +12,10 @@
       tags: role_database_server
     - name: dehydrated
       tags: role_dehydrated
-    - name: "{{ 'apache' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
-      tags: role_web_server
     - name: php
       tags: role_php
+    - name: "{{ 'apache' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
+      tags: role_web_server
     - name: redis
       tags: role_redis
     - name: tools
