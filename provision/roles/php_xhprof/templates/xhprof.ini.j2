@@ -1,0 +1,3 @@
+{% if php_xhprof_set_auto_prepend_file | default(false) %}
+auto_prepend_file = {{ php_xhprof_dest}}/external/header.php
+{% endif %}

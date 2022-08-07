@@ -1,18 +1,18 @@
 ---
 - name: create phpMyAdmin directory
-  file:
+  ansible.builtin.file:
     path: "{{ phpmyadmin_dest }}"
     state: directory
     mode: "0755"
 - name: download phpMyAdmin
-  unarchive:
+  ansible.builtin.unarchive:
     src: https://files.phpmyadmin.net/phpMyAdmin/{{ phpmyadmin_version }}/phpMyAdmin-{{ phpmyadmin_version }}-all-languages.tar.gz
     dest: "{{ phpmyadmin_dest }}"
     extra_opts:
       - "--strip-components=1"
     remote_src: true
 - name: create phpMyAdmin working directory
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: "0777"
@@ -21,7 +21,7 @@
     - "{{ phpmyadmin_upload_dir }}"
     - "{{ phpmyadmin_save_dir }}"
 - name: create phpMyAdmin config
-  template:
+  ansible.builtin.template:
     src: config.inc.php.j2
     dest: "{{ phpmyadmin_dest }}/config.inc.php"
     mode: "0644"
@@ -29,7 +29,7 @@
   mysql_db:
     name: "{{ phpmyadmin_database_name }}"
     encoding: utf8mb4
-    collation: utf8mb4_unicode_ci
+    collation: utf8mb4_general_ci
     login_unix_socket: /run/mysqld/mysqld.sock
 - name: create phpMyAdmin storage database user
   mysql_user:
@@ -42,5 +42,3 @@
     - "127.0.0.1"
     - localhost
   no_log: true
-
-#
