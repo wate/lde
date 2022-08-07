@@ -1,0 +1,4 @@
+---
+php_xhprof_database_name: xhprof
+php_xhprof_database_user: xhprof_user
+php_xhprof_database_password: xhprof_password
