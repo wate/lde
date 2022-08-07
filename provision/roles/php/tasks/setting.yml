@@ -5,7 +5,7 @@
     create: true
     mode: "0644"
     block: "{{ php_cli_cfg }}"
-- name: check config directory(apache)
+- name: check config directory(fpm)
   ansible.builtin.stat:
     path: "{{ php_fpm_conf_dir }}"
   register: stat_result
