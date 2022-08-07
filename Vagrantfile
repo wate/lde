@@ -71,6 +71,8 @@ Vagrant.configure("2") do |config|
     'db.' + settings['domain'],
     # phpRedisAdmin
     'cache.' + settings['domain'],
+    # XHProf UI
+    'xhprof.' + settings['domain'],
   ]
 
   if settings['vagrant'].key?('append_vm_hosts')

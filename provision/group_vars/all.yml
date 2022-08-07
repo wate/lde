@@ -205,6 +205,19 @@ apache_vhosts:
       path: /var/log/apache2/phpredisadmin_error.log
       log_level: warn
     ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
+  - name: 004-XHProf
+    server_name: xhprof.{{ domain }}
+    document_root: "{{ php_xhprof_dest }}/xhprof_html"
+    allow_override: All
+    directory_index:
+      - index.php
+    custom_log:
+      path: /var/log/apache2/xhprof_access.log
+      format: combine
+    error_log:
+      path: /var/log/apache2/xhprof_error.log
+      log_level: warn
+    ssl: "{{ letsencrypt_enable_dns_auth | ternary(apache_vhost_lets_encrypt_ssl_setting, {}) }}"
 
 # --------------
 # Nginxのバーチャルホストの設定
@@ -328,6 +341,29 @@ nginx_vhosts:
         content: |
           deny all;
     ssl: "{{ letsencrypt_enable_dns_auth | ternary(nginx_vhost_lets_encrypt_ssl_setting, {}) }}"
+  # XHProf用のバーチャルホスト ( http://xhprof.<ドメイン>/ )
+  - name: XHProf
+    server_name: xhprof.{{ domain }}
+    document_root: "{{ php_xhprof_dest }}/xhprof_html"
+    index:
+      - index.php
+      - index.html
+    client_max_body_size: 20M
+    access_log: /var/log/nginx/xhprof_access.log
+    error_log: /var/log/nginx/xhprof_error.log
+    locations:
+      - pattern: "/"
+        content:
+          try_files $uri $uri/ =404;
+      - pattern: "\\.php$"
+        match_type: "~"
+        content: |
+          include snippets/fastcgi-php.conf;
+          fastcgi_pass unix:/run/php/php-fpm.sock;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: |
+          deny all;
   - name: status
     server_name: localhost
     listen: 8080
@@ -470,4 +506,3 @@ mackerel_agent_extra_setting: |
   {% endif %}
 
 mackerel_agent_active_and_enabled_on_system_startup: "{{ mackerel_agent_api_key | length > 0 | ternary(true, false) }}"
-
