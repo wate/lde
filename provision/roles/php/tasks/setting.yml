@@ -1,7 +1,7 @@
 ---
 - name: create addtitional php setting file(cli)
   ansible.builtin.blockinfile:
-    path: "{{ php_cli_conf_dir }}/99-custom.ini"
+    path: "{{ php_cli_conf_dir }}/90-custom.ini"
     create: true
     mode: "0644"
     block: "{{ php_cli_cfg }}"
@@ -11,7 +11,7 @@
   register: stat_result
 - name: create addtitional php setting file(fpm)
   ansible.builtin.blockinfile:
-    path: "{{ php_fpm_conf_dir }}/99-custom.ini"
+    path: "{{ php_fpm_conf_dir }}/90-custom.ini"
     create: true
     mode: "0644"
     block: "{{ php_fpm_cfg }}"
