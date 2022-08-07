@@ -21,7 +21,7 @@
   register: stat_result
 - name: create addtitional php setting file(apache)
   ansible.builtin.blockinfile:
-    path: "{{ php_apache_conf_dir }}/99-custom.ini"
+    path: "{{ php_apache_conf_dir }}/90-custom.ini"
     create: true
     mode: "0644"
     block: "{{ php_apache_cfg }}"
