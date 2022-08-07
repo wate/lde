@@ -27,39 +27,40 @@
 - name: check config directory(cli)
   ansible.builtin.stat:
     path: "{{ php_cli_conf_dir }}"
-  register: stat_result
-- name: create php config(cli)
+  register: stat_php_cli_dir_result
+- name: add xhprof php config(cli)
   ansible.builtin.template:
     src: xhprof.ini.j2
     dest: "{{ php_cli_conf_dir }}/95-xhprof.ini"
     mode: "0644"
-    vars:
-      php_xhprof_setting_auto_enabled: "{{ php_xhprof_auto_enabled and php_xhprof_cli_auto_enabled }}"
-    when: stat_result.stat.exists
+  vars:
+    php_xhprof_set_auto_prepend_file: "{{ php_xhprof_cli_set_auto_prepend_file }}"
+  when: stat_php_cli_dir_result.stat.exists
 - name: check config directory(fpm)
   ansible.builtin.stat:
     path: "{{ php_fpm_conf_dir }}"
-  register: stat_result
-- name: create php config(fpm)
+  register: stat_php_fpm_dir_result
+- name: add xhprof php config(fpm)
   ansible.builtin.template:
     src: xhprof.ini.j2
     dest: "{{ php_fpm_conf_dir }}/95-xhprof.ini"
     mode: "0644"
-    vars:
-      php_xhprof_setting_auto_enabled: "{{ php_xhprof_auto_enabled and php_xhprof_fpm_auto_enabled }}"
-    when: stat_result.stat.exists
+  vars:
+    php_xhprof_set_auto_prepend_file: "{{ php_xhprof_fpm_set_auto_prepend_file }}"
+  notify: restart php-fpm
+  when: stat_php_fpm_dir_result.stat.exists
 - name: check config directory(apache)
   ansible.builtin.stat:
     path: "{{ php_apache_conf_dir }}"
-  register: stat_result
-- name: create php config(apache)
+  register: stat_php_apache_dir_result
+- name: add xhprof php config(apache)
   ansible.builtin.template:
     src: xhprof.ini.j2
     dest: "{{ php_apache_conf_dir }}/95-xhprof.ini"
     mode: "0644"
-    vars:
-      php_xhprof_setting_auto_enabled: "{{ php_xhprof_auto_enabled and php_xhprof_apache_auto_enabled }}"
-    when: stat_result.stat.exists
+  vars:
+    php_xhprof_set_auto_prepend_file: "{{ php_xhprof_apache_set_auto_prepend_file }}"
+  when: stat_php_apache_dir_result.stat.exists
 - name: create XHProf storage database
   community.mysql.mysql_db:
     name: "{{ php_xhprof_database_name }}"

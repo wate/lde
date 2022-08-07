@@ -1,14 +1,17 @@
 ---
-php_xhprof_auto_enabled: false
-php_xhprof_cli_auto_enabled: false
-php_xhprof_fpm_auto_enabled: true
-php_xhprof_apache_auto_enabled: true
+php_xhprof_cli_set_auto_prepend_file: false
+php_xhprof_fpm_set_auto_prepend_file: true
+php_xhprof_apache_set_auto_prepend_file: true
+php_xhprof_auto_enabled: true
 
 php_xhprof_database_name: xhprof
 php_xhprof_database_user: xhprof_user
 php_xhprof_database_password: xhprof_password
 
 php_xhprof_ui_cfg: |
+  {% if php_xhprof_auto_enabled %}
+  $_xhprof['doprofile'] = true;
+  {% endif %}
   $_xhprof['dbuser'] = '{{ php_xhprof_database_user }}';
   $_xhprof['dbpass'] = '{{ php_xhprof_database_password }}';
   $_xhprof['dbname'] = '{{ php_xhprof_database_name }}';
@@ -17,6 +20,6 @@ php_xhprof_ui_cfg: |
   $ignoreDomains = [
     'db.{{ domain }}',
     'mailhog.{{ domain }}',
-    'chache.{{ domain }}',
+    'cache.{{ domain }}',
     'xhprof.{{ domain }}',
   ];
