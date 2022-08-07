@@ -2,7 +2,7 @@
 php_xhprof_cli_set_auto_prepend_file: false
 php_xhprof_fpm_set_auto_prepend_file: true
 php_xhprof_apache_set_auto_prepend_file: true
-php_xhprof_auto_enabled: true
+php_xhprof_auto_enabled: false
 
 php_xhprof_database_name: xhprof
 php_xhprof_database_user: xhprof_user
@@ -16,6 +16,9 @@ php_xhprof_ui_cfg: |
   $_xhprof['dbpass'] = '{{ php_xhprof_database_password }}';
   $_xhprof['dbname'] = '{{ php_xhprof_database_name }}';
   $_xhprof['url'] = 'http://xhprof.{{ domain }}';
+  $_xhprof['dot_binary']  = '/usr/bin/dot';
+  $_xhprof['dot_tempdir'] = '/tmp';
+  $_xhprof['dot_errfile'] = '/tmp/xh_dot.err';
   $controlIPs = false;
   $ignoreDomains = [
     'db.{{ domain }}',
