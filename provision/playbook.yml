@@ -2,27 +2,29 @@
   hosts: all
   become: true
   roles:
-    - name: common
+    - role: common
       tags: role_common
-    - name: mackerel_agent
+    - role: mackerel_agent
       tags: role_mackerel_agent
-    - name: nodejs
+    - role: nodejs
       tags: role_nodejs
-    - name: mariadb
+    - role: mariadb
       tags: role_database_server
-    - name: dehydrated
+    - role: dehydrated
       tags: role_dehydrated
-    - name: php
+    - role: php
       tags: role_php
-    - name: "{{ 'apache' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
+    - role: php_xhprof
+      tags: role_php_xhprof
+    - role: "{{ 'apache' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
       tags: role_web_server
-    - name: redis
+    - role: redis
       tags: role_redis
-    - name: tools
+    - role: tools
       tags: role_tools
-    - name: phpmyadmin
+    - role: phpmyadmin
       tags: role_phpmyadmin
-    - name: phpredisadmin
+    - role: phpredisadmin
       tags: role_phpredisadmin
   pre_tasks:
     - name: set pre task files
@@ -66,6 +68,12 @@
         lde_db_encoding: "{{ mariadb_databases[0].encoding | default('utf8mb4') }}"
     - name: add/update user setting
       ansible.builtin.import_tasks: my.yml
+    - name: remove default install index file
+      ansible.builtin.file:
+        path: /var/www/html/{{ item }}
+        state: absent
+      loop:
+        - index.nginx-debian.html
   post_tasks:
     - name: create sorce directory symlink
       ansible.builtin.file:
