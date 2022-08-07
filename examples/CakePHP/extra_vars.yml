@@ -1,4 +1,6 @@
 domain: example.local
+## 自動プロファイルを有効にする
+# php_xhprof_auto_enabled: true
 cake_version: 4
 cake_project_addtitinal_packages:
   - name: "josegonzalez/dotenv:^3.2"
