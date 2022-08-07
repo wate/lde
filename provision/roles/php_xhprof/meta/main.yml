@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  role_name: php_xhprof
+  author: yoshiaki tanaka
+  description: setup HXProf UI
+  license: Apache
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - buster
+dependencies:
+  - php
