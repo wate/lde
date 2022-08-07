@@ -21,7 +21,7 @@
     - "{{ phpmyadmin_upload_dir }}"
     - "{{ phpmyadmin_save_dir }}"
 - name: create phpMyAdmin config
-  ansible.builtin.tempfile:
+  ansible.builtin.template:
     src: config.inc.php.j2
     dest: "{{ phpmyadmin_dest }}/config.inc.php"
     mode: "0644"
