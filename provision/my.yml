@@ -1,11 +1,11 @@
 - name: user setting
   block:
     - name: create bin directory
-      file:
+      ansible.builtin.file:
         path: ~/bin
         state: directory
     - name: create scripts
-      template:
+      ansible.builtin.template:
         src: "{{ item }}"
         dest: ~/bin/{{ item[:-3] | basename }}
         mode: "0700"
@@ -15,16 +15,16 @@
         path: ~/.bashrc
         marker: "# {mark} tbls setting ANSIBLE MANAGED BLOCK"
         block: |
-          export TBLS_DSN=my://{{ lde_db_user }}:{{ lde_db_password }}@{{ lde_db_host }}:3306/{{ lde_db_name }}
+          export TBLS_DSN=mariadb://{{ lde_db_user }}:{{ lde_db_password }}@{{ lde_db_host }}:3306/{{ lde_db_name }}
           export TBLS_DOC_PATH=/vagrant/src/docs/schema
     - name: install bash git prompt
-      git:
+      ansible.builtin.git:
         repo: https://github.com/magicmonty/bash-git-prompt.git
         dest: ~/.bash-git-prompt
         version: master
         depth: 1
     - name: append bash git prompt setting on .bashrc
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
         block: |
@@ -39,7 +39,7 @@
         line: set completion-ignore-case on
         create: true
     - name: user git setting
-      git_config:
+      community.general.git_config:
         name: "{{ item.name }}"
         value: "{{ item.value }}"
         scope: global
@@ -65,7 +65,7 @@
         - name: pull.rebase
           value: "true"
     - name: create mysql connection file
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: ~/.my.cnf
         create: true
         mode: "0600"
@@ -78,35 +78,35 @@
           default_character_set={{ lde_db_encoding }}
       when: mariadb_databases[0] is defined
     - name: install github deploykey
-      copy:
+      ansible.builtin.copy:
         src: "{{ github_deploykey_path }}"
         dest: ~/.ssh/github_deploykey
         mode: '0600'
         remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: github_deploykey_path is defined
     - name: install bitbucket deploykey
-      copy:
+      ansible.builtin.copy:
         src: "{{ bitbucket_deploykey_path }}"
         dest: ~/.ssh/bitbucket_deploykey
         mode: '0600'
         remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: bitbucket_deploykey_path is defined
     - name: install gitlab deploykey
-      copy:
+      ansible.builtin.copy:
         src: "{{ gitlab_deploykey_path }}"
         dest: ~/.ssh/gitlab_deploykey
         mode: '0600'
         remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: gitlab_deploykey_path is defined
     - name: install backlog ssh key
-      copy:
+      ansible.builtin.copy:
         src: "{{ backlog_deploykey_path }}"
         dest: ~/.ssh/backlog_deploykey
         mode: '0600'
         remote_src: "{{ vagrant_provisioner == 'anslble_local' | ternary(true, false) }}"
       when: backlog_deploykey_path is defined
     - name: Insert/Update ssh configuration block in ~/.ssh/config
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: ~/.ssh/config
         block: |
           {% if github_deploykey_path is defined -%}
