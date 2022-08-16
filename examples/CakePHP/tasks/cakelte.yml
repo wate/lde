@@ -2,7 +2,8 @@
   ansible.builtin.stat:
     path: "{{ project_dir }}/vendor/arodu/cakelte"
   register: package_result
-- block:
+- name: setup plugin
+  block:
     - name: load plugin setting
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/Application.php"
@@ -32,14 +33,14 @@
     - name: add CakeLte::initializeCakeLte() statement
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/View/AppView.php"
-        regexp: "this->initializeCakeLte"
-        line: "        $this->initializeCakeLte([]);"
+        line: "        $this->initializeCakeLte($options ?? []);"
         insertafter: "^\\s+parent::initialize\\(\\);"
     - name: check exists plugin template directory
       ansible.builtin.stat:
         path: "{{ project_dir }}/templates/plugin/CakeLte"
       register: plugin_template_dir_result
-    - block:
+    - name: copy CakeLte default template
+      block:
         - name: create plugin template directory
           ansible.builtin.file:
             path: "{{ project_dir }}/templates/plugin/CakeLte/{{ item }}"

@@ -6,12 +6,12 @@ cake_project_addtitinal_packages:
   - name: "josegonzalez/dotenv:^3.2"
   - name: "cakephp/authentication:^2.0"
   - name: symfony/yaml
-  - name: arodu/cakelte
   - name: cakephp/localized
   - name: robotusers/cakephp-table-inheritance
   - name: phpoffice/phpspreadsheet
   - name: tecnickcom/tcpdf
-  - name: ishanvyas22/cakephp-inertiajs
+  - name: arodu/cakelte
+  # - name: ishanvyas22/cakephp-inertiajs
   - name: phpstan/phpstan
     dev: true
   - name: dereuromark/cakephp-ide-helper

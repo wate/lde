@@ -2,14 +2,16 @@
   ansible.builtin.stat:
     path: "{{ project_dir }}/vendor/tecnickcom/tcpdf"
   register: package_result
-- block:
+- name: setup plugin
+  block:
     - name: create fonts directory
       ansible.builtin.file:
         path: "{{ project_dir }}/resources/fonts"
         state: directory
         mode: "0755"
       register: resource_font_dir_result
-    - block:
+    - name: generate font files
+      block:
         - name: synchronize tcpdf original font files
           ansible.posix.synchronize:
             src: "{{ project_dir }}/vendor/tecnickcom/tcpdf/fonts/"

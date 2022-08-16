@@ -12,16 +12,6 @@
   loop:
     - index.html
     - index.nginx-debian.html
-- name: check exists bash completion setting directory
-  ansible.builtin.stat:
-    path: /etc/bash_completion.d
-  register: bash_completion_dir_result
-- name: create bash completion setting
-  ansible.builtin.copy:
-    src: "{{ post_task_base_dir }}/files/cake"
-    dest: /etc/bash_completion.d/cake
-    mode: "0644"
-  when: bash_completion_dir_result.stat.exists
 - name: create CakePHP tomprary directory
   ansible.builtin.file:
     path: /var/log/cake/{{ item }}
@@ -59,7 +49,7 @@
             prefer_dist: true
             working_dir: /tmp
       when: not composer_json_result.stat.exists
-    - name: create cakephp project
+    - name: setup cakephp project
       block:
         - name: create temporary project directory
           ansible.builtin.file:
@@ -80,6 +70,24 @@
             no_dev: false
             working_dir: "{{ tmp_project_dir }}"
       when: composer_json_result.stat.exists
+    - name: check exists bash completion setting directory
+      ansible.builtin.stat:
+        path: /etc/bash_completion.d
+      register: bash_completion_dir_result
+    - name: check exists cake command completion file
+      ansible.builtin.stat:
+        path: "{{ tmp_project_dir }}/app/bin/bash_completion.sh"
+      register: cake_command_completion_file_result
+    - name: create bash completion setting
+      ansible.builtin.copy:
+        src: "{{ tmp_project_dir }}/bin/bash_completion.sh"
+        dest: /etc/bash_completion.d/cake
+        mode: "0644"
+        remote_src: true
+      when:
+        - bash_completion_dir_result.stat.exists
+        - cake_command_completion_file_result.stat.exists
+      become: true
     - name: add php project dependency packages
       community.general.composer:
         command: require
@@ -114,9 +122,9 @@
     - name: set variables
       ansible.builtin.set_fact:
         dot_envrc_value: |
+          PATH_add bin
           layout php
           layout node
-          PATH_add bin
           source_env_if_exists .env
         dot_env_value: |
           export APP_DEFAULT_LOCALE="ja_JP"
