@@ -2,7 +2,8 @@
   ansible.builtin.stat:
     path: "{{ project_dir }}/vendor/cakephp/localized"
   register: package_result
-- block:
+- name: setup plugin
+  block:
     - name: load plugin setting
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/Application.php"

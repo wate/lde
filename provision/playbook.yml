@@ -49,15 +49,12 @@
         owner: vagrant
         group: vagrant
         state: directory
-    - name: set service name variable
-      ansible.builtin.set_fact:
-        web_server_service: "{{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
     - name: restart service
       ansible.builtin.systemd:
         name: "{{ item }}"
         state: restarted
       loop:
-        - "{{ web_server_service }}"
+        - "{{ 'apache2' if (web_server | default('apache')) == 'apache' else 'nginx' }}"
         - mariadb
     - name: set variables(database connection_setting)
       ansible.builtin.set_fact:

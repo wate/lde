@@ -1,7 +1,7 @@
 ---
 apache_packages:
   - apache2
-  - libapache2-mod-php
+  - libapache2-mod-php{{ php_version | default('') }}
   - goaccess
   - dehydrated-apache2
   # - libapache2-mod-perl2

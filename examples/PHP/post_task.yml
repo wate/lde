@@ -1,9 +1,10 @@
 ---
-- name: allow xdebug port
-  ufw:
+- name: allow development ports
+  community.general.ufw:
     rule: allow
-    port: "9000"
-    proto: tcp
+    port: "{{ item }}"
+    proto: any
+  loop: "{{ allow_dev_ports | default(['9000']) }}"
 - name: remove default install index file
   ansible.builtin.file:
     path: /var/www/html/{{ item }}
