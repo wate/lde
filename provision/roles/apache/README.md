@@ -17,10 +17,10 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: apache }
+    - role: apache
 ```
 
 License
 -------
 
-MIT
+Apache License 2.0

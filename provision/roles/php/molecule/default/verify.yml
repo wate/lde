@@ -7,7 +7,7 @@
     - name: Example assertion
       ansible.builtin.assert:
         that: true
-    - name: execute composer command
+    - name: Execute composer command
       community.general.composer:
         command: list
         global_command: true
