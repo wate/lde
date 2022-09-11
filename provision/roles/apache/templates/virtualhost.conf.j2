@@ -16,7 +16,7 @@
     ServerAlias {{ item.server_alias is string | ternary(item.server_alias, item.server_alias | join(' ')) }}
     {% endif -%}
     RewriteEngine On
-    RewriteCond %{REQUEST_URI} !(^/\.well-known/acme-challenge/)
+    RewriteCond %{REQUEST_URI} !^/\.well\-known/acme\-challenge/
     RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
 </VirtualHost>
 {% endif %}

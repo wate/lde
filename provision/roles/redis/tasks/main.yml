@@ -5,7 +5,7 @@
 - name: create redis setting file
   ansible.builtin.blockinfile:
     path: "{{ redis_config_dir }}/redis.conf"
-    block: "{{ redis_extra_cfg  }}"
+    block: "{{ redis_extra_cfg }}"
   notify: restart redis
 - name: redis is active and enabled on system startup
   ansible.builtin.systemd:

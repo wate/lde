@@ -1,6 +1,6 @@
 ---
 mariadb_config_base_dir: /etc/mysql
-mariadb_config_dir: "{{ mariadb_config_base_dir  }}/mariadb.conf.d"
+mariadb_config_dir: "{{ mariadb_config_base_dir }}/mariadb.conf.d"
 mariadb_mysql55_default_sql_mode:
   - NO_ENGINE_SUBSTITUTION
 mariadb_mysql56_default_sql_mode:
