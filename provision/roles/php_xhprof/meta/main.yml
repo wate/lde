@@ -11,4 +11,4 @@ galaxy_info:
         - bullseye
         - buster
 dependencies:
-  - php
+  - role: php
