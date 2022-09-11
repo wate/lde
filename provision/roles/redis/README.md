@@ -16,10 +16,10 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - role: redis
+    - role: redis
 ```
 
 License
 -------
 
-MIT
+Apache License 2.0

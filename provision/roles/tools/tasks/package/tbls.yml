@@ -22,5 +22,5 @@
         - '{{ ansible_facts.os_family }}.yml'
       paths:
         - tasks/package/tbls
-- name: install tool
+- name: install tbls
   ansible.builtin.include_tasks: "{{ install_tbls_task_file }}"

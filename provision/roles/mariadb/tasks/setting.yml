@@ -16,7 +16,7 @@
     enabled: true
 - name: install expect dependency packages
   ansible.builtin.apt:
-    name: "{{ mariadb_expect_dependency_packages  }}"
+    name: "{{ mariadb_expect_dependency_packages }}"
 - name: find mysql_secure_installation task file
   ansible.builtin.set_fact:
     mysql_secure_installation_task_file: "{{ lookup('first_found', params, errors='ignore') }}"

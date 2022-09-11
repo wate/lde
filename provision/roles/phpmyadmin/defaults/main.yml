@@ -1,6 +1,6 @@
 ---
 phpmyadmin_version: "5.2.0"
-phpmyadmin_blowfish_secret: "{{ inventory_hostname | hash('sha256')  }}"
+phpmyadmin_blowfish_secret: "{{ inventory_hostname | hash('sha256') }}"
 phpmyadmin_database_name: phpmyadmin
 phpmyadmin_database_user: pma_user
 phpmyadmin_database_password: pma_password

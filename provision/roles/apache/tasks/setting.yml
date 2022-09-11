@@ -22,8 +22,8 @@
     - "IncludeOptional conf-enabled/*.conf"
     - "IncludeOptional sites-enabled/*.conf"
 - name: update load module
-  ansible.builtin.command: "{{ item.disabled | default(false) | ternary('a2dismod', 'a2enmod') }} {{ item.name }}"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ item.disabled | default(false) | ternary('a2dismod', 'a2enmod') }} {{ item.name }}"
     creates: "{{ item.disabled | default(false) | ternary(omit, apache_module_enabled_dir + '/' + item.name + '.load') }}"
     removes: "{{ item.disabled | default(false) | ternary(apache_module_enabled_dir + '/' + item.name + '.load', omit) }}"
   loop: "{{ apache_modules }}"
@@ -34,8 +34,8 @@
     mode: "0644"
   notify: restart apache
 - name: enable custom setting
-  ansible.builtin.command: a2enconf z-custom
-  args:
+  ansible.builtin.command:
+    cmd: a2enconf z-custom
     creates: "{{ apache_conf_enabled_dir }}/z-custom.conf"
   notify: restart apache
 - name: copy snippet files
@@ -69,8 +69,8 @@
     label: "{{ item.name | default(item.server_name) }}"
   notify: restart apache
 - name: enable / disable virtualhost
-  ansible.builtin.command: "{{ item.disabled | default(false) | ternary('a2dissite', 'a2ensite') }} {{ item.name | default(item.server_name) }}"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ item.disabled | default(false) | ternary('a2dissite', 'a2ensite') }} {{ item.name | default(item.server_name) }}"
     creates: "{{ item.disabled | default(false) | ternary(omit, apache_site_enabled_dir + '/' + (item.name | default(item.server_name)) + '.conf') }}"
     removes: "{{ item.disabled | default(false) | ternary(apache_site_enabled_dir + '/' + (item.name | default(item.server_name)) + '.conf', omit) }}"
   loop: "{{ exist_virtualhosts }}"
