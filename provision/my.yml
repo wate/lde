@@ -8,6 +8,7 @@
         name:
           - ansible
           - mkdocs-material
+          - mycli
         extra_args: --user
     - name: create user directory
       ansible.builtin.file:
@@ -124,6 +125,25 @@
           password={{ lde_db_password }}
           default_character_set={{ lde_db_encoding }}
       when: mariadb_databases[0] is defined
+    - name: create mycli setting file
+      ansible.builtin.blockinfile:
+        path: ~/.myclirc
+        create: true
+        mode: "0600"
+        block: |
+          [main]
+          # Enables context sensitive auto-completion. If this is disabled then all
+          # possible completions will be listed.
+          smart_completion = True
+          # Multi-line mode allows breaking up the sql statements into multiple lines. If
+          # this is set to True, then the end of the statements must have a semi-colon.
+          # If this is set to False then sql statements can't be split into multiple
+          # lines. End of line (return) is considered as the end of the statement.
+          multi_line = False
+          # Enable the pager on startup.
+          enable_pager = False
+          # Skip intro info on startup and outro info on exit
+          less_chatty = True
     - name: install github deploykey
       ansible.builtin.copy:
         src: "{{ github_deploykey_path }}"
@@ -181,6 +201,4 @@
           {% endif %}
         create: true
         mode: "0600"
-  # environment:
-  #   PATH: ~/.local/bin:~/bin:/usr/local/bin:/usr/bin:/bin
   become: false

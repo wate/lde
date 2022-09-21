@@ -70,24 +70,17 @@
             no_dev: false
             working_dir: "{{ tmp_project_dir }}"
       when: composer_json_result.stat.exists
-    - name: check exists bash completion setting directory
-      ansible.builtin.stat:
-        path: /etc/bash_completion.d
-      register: bash_completion_dir_result
     - name: check exists cake command completion file
       ansible.builtin.stat:
         path: "{{ tmp_project_dir }}/app/bin/bash_completion.sh"
       register: cake_command_completion_file_result
-    - name: create bash completion setting
+    - name: create cake completion file
       ansible.builtin.copy:
         src: "{{ tmp_project_dir }}/bin/bash_completion.sh"
-        dest: /etc/bash_completion.d/cake
+        dest: ~/.local/share/bash-completion/completions/cake
         mode: "0644"
         remote_src: true
-      when:
-        - bash_completion_dir_result.stat.exists
-        - cake_command_completion_file_result.stat.exists
-      become: true
+      when: cake_command_completion_file_result.stat.exists
     - name: add php project dependency packages
       community.general.composer:
         command: require
@@ -129,8 +122,8 @@
         dot_env_value: |
           export APP_DEFAULT_LOCALE="ja_JP"
           export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
-          export DATABASE_URL="mysql://app_dev:app_dev_P455w0rd@localhost/app_dev?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
-          export DATABASE_TEST_URL="mysql://app_test:app_test_P455w0rd@localhost/app_test?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+          export DATABASE_URL="mysql://{{ lde_db_user }}:{{ lde_db_password }}@{{ lde_db_host }}/{{ lde_db_name }}?encoding={{ lde_db_encoding }}&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+          export DATABASE_TEST_URL="mysql://{{ lde_test_db_user }}:{{ lde_test_db_password }}@{{ lde_test_db_host }}/{{ lde_test_db_name }}?encoding={{ lde_test_db_encoding }}&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
           export LOG_DEBUG_URL=file:///var/log/cake/logs/
           export LOG_ERROR_URL=file:///var/log/cake/logs/
           export LOG_QUERIES_URL=file:///var/log/cake/logs/
