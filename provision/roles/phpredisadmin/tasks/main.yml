@@ -9,3 +9,5 @@
     command: install
     working_dir: "{{ phpredisadmin_dest }}"
     no_dev: true
+  environment:
+    COMPOSER_ALLOW_SUPERUSER: 1

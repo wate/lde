@@ -1,9 +1,56 @@
+- name: install python pip
+  ansible.builtin.apt:
+    name: python3-pip
 - name: user setting
   block:
-    - name: create bin directory
+    - name: install pip packages
+      ansible.builtin.pip:
+        name:
+          - ansible
+          - mkdocs-material
+        extra_args: --user
+    - name: create user directory
       ansible.builtin.file:
-        path: ~/bin
+        path: ~/{{ item }}
         state: directory
+        mode: "0755"
+      loop:
+        - bin
+        - .local/share/bash-completion/completions
+    - name: check comoser command
+      ansible.builtin.shell:
+        cmd: type composer
+      register: composer_command_result
+      failed_when: false
+      changed_when: false
+    - name: create composer completion file
+      ansible.builtin.shell:
+        cmd: composer completion >~/.local/share/bash-completion/completions/composer
+        creates: ~/.local/share/bash-completion/completions/composer
+      when: not composer_command_result.rc
+    - name: check npm command
+      ansible.builtin.shell:
+        cmd: type npm
+      register: npm_command_result
+      failed_when: false
+      changed_when: false
+    - name: create npm completion file
+      ansible.builtin.shell:
+        cmd: npm completion >~/.local/share/bash-completion/completions/npm
+        creates: ~/.local/share/bash-completion/completions/npm
+      when: not npm_command_result.rc
+    - name: check yarn command
+      ansible.builtin.shell:
+        cmd: type yarn
+      register: yarn_command_result
+      failed_when: false
+      changed_when: false
+    - name: create yarn completion file
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
+        dest: ~/.local/share/bash-completion/completions/yarn
+        mode: "0644"
+      when: not yarn_command_result.rc
     - name: create scripts
       ansible.builtin.template:
         src: "{{ item }}"
@@ -134,4 +181,6 @@
           {% endif %}
         create: true
         mode: "0600"
+  # environment:
+  #   PATH: ~/.local/bin:~/bin:/usr/local/bin:/usr/bin:/bin
   become: false

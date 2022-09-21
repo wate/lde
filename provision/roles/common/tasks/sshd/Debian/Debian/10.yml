@@ -1,0 +1,6 @@
+---
+- name: create sshd custom setting
+  ansible.builtin.blockinfile:
+    path: /etc/ssh/sshd_config
+    content: "{{ lookup('template', 'sshd/custom.conf.j2') }}"
+  notify: restart sshd

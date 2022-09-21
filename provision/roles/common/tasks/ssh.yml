@@ -1,9 +1,13 @@
-# ---
 - name: install geoip packages
   ansible.builtin.apt:
     name:
       - geoip-bin
       - geoip-database
+- name: download geoip database update script
+  ansible.builtin.get_url:
+    url: https://mailfud.org/geoip-legacy/geoip_update.sh
+    dest: /etc/cron.weekly/geoip_update
+    mode: "0755"
 - name: create ssh filter script
   ansible.builtin.template:
     src: ssh/sshfilter.j2

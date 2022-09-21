@@ -160,7 +160,7 @@ fail2ban_cfg: |
 rsyslog_custom_cfg: |
   cron.*				/var/log/cron.log
 
-admin_group_name: server_admin
+admin_group_name: adm
 admin_group_sudo_require_password: false
 
 auto_update_cfg:
@@ -330,7 +330,6 @@ common_install_utilities:
   - silversearcher-ag
   - exa
   - jq
-  - jc
   - fd-find
   - nkf
   - vnstati
