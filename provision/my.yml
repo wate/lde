@@ -40,18 +40,11 @@
         cmd: npm completion >~/.local/share/bash-completion/completions/npm
         creates: ~/.local/share/bash-completion/completions/npm
       when: not npm_command_result.rc
-    - name: check yarn command
-      ansible.builtin.shell:
-        cmd: type yarn
-      register: yarn_command_result
-      failed_when: false
-      changed_when: false
     - name: create yarn completion file
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
         dest: ~/.local/share/bash-completion/completions/yarn
         mode: "0644"
-      when: not yarn_command_result.rc
     - name: create scripts
       ansible.builtin.template:
         src: "{{ item }}"
