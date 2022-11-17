@@ -33,54 +33,21 @@
     - name: add CakeLte::initializeCakeLte() statement
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/View/AppView.php"
-        line: "        $this->initializeCakeLte($options ?? []);"
+        line: "        $this->initializeCakeLte();"
         insertafter: "^\\s+parent::initialize\\(\\);"
-    - name: check exists plugin template directory
+    - name: check exists plugin config file
       ansible.builtin.stat:
-        path: "{{ project_dir }}/templates/plugin/CakeLte"
-      register: plugin_template_dir_result
-    - name: copy CakeLte default template
-      block:
-        - name: create plugin template directory
-          ansible.builtin.file:
-            path: "{{ project_dir }}/templates/plugin/CakeLte/{{ item }}"
-            state: directory
-            mode: "0755"
-          loop:
-            - layout
-            - element/content
-            - element/header
-            - element/footer
-            - element/sidebar
-            - element/aside
-        - name: copy CakeLte template files
-          ansible.builtin.copy:
-            src: "{{ project_dir }}/vendor/arodu/cakelte/templates/{{ item }}"
-            dest: "{{ project_dir }}/templates/plugin/CakeLte/{{ item }}"
-            mode: "0644"
-            remote_src: true
-          loop:
-            # Layouts
-            - layout/default.php
-            - layout/login.php
-            - layout/top-nav.php
-            # Content
-            - element/content/header.php
-            # Header navbar
-            - element/header/main.php
-            - element/header/menu.php
-            - element/header/messages.php
-            - element/header/notifications.php
-            - element/header/search-default.php
-            - element/header/search-block.php
-            # Footer
-            - element/footer/main.php
-            # Left sidebar
-            - element/sidebar/main.php
-            - element/sidebar/menu.php
-            - element/sidebar/search.php
-            - element/sidebar/user.php
-            # Right sidebar
-            - element/aside/main.php
-      when: not plugin_template_dir_result.stat.exists
+        path: "{{ project_dir }}/config/cakelte.php"
+      register: plugin_config_file_result
+    - name: copy plugin config file
+      ansible.builtin.copy:
+        src: "{{ project_dir }}/vendor/arodu/cakelte/config/cakelte.php"
+        dest: "{{ project_dir }}/config/cakelte.php"
+        remote_src: true
+      when: not plugin_config_file_result.stat.exists
+    - name: copy AdminLte Template Files
+      ansible.builtin.command:
+        cmd: "{{ project_dir }}/bin/cake cakelte copy_files  -a -f"
+        chdir: "{{ project_dir }}"
+        creates: "{{ project_dir }}/templates/layout/login.php"
   when: package_result.stat.exists
