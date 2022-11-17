@@ -7,11 +7,10 @@
 ### Description
 # desc: This is My Database
 ### Document path
-docPath: /vagrant/source/docs/schema
+docPath: /vagrant/src/docs/schema
 ### DSN(Data Source Name)
 dsn: mysql://app_dev:app_dev_P455w0rd@localhost:3306/app_dev
 # dsn: postgres://app_dev:app_dev_P455w0rd@localhost:5432/app_dev
-# dsn: sqlite3:///vagrant/database.sqlite3
 # dsn: sqlite:///path/to/dbname.db
 ### Table format
 format:
@@ -119,6 +118,10 @@ lint:
 #       comment_user: comments.users.username
 #       created: comments.created
 #       updated: comments.updated
+### Automatically detect relations
+# detectVirtualRelations:
+#   enabled: true
+#   strategy: default
 ### Relations
 # relations:
 #   - table: logs
