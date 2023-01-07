@@ -1,8 +1,4 @@
 ---
-document_root_path:
-
-
-
 ## --------------
 ## Nginxのバーチャルホストの設定
 ## --------------
@@ -131,7 +127,8 @@ mariadb_databases:
 ## --------------
 postgresql_pg_hba_cfg: |
   # TYPE  DATABASE        USER            ADDRESS                 METHOD
-  host    all             all             10.0.0.0/24             md5
+  host    all             all             192.168.56.0/24         md5
+  host    all             all             10.0.0.0/8              md5
 
 ## --------------
 ## PostgreSQLのデータベース設定

@@ -11,4 +11,3 @@ rules:
     pattern: /サーバ(?!ー)/
   - expected: カテゴリー
     pattern: /カテゴリ(?!ー)/
-

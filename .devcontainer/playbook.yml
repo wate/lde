@@ -18,15 +18,15 @@
     - role: tools
     - role: logrotate
   tasks:
-    - name:
-      become: false
-      block:
-        # - name:
-        #   ansible.builtin.pip:
-        #     name:
-        #     executable: /usr/bin/pip3
+    # - name:
+    #   become: false
+    #   block:
+    #     # - name:
+    #     #   ansible.builtin.pip:
+    #     #     name:
+    #     #     executable: /usr/bin/pip3
 
-    - name: Restart searvices
+    - name: Restart Searvices
       ansible.builtin.systemd:
         name: "{{ item }}"
         state: restarted

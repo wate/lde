@@ -60,10 +60,8 @@ rules:
   - expected: WordPress
   - expected: Redmine
   - expected: Backlog
-    patterns:
-      - /Backlog/i
-      - バックログ
   - expected: Jira
+  - expected: Confluence
   ## Browser
   - expected: Firefox
   - expected: Chrome
