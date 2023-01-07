@@ -105,10 +105,10 @@ Ansibleを使ってローカル開発環境(LAMP)を構築します。
 
 | データベース名 | データベースユーザー名 | データベースパスワード |
 | -------------- | ---------------------- | ---------------------- |
-| app_dev        | app_dev                | app_dev_P455w0rd       |
-| app_test       | app_test               | app_test_P455w0rd      |
-| app_staging    | app_staging            | app_staging_P455w0rd   |
-| app_prod       | app_prod               | app_prod_P455w0rd      |
+| app_dev        | app_dev                | app_dev_password       |
+| app_test       | app_test               | app_test_password      |
+| app_staging    | app_staging            | app_staging_password   |
+| app_prod       | app_prod               | app_prod_password      |
 
 ### Webサーバー
 

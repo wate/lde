@@ -1,7 +1,14 @@
 ---
-- name: create sshd custom setting
-  ansible.builtin.template:
-    src: sshd/custom.conf.j2
-    dest: /etc/ssh/sshd_config.d/custom.conf
-    mode: "0644"
-  notify: restart sshd
+- name: find task file
+  ansible.builtin.set_fact:
+    install_task_file: "{{ lookup('first_found', params, errors='ignore') }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_facts.os_family }}/{{ ansible_facts.distribution }}/{{ ansible_facts.distribution_major_version }}.yml'
+        - '{{ ansible_facts.os_family }}/{{ ansible_facts.distribution }}.yml'
+        - '{{ ansible_facts.os_family }}.yml'
+      paths:
+        - tasks/sshd
+- name: install tbls
+  ansible.builtin.include_tasks: "{{ install_task_file }}"

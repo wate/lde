@@ -63,6 +63,11 @@
         lde_db_user: "{{ mariadb_databases[0]['user'] | default(mariadb_databases[0]['name']) }}"
         lde_db_password: "{{ mariadb_databases[0]['password'] }}"
         lde_db_encoding: "{{ mariadb_databases[0].encoding | default('utf8mb4') }}"
+        lde_test_db_host: localhost
+        lde_test_db_name: "{{ mariadb_databases[1]['name'] }}"
+        lde_test_db_user: "{{ mariadb_databases[1]['user'] | default(mariadb_databases[0]['name']) }}"
+        lde_test_db_password: "{{ mariadb_databases[1]['password'] }}"
+        lde_test_db_encoding: "{{ mariadb_databases[1].encoding | default('utf8mb4') }}"
     - name: add/update user setting
       ansible.builtin.import_tasks: my.yml
     - name: remove default install index file

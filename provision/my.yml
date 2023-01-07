@@ -1,9 +1,50 @@
+- name: install python pip
+  ansible.builtin.apt:
+    name: python3-pip
 - name: user setting
   block:
-    - name: create bin directory
+    - name: install pip packages
+      ansible.builtin.pip:
+        name:
+          - ansible
+          - mkdocs-material
+          - mycli
+        extra_args: --user
+    - name: create user directory
       ansible.builtin.file:
-        path: ~/bin
+        path: ~/{{ item }}
         state: directory
+        mode: "0755"
+      loop:
+        - bin
+        - .local/share/bash-completion/completions
+    - name: check comoser command
+      ansible.builtin.shell:
+        cmd: type composer
+      register: composer_command_result
+      failed_when: false
+      changed_when: false
+    - name: create composer completion file
+      ansible.builtin.shell:
+        cmd: composer completion >~/.local/share/bash-completion/completions/composer
+        creates: ~/.local/share/bash-completion/completions/composer
+      when: not composer_command_result.rc
+    - name: check npm command
+      ansible.builtin.shell:
+        cmd: type npm
+      register: npm_command_result
+      failed_when: false
+      changed_when: false
+    - name: create npm completion file
+      ansible.builtin.shell:
+        cmd: npm completion >~/.local/share/bash-completion/completions/npm
+        creates: ~/.local/share/bash-completion/completions/npm
+      when: not npm_command_result.rc
+    - name: create yarn completion file
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
+        dest: ~/.local/share/bash-completion/completions/yarn
+        mode: "0644"
     - name: create scripts
       ansible.builtin.template:
         src: "{{ item }}"
@@ -77,6 +118,25 @@
           password={{ lde_db_password }}
           default_character_set={{ lde_db_encoding }}
       when: mariadb_databases[0] is defined
+    - name: create mycli setting file
+      ansible.builtin.blockinfile:
+        path: ~/.myclirc
+        create: true
+        mode: "0600"
+        block: |
+          [main]
+          # Enables context sensitive auto-completion. If this is disabled then all
+          # possible completions will be listed.
+          smart_completion = True
+          # Multi-line mode allows breaking up the sql statements into multiple lines. If
+          # this is set to True, then the end of the statements must have a semi-colon.
+          # If this is set to False then sql statements can't be split into multiple
+          # lines. End of line (return) is considered as the end of the statement.
+          multi_line = False
+          # Enable the pager on startup.
+          enable_pager = False
+          # Skip intro info on startup and outro info on exit
+          less_chatty = True
     - name: install github deploykey
       ansible.builtin.copy:
         src: "{{ github_deploykey_path }}"

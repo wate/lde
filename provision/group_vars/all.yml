@@ -58,7 +58,7 @@ mariadb_root_password: r00t_P455w0rd
 mariadb_databases:
   # 開発用データベース
   - name: app_dev
-    password: app_dev_P455w0rd
+    password: app_dev_password
     hosts:
       - "127.0.0.1"
       - localhost
@@ -67,7 +67,7 @@ mariadb_databases:
   # テスト用データベース
   - name: app_test
     # import_data: /vagrant/source/test_data.sql
-    password: app_test_P455w0rd
+    password: app_test_password
     hosts:
       - "127.0.0.1"
       - localhost
@@ -75,7 +75,7 @@ mariadb_databases:
       - "10.%"
   # ステージング用データベース
   - name: app_staging
-    password: app_staging_P455w0rd
+    password: app_staging_password
     hosts:
       - "127.0.0.1"
       - localhost
@@ -83,7 +83,7 @@ mariadb_databases:
       - "10.%"
   # 本番用データベース
   - name: app_prod
-    password: app_prod_P455w0rd
+    password: app_prod_password
     hosts:
       - "127.0.0.1"
       - localhost
