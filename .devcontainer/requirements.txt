@@ -1,4 +1,4 @@
-material-mkdocs
+mkdocs-material
 mkdocs-tooltips
 mycli
 pgcli
