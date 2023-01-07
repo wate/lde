@@ -147,9 +147,9 @@ Vagrant.configure("2") do |config|
     end
   end
   config.trigger.before :destroy do |trigger|
-    trigger.info = "Dump database data"
+    trigger.info = "Dump database(app_dev)"
     trigger.run_remote = {
-      inline: "echo Dump database data"
+      inline: "mysqldump -u app_dev -papp_dev_password app_dev >/vagrant/databse_backup.sql"
     }
   end
 end
