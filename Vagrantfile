@@ -55,7 +55,6 @@ Vagrant.configure("2") do |config|
   if vm_hosts.empty?
     vm_hosts = {
       "@" => vm_domain,
-      "www" => "www." + vm_domain,
     }
   end
   vm_host_aliases = vm_hosts.values
@@ -148,9 +147,9 @@ Vagrant.configure("2") do |config|
     end
   end
   config.trigger.before :destroy do |trigger|
-    trigger.info = "Backup database"
-    trigger.run = {
-      inline: ""
+    trigger.info = "Dump database data"
+    trigger.run_remote = {
+      inline: "echo Dump database data"
     }
   end
 end

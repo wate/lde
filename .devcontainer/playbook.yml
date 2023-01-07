@@ -1,0 +1,37 @@
+---
+# code: language=ansible
+- name: Setup local development environment
+  hosts: all
+  become: true
+  gather_facts: true
+  # pre_tasks: []
+  roles:
+    - role: common
+    - role: nodejs
+    - role: mariadb
+    - role: postgresql
+    - role: php
+    # - role: nginx
+    - role: apache
+    - role: dehydrated
+    - role: redis
+    - role: tools
+    - role: logrotate
+  tasks:
+    - name:
+      become: false
+      block:
+        # - name:
+        #   ansible.builtin.pip:
+        #     name:
+        #     executable: /usr/bin/pip3
+
+    - name: Restart searvices
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - apache2
+        - mariadb
+        - postgresql
+  # post_tasks: []
