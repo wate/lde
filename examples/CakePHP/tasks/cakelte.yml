@@ -1,51 +1,52 @@
-- name: check exists CakeLte
+---
+- name: Check exists CakeLte
   ansible.builtin.stat:
     path: "{{ project_dir }}/vendor/arodu/cakelte"
   register: package_result
 - name: setup plugin
   block:
-    - name: load plugin setting
+    - name: Load plugin setting
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/Application.php"
         regexp: "this->addPlugin\\('CakeLte'\\)"
         line: "        $this->addPlugin('CakeLte');"
         insertafter: "^\\s+parent::bootstrap\\(\\);"
-    - name: load CakeLteTrait(1)
+    - name: Load CakeLteTrait(1)
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/View/AppView.php"
         line: 'use CakeLte\View\CakeLteTrait;'
         insertafter: '^use Cake\\View\\View;'
-    - name: load CakeLteTrait(2)
+    - name: Load CakeLteTrait(2)
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/View/AppView.php"
-        line: '    use CakeLteTrait;'
+        line: "    use CakeLteTrait;"
         insertafter: "^\\{"
-    - name: change default layout
+    - name: Change default layout
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/View/AppView.php"
         line: "    public $layout = 'CakeLte.default';"
         insertafter: "^\\s+use CakeLteTrait;"
-    - name: add parent::initialize() statement
+    - name: Add parent::initialize() statement
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/View/AppView.php"
         line: "        parent::initialize();"
         insertafter: "^\\s+{"
-    - name: add CakeLte::initializeCakeLte() statement
+    - name: Add CakeLte::initializeCakeLte() statement
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/View/AppView.php"
         line: "        $this->initializeCakeLte();"
         insertafter: "^\\s+parent::initialize\\(\\);"
-    - name: check exists plugin config file
+    - name: Check exists plugin config file
       ansible.builtin.stat:
         path: "{{ project_dir }}/config/cakelte.php"
       register: plugin_config_file_result
-    - name: copy plugin config file
+    - name: Copy plugin config file
       ansible.builtin.copy:
         src: "{{ project_dir }}/vendor/arodu/cakelte/config/cakelte.php"
         dest: "{{ project_dir }}/config/cakelte.php"
         remote_src: true
       when: not plugin_config_file_result.stat.exists
-    - name: copy AdminLte Template Files
+    - name: Copy AdminLte Template Files
       ansible.builtin.command:
         cmd: "{{ project_dir }}/bin/cake cakelte copy_files  -a -f"
         chdir: "{{ project_dir }}"

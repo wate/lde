@@ -1,8 +1,0 @@
-domain: example.local
-## 自動プロファイルを有効にする
-# php_xhprof_auto_enabled: false
-
-## 解放するポート番号
-allow_dev_ports:
-  - 9000
-  - 3000

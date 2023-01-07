@@ -1,16 +1,17 @@
-- name: check exists CakeLte
+---
+- name: Check exists localized
   ansible.builtin.stat:
     path: "{{ project_dir }}/vendor/cakephp/localized"
   register: package_result
-- name: setup plugin
+- name: Setup plugin
   block:
-    - name: load plugin setting
+    - name: Load plugin setting
       ansible.builtin.lineinfile:
         path: "{{ project_dir }}/src/Application.php"
         regexp: "this->addPlugin\\('Cake/Localized'\\)"
         line: "        $this->addPlugin('Cake/Localized');"
         insertafter: "^\\s+parent::bootstrap\\(\\);"
-    - name: create plugin resource directory
+    - name: Create plugin resource directory
       ansible.builtin.file:
         path: "{{ project_dir }}/resources/{{ item }}"
         state: directory
@@ -19,7 +20,7 @@
         - locales
         - locales/ja_JP
       register: resource_locales_dir_result
-    - name: copy po files
+    - name: Copy po files
       ansible.builtin.copy:
         src: "{{ project_dir }}/vendor/cakephp/localized/resources/locales/ja_JP/cake.po"
         dest: "{{ project_dir }}/resources/locales/ja_JP/cake.po"
