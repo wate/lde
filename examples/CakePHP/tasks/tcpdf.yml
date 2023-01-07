@@ -1,23 +1,24 @@
-- name: check exists tcpdf
+---
+- name: Check exists tcpdf
   ansible.builtin.stat:
     path: "{{ project_dir }}/vendor/tecnickcom/tcpdf"
   register: package_result
-- name: setup plugin
+- name: Setup plugin
   block:
-    - name: create fonts directory
+    - name: Create fonts directory
       ansible.builtin.file:
         path: "{{ project_dir }}/resources/fonts"
         state: directory
         mode: "0755"
       register: resource_font_dir_result
-    - name: generate font files
+    - name: Generate font files
       block:
-        - name: synchronize tcpdf original font files
+        - name: Synchronize tcpdf original font files
           ansible.posix.synchronize:
             src: "{{ project_dir }}/vendor/tecnickcom/tcpdf/fonts/"
             dest: "{{ project_dir }}/resources/fonts"
           delegate_to: "{{ inventory_hostname }}"
-        - name: find all ttf files
+        - name: Find all ttf files
           ansible.builtin.find:
             paths:
               - /usr/share/fonts/opentype/ipaexfont-gothic
@@ -28,14 +29,14 @@
             patterns:
               - '*.ttf'
           register: find_result
-        - name: generate tcpdf font file
+        - name: Generate tcpdf font file
           ansible.builtin.command:
             cmd: vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php --outpath {{ project_dir }}/resources/fonts --fonts "{{ item }}"
             chdir: "{{ project_dir }}"
           loop: "{{ find_result.files | map(attribute='path') | list }}"
           tags:
             - skip_ansible_lint
-        - name: add TCPDF setting
+        - name: Add TCPDF setting
           ansible.builtin.blockinfile:
             path: "{{ project_dir }}/config/paths.php"
             marker: "// {mark} ANSIBLE MANAGED BLOCK"
