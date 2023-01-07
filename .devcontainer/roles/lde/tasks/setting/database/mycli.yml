@@ -5,19 +5,3 @@
     src: mycli_donfig.j2
     dest: ~/.myclirc
     mode: "0600"
-
-  # ansible.builtin.blockinfile:
-  #   path: ~/.myclirc
-  #   mode: "0600"
-  #   create: true
-  #   block: |
-  #     {% for section, section_config in lde_mycli_cfg.items() -%}
-  #     [{{ section }}]
-  #     {% for option_name, option_value in section_config.items() -%}
-  #     {% if section != 'alias_dsn' -%}
-  #     {{ option_name }} = {{ option_value | string if option_value is boolean else "'" + option_value + "'" }}
-  #     {% else -%}
-  #     {{ option_name }} = "{{ option_value | replace('{db_type}', db_type) }}"
-  #     {% endif -%}
-  #     {% endfor %}
-  #     {% endfor %}

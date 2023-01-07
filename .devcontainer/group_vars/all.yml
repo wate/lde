@@ -35,6 +35,9 @@ nginx_vhosts:
       - pattern: "/\\.ht"
         match_type: "~"
         content: "deny all;"
+    ## Vagrant用設定
+    ## @see https://developer.hashicorp.com/vagrant/docs/synced-folders/virtualbox
+    extra_setting: sendfile off;
 
 ## --------------
 ## Apacheのバーチャルホストの設定
@@ -64,16 +67,10 @@ apache_vhosts:
 
 ## --------------
 ## ApacheのVagrant用設定
+## @see https://developer.hashicorp.com/vagrant/docs/synced-folders/virtualbox
 ## --------------
 apache_extra_cfg: |
   EnableSendfile off
-
-## --------------
-## NginxのVagrant用設定
-## --------------
-nginx_cfg:
-  extra_setting: |
-    sendfile off;
 
 ## --------------
 ## データベースの設定(共通)
