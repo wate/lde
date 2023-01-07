@@ -1,0 +1,62 @@
+---
+# code: language=ansible
+- name: Check ruby command
+  ansible.builtin.command:
+    cmd: which ruby
+  failed_when: false
+  changed_when: false
+  register: ruby_command_result
+- name: Create ruby completion file
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/mernen/completion-ruby/main/completion-ruby
+    dest: ~/.local/share/bash-completion/completions/ruby
+    mode: "0644"
+  when: not ruby_command_result.rc
+- name: Check gem command
+  ansible.builtin.command:
+    cmd: which gem
+  failed_when: false
+  changed_when: false
+  register: gem_command_result
+- name: Create gem completion file
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/mernen/completion-ruby/main/completion-gem
+    dest: ~/.local/share/bash-completion/completions/gem
+    mode: "0644"
+  when: not gem_command_result.rc
+- name: Check rails command
+  ansible.builtin.command:
+    cmd: which rails
+  failed_when: false
+  changed_when: false
+  register: rails_command_result
+- name: Create rails completion file
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/mernen/completion-ruby/main/completion-rails
+    dest: ~/.local/share/bash-completion/completions/rails
+    mode: "0644"
+  when: not rails_command_result.rc
+- name: Check rake command
+  ansible.builtin.command:
+    cmd: which rake
+  failed_when: false
+  changed_when: false
+  register: rake_command_result
+- name: Create rake completion file
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/mernen/completion-ruby/main/completion-rake
+    dest: ~/.local/share/bash-completion/completions/rake
+    mode: "0644"
+  when: not rake_command_result.rc
+- name: Check bundle command
+  ansible.builtin.command:
+    cmd: which bundle
+  failed_when: false
+  changed_when: false
+  register: bundle_command_result
+- name: Create bundle completion file
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/mernen/completion-ruby/main/completion-bundle
+    dest: ~/.local/share/bash-completion/completions/bundle
+    mode: "0644"
+  when: not bundle_command_result.rc

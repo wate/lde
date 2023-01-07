@@ -1,0 +1,7 @@
+---
+# code: language=ansible
+- name: Install developer tools
+  ansible.builtin.pip:
+    requirements: /vagrant/.devcontainer/requirements.txt
+    executable: /usr/bin/pip3
+    extra_args: --user

@@ -1,0 +1,8 @@
+material-mkdocs
+mkdocs-tooltips
+mycli
+pgcli
+litecli
+lizard
+ansible
+ansible-lint

@@ -1,0 +1,63 @@
+---
+## -----------------
+## 環境変数
+## -----------------
+lde_env_vars:
+  TBLS_DSN: mariadb://app_dev:app_dev_password@localhost/app_dev
+  TBLS_DOC_PATH: /vagrant/docs/schema
+
+## -----------------
+## gitの設定(名前)
+## -----------------
+# lde_git_user_name: your name
+
+## -----------------
+## gitの設定(メールアドレス)
+## -----------------
+# lde_git_user_email: your_name@example.com
+
+## -----------------
+## git prompt for bashのテーマ設定ファイルのURL
+## --
+## git prompt for bash:https://github.com/magicmonty/bash-git-prompt
+## -----------------
+# lde_git_prompt_custom_theme_url: https://raw.githubusercontent.com/wate/Dotfiles/master/.git-prompt-colors.sh
+
+
+## -----------------
+## mycliの設定
+## -----------------
+lde_mycli_cfg:
+  smart_completion: true
+  multi_line: false
+  less_chatty: true
+  enable_pager: true
+  alias_dsn:
+    dev: "mysql://app_dev:app_dev_password@localhost/app_dev"
+    test: "mysql://app_test:app_test_password@localhost/app_test"
+    stg: "mysql://app_stg:app_stg_password@localhost/app_stg"
+    prod: "mysql://app_prod:app_prod_password@localhost/app_prod"
+
+
+## -----------------
+## pgcliの設定
+## -----------------
+lde_pgcli_cfg:
+  smart_completion: true
+  multi_line: false
+  less_chatty: true
+  enable_pager: true
+  alias_dsn:
+    dev: "postgresql://app_dev:app_dev_password@localhost/app_dev"
+    test: "postgresql://app_test:app_test_password@localhost/app_test"
+    stg: "postgresql://app_stg:app_stg_password@localhost/app_stg"
+    prod: "postgresql://app_prod:app_prod_password@localhost/app_prod"
+
+## -----------------
+## litecliの設定
+## -----------------
+lde_litecli_cfg:
+  smart_completion: true
+  multi_line: false
+  less_chatty: true
+  enable_pager: true

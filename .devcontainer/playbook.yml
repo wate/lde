@@ -17,21 +17,16 @@
     - role: redis
     - role: tools
     - role: logrotate
+    - role: lde
+      become: false
   tasks:
-    # - name:
-    #   become: false
-    #   block:
-    #     # - name:
-    #     #   ansible.builtin.pip:
-    #     #     name:
-    #     #     executable: /usr/bin/pip3
-
     - name: Restart Searvices
       ansible.builtin.systemd:
         name: "{{ item }}"
         state: restarted
       loop:
         - apache2
+        - php{{ php_version | default('8.1') }}-fpm
         - mariadb
         - postgresql
   # post_tasks: []

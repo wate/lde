@@ -1,0 +1,23 @@
+[main]
+# Enables context sensitive auto-completion. If this is disabled then all
+# possible completions will be listed.
+smart_completion = {{ lde_mycli_cfg.smart_completion | string }}
+
+# Multi-line mode allows breaking up the sql statements into multiple lines. If
+# this is set to True, then the end of the statements must have a semi-colon.
+# If this is set to False then sql statements can't be split into multiple
+# lines. End of line (return) is considered as the end of the statement.
+multi_line = {{ lde_mycli_cfg.multi_line | string }}
+
+# Enable the pager on startup.
+enable_pager = {{ lde_mycli_cfg.enable_pager | string }}
+
+# Skip intro info on startup and outro info on exit
+less_chatty = {{ lde_mycli_cfg.less_chatty | string }}
+{% if lde_mycli_cfg.alias_dsn is defined %}
+
+[alias_dsn]
+{% for alias_name, alias_value in lde_mycli_cfg.alias_dsn.items() %}
+{% endfor %}
+{{ alias_name }} = "{{ alias_value }}"
+{% endif %}
