@@ -2,6 +2,8 @@
 ## --------------
 ## ドキュメントルートのパス
 ## --------------
+# lde_ocument_root_path: /vagrant/webroot
+# lde_ocument_root_path: /vagrant/public
 # lde_ocument_root_path: /vagrant
 
 ## --------------

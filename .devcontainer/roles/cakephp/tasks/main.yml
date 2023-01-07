@@ -1,27 +1,30 @@
 ---
-- name: Allow development ports
-  community.general.ufw:
-    rule: allow
-    port: "{{ item }}"
-    proto: any
-  loop: "{{ cakephp_allow_dev_ports | default(['9000']) }}"
-- name: Remove default install index file
-  ansible.builtin.file:
-    path: /var/www/html/{{ item }}
-    state: absent
-  loop:
-    - index.html
-    - index.nginx-debian.html
-- name: Create CakePHP tomprary directory
-  ansible.builtin.file:
-    path: /var/log/cakephp/{{ item }}
-    state: directory
-    mode: "0777"
-  loop:
-    - tmp/cache
-    - tmp/session
-    - tmp/tests
-    - logs
+- name: Setup CakePHP project
+  become: true
+  block:
+    - name: Allow development ports
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: any
+      loop: "{{ cakephp_allow_dev_ports | default(['9000']) }}"
+    - name: Remove default install index file
+      ansible.builtin.file:
+        path: /var/www/html/{{ item }}
+        state: absent
+      loop:
+        - index.html
+        - index.nginx-debian.html
+    - name: Create CakePHP tomprary directory
+      ansible.builtin.file:
+        path: /var/log/cakephp/{{ item }}
+        state: directory
+        mode: "0777"
+      loop:
+        - tmp/cache
+        - tmp/session
+        - tmp/tests
+        - logs
 - name: Setup CakePHP project
   become: false
   block:
@@ -61,7 +64,7 @@
             path: "{{ cakephp_tmp_project_dir }}"
             state: directory
             mode: "0755"
-        - name: Synchronize project files(shard directory => working directory)
+        - name: Synchronize project files(VirtualBox shard directory => temporary directory)
           ansible.posix.synchronize:
             src: "{{ cakephp_source_dir }}/"
             dest: "{{ cakephp_tmp_project_dir }}"
@@ -97,14 +100,14 @@
       loop: "{{ cakephp_project_addtitinal_packages | default([]) }}"
     - name: Setup localized plugin setting
       ansible.builtin.include_tasks:
-        file: plugin/localized.yml
+        file: plugins/localized.yml
     - name: Setup Cakelte plugin setting
       ansible.builtin.include_tasks:
-        file: plugin/cakelte.yml
+        file: plugins/cakelte.yml
     - name: Setup tcpdf font files
       ansible.builtin.import_tasks:
-        file: plugin/tcpdf.yml
-    - name: Synchronize project files(working directory => shard directory)
+        file: plugins/tcpdf.yml
+    - name: Synchronize project files(temporary directory => VirtualBox shard directory)
       ansible.posix.synchronize:
         src: "{{ cakephp_tmp_project_dir }}/"
         dest: "{{ cakephp_source_dir }}"
