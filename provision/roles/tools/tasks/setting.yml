@@ -1,5 +1,0 @@
----
-- name: create/update tool setting
-  ansible.builtin.include_tasks: "{{ item }}"
-  when: install_tools is undefined or (item | basename)[0:-4] in install_tools
-  loop: "{{ lookup('fileglob', 'tasks/setting/*.yml', wantlist=True) }}"

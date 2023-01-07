@@ -1,9 +1,0 @@
----
-- name: restart mariadb
-  ansible.builtin.systemd:
-    name: mariadb
-    state: restarted
-- name: restart firewalld
-  ansible.builtin.systemd:
-    name: firewalld
-    state: restarted

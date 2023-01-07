@@ -1,0 +1,16 @@
+---
+filters:
+  ## https://github.com/textlint/textlint-filter-rule-comments
+  comments: true
+rules:
+  ## https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing
+  preset-ja-technical-writing: true
+  ## https://github.com/textlint-ja/textlint-rule-preset-ja-spacing
+  preset-ja-spacing: true
+  ## https://github.com/textlint-rule/textlint-rule-prh
+  prh:
+    rulePaths:
+      - docs/rules/kanji-open.yml
+      - docs/rules/names.yml
+      - docs/rules/abbreviations.yml
+      - docs/rules/typo.yml

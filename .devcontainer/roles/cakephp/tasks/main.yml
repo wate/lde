@@ -1,0 +1,165 @@
+---
+- name: allow development ports
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: any
+  loop: "{{ allow_dev_ports | default(['9000']) }}"
+- name: remove default install index file
+  ansible.builtin.file:
+    path: /var/www/html/{{ item }}
+    state: absent
+  loop:
+    - index.html
+    - index.nginx-debian.html
+- name: create CakePHP tomprary directory
+  ansible.builtin.file:
+    path: /var/log/cake/{{ item }}
+    state: directory
+    mode: "0777"
+  loop:
+    - tmp/cache
+    - tmp/session
+    - tmp/tests
+    - logs
+- name:
+  block:
+    - name: Set variable
+      ansible.builtin.set_fact:
+        tmp_project_dir: /tmp/php_project
+        lde_source_code_dir: /vagrant/src
+    - name: Remove dummy file
+      ansible.builtin.file:
+        path: "{{ lde_source_code_dir }}/.gitkeep"
+        state: absent
+    - name: Check exists composer.json
+      ansible.builtin.stat:
+        path: "{{ lde_source_code_dir }}/composer.json"
+      register: composer_json_result
+    - name: Remove temporary project directory
+      ansible.builtin.file:
+        path: "{{ tmp_project_dir }}"
+        state: absent
+    - name: Create cakephp project
+      when: not composer_json_result.stat.exists
+      block:
+        - name: Create temporary cakephp project
+          community.general.composer:
+            command: create-project
+            arguments: '"cakephp/app:^{{ cake_version | default(4) | string }}" {{ tmp_project_dir }}'
+            no_dev: false
+            prefer_dist: true
+            working_dir: /tmp
+    - name: Setup cakephp project
+      when: composer_json_result.stat.exists
+      block:
+        - name: Create temporary project directory
+          ansible.builtin.file:
+            path: "{{ tmp_project_dir }}"
+            state: directory
+            mode: "0755"
+        - name: Synchronize project files(shard directory => working directory)
+          ansible.posix.synchronize:
+            src: "{{ lde_source_code_dir }}/"
+            dest: "{{ tmp_project_dir }}"
+            rsync_opts:
+              - "--exclude=.git"
+              - "--exclude=tmp"
+              - "--exclude=logs"
+          delegate_to: "{{ inventory_hostname }}"
+        - name: Install php dependency packages
+          community.general.composer:
+            command: install
+            no_dev: false
+            working_dir: "{{ tmp_project_dir }}"
+    - name: Check exists cake command completion file
+      ansible.builtin.stat:
+        path: "{{ tmp_project_dir }}/app/bin/bash_completion.sh"
+      register: cake_command_completion_file_result
+    - name: Create cake completion file
+      ansible.builtin.copy:
+        src: "{{ tmp_project_dir }}/bin/bash_completion.sh"
+        dest: ~/.local/share/bash-completion/completions/cake
+        mode: "0644"
+        remote_src: true
+      when: cake_command_completion_file_result.stat.exists
+    - name: Add php project dependency packages
+      community.general.composer:
+        command: require
+        arguments: '"{{ item.name }}" {{ item.dev | default(false) | ternary("--dev", "") }}'
+        working_dir: "{{ tmp_project_dir }}"
+      loop: "{{ cake_project_addtitinal_packages | default([]) }}"
+    - name: Setup localized plugin setting
+      ansible.builtin.include_tasks: "{{ post_task_base_dir }}/tasks/localized.yml"
+      vars:
+        project_dir: "{{ tmp_project_dir }}"
+    - name: Setup Cakelte plugin setting
+      ansible.builtin.include_tasks: "{{ post_task_base_dir }}/tasks/cakelte.yml"
+      vars:
+        project_dir: "{{ tmp_project_dir }}"
+    - name: Setup tcpdf font files
+      ansible.builtin.include_tasks: "{{ post_task_base_dir }}/tasks/tcpdf.yml"
+      vars:
+        project_dir: "{{ tmp_project_dir }}"
+    - name: Synchronize project files(working directory => shard directory)
+      ansible.posix.synchronize:
+        src: "{{ tmp_project_dir }}/"
+        dest: "{{ lde_source_code_dir }}"
+      delegate_to: "{{ inventory_hostname }}"
+    - name: Remove temporary project directory
+      ansible.builtin.file:
+        path: "{{ tmp_project_dir }}"
+        state: absent
+    - name: Regenerate dummy file
+      ansible.builtin.file:
+        path: "{{ lde_source_code_dir }}/.gitkeep"
+        state: touch
+        mode: "0644"
+    - name: Set variables
+      ansible.builtin.set_fact:
+        dot_envrc_value: |
+          PATH_add bin
+          layout php
+          layout node
+          source_env_if_exists .env
+        dot_env_value: |
+          export APP_DEFAULT_LOCALE="ja_JP"
+          export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
+          export DATABASE_URL="mysql://{{ lde_db_user }}:{{ lde_db_password }}@{{ lde_db_host }}/{{ lde_db_name }}?encoding={{ lde_db_encoding }}&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+          export DATABASE_TEST_URL="mysql://{{ lde_test_db_user }}:{{ lde_test_db_password }}@{{ lde_test_db_host }}/{{ lde_test_db_name }}?encoding={{ lde_test_db_encoding }}&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+          export LOG_DEBUG_URL=file:///var/log/cake/logs/
+          export LOG_ERROR_URL=file:///var/log/cake/logs/
+          export LOG_QUERIES_URL=file:///var/log/cake/logs/
+          export CACHE_DEFAULT_URL=redis://localhost
+          export CACHE_CAKECORE_URL=redis://localhost
+          export CACHE_CAKEMODEL_URL=redis://localhost
+          export CACHE_CAKEROUTES_URL=redis://localhost
+    - name: create direnv setting
+      ansible.builtin.blockinfile:
+        path: "{{ lde_source_code_dir }}/.envrc"
+        create: true
+        block: "{{ dot_envrc_value }}"
+    - name: add .gitignore direnv setting file
+      ansible.builtin.lineinfile:
+        path: "{{ lde_source_code_dir }}/.gitignore"
+        line: .envrc
+    - name: display direnv setting
+      ansible.builtin.debug:
+        msg: |
+          自動生成したdirenvの設定(.envrc)は以下の通りです
+          ```
+          {{ dot_envrc_value -}}
+          ```
+    - name: create CakePHP setting
+      ansible.builtin.blockinfile:
+        path: "{{ lde_source_code_dir }}/config/.env"
+        create: true
+        block: "{{ dot_env_value }}"
+    - name: display direnv setting
+      ansible.builtin.debug:
+        msg: |
+          自動生成したCakePHPの設定(config/.env)は以下の通りです
+          ```
+          {{ dot_env_value -}}
+          ```
+  become: false

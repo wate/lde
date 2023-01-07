@@ -1,0 +1,250 @@
+---
+
+lde_common_databases:
+  dev: &db_app_dev
+    name: app_dev
+    user: app_dev
+    password: app_dev_password
+  test: &db_app_test
+    name: app_test
+    user: app_test
+    password: app_test_password
+  stg: &db_app_stg
+    name: app_stg
+    user: app_stg
+    password: app_stg_password
+  prod: &db_app_prod
+    name: app_prod
+    user: app_prod
+    password: app_prod_password
+
+
+lde_common_db_connection_hosts: &mariadb_common_db_connection_hosts
+  - "127.0.0.1"
+  - "localhost"
+  - "192.168.%"
+
+install_other_japanese_fonts: true
+
+nodejs_version: 16
+
+hedgedoc_port: 3000
+gitea_port: 3001
+grafana_port: 3002
+
+mariadb_databases:
+  - <<: *db_app_dev
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - <<: *db_app_test
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - <<: *db_app_stg
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - <<: *db_app_prod
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - name: hedgedoc
+    user: hedgedoc
+    password: hedgedoc_password
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - name: gitea
+    user: gitea
+    password: gitea_password
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - name: mattermost
+    encoding: utf8mb4
+    user: mattermost
+    password: mattermost_password
+    hosts: *mariadb_common_db_connection_hosts
+
+postgresql_databases:
+  - <<: *db_app_dev
+    encoding: utf8
+  - <<: *db_app_test
+    encoding: utf8
+  - <<: *db_app_stg
+    encoding: utf8
+  - <<: *db_app_prod
+    encoding: utf8
+  - name: gitea
+    user: gitea
+    password: gitea_password
+    encoding: utf8
+  - name: hedgedoc
+    user: hedgedoc
+    password: hedgedoc_password
+    encoding: utf8
+  - name: mattermost
+    encoding: utf8
+    user: mattermost
+    password: mattermost_password
+
+mattermost_db_cfg:
+  type: postgres
+  host: localhost
+  name: mattermost
+  user: mattermost
+  port: "5432"
+  password: mattermost_password
+  # additional_params:
+  #   - "charset=utf8mb4"
+  #   - "writeTimeout=30s"
+
+hedgedoc_cfg:
+  production:
+    domain: "hedgedoc.{{ domain }}"
+    host: localhost
+    port: "{{ hedgedoc_port }}"
+    protocolUseSSL: false
+    urlAddPort: false
+    db:
+      dialect: postgres
+      host: localhost
+      port: 5432
+      database: hedgedoc
+      username: hedgedoc
+      password: hedgedoc_password
+
+gitea_cfg:
+  database:
+    DB_TYPE: postgres
+    HOST: "127.0.0.1:5432"
+    NAME: gitea
+    USER: gitea
+    PASSWD: gitea_password
+    CHARSET: utf8
+    SSL_MODE: disable
+  server:
+    HTTP_PORT: "{{ gitea_port }}"
+    LOCAL_ROOT_URL: http://localhost:{{ gitea_port }}/
+    SSH_DOMAIN: gitea.{{ domain }}
+    DOMAIN: gitea.{{ domain }}
+    ROOT_URL: http://gitea.{{ domain }}/
+
+nginx_vhosts:
+  - name: default
+    default: true
+    server_name:
+      - "{{ domain }}"
+      - "www.{{ domain }}"
+    document_root: /var/www/html
+    index:
+      - index.html
+      - index.htm
+      - index.php
+    access_log: /var/log/nginx/ssl.access.log
+    error_log: /var/log/nginx/ssl.error.log
+    client_max_body_size: 50M
+    locations:
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          default_type "text/plain";
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "="
+        content: |
+          return 404;
+      - pattern: /
+        content: |
+          try_files $uri $uri/ /index.php?$query_string;
+      - pattern: "\\.php"
+        match_type: "~"
+        content: |
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          include snippets/fastcgi-php.conf;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
+  - name: hedgedoc
+    server_name: hedgedoc.{{ domain }}
+    client_max_body_size: 0
+    pre_extra_setting: |
+      map $http_upgrade $connection_upgrade {
+              default upgrade;
+              ''      close;
+      }
+    locations:
+      - pattern: "/.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: /
+        content: |
+          proxy_pass http://localhost:{{ hedgedoc_port }}/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+      - pattern: /socket.io/
+        content: |
+          proxy_pass http://localhost:{{ hedgedoc_port }}/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $connection_upgrade;
+  - name: gitea
+    server_name: gitea.{{ domain }}
+    client_max_body_size: 0
+    locations:
+      - pattern: "/.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: /
+        content: |
+          proxy_pass http://localhost:{{ gitea_port }}/;
+          include proxy_params;
+  - name: minio
+    server_name: minio.{{ domain }}
+    client_max_body_size: 0
+    locations:
+      - pattern: "/.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: /
+        content: |
+          proxy_pass http://127.0.0.1:{{ minio_address_port }};
+          include proxy_params;
+  - name: mattermost
+    server_name: mattermost.{{ domain }}
+    client_max_body_size: 0
+    locations:
+      - pattern: "/.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: /
+        content: |
+          proxy_pass http://localhost:{{ mattermost_listen_address_port }};
+          include proxy_params;
+  - name: grafana
+    server_name: grafana.{{ domain }}
+    client_max_body_size: 0
+    locations:
+      - pattern: "/.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: /
+        content: |
+          proxy_pass http://localhost:{{ grafana_port }};
+          include proxy_params;
+  # --------------
+  # status page
+  # --------------
+  - name: status
+    server_name: localhost
+    listen: 8080
+    access_log: 'off'
+    locations:
+      - pattern: "/nginx_status"
+        content: |
+          stub_status on;

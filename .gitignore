@@ -1,15 +1,43 @@
-### Ansible ###
-# Ansible retry files
-*.retry
+### macOS ###
+.DS_Store
+
+### Windows ###
+Thumbs.db
+
+# Sphinx documentation
+docs/_build/
+
+# mkdocs documentation
+/site
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+### PhpStorm / WebStorm ###
+.idea/
+
+### Composer ###
+composer.phar
+/vendor/
+
+### Node ###
+/node_modules/
+
+## Environment normalization:
+/.bundle/
 
 ### Vagrant ###
 .vagrant/
 
-### Other ###
-src/
-wiki/
-provision/roles/*/meta/.galaxy_install_info
+### dotenv ###
+.env
 
 ### direnv ###
+.direnv
 .envrc
-.env
+

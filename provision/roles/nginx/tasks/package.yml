@@ -1,4 +1,0 @@
----
-- name: install nginx
-  ansible.builtin.apt:
-    name: "{{ nginx_packages }}"
