@@ -4,7 +4,7 @@
     rule: allow
     port: "{{ item }}"
     proto: any
-  loop: "{{ allow_dev_ports | default(['9000']) }}"
+  loop: "{{ cakephp_allow_dev_ports | default(['9000']) }}"
 - name: Remove default install index file
   ansible.builtin.file:
     path: /var/www/html/{{ item }}
@@ -123,8 +123,8 @@
         dot_env_value: |
           export APP_DEFAULT_LOCALE="ja_JP"
           export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
-          export DATABASE_URL="mysql://{{ lde_db_user }}:{{ lde_db_password }}@{{ lde_db_host }}/{{ lde_db_name }}?encoding={{ lde_db_encoding }}&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
-          export DATABASE_TEST_URL="mysql://{{ lde_test_db_user }}:{{ lde_test_db_password }}@{{ lde_test_db_host }}/{{ lde_test_db_name }}?encoding={{ lde_test_db_encoding }}&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+          export DATABASE_URL="{{ cakephp_database_url }}"
+          export DATABASE_TEST_URL="{{ cakephp_database_test_url }}"
           export LOG_DEBUG_URL=file:///var/log/cakephp/logs/
           export LOG_ERROR_URL=file:///var/log/cakephp/logs/
           export LOG_QUERIES_URL=file:///var/log/cakephp/logs/
@@ -137,6 +137,7 @@
     - name: Create direnv setting
       ansible.builtin.blockinfile:
         path: "{{ cakephp_source_dir }}/.envrc"
+        mode: "0644"
         create: true
         block: "{{ dot_envrc_value }}"
     - name: Add .gitignore direnv setting file
@@ -153,6 +154,7 @@
     - name: Create CakePHP setting
       ansible.builtin.blockinfile:
         path: "{{ cakephp_source_dir }}/config/.env"
+        mode: "0644"
         create: true
         block: "{{ dot_env_value }}"
     - name: Display direnv setting
