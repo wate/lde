@@ -1,19 +1,20 @@
 ---
-- name: Check exists localized
+- name: Check exists localized plugin
   ansible.builtin.stat:
-    path: "{{ project_dir }}/vendor/cakephp/localized"
+    path: "{{ cakephp_tmp_project_dir }}/vendor/cakephp/localized"
   register: package_result
 - name: Setup plugin
+  when: package_result.stat.exists
   block:
     - name: Load plugin setting
       ansible.builtin.lineinfile:
-        path: "{{ project_dir }}/src/Application.php"
+        path: "{{ cakephp_tmp_project_dir }}/src/Application.php"
         regexp: "this->addPlugin\\('Cake/Localized'\\)"
         line: "        $this->addPlugin('Cake/Localized');"
         insertafter: "^\\s+parent::bootstrap\\(\\);"
     - name: Create plugin resource directory
       ansible.builtin.file:
-        path: "{{ project_dir }}/resources/{{ item }}"
+        path: "{{ cakephp_tmp_project_dir }}/resources/{{ item }}"
         state: directory
         mode: "0755"
       loop:
@@ -22,9 +23,8 @@
       register: resource_locales_dir_result
     - name: Copy po files
       ansible.builtin.copy:
-        src: "{{ project_dir }}/vendor/cakephp/localized/resources/locales/ja_JP/cake.po"
-        dest: "{{ project_dir }}/resources/locales/ja_JP/cake.po"
+        src: "{{ cakephp_tmp_project_dir }}/vendor/cakephp/localized/resources/locales/ja_JP/cake.po"
+        dest: "{{ cakephp_tmp_project_dir }}/resources/locales/ja_JP/cake.po"
         mode: "0644"
         remote_src: true
       when: resource_locales_dir_result is changed
-  when: package_result.stat.exists

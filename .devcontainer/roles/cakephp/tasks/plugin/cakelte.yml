@@ -1,54 +1,55 @@
 ---
-- name: Check exists CakeLte
+- name: Check exists CakeLte plugin
   ansible.builtin.stat:
-    path: "{{ project_dir }}/vendor/arodu/cakelte"
+    path: "{{ cakephp_tmp_project_dir }}/vendor/arodu/cakelte"
   register: package_result
-- name: setup plugin
+- name: Setup plugin
+  when: package_result.stat.exists
   block:
     - name: Load plugin setting
       ansible.builtin.lineinfile:
-        path: "{{ project_dir }}/src/Application.php"
+        path: "{{ cakephp_tmp_project_dir }}/src/Application.php"
         regexp: "this->addPlugin\\('CakeLte'\\)"
         line: "        $this->addPlugin('CakeLte');"
         insertafter: "^\\s+parent::bootstrap\\(\\);"
     - name: Load CakeLteTrait(1)
       ansible.builtin.lineinfile:
-        path: "{{ project_dir }}/src/View/AppView.php"
+        path: "{{ cakephp_tmp_project_dir }}/src/View/AppView.php"
         line: 'use CakeLte\View\CakeLteTrait;'
         insertafter: '^use Cake\\View\\View;'
     - name: Load CakeLteTrait(2)
       ansible.builtin.lineinfile:
-        path: "{{ project_dir }}/src/View/AppView.php"
+        path: "{{ cakephp_tmp_project_dir }}/src/View/AppView.php"
         line: "    use CakeLteTrait;"
         insertafter: "^\\{"
     - name: Change default layout
       ansible.builtin.lineinfile:
-        path: "{{ project_dir }}/src/View/AppView.php"
+        path: "{{ cakephp_tmp_project_dir }}/src/View/AppView.php"
         line: "    public $layout = 'CakeLte.default';"
         insertafter: "^\\s+use CakeLteTrait;"
     - name: Add parent::initialize() statement
       ansible.builtin.lineinfile:
-        path: "{{ project_dir }}/src/View/AppView.php"
+        path: "{{ cakephp_tmp_project_dir }}/src/View/AppView.php"
         line: "        parent::initialize();"
         insertafter: "^\\s+{"
     - name: Add CakeLte::initializeCakeLte() statement
       ansible.builtin.lineinfile:
-        path: "{{ project_dir }}/src/View/AppView.php"
+        path: "{{ cakephp_tmp_project_dir }}/src/View/AppView.php"
         line: "        $this->initializeCakeLte();"
         insertafter: "^\\s+parent::initialize\\(\\);"
     - name: Check exists plugin config file
       ansible.builtin.stat:
-        path: "{{ project_dir }}/config/cakelte.php"
+        path: "{{ cakephp_tmp_project_dir }}/config/cakelte.php"
       register: plugin_config_file_result
     - name: Copy plugin config file
       ansible.builtin.copy:
-        src: "{{ project_dir }}/vendor/arodu/cakelte/config/cakelte.php"
-        dest: "{{ project_dir }}/config/cakelte.php"
+        src: "{{ cakephp_tmp_project_dir }}/vendor/arodu/cakelte/config/cakelte.php"
+        dest: "{{ cakephp_tmp_project_dir }}/config/cakelte.php"
+        mode: "0644"
         remote_src: true
       when: not plugin_config_file_result.stat.exists
     - name: Copy AdminLte Template Files
       ansible.builtin.command:
-        cmd: "{{ project_dir }}/bin/cake cakelte copy_files  -a -f"
-        chdir: "{{ project_dir }}"
-        creates: "{{ project_dir }}/templates/layout/login.php"
-  when: package_result.stat.exists
+        cmd: "{{ cakephp_tmp_project_dir }}/bin/cake cakelte copy_files -a -f"
+        chdir: "{{ cakephp_tmp_project_dir }}"
+        creates: "{{ cakephp_tmp_project_dir }}/templates/layout/login.php"

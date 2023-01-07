@@ -1,5 +1,9 @@
-cake_version: 4
-cake_project_addtitinal_packages:
+---
+cakephp_source_dir: /vagrant
+cakephp_tmp_project_dir: /tmp/php_project
+
+cakephp_major_version: 4
+cakephp_project_addtitinal_packages:
   - name: "josegonzalez/dotenv:^3.2"
   - name: "cakephp/authentication:^2.0"
   - name: symfony/yaml
@@ -8,13 +12,9 @@ cake_project_addtitinal_packages:
   - name: phpoffice/phpspreadsheet
   - name: tecnickcom/tcpdf
   - name: arodu/cakelte
-  # - name: ishanvyas22/cakephp-inertiajs
+  - name: squizlabs/php_codesniffer
+    dev: true
   - name: phpstan/phpstan
     dev: true
   - name: dereuromark/cakephp-ide-helper
     dev: true
-
-# ## 解放するポート番号
-# allow_dev_ports:
-#   - 9000
-#   - 3000
