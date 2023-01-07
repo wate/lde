@@ -1,5 +1,10 @@
 ---
 ## --------------
+## ドキュメントルートのパス
+## --------------
+# lde_ocument_root_path: /vagrant
+
+## --------------
 ## Nginxのバーチャルホストの設定
 ## --------------
 nginx_vhosts:
@@ -7,7 +12,7 @@ nginx_vhosts:
     default: true
     server_name:
       - "{{ domain }}"
-    document_root: "{{ document_root_path | default('/vagrant') }}"
+    document_root: "{{ lde_document_root_path | default('/vagrant', true) }}"
     index:
       - index.html
       - index.php
@@ -46,7 +51,7 @@ apache_vhosts:
   - name: 000-default
     default: true
     server_name: "{{ domain }}"
-    document_root: "{{ document_root_path | default('/vagrant') }}"
+    document_root: "{{ lde_document_root_path | default('/vagrant', true) }}"
     directory_index:
       - index.html
       - index.php
@@ -63,7 +68,6 @@ apache_vhosts:
     alias:
       - from: /.well-known/acme-challenge/
         to: /var/lib/dehydrated/acme-challenges/
-
 
 ## --------------
 ## ApacheのVagrant用設定
@@ -139,3 +143,27 @@ postgresql_databases:
     encoding: utf8
   - <<: *db_app_prod
     encoding: utf8
+
+## --------------
+## CekePHPプロジェクトのデータベース設定
+## --------------
+cakephp_database_url: "\
+  mysql://{{ mariadb_databases[0].user }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}\
+  ?encoding={{ mariadb_databases[0].encoding }}\
+  &timezone=UTC\
+  &cacheMetadata=true\
+  &quoteIdentifiers=false\
+  &persistent=false
+  "
+
+## --------------
+## CekePHPプロジェクトのテスト用データベース設定
+## --------------
+cakephp_database_test_url: "\
+  mysql://{{ mariadb_databases[1].user }}:{{ mariadb_databases[1].password }}@localhost/{{ mariadb_databases[1].name }}\
+  ?encoding={{ mariadb_databases[1].encoding }}\
+  &timezone=UTC\
+  &cacheMetadata=true\
+  &quoteIdentifiers=false\
+  &persistent=false
+  "
