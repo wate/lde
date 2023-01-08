@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS app_dev DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS app_test DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS app_stg DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS app_prod DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER 'app_dev'@'%' IDENTIFIED BY 'app_dev_password';
+CREATE USER 'app_test'@'%' IDENTIFIED BY 'app_test_password';
+CREATE USER 'app_stg'@'%' IDENTIFIED BY 'app_stg_password';
+CREATE USER 'app_prod'@'%' IDENTIFIED BY 'app_prod_password';
+GRANT ALL ON app_dev.* TO 'app_dev'@'%';
+GRANT ALL ON app_test.* TO 'app_test'@'%';
+GRANT ALL ON app_stg.* TO 'app_stg'@'%';
+GRANT ALL ON app_prod.* TO 'app_prod'@'%';

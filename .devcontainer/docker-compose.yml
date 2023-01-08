@@ -16,63 +16,9 @@ services:
     volumes:
       - ..:/workspace:cached
     command: sleep infinity
-    networks:
-      - bluemine
+    network_mode: service:db
     depends_on:
       - db
-  hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:1.9.6
-    container_name: hedgedoc
-    environment:
-      - CMD_DB_URL=mariadb://hedgedoc:hedgedoc@db:3306/hedgedoc
-      - CMD_DOMAIN=localhost
-      - CMD_URL_ADDPORT=true
-    volumes:
-      - hedgedoc-uploads:/hedgedoc/public/uploads
-    ports:
-      - "3000:3000"
-    restart: always
-    networks:
-      - bluemine
-    depends_on:
-      - db
-  gitea:
-    image: gitea/gitea:latest
-    container_name: gitea
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-      - GITEA__database__DB_TYPE=mysql
-      - GITEA__database__HOST=db:3306
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=gitea
-    restart: always
-    volumes:
-      - ./gitea:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - "8081:3000"
-      - "2222:22"
-    networks:
-      - bluemine
-    depends_on:
-      - db
-  minio:
-    image: quay.io/minio/minio
-    container_name: minio
-    environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
-    command: server --console-address ":9001" /data
-    volumes:
-      - ./minio:/data
-    networks:
-      - bluemine
-    ports:
-      - "9000:9000"
-      - "9001:9001"
   db:
     image: mariadb:10.5
     restart: unless-stopped
@@ -80,16 +26,11 @@ services:
       - ./mariadb/customize.cnf:/etc/mysql/mariadb.conf.d/customize.cnf
       - ./mariadb/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - mariadb-data:/var/lib/mysql
-    networks:
-      - bluemine
-    ports:
-      - "3306:3306"
     environment:
       TZ: Asia/Tokyo
       MYSQL_ROOT_PASSWORD: mariadb
+      # MYSQL_DATABASE: app_dev
+      # MYSQL_USER: app_dev_user
+      # MYSQL_PASSWORD: app_dev_password
 volumes:
   mariadb-data:
-  hedgedoc-uploads:
-networks:
-  bluemine:
-    external: false
