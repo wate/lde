@@ -16,6 +16,7 @@
     - role: php
     - role: nginx
     # - role: apache
+    - role: phpredisadmin
     - role: dehydrated
     - role: redis
     - role: tools

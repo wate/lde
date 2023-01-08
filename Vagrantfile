@@ -55,6 +55,7 @@ Vagrant.configure("2") do |config|
   if vm_hosts.empty?
     vm_hosts = {
       "@" => vm_domain,
+      "cache" => "cache." + vm_domain
     }
   end
   vm_host_aliases = vm_hosts.values

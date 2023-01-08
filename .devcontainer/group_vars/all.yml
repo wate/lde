@@ -45,6 +45,37 @@ nginx_vhosts:
     ## Vagrant用設定
     ## @see https://developer.hashicorp.com/vagrant/docs/synced-folders/virtualbox
     extra_setting: sendfile off;
+  - name: phpRedisAdmin
+    server_name:
+      - "cache.{{ domain }}"
+    document_root: "{{ phpredisadmin_dest }}"
+    index:
+      - index.html
+      - index.php
+    access_log: /var/log/nginx/phpRedisAdmin.access.log
+    error_log: /var/log/nginx/phpRedisAdmin.error.log
+    client_max_body_size: 0
+    locations:
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          default_type "text/plain";
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "="
+        content: |
+          return 404;
+      - pattern: /
+        content: |
+          try_files $uri $uri/ /index.php?$query_string;
+      - pattern: "\\.php"
+        match_type: "~"
+        content: |
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          include snippets/fastcgi-php.conf;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
 
 ## --------------
 ## Apacheのバーチャルホストの設定
@@ -70,6 +101,26 @@ apache_vhosts:
     alias:
       - from: /.well-known/acme-challenge/
         to: /var/lib/dehydrated/acme-challenges/
+  - name: 090-phpRedisAdmin
+    server_name: "cache.{{ domain }}"
+    document_root: "{{ phpredisadmin_dest }}"
+    directory_index:
+      - index.html
+      - index.php
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    custom_log:
+      path: /var/log/apache2/phpRedisAdmin.access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/phpRedisAdmin.error.log
+      log_level: warn
+    alias:
+      - from: /.well-known/acme-challenge/
+        to: /var/lib/dehydrated/acme-challenges/
+
 
 ## --------------
 ## ApacheのVagrant用設定
@@ -77,6 +128,32 @@ apache_vhosts:
 ## --------------
 apache_extra_cfg: |
   EnableSendfile off
+
+## ---------
+## インストールするPHP関連パッケージ
+## ---------
+php_packages:
+  - php{{ php_version }}-common
+  - php{{ php_version }}-cli
+  - php{{ php_version }}-dev
+  - php{{ php_version }}-curl
+  - php{{ php_version }}-gd
+  - php{{ php_version }}-bcmath
+  - php{{ php_version }}-mbstring
+  - php{{ php_version }}-bz2
+  - php{{ php_version }}-gettext
+  - php{{ php_version }}-sqlite3
+  - php{{ php_version }}-mysqlnd
+  - php{{ php_version }}-pdo
+  - php{{ php_version }}-opcache
+  - php{{ php_version }}-intl
+  - php{{ php_version }}-imagick
+  - php{{ php_version }}-xml
+  - php{{ php_version }}-zip
+  - php{{ php_version }}-apcu
+  - php{{ php_version }}-fpm
+  - php{{ php_version }}-redis
+  # - php{{ php_version }}-xdebug
 
 ## --------------
 ## データベースの設定(共通)
