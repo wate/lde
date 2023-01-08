@@ -1,6 +1,18 @@
 ---
 # code: language=ansible
-- name: Install developer tools
+- name: Install development tools
+  become: true
+  block:
+    - name: Install pre-commit
+      ansible.builtin.apt:
+        name: pre-commit
+    - name: Install Graphviz
+      ansible.builtin.apt:
+        name: graphviz
+    - name: Install PlantUML
+      ansible.builtin.apt:
+        name: plantuml
+- name: Install pip packages
   ansible.builtin.pip:
     requirements: /vagrant/.devcontainer/requirements.txt
     executable: /usr/bin/pip3
