@@ -30,6 +30,8 @@ lde_env_vars:
 lde_mycli_cfg:
   smart_completion: true
   multi_line: false
+  table_format: ascii
+  syntax_style: default
   less_chatty: true
   enable_pager: true
   alias_dsn:
@@ -45,6 +47,8 @@ lde_mycli_cfg:
 lde_pgcli_cfg:
   smart_completion: true
   multi_line: false
+  table_format: psql
+  syntax_style: default
   less_chatty: true
   enable_pager: true
   alias_dsn:
@@ -59,5 +63,7 @@ lde_pgcli_cfg:
 lde_litecli_cfg:
   smart_completion: true
   multi_line: false
+  table_format: ascii
+  syntax_style: default
   less_chatty: true
   enable_pager: true

@@ -9,11 +9,22 @@ smart_completion = {{ lde_mycli_cfg.smart_completion | string }}
 # lines. End of line (return) is considered as the end of the statement.
 multi_line = {{ lde_mycli_cfg.multi_line | string }}
 
-# Enable the pager on startup.
-enable_pager = {{ lde_mycli_cfg.enable_pager | string }}
+# Table format. Possible values: ascii, double, github,
+# psql, plain, simple, grid, fancy_grid, pipe, orgtbl, rst, mediawiki, html,
+# latex, latex_booktabs, textile, moinmoin, jira, vertical, tsv, csv.
+# Recommended: ascii
+table_format = {{ lde_mycli_cfg.table_format }}
+
+# Syntax Style. Possible values: manni, igor, xcode, vim, autumn, vs, rrt,
+# native, perldoc, borland, tango, emacs, friendly, monokai, paraiso-dark,
+# colorful, murphy, bw, pastie, paraiso-light, trac, default, fruity
+syntax_style = {{ lde_mycli_cfg.syntax_style }}
 
 # Skip intro info on startup and outro info on exit
 less_chatty = {{ lde_mycli_cfg.less_chatty | string }}
+
+# Enable the pager on startup.
+enable_pager = {{ lde_mycli_cfg.enable_pager | string }}
 {% if lde_mycli_cfg.alias_dsn is defined %}
 
 [alias_dsn]
