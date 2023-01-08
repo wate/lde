@@ -83,6 +83,9 @@ less_chatty = True
 
 [alias_dsn]
 dev = mysql://app_dev:app_dev_password@db:3306/app_dev
+test = mysql://app_test:app_test_password@db:3306/app_test
+stg = mysql://app_stg:app_stg_password@db:3306/app_stg
+prod = mysql://app_prod:app_prod_password@db:3306/app_prod
 EOT
 
 sudo chmod a+x "$(pwd)"
