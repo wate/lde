@@ -46,17 +46,17 @@
       ansible.builtin.file:
         path: "{{ cakephp_tmp_project_dir }}"
         state: absent
-    - name: Create cakephp project
+    - name: Create CakePHP project
       when: not composer_json_result.stat.exists
       block:
-        - name: Create temporary cakephp project
+        - name: Create CakePHP project temporary
           community.general.composer:
             command: create-project
             arguments: '"cakephp/app:^{{ cakephp_major_version | default(4) | string }}" {{ cakephp_tmp_project_dir }}'
             no_dev: false
             prefer_dist: true
             working_dir: "{{ cakephp_tmp_project_dir | dirname }}"
-    - name: Setup cakephp project
+    - name: Setup CakePHP project
       when: composer_json_result.stat.exists
       block:
         - name: Create temporary project directory
@@ -75,6 +75,7 @@
               - "--exclude=.devcontainer"
               - "--exclude=.vagrant"
               - "--exclude=docs"
+              - "--exclude=README.md"
           delegate_to: "{{ inventory_hostname }}"
         - name: Install php dependency packages
           community.general.composer:
@@ -111,6 +112,14 @@
       ansible.posix.synchronize:
         src: "{{ cakephp_tmp_project_dir }}/"
         dest: "{{ cakephp_source_dir }}"
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=tmp"
+          - "--exclude=logs"
+          - "--exclude=.devcontainer"
+          - "--exclude=.vagrant"
+          - "--exclude=docs"
+          - "--exclude=README.md"
       delegate_to: "{{ inventory_hostname }}"
     - name: Remove temporary project directory
       ansible.builtin.file:

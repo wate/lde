@@ -23,9 +23,27 @@
     - role: logrotate
     - role: lde
       become: false
-    # - role: cakephp
-    #   become: false
   tasks:
+    # - name: Setup CakePHP Project
+    #   ansible.builtin.import_role:
+    #     name: cakephp
+    #   become: false
+    - name: Check pre-commit config file
+      ansible.builtin.stat:
+        path: /vagrant/.pre-commit-config.yaml
+      register: pre_commit_config_result
+    - name: pre-commit config auto update
+      when: pre_commit_config_result.stat.exists
+      become: false
+      block:
+        - name: pre-commit config auto update
+          ansible.builtin.command:
+            cmd: pre-commit autoupdate
+            chdir: /vagrant
+          register: cmd_result
+        - name: Debug
+          ansible.builtin.debug:
+            var: cmd_result
     - name: Restart Searvices
       ansible.builtin.systemd:
         name: "{{ item }}"
