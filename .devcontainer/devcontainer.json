@@ -13,16 +13,27 @@
                 "files.associations": {
                     "deploy.yml": "ansible",
                     "release.yml": "ansible"
+                },
+                "[markdown]": {
+                  "editor.unicodeHighlight.ambiguousCharacters": false,
+                  "editor.unicodeHighlight.invisibleCharacters": false,
+                  "editor.wordWrap": "on",
+                  "editor.quickSuggestions": {
+                    "comments": "off",
+                    "strings": "off",
+                    "other": "off"
+                  },
+                  "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
                 }
             },
             "extensions": [
                 "mikestead.dotenv",
                 "EditorConfig.EditorConfig",
+                "yzhang.markdown-all-in-one",
                 "DavidAnson.vscode-markdownlint",
                 "xdebug.php-debug",
                 "bmewburn.vscode-intelephense-client",
                 "mrmlnc.vscode-apache",
-                "DavidAnson.vscode-markdownlint",
                 "hediet.vscode-drawio",
                 "redhat.vscode-yaml",
                 "redhat.ansible"
