@@ -75,9 +75,11 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 * [pre-commit](https://pre-commit.com/)
 * [pict](https://github.com/microsoft/pict)
     * [ペアワイズ法によるテストケース抽出ツール「PICT」を使ってテストケースを85%削減する](https://qiita.com/odekekepeanuts/items/6eceddc534d87fc797cc)
-* [MailHog](https://github.com/mailhog/MailHog)
 * [Graphviz](https://graphviz.org/)
 * [PlantUML](https://plantuml.com/ja/)
 * [d2](https://d2lang.com/)
 * [tbls](https://github.com/k1LoW/tbls)
+* [MailHog](https://github.com/mailhog/MailHog)
+    * ※Vagrant利用時のみ
 * [osv-scanner](https://github.com/google/osv-scanner)
+    * ※Vagrant利用時のみ
