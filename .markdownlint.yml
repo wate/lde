@@ -6,9 +6,6 @@ extends:
 ### ------------------
 ## MD001 - Heading levels should only increment by one level at a time
 # header-increment: true
-## MD002 - First heading should be a top-level heading
-# first-header-h1:
-#   level: 1
 ## MD003 - Heading style
 header-style:
   style: setext_with_atx
@@ -17,8 +14,6 @@ header-style:
 #   style: consistent
 ## MD005 - Inconsistent indentation for list items at the same level
 # list-indent: true
-## MD006 - Consider starting bulleted lists at the beginning of the line
-# ul-start-left: true
 ## MD007 - Unordered list indentation
 ul-indent:
   # Spaces for indent
