@@ -47,9 +47,11 @@ EOT
 
 fi
 
-pip3 install --user mycli ansible ansible-lint mkdocs-material mkdocs-tooltips lizard
-
 source ~/.bashrc
+
+if [ -f .devcontainer/requirements.txt ]; then
+  pip3 install --user --disable-pip-version-check -r .devcontainer/requirements.txt
+fi
 
 cat << EOT >~/.my.cnf
 [mysql]
@@ -97,10 +99,6 @@ elif [ -d webroot ]; then
   DOC_ROOT="$(pwd)/webroot"
 fi
 sudo ln -s "${DOC_ROOT}" /var/www/html
-
-if [ -f requirements.txt ]; then
-  pip3 install --user --disable-pip-version-check -r requirements.txt
-fi
 
 if [ -f composer.json ]; then
   composer install --no-interaction
