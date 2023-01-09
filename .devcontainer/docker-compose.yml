@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Update 'VARIANT' to pick a version of PHP version: 8, 8.1, 8.0, 7, 7.4
+        # Append -bullseye or -buster to pin to an OS version.
+        # Use -bullseye variants on local arm64/Apple Silicon.
+        VARIANT: "8-bullseye"
+        # Optional Node.js version
+        NODE_VERSION: "lts/*"
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    network_mode: service:db
+    depends_on:
+      - db
+  db:
+    image: mariadb:10.5
+    restart: unless-stopped
+    volumes:
+      - ./mariadb/customize.cnf:/etc/mysql/mariadb.conf.d/customize.cnf
+      - ./mariadb/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - mariadb-data:/var/lib/mysql
+    environment:
+      TZ: Asia/Tokyo
+      MYSQL_ROOT_PASSWORD: mariadb
+      # MYSQL_DATABASE: app_dev
+      # MYSQL_USER: app_dev_user
+      # MYSQL_PASSWORD: app_dev_password
+volumes:
+  mariadb-data:

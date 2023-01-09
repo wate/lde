@@ -1,8 +1,0 @@
----
-- name: restart mackerel-agent
-  ansible.builtin.systemd:
-    name: mackerel-agent
-    state: restarted
-  when:
-    - mackerel_agent_api_key | length > 0
-    - mackerel_agent_active_and_enabled_on_system_startup

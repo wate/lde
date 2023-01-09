@@ -1,7 +1,0 @@
----
-skip_list:
-  - role-name
-  - name[casing]
-  - no-handler
-warn_list:
-  - experimental

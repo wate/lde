@@ -1,0 +1,9 @@
+pre-commit
+mycli
+pgcli
+litecli
+mkdocs-material
+mkdocs-tooltips
+lizard
+ansible
+ansible-lint

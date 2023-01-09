@@ -1,6 +1,0 @@
----
-- name: restart mailhog
-  ansible.builtin.systemd:
-    name: mailhog
-    state: restarted
-    daemon_reload: true

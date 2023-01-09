@@ -1,0 +1,7 @@
+---
+# code: language=ansible
+- name: Create/Update mycli setting
+  ansible.builtin.template:
+    src: mycli_donfig.j2
+    dest: ~/.myclirc
+    mode: "0600"

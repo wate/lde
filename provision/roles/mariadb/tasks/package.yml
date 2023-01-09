@@ -1,7 +1,0 @@
-- name: install MariaDB packages
-  ansible.builtin.apt:
-    update_cache: true
-    name: "{{ mariadb_packages }}"
-- name: install dependency packages
-  ansible.builtin.apt:
-    name: "{{ mariadb_dependency_packages }}"

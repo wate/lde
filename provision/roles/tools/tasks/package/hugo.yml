@@ -1,3 +1,0 @@
-- name: install hugo
-  ansible.builtin.apt:
-    name: hugo

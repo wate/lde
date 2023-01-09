@@ -1,0 +1,95 @@
+---
+# code: language=ansible
+- name: Install bash git prompt
+  ansible.builtin.git:
+    repo: https://github.com/magicmonty/bash-git-prompt.git
+    dest: ~/.bash-git-prompt
+    version: master
+    depth: 1
+- name: Append bash git prompt setting on .bashrc
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
+    block: |
+      if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+          GIT_PROMPT_ONLY_IN_REPO=1
+          source $HOME/.bash-git-prompt/gitprompt.sh
+      fi
+- name: Set git-prompt custom theme
+  ansible.builtin.get_url:
+    url: "{{ lde_git_prompt_custom_theme_url }}"
+    dest: ~/.git-prompt-colors.sh
+    mode: "0644"
+  when:
+    - lde_git_prompt_custom_theme_url is defined
+    - lde_git_prompt_custom_theme_url | length > 1
+- name: Set user git setting
+  community.general.git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    scope: global
+  loop:
+    ## fetch / pull / push
+    - name: fetch.prune
+      value: "true"
+    - name: pull.rebase
+      value: "true"
+    - name: push.autoSetupRemote
+      value: "true"
+    - name: push.default
+      value: simple
+    - name: push.autoSetupRemote
+      value: "true"
+    ## alias
+    - name: alias.au
+      value: add --update
+    - name: alias.br
+      value: branch
+    - name: alias.ca
+      value: commit --amend
+    - name: alias.ci
+      value: commit
+    - name: alias.co
+      value: checkout
+    - name: alias.dc
+      value: diff --cached
+    - name: alias.st
+      value: status -s
+    - name: alias.lg
+      value: >-
+        log --graph
+        --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset'
+        --abbrev-commit
+        --date=iso
+        --all
+        --decorate
+    ## alias(update-index)
+    - name: alias.assume
+      value: update-index --assume-unchanged
+    - name: alias.unassume
+      value: update-index --no-assume-unchanged
+    - name: alias.assumed
+      value: "!git ls-files -v | grep ^h | cut -c 3-"
+    - name: alias.skip-worktree
+      value: update-index --skip-worktree
+    - name: alias.unskip-worktree
+      value: update-index --no-skip-worktree
+    - name: alias.skipped-worktree
+      value: "!git ls-files -v | grep ^s | cut -c 3-"
+    ## user
+- name: Set user git setting(user.name)
+  community.general.git_config:
+    name: user.name
+    value: "{{ lde_git_user_name }}"
+    scope: global
+  when:
+    - lde_git_user_name is defined
+    - lde_git_user_name | length > 0
+- name: Set user git setting(user.email)
+  community.general.git_config:
+    name: user.email
+    value: "{{ lde_git_user_name }}"
+    scope: global
+  when:
+    - lde_git_user_email is defined
+    - lde_git_user_email | length > 0

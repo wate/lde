@@ -1,0 +1,248 @@
+---
+## --------------
+## ドキュメントルートのパス
+## --------------
+# lde_ocument_root_path: /vagrant/webroot
+# lde_ocument_root_path: /vagrant/public
+# lde_ocument_root_path: /vagrant
+
+## --------------
+## Nginxのバーチャルホストの設定
+## --------------
+nginx_vhosts:
+  - name: default
+    default: true
+    server_name:
+      - "{{ domain }}"
+    document_root: "{{ lde_document_root_path | default('/vagrant', true) }}"
+    index:
+      - index.html
+      - index.php
+    access_log: /var/log/nginx/access.log
+    error_log: /var/log/nginx/error.log
+    client_max_body_size: 0
+    locations:
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          default_type "text/plain";
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "="
+        content: |
+          return 404;
+      - pattern: /
+        content: |
+          try_files $uri $uri/ /index.php?$query_string;
+      - pattern: "\\.php"
+        match_type: "~"
+        content: |
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          include snippets/fastcgi-php.conf;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
+    ## Vagrant用設定
+    ## @see https://developer.hashicorp.com/vagrant/docs/synced-folders/virtualbox
+    extra_setting: sendfile off;
+  - name: phpRedisAdmin
+    server_name:
+      - "cache.{{ domain }}"
+    document_root: "{{ phpredisadmin_dest }}"
+    index:
+      - index.html
+      - index.php
+    access_log: /var/log/nginx/phpRedisAdmin.access.log
+    error_log: /var/log/nginx/phpRedisAdmin.error.log
+    client_max_body_size: 0
+    locations:
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "^~"
+        content: |
+          default_type "text/plain";
+          alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: "/\\.well-known/acme-challenge/"
+        match_type: "="
+        content: |
+          return 404;
+      - pattern: /
+        content: |
+          try_files $uri $uri/ /index.php?$query_string;
+      - pattern: "\\.php"
+        match_type: "~"
+        content: |
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          include snippets/fastcgi-php.conf;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
+
+## --------------
+## Apacheのバーチャルホストの設定
+## --------------
+apache_vhosts:
+  - name: 000-default
+    default: true
+    server_name: "{{ domain }}"
+    document_root: "{{ lde_document_root_path | default('/vagrant', true) }}"
+    directory_index:
+      - index.html
+      - index.php
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    custom_log:
+      path: /var/log/apache2/access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/error.log
+      log_level: warn
+    alias:
+      - from: /.well-known/acme-challenge/
+        to: /var/lib/dehydrated/acme-challenges/
+  - name: 090-phpRedisAdmin
+    server_name: "cache.{{ domain }}"
+    document_root: "{{ phpredisadmin_dest }}"
+    directory_index:
+      - index.html
+      - index.php
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    custom_log:
+      path: /var/log/apache2/phpRedisAdmin.access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/phpRedisAdmin.error.log
+      log_level: warn
+    alias:
+      - from: /.well-known/acme-challenge/
+        to: /var/lib/dehydrated/acme-challenges/
+
+
+## --------------
+## ApacheのVagrant用設定
+## @see https://developer.hashicorp.com/vagrant/docs/synced-folders/virtualbox
+## --------------
+apache_extra_cfg: |
+  EnableSendfile off
+
+## ---------
+## インストールするPHP関連パッケージ
+## ---------
+php_packages:
+  - php{{ php_version }}-common
+  - php{{ php_version }}-cli
+  - php{{ php_version }}-dev
+  - php{{ php_version }}-curl
+  - php{{ php_version }}-gd
+  - php{{ php_version }}-bcmath
+  - php{{ php_version }}-mbstring
+  - php{{ php_version }}-bz2
+  - php{{ php_version }}-gettext
+  - php{{ php_version }}-sqlite3
+  - php{{ php_version }}-mysqlnd
+  - php{{ php_version }}-pdo
+  - php{{ php_version }}-opcache
+  - php{{ php_version }}-intl
+  - php{{ php_version }}-imagick
+  - php{{ php_version }}-xml
+  - php{{ php_version }}-zip
+  - php{{ php_version }}-apcu
+  - php{{ php_version }}-fpm
+  - php{{ php_version }}-redis
+  # - php{{ php_version }}-xdebug
+
+## --------------
+## データベースの設定(共通)
+## --------------
+lde_common_databases:
+  dev: &db_app_dev
+    name: app_dev
+    user: app_dev
+    password: app_dev_password
+  test: &db_app_test
+    name: app_test
+    user: app_test
+    password: app_test_password
+  stg: &db_app_stg
+    name: app_stg
+    user: app_stg
+    password: app_stg_password
+  prod: &db_app_prod
+    name: app_prod
+    user: app_prod
+    password: app_prod_password
+
+## --------------
+## 接続を許可するホストの設定(MariaDB)
+## --------------
+lde_common_db_connection_hosts: &mariadb_common_db_connection_hosts
+  - "127.0.0.1"
+  - "localhost"
+  - "192.168.%"
+  - "10.0.%"
+
+## --------------
+## MariaDBのデータベース設定
+## --------------
+mariadb_databases:
+  - <<: *db_app_dev
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - <<: *db_app_test
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - <<: *db_app_stg
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+  - <<: *db_app_prod
+    encoding: utf8mb4
+    hosts: *mariadb_common_db_connection_hosts
+
+## --------------
+## 接続を許可するホストの設定(PostgreSQL)
+## --------------
+postgresql_pg_hba_cfg: |
+  # TYPE  DATABASE        USER            ADDRESS                 METHOD
+  host    all             all             192.168.56.0/24         md5
+  host    all             all             10.0.0.0/8              md5
+
+## --------------
+## PostgreSQLのデータベース設定
+## --------------
+postgresql_databases:
+  - <<: *db_app_dev
+    encoding: utf8
+  - <<: *db_app_test
+    encoding: utf8
+  - <<: *db_app_stg
+    encoding: utf8
+  - <<: *db_app_prod
+    encoding: utf8
+
+## --------------
+## CekePHPプロジェクトのデータベース設定
+## --------------
+cakephp_database_url: "\
+  mysql://{{ mariadb_databases[0].user }}:{{ mariadb_databases[0].password }}@localhost/{{ mariadb_databases[0].name }}\
+  ?encoding={{ mariadb_databases[0].encoding }}\
+  &timezone=UTC\
+  &cacheMetadata=true\
+  &quoteIdentifiers=false\
+  &persistent=false
+  "
+
+## --------------
+## CekePHPプロジェクトのテスト用データベース設定
+## --------------
+cakephp_database_test_url: "\
+  mysql://{{ mariadb_databases[1].user }}:{{ mariadb_databases[1].password }}@localhost/{{ mariadb_databases[1].name }}\
+  ?encoding={{ mariadb_databases[1].encoding }}\
+  &timezone=UTC\
+  &cacheMetadata=true\
+  &quoteIdentifiers=false\
+  &persistent=false
+  "

@@ -1,0 +1,24 @@
+---
+filters:
+  ## https://github.com/textlint/textlint-filter-rule-comments
+  comments: true
+rules:
+  ## https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing
+  preset-ja-technical-writing: true
+  ## https://github.com/textlint-ja/textlint-rule-preset-ja-spacing
+  preset-ja-spacing:
+    ja-nakaguro-or-halfwidth-space-between-katakana: true
+    ja-no-space-around-parentheses: true
+    ja-no-space-between-full-width: true
+    ja-space-between-half-and-full-width:
+      space: never
+    ja-space-after-exclamation: true
+    ja-space-after-question: true
+    ja-space-around-code: false
+  ## https://github.com/textlint-rule/textlint-rule-prh
+  prh:
+    rulePaths:
+      - docs/rules/kanji-open.yml
+      - docs/rules/names.yml
+      - docs/rules/abbreviations.yml
+      - docs/rules/typo.yml
