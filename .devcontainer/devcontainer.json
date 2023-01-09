@@ -1,43 +1,43 @@
 {
-    "name": "PHP & MariaDB",
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "app",
-    "workspaceFolder": "/workspace",
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "php.validate.executablePath": "/usr/local/bin/php",
-                "yaml.schemas": {
-                    "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
-                },
-                "files.associations": {
-                    "deploy.yml": "ansible",
-                    "release.yml": "ansible"
-                }
-            },
-            "extensions": [
-                "mikestead.dotenv",
-                "EditorConfig.EditorConfig",
-                "DavidAnson.vscode-markdownlint",
-                "xdebug.php-debug",
-                "bmewburn.vscode-intelephense-client",
-                "mrmlnc.vscode-apache",
-                "DavidAnson.vscode-markdownlint",
-                "hediet.vscode-drawio",
-                "redhat.vscode-yaml",
-                "redhat.ansible"
-            ]
+  "name": "PHP & MariaDB",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php",
+        "yaml.schemas": {
+          "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
+        },
+        "files.associations": {
+          "deploy.yml": "ansible",
+          "release.yml": "ansible"
+        },
+        "[markdown]": {
+          "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
         }
-    },
-    "forwardPorts": [
-        8080,
-        3306
-    ],
-    "postCreateCommand": "if [ -f ./.devcontainer/scripts/post_create.sh ]; then bash ./.devcontainer/scripts/post_create.sh; fi",
-    "postStartCommand": "if [ -f ./.devcontainer/scripts/post_start.sh ]; then bash ./.devcontainer/scripts/post_start.sh; fi",
-    "shutdownAction": "stopCompose",
-    "features": {
-        "sshd": "latest"
-    },
-    "remoteUser": "vscode"
+      },
+      "extensions": [
+        "mikestead.dotenv",
+        "EditorConfig.EditorConfig",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "mrmlnc.vscode-apache",
+        "hediet.vscode-drawio",
+        "redhat.vscode-yaml",
+        "redhat.ansible"
+      ]
+    }
+  },
+  "forwardPorts": [
+    8080,
+    3306
+  ],
+  "postCreateCommand": "if [ -f ./.devcontainer/scripts/post_create.sh ]; then bash ./.devcontainer/scripts/post_create.sh; fi",
+  "postStartCommand": "if [ -f ./.devcontainer/scripts/post_start.sh ]; then bash ./.devcontainer/scripts/post_start.sh; fi",
+  "shutdownAction": "stopCompose",
+  "remoteUser": "vscode"
 }

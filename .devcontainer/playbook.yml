@@ -10,19 +10,45 @@
         update_cache: true
   roles:
     - role: common
+      tags:
+        - role_common
     - role: nodejs
+      tags:
+        - role_nodejs
     - role: mariadb
+      tags:
+        - role_mariadb
     - role: postgresql
+      tags:
+        - role_postgresql
     - role: php
+      tags:
+        - role_php
     - role: nginx
+      tags:
+        - role_nginx
     # - role: apache
-    - role: phpredisadmin
+    #   tags:
+    #     - role_apache
     - role: dehydrated
+      tags:
+        - role_dehydrated
     - role: redis
+      tags:
+        - role_redis
     - role: tools
+      tags:
+        - role_tools
     - role: logrotate
+      tags:
+        - role_logrotate
+    - role: phpredisadmin
+      tags:
+        - role_phpredisadmin
     - role: lde
       become: false
+      tags:
+        - role_lde
   tasks:
     # - name: Setup CakePHP Project
     #   ansible.builtin.import_role:
@@ -41,9 +67,6 @@
             cmd: pre-commit autoupdate
             chdir: /vagrant
           register: cmd_result
-        - name: Debug
-          ansible.builtin.debug:
-            var: cmd_result
     - name: Restart Searvices
       ansible.builtin.systemd:
         name: "{{ item }}"

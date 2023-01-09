@@ -1,11 +1,15 @@
 ---
 # code: language=ansible
-- name: Setup node bash-completion setting
-  ansible.builtin.import_tasks:
-    file: bash_completion/node.yml
-- name: Setup php bash-completion setting
-  ansible.builtin.import_tasks:
-    file: bash_completion/php.yml
-- name: Setup ruby bash-completion setting
-  ansible.builtin.import_tasks:
-    file: bash_completion/ruby.yml
+- name: Create user directory
+  ansible.builtin.file:
+    path: ~/{{ item }}
+    state: directory
+    mode: "0755"
+  loop:
+    - .local/share/bash-completion/completions
+- name: Inclde bash completion setting tasks
+  ansible.builtin.include_tasks:
+    file: tasks/setting/bash_completion/{{ bash_completion_task | basename }}
+  loop: "{{ lookup('fileglob', 'tasks/setting/bash_completion/*.yml', wantlist=True) }}"
+  loop_control:
+    loop_var: bash_completion_task

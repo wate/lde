@@ -1,7 +1,33 @@
 ---
 # code: language=ansible
-- name: Create/Update mycli setting
-  ansible.builtin.template:
-    src: mycli_donfig.j2
-    dest: ~/.myclirc
+- name: Create/Update mycli main section setting
+  community.general.ini_file:
+    path: ~/.myclirc
+    section: main
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    create: true
     mode: "0600"
+  loop: "{{ lde_mycli_cfg.main | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+- name: Create/Update mycli alias_dsn section setting
+  community.general.ini_file:
+    path: ~/.myclirc
+    section: alias_dsn
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    mode: "0600"
+  loop: "{{ lde_mycli_cfg.alias_dsn | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+- name: Create/Update mycli favorite_queries section setting
+  community.general.ini_file:
+    path: ~/.myclirc
+    section: favorite_queries
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    mode: "0600"
+  loop: "{{ lde_mycli_cfg.favorite_queries | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"

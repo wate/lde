@@ -7,6 +7,6 @@
     mode: "0755"
 - name: Create/Update pgcli setting
   ansible.builtin.template:
-    src: pgcli_donfig.j2
+    src: pgcli_config.j2
     dest: ~/.config/pgcli/config
     mode: "0600"

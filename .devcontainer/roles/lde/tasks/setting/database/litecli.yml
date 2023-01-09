@@ -7,6 +7,6 @@
     mode: "0755"
 - name: Create/Update litecli setting
   ansible.builtin.template:
-    src: litecli_donfig.j2
+    src: litecli_config.j2
     dest: ~/.config/litecli/config
     mode: "0600"

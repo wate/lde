@@ -124,6 +124,20 @@ Vagrant.configure("2") do |config|
       ansible_raw_arguments.push(env_var)
     end
   end
+  ansible_tags = nil
+  ansible_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_TAGS_/) }
+  unless ansible_tags_env_vars.empty?
+    ansible_tags_env_vars.each_value do |env_var|
+      ansible_tags.push(env_var)
+    end
+  end
+  ansible_skip_tags = []
+  ansible_skip_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_SKIP_TAGS_/) }
+  unless ansible_skip_tags_env_vars.empty?
+    ansible_skip_tags_env_vars.each_value do |env_var|
+      ansible_skip_tags.push(env_var)
+    end
+  end
   ANSIBLR_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, 'playbook.yml'))
   if File.exists?(ANSIBLR_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
@@ -132,6 +146,8 @@ Vagrant.configure("2") do |config|
       ansible.galaxy_role_file = ANSIBLR_GALAXY_ROLE_FILE if File.exists?(ANSIBLR_GALAXY_ROLE_FILE)
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.extra_vars = ansible_extra_vars
+      ansible.tags = ansible_tags
+      ansible.skip_tags = ansible_skip_tags
       ansible.raw_arguments = ansible_raw_arguments
       ansible.groups = ansible_groups
     end
@@ -143,6 +159,8 @@ Vagrant.configure("2") do |config|
       ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.extra_vars = ansible_extra_vars
+      ansible.tags = ansible_tags
+      ansible.skip_tags = ansible_skip_tags
       ansible.raw_arguments = ansible_raw_arguments
       ansible.groups = ansible_groups
     end

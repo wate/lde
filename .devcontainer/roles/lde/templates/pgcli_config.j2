@@ -1,34 +1,34 @@
 [main]
 # Enables context sensitive auto-completion. If this is disabled then all
 # possible completions will be listed.
-smart_completion = {{ lde_pgcli_cfg.smart_completion | string }}
+smart_completion = {{ lde_pgcli_cfg.main.smart_completion | string }}
 
 # Multi-line mode allows breaking up the sql statements into multiple lines. If
 # this is set to True, then the end of the statements must have a semi-colon.
 # If this is set to False then sql statements can't be split into multiple
 # lines. End of line (return) is considered as the end of the statement.
-multi_line = {{ lde_pgcli_cfg.multi_line | string }}
+multi_line = {{ lde_pgcli_cfg.main.multi_line | string }}
 
 # Table format. Possible values: psql, plain, simple, grid, fancy_grid, pipe,
 # ascii, double, github, orgtbl, rst, mediawiki, html, latex, latex_booktabs,
 # textile, moinmoin, jira, vertical, tsv, csv.
 # Recommended: psql, fancy_grid and grid.
-table_format = {{ lde_pgcli_cfg.table_format }}
+table_format = {{ lde_pgcli_cfg.main.table_format }}
 
 # Syntax Style. Possible values: manni, igor, xcode, vim, autumn, vs, rrt,
 # native, perldoc, borland, tango, emacs, friendly, monokai, paraiso-dark,
 # colorful, murphy, bw, pastie, paraiso-light, trac, default, fruity
-syntax_style = {{ lde_pgcli_cfg.syntax_style }}
+syntax_style = {{ lde_pgcli_cfg.main.syntax_style }}
 
 # Skip intro info on startup and outro info on exit
-less_chatty = {{ lde_pgcli_cfg.less_chatty | string }}
+less_chatty = {{ lde_pgcli_cfg.main.less_chatty | string }}
 
 # Enable the pager on startup.
-enable_pager = {{ lde_pgcli_cfg.enable_pager | string }}
+enable_pager = {{ lde_pgcli_cfg.main.enable_pager | string }}
 {% if lde_pgcli_cfg.alias_dsn is defined %}
 
 [alias_dsn]
-{% for alias_name, alias_value in lde_pgcli_cfg.alias_dsn.items() %}
+{% for pgcli_alias_name, pgcli_alias_value in lde_pgcli_cfg.alias_dsn.items() %}
+{{ pgcli_alias_name }} = "{{ pgcli_alias_value }}"
 {% endfor %}
-{{ alias_name }} = "{{ alias_value }}"
 {% endif %}
