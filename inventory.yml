@@ -1,0 +1,36 @@
+---
+## @see https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html
+all:
+  vars:
+    ## リポジトリ
+    app_repo: https://github.com/wate/lde.git
+    ## デプロイ先のパス
+    app_deploy_path: ~/app
+development:
+  host:
+    dev.example.com:
+      ## ホスト変数
+      # ansible_connection: ssh
+      # ansible_host: 123.123.123.123
+      # ansible_port: 5555
+      # ansible_user: dev_user
+      # ansible_password: dev_user_password
+      # ansible_ssh_private_key_file: ~/.ssh/id_rsa
+  ## グループ変数
+  vars:
+    ## ブランチ名
+    app_repo_branch: develop
+    ## 動作モード
+    app_env: development
+staging:
+  host:
+    stg.example.com:
+  vars:
+    app_repo_branch: staging
+    app_env: staging
+production:
+  host:
+    example.com:
+  vars:
+    app_repo_branch: master
+    app_env: production

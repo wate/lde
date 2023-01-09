@@ -1,0 +1,52 @@
+---
+# code: language=ansible
+- name: Deploy App
+  hosts: all
+  become: false
+  connection: local
+  vars:
+    app_repo: https://github.com/wate/lde.git
+    app_deploy_path: ~/lde
+    app_repo_branch: feature/v3
+  tasks:
+    - name: ソースコードのチェックアウト
+      ansible.builtin.git:
+        repo: "{{ app_repo }}"
+        dest: "{{ app_deploy_path }}"
+        version: "{{ app_repo_branch }}"
+      register: checkout_result
+    - name: セットアップ処理
+      when: checkout_result is changed
+      block:
+        - name: 新規セットアップ処理
+          when: not checkout_result.before
+          block:
+            ## 以下、新規設置時の処理
+            - name: 初期セットアップ処理
+              ansible.builtin.shell:
+                cmd: |
+                  echo "新規設置時の処理を実装してください。"
+                chdir: "{{ app_deploy_path }}"
+        ## 以下、更新時の共通処理
+        - name: 更新時の処理
+          ansible.builtin.shell:
+            cmd: |
+              echo "更新時の処理を実装してください。"
+            chdir: "{{ app_deploy_path }}"
+        - name: デプロイ完了時の通知処理
+          community.general.slack:
+            token: "{{ lookup('env', 'SLACK_TOKEN') }}"
+            channel: "{{ lookup('env', 'SLACK_CHANNEL') | default(omit, true) }}"
+            username: "{{ lookup('env', 'SLACK_USERNAME') | default(omit, true) }}"
+            color: "#00ff00"
+            msg: '{{ inventory_hostname }}へのデプロイが完了しました。'
+          when: lookup('env', 'SLACK_TOKEN') | length > 0
+      rescue:
+        - name: デプロイ失敗時の通知処理
+          community.general.slack:
+            token: "{{ lookup('env', 'SLACK_TOKEN') }}"
+            channel: "{{ lookup('env', 'SLACK_CHANNEL') | default(omit, true) }}"
+            username: "{{ lookup('env', 'SLACK_USERNAME') | default(omit, true) }}"
+            color: "#ff0000"
+            msg: '{{ inventory_hostname }}へのデプロイに失敗しました。'
+          when: lookup('env', 'SLACK_TOKEN') | length > 0
