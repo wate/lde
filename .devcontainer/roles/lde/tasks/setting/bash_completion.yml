@@ -1,0 +1,11 @@
+---
+# code: language=ansible
+- name: Setup node bash-completion setting
+  ansible.builtin.import_tasks:
+    file: bash_completion/node.yml
+- name: Setup php bash-completion setting
+  ansible.builtin.import_tasks:
+    file: bash_completion/php.yml
+- name: Setup ruby bash-completion setting
+  ansible.builtin.import_tasks:
+    file: bash_completion/ruby.yml

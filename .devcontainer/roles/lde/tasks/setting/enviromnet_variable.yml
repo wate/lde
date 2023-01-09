@@ -1,0 +1,10 @@
+---
+# code: language=ansible
+- name: Set user enviromnet variable
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    marker: "# {mark} environment variable ANSIBLE MANAGED BLOCK"
+    block: |
+      {% for env_var_name, env_var_value in env_vars.items() -%}
+      export {{ env_var_name }}="{{ env_var_value }}"
+      {% endfor -%}

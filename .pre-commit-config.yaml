@@ -1,0 +1,42 @@
+---
+# yamllint disable rule:quoted-strings
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-json
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+      - id: no-commit-to-branch
+        args: [--branch, master, --branch, main, --branch, staging]
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.33.0
+    hooks:
+      - id: markdownlint-fix
+  - repo: https://github.com/RyoWakabayashi/pre-commit-mirrors-textlint
+    rev: v12.2.1
+    hooks:
+      - id: textlint
+        args: [--fix]
+        additional_dependencies:
+          - textlint
+          - textlint-filter-rule-comments
+          - textlint-rule-preset-ja-technical-writing
+          - textlint-rule-preset-ja-spacing
+          - textlint-rule-prh
+  - repo: https://github.com/digitalpulp/pre-commit-php
+    rev: "1.4.0"
+    hooks:
+      - id: php-lint
+      - id: php-cs
+      - id: php-cbf
+      - id: php-stan
+      # - id: php-unit

@@ -1,0 +1,13 @@
+---
+- name: Checkout phpRedisAdmin source
+  ansible.builtin.git:
+    repo: https://github.com/erikdubbelboer/phpRedisAdmin.git
+    dest: "{{ phpredisadmin_dest }}"
+    version: master
+- name: Install dependency packages
+  community.general.composer:
+    command: install
+    working_dir: "{{ phpredisadmin_dest }}"
+    no_dev: true
+  environment:
+    COMPOSER_ALLOW_SUPERUSER: 1

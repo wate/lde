@@ -1,0 +1,36 @@
+---
+roles:
+  - name: common
+    src: https://github.com/wate/ansible-role-common
+    version: develop
+  - name: nodejs
+    src: https://github.com/wate/ansible-role-nodejs
+    version: develop
+  - name: nginx
+    src: https://github.com/wate/ansible-role-nginx
+    version: develop
+  - name: apache
+    src: https://github.com/wate/ansible-role-apache
+    version: develop
+  - name: php
+    src: https://github.com/wate/ansible-role-php
+    version: develop
+  - name: mariadb
+    src: https://github.com/wate/ansible-role-mariadb
+    version: develop
+  - name: postgresql
+    src: https://github.com/wate/ansible-role-postgresql
+    version: develop
+  - name: dehydrated
+    src: https://github.com/wate/ansible-role-dehydrated
+    version: develop
+  - name: redis
+    src: https://github.com/wate/ansible-role-redis
+    version: develop
+  - name: tools
+    src: https://github.com/wate/ansible-role-tools
+    version: develop
+  - name: logrotate
+    src: https://github.com/wate/ansible-role-logrotate
+    version: develop
+collections: []

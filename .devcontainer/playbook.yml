@@ -1,0 +1,56 @@
+---
+# code: language=ansible
+- name: Setup local development environment
+  hosts: all
+  become: true
+  gather_facts: true
+  pre_tasks:
+    - name: Update package cache
+      ansible.builtin.apt:
+        update_cache: true
+  roles:
+    - role: common
+    - role: nodejs
+    - role: mariadb
+    - role: postgresql
+    - role: php
+    - role: nginx
+    # - role: apache
+    - role: phpredisadmin
+    - role: dehydrated
+    - role: redis
+    - role: tools
+    - role: logrotate
+    - role: lde
+      become: false
+  tasks:
+    # - name: Setup CakePHP Project
+    #   ansible.builtin.import_role:
+    #     name: cakephp
+    #   become: false
+    - name: Check pre-commit config file
+      ansible.builtin.stat:
+        path: /vagrant/.pre-commit-config.yaml
+      register: pre_commit_config_result
+    - name: pre-commit config auto update
+      when: pre_commit_config_result.stat.exists
+      become: false
+      block:
+        - name: pre-commit config auto update
+          ansible.builtin.command:
+            cmd: pre-commit autoupdate
+            chdir: /vagrant
+          register: cmd_result
+        - name: Debug
+          ansible.builtin.debug:
+            var: cmd_result
+    - name: Restart Searvices
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - mariadb
+        - postgresql
+        - php{{ php_version | default('8.1') }}-fpm
+        - nginx
+        # - apache2

@@ -1,0 +1,49 @@
+---
+site_name: システムドキュメント
+theme:
+  name: material
+  language: ja
+# nav:
+#   - ホーム: 'index.md'
+#   - サンプル集:
+#     - サンプル1: examples/sample1.md
+#     - サンプル2: examples/sample2.md
+#     - サンプル3: examples/sample3.md
+# docs_dir: docs
+# site_dir: site
+# extra_javascript:
+#   - javascripts/extra.js
+extra_css:
+  - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
+  - stylesheets/extra.css
+markdown_extensions:
+  - abbr
+  - footnotes
+  - attr_list
+  - def_list
+  - tables
+  - md_in_html
+  - admonition
+  - pymdownx.betterem
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      # auto_append:
+      #   - includes/abbreviations.md
+      #   - includes/links.md
+
+plugins:
+  - search
+  - tags
+  # https://roipoussiere.frama.io/mkdocs-tooltips/
+  - tooltips

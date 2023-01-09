@@ -1,0 +1,14 @@
+---
+# code: language=ansible
+- name: Include dependency task
+  ansible.builtin.import_tasks:
+    file: dependency.yml
+  tags: dependency
+- name: Include package task
+  ansible.builtin.import_tasks:
+    file: package.yml
+  tags: package
+- name: Include setting task
+  ansible.builtin.import_tasks:
+    file: setting.yml
+  tags: setting

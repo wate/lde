@@ -1,0 +1,9 @@
+---
+# code: language=ansible
+- name: Set .inputrc
+  ansible.builtin.lineinfile:
+    path: ~/.inputrc
+    regexp: "^set completion-ignore-case"
+    line: set completion-ignore-case on
+    mode: "0644"
+    create: true

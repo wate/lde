@@ -1,0 +1,7 @@
+---
+# code: language=ansible
+- name: Create/Update mariadb connection setting
+  ansible.builtin.template:
+    src: my.cnf.j2
+    dest: ~/.my.cnf
+    mode: "0600"

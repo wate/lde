@@ -1,3 +1,0 @@
-- name: install packages
-  ansible.builtin.apt:
-    name: "{{ mackerel_agent_packages }}"

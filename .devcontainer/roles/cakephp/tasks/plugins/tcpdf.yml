@@ -1,0 +1,46 @@
+---
+- name: Check exists tcpdf
+  ansible.builtin.stat:
+    path: "{{ cakephp_tmp_project_dir }}/vendor/tecnickcom/tcpdf"
+  register: package_result
+- name: Setup plugin
+  when: package_result.stat.exists
+  block:
+    - name: Create fonts directory
+      ansible.builtin.file:
+        path: "{{ cakephp_tmp_project_dir }}/resources/fonts"
+        state: directory
+        mode: "0755"
+      register: resource_font_dir_result
+    - name: Generate font files
+      when: resource_font_dir_result is changed
+      block:
+        - name: Synchronize tcpdf original font files
+          ansible.posix.synchronize:
+            src: "{{ cakephp_tmp_project_dir }}/vendor/tecnickcom/tcpdf/fonts/"
+            dest: "{{ cakephp_tmp_project_dir }}/resources/fonts"
+          delegate_to: "{{ inventory_hostname }}"
+        - name: Find all ttf files
+          ansible.builtin.find:
+            paths:
+              - /usr/share/fonts/opentype/ipaexfont-gothic
+              - /usr/share/fonts/opentype/ipaexfont-gothic
+              - /usr/share/fonts/opentype/ipafont-gothic
+              - /usr/share/fonts/opentype/ipafont-mincho
+              - /usr/local/share/fonts/morisawa-biz-ud-gothic
+            patterns:
+              - '*.ttf'
+          register: find_result
+        - name: Generate tcpdf font file
+          ansible.builtin.command:
+            cmd: vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php --outpath {{ cakephp_tmp_project_dir }}/resources/fonts --fonts "{{ item }}"
+            chdir: "{{ cakephp_tmp_project_dir }}"
+          loop: "{{ find_result.files | map(attribute='path') | list }}"
+          tags:
+            - skip_ansible_lint
+        - name: Add TCPDF setting
+          ansible.builtin.blockinfile:
+            path: "{{ cakephp_tmp_project_dir }}/config/paths.php"
+            marker: "// {mark} ANSIBLE MANAGED BLOCK"
+            content: |
+              define ('K_PATH_FONTS', ROOT . DS . 'resources'. DS . 'fonts' . DS);

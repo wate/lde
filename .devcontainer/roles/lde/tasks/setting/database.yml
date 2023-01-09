@@ -1,0 +1,14 @@
+---
+# code: language=ansible
+- name: Setup mariadb setting
+  ansible.builtin.import_tasks:
+    file: database/mariadb.yml
+- name: Setup mycli setting
+  ansible.builtin.import_tasks:
+    file: database/mycli.yml
+- name: Setup pgcli setting
+  ansible.builtin.import_tasks:
+    file: database/pgcli.yml
+- name: Setup litecli setting
+  ansible.builtin.import_tasks:
+    file: database/litecli.yml

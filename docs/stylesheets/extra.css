@@ -1,0 +1,10 @@
+[class*=hint--] {
+  border-bottom: 0.05rem dotted var(--md-default-fg-color--light);
+}
+[class*=hint--]:hover {
+  cursor: help;
+  text-decoration: none;
+}
+.md-grid {
+  max-width: 80rem;
+}

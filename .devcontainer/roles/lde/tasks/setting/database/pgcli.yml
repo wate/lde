@@ -1,0 +1,12 @@
+---
+# code: language=ansible
+- name: Create pgcli config directory
+  ansible.builtin.file:
+    path: ~/.config/pgcli
+    state: directory
+    mode: "0755"
+- name: Create/Update pgcli setting
+  ansible.builtin.template:
+    src: pgcli_donfig.j2
+    dest: ~/.config/pgcli/config
+    mode: "0600"

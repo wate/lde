@@ -1,0 +1,14 @@
+---
+# code: language=ansible
+- name: Insert/Update ssh configuration block in ~/.ssh/config
+  ansible.builtin.blockinfile:
+    path: ~/.ssh/config
+    block: |
+      Host github.com
+        StrictHostKeyChecking no
+      Host bitbucket.org
+        StrictHostKeyChecking no
+      Host gitlab.com
+        StrictHostKeyChecking no
+    create: true
+    mode: "0600"
