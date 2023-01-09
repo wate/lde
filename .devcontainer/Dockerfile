@@ -33,6 +33,9 @@ RUN git clone https://github.com/microsoft/pict.git /usr/local/src/pict \
     && mv /usr/local/src/pict/pict /usr/local/bin/pict \
     && rm -fr /usr/local/src/pict
 
+# Install d2
+RUN curl -fsSL https://d2lang.com/install.sh | sh -s --
+
 # Install developer omnibus tools
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends bash-completion tig git-flow direnv pre-commit silversearcher-ag vim exa bat fd-find python3-pip graphviz plantuml fonts-ipafont fonts-ipaexfont fonts-noto-cjk \
