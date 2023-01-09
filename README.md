@@ -78,6 +78,7 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 * [Graphviz](https://graphviz.org/)
 * [PlantUML](https://plantuml.com/ja/)
 * [d2](https://d2lang.com/)
+* [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
 * [tbls](https://github.com/k1LoW/tbls)
 * [MailHog](https://github.com/mailhog/MailHog)
     * ※Vagrant利用時のみ

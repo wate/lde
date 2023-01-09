@@ -1,14 +1,8 @@
 ---
 # code: language=ansible
-- name: Setup mariadb setting
-  ansible.builtin.import_tasks:
-    file: database/mariadb.yml
-- name: Setup mycli setting
-  ansible.builtin.import_tasks:
-    file: database/mycli.yml
-- name: Setup pgcli setting
-  ansible.builtin.import_tasks:
-    file: database/pgcli.yml
-- name: Setup litecli setting
-  ansible.builtin.import_tasks:
-    file: database/litecli.yml
+- name: Inclde database conection setting tasks
+  ansible.builtin.include_tasks:
+    file: tasks/setting/database/{{ database_connection_setting_task | basename }}
+  loop: "{{ lookup('fileglob', 'tasks/setting/database/*.yml', wantlist=True) }}"
+  loop_control:
+    loop_var: database_connection_setting_task

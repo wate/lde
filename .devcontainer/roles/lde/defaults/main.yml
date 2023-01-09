@@ -28,12 +28,16 @@ lde_env_vars:
 ## mycliの設定
 ## -----------------
 lde_mycli_cfg:
-  smart_completion: true
-  multi_line: false
-  table_format: ascii
-  syntax_style: default
-  less_chatty: true
-  enable_pager: true
+  main:
+    smart_completion: true
+    multi_line: false
+    table_format: ascii
+    syntax_style: default
+    less_chatty: true
+    enable_pager: true
+  favorite_queries:
+    list_table: SHOW TABLES
+    list_columns: SHOW COLUMNS FROM $1
   alias_dsn:
     dev: "mysql://app_dev:app_dev_password@localhost/app_dev"
     test: "mysql://app_test:app_test_password@localhost/app_test"
@@ -45,12 +49,13 @@ lde_mycli_cfg:
 ## pgcliの設定
 ## -----------------
 lde_pgcli_cfg:
-  smart_completion: true
-  multi_line: false
-  table_format: psql
-  syntax_style: default
-  less_chatty: true
-  enable_pager: true
+  main:
+    smart_completion: true
+    multi_line: false
+    table_format: psql
+    syntax_style: default
+    less_chatty: true
+    enable_pager: true
   alias_dsn:
     dev: "postgresql://app_dev:app_dev_password@localhost/app_dev"
     test: "postgresql://app_test:app_test_password@localhost/app_test"
@@ -61,9 +66,10 @@ lde_pgcli_cfg:
 ## litecliの設定
 ## -----------------
 lde_litecli_cfg:
-  smart_completion: true
-  multi_line: false
-  table_format: ascii
-  syntax_style: default
-  less_chatty: true
-  enable_pager: true
+  main:
+    smart_completion: true
+    multi_line: false
+    table_format: ascii
+    syntax_style: default
+    less_chatty: true
+    enable_pager: true

@@ -7,16 +7,10 @@
     mode: "0755"
   loop:
     - bin
-    - .local/share/bash-completion/completions
-- name: Setup SSH setting
-  ansible.builtin.import_tasks:
-    file: setting/ssh.yml
-- name: Setup bash-completion setting
-  ansible.builtin.import_tasks:
-    file: setting/bash_completion.yml
-- name: Setup git setting
-  ansible.builtin.import_tasks:
-    file: setting/git.yml
-- name: Setup git setting
-  ansible.builtin.import_tasks:
-    file: setting/git.yml
+    - .local/bin
+- name: Inclde setting tasks
+  ansible.builtin.include_tasks:
+    file: tasks/setting/{{ setting_task | basename }}
+  loop: "{{ lookup('fileglob', 'tasks/setting/*.yml', wantlist=True) }}"
+  loop_control:
+    loop_var: setting_task

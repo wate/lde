@@ -1,30 +1,30 @@
 [main]
 # Enables context sensitive auto-completion. If this is disabled then all
 # possible completions will be listed.
-smart_completion = {{ lde_litecli_cfg.smart_completion | string }}
+smart_completion = {{ lde_litecli_cfg.main.smart_completion | string }}
 
 # Multi-line mode allows breaking up the sql statements into multiple lines. If
 # this is set to True, then the end of the statements must have a semi-colon.
 # If this is set to False then sql statements can't be split into multiple
 # lines. End of line (return) is considered as the end of the statement.
-multi_line = {{ lde_litecli_cfg.multi_line | string }}
+multi_line = {{ lde_litecli_cfg.main.multi_line | string }}
 
 # Table format. Possible values:
 # ascii, double, github, psql, plain, simple, grid, fancy_grid, pipe, orgtbl,
 # rst, mediawiki, html, latex, latex_booktabs, textile, moinmoin, jira,
 # vertical, tsv, csv.
 # Recommended: ascii
-table_format = {{ lde_litecli_cfg.table_format }}
+table_format = {{ lde_litecli_cfg.main.table_format }}
 
 # Syntax coloring style. Possible values (many support the "-dark" suffix):
 # manni, igor, xcode, vim, autumn, vs, rrt, native, perldoc, borland, tango, emacs,
 # friendly, monokai, paraiso, colorful, murphy, bw, pastie, paraiso, trac, default,
 # fruity.
 # Screenshots at http://mycli.net/syntax
-syntax_style = {{ lde_litecli_cfg.syntax_style }}
+syntax_style = {{ lde_litecli_cfg.main.syntax_style }}
 
 # Skip intro info on startup and outro info on exit
-less_chatty = {{ lde_litecli_cfg.less_chatty | string }}
+less_chatty = {{ lde_litecli_cfg.main.less_chatty | string }}
 
 # Enable the pager on startup.
-enable_pager = {{ lde_litecli_cfg.enable_pager | string }}
+enable_pager = {{ lde_litecli_cfg.main.enable_pager | string }}
