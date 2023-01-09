@@ -124,7 +124,7 @@ Vagrant.configure("2") do |config|
       ansible_raw_arguments.push(env_var)
     end
   end
-  ansible_tags = []
+  ansible_tags = nil
   ansible_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_TAGS_/) }
   unless ansible_tags_env_vars.empty?
     ansible_tags_env_vars.each_value do |env_var|
