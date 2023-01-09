@@ -23,13 +23,13 @@ lde(Local Development Environment)
     * M1/M2 Macを利用している場合は`Apple Chip`版をインストールしてください。
     * Windowsを利用している場合は別途`WSL`が必要になります。
 
-※Remote Developmentの詳細については、以下の公式サイトを参照してください。
+※Remote Developmentの詳細については、以下の公式サイトを参照してください。  
 [Visual Studio Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview)
 
 利用方法
 ------------
 
-このリポジトリのファイル一式をダウンロードし既存のプロジェクトにファイルを追加し、
+このリポジトリのファイル一式をダウンロードし既存のプロジェクトにファイルを追加し、  
 ローカル開発環境をセットアップします。
 
 利用するツールごとの利用方法は以下のとおりです。
@@ -49,7 +49,7 @@ Vagrantの詳細な使い方については公式サイトなどを参照して�
 
 ### dev containersを利用する場合
 
-Visual Studo Codeを起動し、プロジェクトのディレクトリを開きます、
+Visual Studo Codeを起動し、プロジェクトのディレクトリを開きます、  
 次に`F1`キーを押し、`Reopen in Container`をクリックするとローカル開発環境の構築が開始されます。
 
 dev containersの詳細な使い方は公式サイトなどを参照してください。
