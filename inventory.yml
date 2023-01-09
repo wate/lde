@@ -10,9 +10,8 @@ development:
   host:
     dev.example.com:
       ## ホスト変数
-      # ansible_connection: ssh
       # ansible_host: 123.123.123.123
-      # ansible_port: 5555
+      # ansible_port: 1234
       # ansible_user: dev_user
       # ansible_password: dev_user_password
       # ansible_ssh_private_key_file: ~/.ssh/id_rsa
@@ -25,12 +24,22 @@ development:
 staging:
   host:
     stg.example.com:
+      # ansible_host: 123.123.123.123
+      # ansible_port: 1234
+      # ansible_user: dev_user
+      # ansible_password: dev_user_password
+      # ansible_ssh_private_key_file: ~/.ssh/id_rsa
   vars:
     app_repo_branch: staging
     app_env: staging
 production:
   host:
     example.com:
+      # ansible_host: 123.123.123.123
+      # ansible_port: 1234
+      # ansible_user: prod_user
+      # ansible_password: prod_user_password
+      # ansible_ssh_private_key_file: ~/.ssh/id_rsa
   vars:
     app_repo_branch: master
     app_env: production

@@ -3,11 +3,6 @@
 - name: Deploy App
   hosts: all
   become: false
-  connection: local
-  vars:
-    app_repo: https://github.com/wate/lde.git
-    app_deploy_path: ~/lde
-    app_repo_branch: feature/v3
   tasks:
     - name: ソースコードのチェックアウト
       ansible.builtin.git:
@@ -18,6 +13,19 @@
     - name: セットアップ処理
       when: checkout_result is changed
       block:
+        # - name: rsyncを使ったデプロイ
+        #   ## @see https://docs.ansible.com/ansible/latest/collections/ansible/posix/synchronize_module.html
+        #   ansible.posix.synchronize:
+        #     src: dist/
+        #     dest: rsync://{{ inventory_hostname }}{{ app_deploy_path }}
+        #     rsync_opts:
+        #       - "--exclude=.git"
+        #       - "--exclude=.env"
+        #       - "--exclude=.envrc"
+        #       - "--exclude=.github"
+        #       - "--exclude=.devcontainer"
+        #       - "--exclude=.vagrant"
+        #   delegate_to: 127.0.0.1
         - name: 新規セットアップ処理
           when: not checkout_result.before
           block:
@@ -34,6 +42,7 @@
               echo "更新時の処理を実装してください。"
             chdir: "{{ app_deploy_path }}"
         - name: デプロイ完了時の通知処理
+          ## @see https://docs.ansible.com/ansible/latest/collections/community/general/slack_module.html
           community.general.slack:
             token: "{{ lookup('env', 'SLACK_TOKEN') }}"
             channel: "{{ lookup('env', 'SLACK_CHANNEL') | default(omit, true) }}"
@@ -43,6 +52,7 @@
           when: lookup('env', 'SLACK_TOKEN') | length > 0
       rescue:
         - name: デプロイ失敗時の通知処理
+          ## @see https://docs.ansible.com/ansible/latest/collections/community/general/slack_module.html
           community.general.slack:
             token: "{{ lookup('env', 'SLACK_TOKEN') }}"
             channel: "{{ lookup('env', 'SLACK_CHANNEL') | default(omit, true) }}"
