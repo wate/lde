@@ -140,6 +140,9 @@
           export LOG_DEBUG_URL=file:///var/log/cakephp/logs/
           export LOG_ERROR_URL=file:///var/log/cakephp/logs/
           export LOG_QUERIES_URL=file:///var/log/cakephp/logs/
+          {% if lookup('env', 'EMAIL_TRANSPORT_DEFAULT_URL') %}
+          export EMAIL_TRANSPORT_DEFAULT_URL={{ lookup('env', 'EMAIL_TRANSPORT_DEFAULT_URL') }}
+          {% endif %}
           {% if redis_port is defined %}
           export CACHE_DEFAULT_URL=redis://localhost:{{ redis_port }}
           export CACHE_CAKECORE_URL=redis://localhost:{{ redis_port }}
