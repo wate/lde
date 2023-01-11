@@ -53,6 +53,8 @@
     # - name: Setup CakePHP Project
     #   ansible.builtin.import_role:
     #     name: cakephp
+    #   tags:
+    #     role_cakephp
     #   become: false
     - name: Check pre-commit config file
       ansible.builtin.stat:
