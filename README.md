@@ -86,3 +86,17 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 * [osv-scanner](https://github.com/google/osv-scanner)
 * [MailHog](https://github.com/mailhog/MailHog)
     * ※Vagrant利用時のみ
+
+Tips
+------------
+
+### CakePHPのメール送信方法を環境変数で設定する
+
+`config/.env`に以下のようにメール送信方法の環境変数を設定します。
+
+※以下の設定は[mailtrap](https://mailtrap.io/)を使ってメールの送信テストを行う場合の設定例です。  
+(`<username>`および`<password>`は適時変更してください。)
+
+```
+export EMAIL_TRANSPORT_DEFAULT_URL=smtp://<username>:<password>@smtp.mailtrap.io:2525
+```
