@@ -1,0 +1,13 @@
+---
+slim_project_exclude_synchronize_params:
+  - .git
+  - .gitignore
+  - var/cache/*
+  - logs/*
+  - .devcontainer
+  - .vagrant
+  - docs
+  - .coveralls.yml
+  - docker-compose.yml
+  - README.md
+  - CONTRIBUTING.md
