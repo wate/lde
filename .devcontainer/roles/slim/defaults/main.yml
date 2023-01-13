@@ -1,0 +1,33 @@
+---
+## --------------
+## Slimプロジェクトディレクトリ
+## --------------
+slim_source_dir: /vagrant
+
+## --------------
+## Slimプロジェクト設定用一時ディレクトリ
+## --------------
+slim_tmp_project_dir: /tmp/php_project
+
+## --------------
+## 利用するSlimのメジャーバージョン
+## --------------
+slim_major_version: 4
+
+## --------------
+## インストールする追加パッケージ
+## --------------
+slim_project_addtitinal_packages:
+  - name: symfony/yaml
+  - name: squizlabs/php_codesniffer
+    dev: true
+  - name: phpstan/phpstan
+    dev: true
+  - name: phpunit/phpunit
+    deb: true
+
+## --------------
+## 開発用に解放するポートの設定
+## --------------
+slim_allow_dev_ports:
+  - 9000
