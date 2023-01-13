@@ -70,6 +70,13 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 
 ※デフォルトで`app_dev`を利用するように設定されます。
 
+### 利用環境ごとのデータベースのホスト名
+
+利用している環境ごとのデータベースのホスト名は以下のとおりです。
+
+* Vagrantを利用する場合：`localhost`
+* dev containersを利用する場合：`db`
+
 ### インストール済み開発関連ツール
 
 * [pre-commit](https://pre-commit.com/)
