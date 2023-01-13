@@ -25,15 +25,16 @@
             paths:
               - /usr/share/fonts/opentype/ipaexfont-gothic
               - /usr/share/fonts/opentype/ipaexfont-gothic
+              - /usr/local/share/fonts/morisawa-biz-ud-gothic
+              - /usr/local/share/fonts/morisawa-biz-ud-mincho
               - /usr/share/fonts/opentype/ipafont-gothic
               - /usr/share/fonts/opentype/ipafont-mincho
-              - /usr/local/share/fonts/morisawa-biz-ud-gothic
             patterns:
               - '*.ttf'
           register: find_result
         - name: Generate tcpdf font file
           ansible.builtin.command:
-            cmd: vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php --outpath {{ cakephp_tmp_project_dir }}/resources/fonts --fonts "{{ item }}"
+            cmd: php vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php --outpath {{ cakephp_tmp_project_dir }}/resources/fonts --fonts "{{ item }}"
             chdir: "{{ cakephp_tmp_project_dir }}"
           loop: "{{ find_result.files | map(attribute='path') | list }}"
           tags:
