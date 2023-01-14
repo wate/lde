@@ -83,7 +83,7 @@
         state: restarted
       loop:
         - mariadb
-        - postgresql
+        # - postgresql
         - php{{ php_version | default('8.1') }}-fpm
         - nginx
         # - apache2

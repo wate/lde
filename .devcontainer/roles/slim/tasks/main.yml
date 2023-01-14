@@ -7,7 +7,7 @@
         rule: allow
         port: "{{ item }}"
         proto: any
-      loop: "{{ slim_allow_dev_ports | default(['9000']) }}"
+      loop: "{{ slim_allow_dev_ports | default([]) }}"
     - name: Remove default install index file
       ansible.builtin.file:
         path: /var/www/html/{{ item }}

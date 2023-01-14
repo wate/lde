@@ -155,6 +155,26 @@ php_packages:
   - php{{ php_version }}-redis
   - php{{ php_version }}-xdebug
 
+## ---------
+## PHPの設定(cli)
+## ---------
+php_cli_cfg: |
+    date.timezone = Asia/Tokyo
+## ---------
+## PHPの設定(php-fpm)
+## ---------
+php_fpm_cfg: |
+  date.timezone = Asia/Tokyo
+  [Xdebug]
+  xdebug.mode = debug
+## ---------
+## PHPの設定(apache)
+## ---------
+php_apache_cfg: |
+  date.timezone = Asia/Tokyo
+  [Xdebug]
+  xdebug.mode = debug
+
 ## --------------
 ## データベースの設定(共通)
 ## --------------
