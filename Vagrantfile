@@ -166,10 +166,20 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  # config.trigger.before :destroy do |trigger|
-  #   trigger.info = "Dump database(app_dev)"
-  #   trigger.run_remote = {
-  #     inline: "mysqldump -u app_dev -papp_dev_password app_dev >/vagrant/databse_backup.sql"
-  #   }
-  # end
+  unless ENV.has_key?('VAGRANT_TREIGGER_DISABLE') || ENV.has_key?('VAGRANT_TREIGGER_DISABLE_PROVISION')
+    config.trigger.after :provision do |trigger|
+      trigger.info = "Restore Database(app_dev) Data"
+      trigger.run_remote = {
+        path: ".devcontainer/scripts/vagrant_afte_provision.sh"
+      }
+    end
+  end
+  unless ENV.has_key?('VAGRANT_TREIGGER_DISABLE') && ENV.has_key?('VAGRANT_TREIGGER_DISABLE_DESTROY')
+    config.trigger.before :destroy do |trigger|
+      trigger.info = "Backup Database(app_dev) Data"
+      trigger.run_remote = {
+        path: ".devcontainer/scripts/vagrant_befor_destroy.sh"
+      }
+    end
+  end
 end
