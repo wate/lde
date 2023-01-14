@@ -167,6 +167,9 @@ php_fpm_cfg: |
   date.timezone = Asia/Tokyo
   [Xdebug]
   xdebug.mode = debug
+  xdebug.client_port = 9003
+  xdebug.client_host = 192.168.56.10
+  xdebug.start_with_request = yes
 ## ---------
 ## PHPの設定(apache)
 ## ---------
@@ -174,6 +177,9 @@ php_apache_cfg: |
   date.timezone = Asia/Tokyo
   [Xdebug]
   xdebug.mode = debug
+  xdebug.client_port = 9003
+  xdebug.client_host = 192.168.56.10
+  xdebug.start_with_request = yes
 
 ## --------------
 ## データベースの設定(共通)
