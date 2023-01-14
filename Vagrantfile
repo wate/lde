@@ -166,6 +166,17 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
+  ANSIBLR_VERIFY_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, 'verify.yml'))
+  if File.exists?(ANSIBLR_VERIFY_PLAYBOOK)
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = ANSIBLR_VERIFY_PLAYBOOK
+      ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
+      ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
+      ansible.extra_vars = ansible_extra_vars
+      ansible.raw_arguments = ansible_raw_arguments
+      ansible.groups = ansible_groups
+    end
+  end
   unless ENV.has_key?('VAGRANT_TREIGGER_DISABLE') || ENV.has_key?('VAGRANT_TREIGGER_DISABLE_PROVISION')
     config.trigger.after :provision do |trigger|
       trigger.info = "Restore Database(app_dev) Data"
