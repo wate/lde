@@ -177,6 +177,7 @@ Vagrant.configure("2") do |config|
   unless ENV.has_key?('VAGRANT_TREIGGER_DISABLE') && ENV.has_key?('VAGRANT_TREIGGER_DISABLE_DESTROY')
     config.trigger.before :destroy do |trigger|
       trigger.info = "Backup Database(app_dev) Data"
+      trigger.on_error = :continue
       trigger.run_remote = {
         path: ".devcontainer/scripts/vagrant_befor_destroy.sh"
       }
