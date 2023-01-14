@@ -7,7 +7,7 @@
         rule: allow
         port: "{{ item }}"
         proto: any
-      loop: "{{ slim_allow_dev_ports | default(['9000']) }}"
+      loop: "{{ slim_allow_dev_ports | default([]) }}"
     - name: Remove default install index file
       ansible.builtin.file:
         path: /var/www/html/{{ item }}
@@ -61,6 +61,8 @@
         arguments: '"{{ item.name }}" {{ item.dev | default(false) | ternary("--dev", "") }}'
         working_dir: "{{ slim_tmp_project_dir }}"
       loop: "{{ slim_project_addtitinal_packages | default([]) }}"
+      loop_control:
+        label: "{{ item.name }}"
     - name: Synchronize project files(temporary directory => VirtualBox shard directory)
       ansible.posix.synchronize:
         src: "{{ slim_tmp_project_dir }}/"

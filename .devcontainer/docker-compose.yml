@@ -11,6 +11,7 @@ services:
       TZ: Asia/Tokyo
     volumes:
       - ..:/workspace:cached
+      - ./php/z-custom.ini:/usr/local/etc/php/conf.d/z-custom.ini
     command: sleep infinity
     network_mode: service:db
     depends_on:

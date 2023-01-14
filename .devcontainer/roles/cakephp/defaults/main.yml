@@ -32,6 +32,8 @@ cakephp_project_addtitinal_packages:
     dev: true
   - name: phpunit/phpunit
     deb: true
+  - name: fakerphp/faker
+    dev: true
   - name: dereuromark/cakephp-ide-helper
     dev: true
 
@@ -63,6 +65,22 @@ cakephp_database_test_url: "\
 ## 開発用に解放するポートの設定
 ## --------------
 cakephp_allow_dev_ports:
-  - 9000
-  # - 3306
-  # - 5432
+  - 9003
+  - 3306
+
+## --------------
+## 同期処理から除外するファイル/ディレクトリ
+## --------------
+cakephp_project_exclude_synchronize_params:
+  - .git
+  - .gitignore
+  - tmp/cache/models/*
+  - tmp/cache/persistent/*
+  - tmp/sessions/*
+  - tmp/tests/*
+  - logs/*
+  - .devcontainer
+  - .vagrant
+  - .editorconfig
+  - docs
+  - README.md

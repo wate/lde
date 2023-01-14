@@ -30,4 +30,21 @@ slim_project_addtitinal_packages:
 ## 開発用に解放するポートの設定
 ## --------------
 slim_allow_dev_ports:
-  - 9000
+  - 9003
+  - 3306
+
+## --------------
+## 同期処理から除外するファイル/ディレクトリ
+## --------------
+slim_project_exclude_synchronize_params:
+  - .git
+  - .gitignore
+  - var/cache/*
+  - logs/*
+  - .devcontainer
+  - .vagrant
+  - docs
+  - .coveralls.yml
+  - docker-compose.yml
+  - README.md
+  - CONTRIBUTING.md
