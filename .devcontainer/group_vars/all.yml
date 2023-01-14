@@ -168,7 +168,7 @@ php_fpm_cfg: |
   [Xdebug]
   xdebug.mode = debug
   xdebug.client_port = 9003
-  xdebug.client_host = 192.168.56.10
+  xdebug.client_host = localhost
   xdebug.start_with_request = yes
 ## ---------
 ## PHPの設定(apache)
@@ -178,7 +178,7 @@ php_apache_cfg: |
   [Xdebug]
   xdebug.mode = debug
   xdebug.client_port = 9003
-  xdebug.client_host = 192.168.56.10
+  xdebug.client_host = localhost
   xdebug.start_with_request = yes
 
 ## --------------

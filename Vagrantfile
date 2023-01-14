@@ -125,7 +125,7 @@ Vagrant.configure("2") do |config|
     end
   end
   ansible_tags = nil
-  ansible_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_TAGS_/) }
+  ansible_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_TAG_/) }
   unless ansible_tags_env_vars.empty?
     ansible_tags = []
     ansible_tags_env_vars.each_value do |env_var|
@@ -133,7 +133,7 @@ Vagrant.configure("2") do |config|
     end
   end
   ansible_skip_tags = []
-  ansible_skip_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_SKIP_TAGS_/) }
+  ansible_skip_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_SKIP_TAG_/) }
   unless ansible_skip_tags_env_vars.empty?
     ansible_skip_tags_env_vars.each_value do |env_var|
       ansible_skip_tags.push(env_var)
