@@ -55,13 +55,15 @@
     #     name: cakephp
     #   become: false
     #   tags:
-    #     role_cakephp
+    #     - role_framework
+    #     - role_cakephp
     # - name: Setup Slim Project
     #   ansible.builtin.import_role:
     #     name: slim
     #   become: false
     #   tags:
-    #     role_slim
+    #     - role_framework
+    #     - role_slim
     - name: Check pre-commit config file
       ansible.builtin.stat:
         path: /vagrant/.pre-commit-config.yaml
