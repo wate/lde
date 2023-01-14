@@ -28,6 +28,8 @@
     name: "{{ item.name }}"
     value: "{{ item.value }}"
     scope: global
+  loop_control:
+    label: "{{ item.name }}"
   loop:
     ## fetch / pull / push
     - name: fetch.prune

@@ -32,6 +32,8 @@ cakephp_project_addtitinal_packages:
     dev: true
   - name: phpunit/phpunit
     deb: true
+  - name: fakerphp/faker
+    dev: true
   - name: dereuromark/cakephp-ide-helper
     dev: true
 
