@@ -18,9 +18,9 @@
     - role: mariadb
       tags:
         - role_mariadb
-    - role: postgresql
-      tags:
-        - role_postgresql
+    # - role: postgresql
+    #   tags:
+    #     - role_postgresql
     - role: php
       tags:
         - role_php
@@ -83,7 +83,7 @@
         state: restarted
       loop:
         - mariadb
-        # - postgresql
         - php{{ php_version | default('8.1') }}-fpm
         - nginx
+        # - postgresql
         # - apache2
