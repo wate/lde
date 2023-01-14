@@ -64,5 +64,20 @@ cakephp_database_test_url: "\
 ## --------------
 cakephp_allow_dev_ports:
   - 9000
-  # - 3306
-  # - 5432
+
+## --------------
+## 同期処理から除外するファイル/ディレクトリ
+## --------------
+cakephp_project_exclude_synchronize_params:
+  - .git
+  - .gitignore
+  - tmp/cache/models/*
+  - tmp/cache/persistent/*
+  - tmp/sessions/*
+  - tmp/tests/*
+  - logs/*
+  - .devcontainer
+  - .vagrant
+  - .editorconfig
+  - docs
+  - README.md
