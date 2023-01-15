@@ -153,7 +153,7 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  ANSIBLR_USER_SETTING_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, 'my_env.yml'))
+  ANSIBLR_USER_SETTING_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, 'custom.yml'))
   if File.exists?(ANSIBLR_USER_SETTING_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_USER_SETTING_PLAYBOOK
