@@ -30,6 +30,9 @@ roles:
   - name: redis
     src: https://github.com/wate/ansible-role-redis
     version: develop
+  - name: grafana
+    src: https://github.com/wate/ansible-role-grafana
+    version: develop
   - name: tools
     src: https://github.com/wate/ansible-role-tools
     version: develop

@@ -22,6 +22,9 @@
     # - role: postgresql
     #   tags:
     #     - role_postgresql
+    - role: grafana
+      tags:
+        - role_grafana
     - role: php
       tags:
         - role_php

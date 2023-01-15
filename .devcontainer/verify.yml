@@ -50,6 +50,11 @@
     - name: 待受ポートを検証
       ansible.builtin.assert:
         that:
+          ## Nginx / Apache
           - 80 in listen_tcp_posts
+          ## grafana
+          - 3000 in listen_tcp_posts
+          ## MariaDB
           - 3306 in listen_tcp_posts
+          ## redis
           - 6379 in listen_tcp_posts
