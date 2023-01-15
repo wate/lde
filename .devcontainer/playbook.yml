@@ -22,9 +22,15 @@
     # - role: postgresql
     #   tags:
     #     - role_postgresql
+    - role: grafana
+      tags:
+        - role_grafana
     - role: php
       tags:
         - role_php
+    - role: goaccess
+      tags:
+        - role_goaccess
     - role: nginx
       tags:
         - role_nginx
