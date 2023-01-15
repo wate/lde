@@ -1,0 +1,55 @@
+---
+# code: language=ansible
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json
+- name: 仮想マシンの検証
+  hosts: all
+  gather_facts: false
+  check_mode: true
+  become: true
+  tasks:
+    - name: php-fpmのパッケージ名/サービス名を変数に設定
+      ansible.builtin.set_fact:
+        php_fpm_name: "php{{ php_version | default('8.1') }}-fpm"
+    ## パッケージ
+    - name: インストール済みパッケージの情報を取得
+      ansible.builtin.package_facts:
+        manager: auto
+    - name: パッケージのインストール状況を検証
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.packages['mariadb-server'] is defined
+          - ansible_facts.packages[php_fpm_name] is defined
+          - ansible_facts.packages['nginx'] is defined
+          - ansible_facts.packages['redis'] is defined
+    ## サービスのテスト
+    - name: サービスの情報を取得
+      ansible.builtin.service_facts:
+    - name: サービスの状態を検証
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['mariadb.service'] is defined
+          - ansible_facts.services['mariadb.service']['state'] == 'running'
+          - ansible_facts.services['mariadb.service']['status'] == 'enabled'
+          - ansible_facts.services[php_fpm_name + '.service'] is defined
+          - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
+          - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
+          - ansible_facts.services['nginx.service'] is defined
+          - ansible_facts.services['nginx.service']['state'] == 'running'
+          - ansible_facts.services['nginx.service']['status'] == 'enabled'
+          - ansible_facts.services['redis-server.service'] is defined
+          - ansible_facts.services['redis-server.service']['state'] == 'running'
+          - ansible_facts.services['redis-server.service']['status'] == 'enabled'
+    ## 待受ポート
+    - name: 待受ポートの情報を取得
+      community.general.listen_ports_facts:
+        command: ss
+    - name: 取得した待受ポートの情報を加工してテスト用変数に格納
+      ansible.builtin.set_fact:
+        listen_tcp_posts: "{{ ansible_facts.tcp_listen | map(attribute='port') | unique | sort | list }}"
+        listen_udp_posts: "{{ ansible_facts.udp_listen | map(attribute='port') | unique | sort | list }}"
+    - name: 待受ポートを検証
+      ansible.builtin.assert:
+        that:
+          - 80 in listen_tcp_posts
+          - 3306 in listen_tcp_posts
+          - 6379 in listen_tcp_posts

@@ -272,3 +272,15 @@ cakephp_database_test_url: "\
   &quoteIdentifiers=false\
   &persistent=false
   "
+
+## -----------------
+## MaxMindのアカウントID
+## @see https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
+## -----------------
+goaccess_geoipupdate_maxmind_account_id: "{{ lookup('env', 'MAXMIND_ACCOUNT_ID') | default('YOUR_ACCOUNT_ID_HERE', true) }}"
+
+## -----------------
+## MaxMindのライセンスキー
+## @see https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
+## -----------------
+goaccess_geoipupdate_maxmind_license_key: "{{ lookup('env', 'MAXMIND_LICENSE_KEY') | default('YOUR_LICENSE_KEY_HERE', true) }}"

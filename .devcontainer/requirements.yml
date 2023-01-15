@@ -6,6 +6,9 @@ roles:
   - name: nodejs
     src: https://github.com/wate/ansible-role-nodejs
     version: develop
+  - name: goaccess
+    src: https://github.com/wate/ansible-role-goaccess
+    version: develop
   - name: nginx
     src: https://github.com/wate/ansible-role-nginx
     version: develop
