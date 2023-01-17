@@ -34,7 +34,7 @@ lde_mycli_cfg:
     table_format: ascii
     syntax_style: default
     less_chatty: true
-    enable_pager: true
+    enable_pager: false
   favorite_queries:
     list_table: SHOW TABLES
     list_columns: SHOW COLUMNS FROM $1
@@ -55,7 +55,7 @@ lde_pgcli_cfg:
     table_format: psql
     syntax_style: default
     less_chatty: true
-    enable_pager: true
+    enable_pager: false
   alias_dsn:
     dev: "postgresql://app_dev:app_dev_password@localhost/app_dev"
     test: "postgresql://app_test:app_test_password@localhost/app_test"
@@ -72,4 +72,4 @@ lde_litecli_cfg:
     table_format: ascii
     syntax_style: default
     less_chatty: true
-    enable_pager: true
+    enable_pager: false
