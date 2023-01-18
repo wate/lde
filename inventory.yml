@@ -6,6 +6,7 @@ all:
     app_repo: https://github.com/wate/lde.git
     ## デプロイ先のパス
     app_deploy_path: ~/app
+    ## rsyncの--excludeパラメーター
     rsync_exclude_opts:
       - .git
       - .env
@@ -13,20 +14,31 @@ all:
       - .github
       - .devcontainer
       - .vagrant
+developers:
+  host:
+    wate:
+      ## ホスト変数
+      # ansible_host: 123.123.123.123
+      # ansible_port: 1234
+      # ansible_user: wate
+      # ansible_password: password_not_found
+      # ansible_ssh_private_key_file: ~/.ssh/id_rsa
+  ## グループ変数
+  vars:
+    ## ブランチ名(現在のブランチ)
+    app_repo_branch: "{{ lookup('pipe', 'git branch --contains | cut -d ' ' -f 2') }}"
+    ## 動作モード
+    app_env: development
 development:
   host:
     dev.example.com:
-      ## ホスト変数
       # ansible_host: 123.123.123.123
       # ansible_port: 1234
       # ansible_user: dev_user
       # ansible_password: dev_user_password
       # ansible_ssh_private_key_file: ~/.ssh/id_rsa
-  ## グループ変数
   vars:
-    ## ブランチ名
     app_repo_branch: develop
-    ## 動作モード
     app_env: development
 staging:
   host:
