@@ -6,6 +6,13 @@ all:
     app_repo: https://github.com/wate/lde.git
     ## デプロイ先のパス
     app_deploy_path: ~/app
+    rsync_exclude_opts:
+      - .git
+      - .env
+      - .envrc
+      - .github
+      - .devcontainer
+      - .vagrant
 development:
   host:
     dev.example.com:

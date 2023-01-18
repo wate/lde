@@ -19,13 +19,7 @@
         #   ansible.posix.synchronize:
         #     src: dist/
         #     dest: rsync://{{ inventory_hostname }}{{ app_deploy_path }}
-        #     rsync_opts:
-        #       - "--exclude=.git"
-        #       - "--exclude=.env"
-        #       - "--exclude=.envrc"
-        #       - "--exclude=.github"
-        #       - "--exclude=.devcontainer"
-        #       - "--exclude=.vagrant"
+        #     rsync_opts: "{{ rsync_exclude_opts | map('regex_replace', '(.+)', '--exclude=\\1') }}"
         #   delegate_to: 127.0.0.1
         - name: 新規セットアップ処理
           when: not checkout_result.before
