@@ -114,5 +114,5 @@ if [ -f "$(dirname $0)/post_create.yml" ]; then
 fi
 
 if [ -f "${PWD}/.devcontainer/my_env.yml" ]; then
-    ansible-playbook -i 127.0.0.1, -c local "${PWD}/.devcontainer/my_env.yml"
+  ansible-playbook -i 127.0.0.1, -c local "${PWD}/.devcontainer/custom.yml"
 fi
