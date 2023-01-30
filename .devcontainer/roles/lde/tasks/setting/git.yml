@@ -42,21 +42,19 @@
       value: simple
     - name: push.autoSetupRemote
       value: "true"
-    ## alias
+    ## alias(add)
     - name: alias.au
       value: add --update
+    ## alias(branch)
     - name: alias.br
       value: branch
-    - name: alias.ca
-      value: commit --amend
-    - name: alias.ci
-      value: commit
-    - name: alias.co
-      value: checkout
-    - name: alias.dc
-      value: diff --cached
+    ## alias(status)
     - name: alias.st
       value: status -s
+    ## alias(checkout)
+    - name: alias.co
+      value: checkout
+    ## alias(log)
     - name: alias.lg
       value: >-
         log --graph
@@ -65,6 +63,18 @@
         --date=iso
         --all
         --decorate
+    ## alias(commit)
+    - name: alias.ca
+      value: commit --amend
+    - name: alias.ci
+      value: commit
+    ## alias(diff)
+    - name: alias.df
+      value: diff
+    - name: alias.dc
+      value: diff --cached
+    - name: alias.dw
+      value: diff --word-diff
     ## alias(update-index)
     - name: alias.assume
       value: update-index --assume-unchanged
