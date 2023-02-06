@@ -13,7 +13,7 @@
     - name: Create Slim project
       when: not composer_json_result.stat.exists
       block:
-        - name: Create Slim temporary project
+        - name: Create Slim project
           community.general.composer:
             command: create-project
             arguments: '"slim/slim-skeleton:^{{ slim_major_version | default(4) | string }}" {{ php_project_tmp_dir }}'
