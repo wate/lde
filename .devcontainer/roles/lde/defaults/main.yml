@@ -30,7 +30,6 @@ php_project_allow_dev_ports:
 ## -----------------
 # lde_git_prompt_custom_theme_url: https://raw.githubusercontent.com/wate/Dotfiles/master/.git-prompt-colors.sh
 
-
 ## -----------------
 ## mycliの設定
 ## -----------------
@@ -44,7 +43,7 @@ lde_mycli_cfg:
     enable_pager: false
   favorite_queries:
     list_table: SHOW TABLES
-    list_columns: SHOW COLUMNS FROM $1
+    list_column: SHOW COLUMNS FROM $1
   alias_dsn:
     dev: "mysql://app_dev:app_dev_password@localhost/app_dev"
     test: "mysql://app_test:app_test_password@localhost/app_test"
