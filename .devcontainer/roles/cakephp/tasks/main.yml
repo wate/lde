@@ -1,5 +1,5 @@
 ---
-- name: Setup CakePHP project
+- name: Setup PHP project
   become: true
   block:
     - name: Allow development ports
@@ -25,7 +25,7 @@
         - tmp/session
         - tmp/tests
         - logs
-- name: Setup CakePHP project
+- name: Setup PHP project
   become: false
   block:
     - name: Create symlink
@@ -46,17 +46,17 @@
       ansible.builtin.file:
         path: "{{ cakephp_tmp_project_dir }}"
         state: absent
-    - name: Create CakePHP project
+    - name: Create PHP project
       when: not composer_json_result.stat.exists
       block:
-        - name: Create CakePHP project temporary
+        - name: Create PHP project temporary
           community.general.composer:
             command: create-project
             arguments: '"cakephp/app:^{{ cakephp_major_version | default(4) | string }}" {{ cakephp_tmp_project_dir }}'
             no_dev: false
             prefer_dist: true
             working_dir: "{{ cakephp_tmp_project_dir | dirname }}"
-    - name: Setup CakePHP project
+    - name: Setup PHP project
       when: composer_json_result.stat.exists
       block:
         - name: Create temporary project directory
