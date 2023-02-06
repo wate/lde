@@ -6,6 +6,13 @@ lde_env_vars:
   TBLS_DSN: mariadb://app_dev:app_dev_password@localhost/app_dev
   TBLS_DOC_PATH: /vagrant/docs/schema
 
+## --------------
+## 開発用に解放するポートの設定
+## --------------
+php_project_allow_dev_ports:
+  - 9003
+  - 3306
+
 ## -----------------
 ## gitの設定(名前)
 ## -----------------
