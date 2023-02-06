@@ -1,18 +1,8 @@
 ---
 ## --------------
-## CakePHPプロジェクトディレクトリ
-## --------------
-cakephp_source_dir: /vagrant
-
-## --------------
-## CakePHPプロジェクト設定用一時ディレクトリ
-## --------------
-cakephp_tmp_project_dir: /tmp/php_project
-
-## --------------
 ## 利用するCakePHPのメジャーバージョン
 ## --------------
-cakephp_major_version: 4
+cakephp_major_version: "4"
 
 ## --------------
 ## インストールする追加パッケージ
@@ -62,13 +52,6 @@ cakephp_database_test_url: "\
   "
 
 ## --------------
-## 開発用に解放するポートの設定
-## --------------
-cakephp_allow_dev_ports:
-  - 9003
-  - 3306
-
-## --------------
 ## 同期処理から除外するファイル/ディレクトリ
 ## --------------
 cakephp_project_exclude_synchronize_params:
@@ -84,3 +67,8 @@ cakephp_project_exclude_synchronize_params:
   - .editorconfig
   - docs
   - README.md
+
+## --------------
+## CakePHPプロジェクト時のドキュメントルートディレクトリ
+## --------------
+php_project_web_dir: webroot
