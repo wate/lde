@@ -8,14 +8,24 @@
         rule: allow
         port: "{{ item }}"
         proto: any
-      loop: "{{ cakephp_allow_dev_ports | default([]) }}"
-    - name: Remove default install index file
+      loop: "{{ php_project_allow_dev_ports | default([]) }}"
+    - name: Check Doc root directory
+      ansible.builtin.stat:
+        path: /var/www/html
+      register: result
+    - name: Remove document root directory
       ansible.builtin.file:
-        path: /var/www/html/{{ item }}
+        path: /var/www/html
         state: absent
-      loop:
-        - index.html
-        - index.nginx-debian.html
+      when: result.stat.isdir
+    - name: Create Symlink
+      ansible.builtin.file:
+        path: /var/www/html
+        src: /vagrant
+        owner: vagrant
+        group: vagrant
+        mode: "{{ php_project_doc_root_mode }}"
+        state: link
 - name: Create user directory
   ansible.builtin.file:
     path: ~/{{ item }}
