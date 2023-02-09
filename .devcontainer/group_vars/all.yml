@@ -230,12 +230,14 @@ php_packages:
 ## PHPの設定(cli)
 ## ---------
 php_cli_cfg: |
-    date.timezone = Asia/Tokyo
+  date.timezone = Asia/Tokyo
+  sendmail_path = /usr/local/bin/mailpit sendmail
 ## ---------
 ## PHPの設定(php-fpm)
 ## ---------
 php_fpm_cfg: |
   date.timezone = Asia/Tokyo
+  sendmail_path = /usr/local/bin/mailpit sendmail
   [Xdebug]
   xdebug.mode = debug
   xdebug.client_port = 9003
@@ -246,6 +248,7 @@ php_fpm_cfg: |
 ## ---------
 php_apache_cfg: |
   date.timezone = Asia/Tokyo
+  sendmail_path = /usr/local/bin/mailpit sendmail
   [Xdebug]
   xdebug.mode = debug
   xdebug.client_port = 9003
