@@ -6,6 +6,18 @@ lde_env_vars:
   TBLS_DSN: mariadb://app_dev:app_dev_password@localhost/app_dev
   TBLS_DOC_PATH: /vagrant/docs/schema
 
+## --------------
+## 開発用に解放するポートの設定
+## --------------
+php_project_allow_dev_ports:
+  - 9003
+  - 3306
+
+## --------------
+## ドキュメントルートのアクセス権
+## --------------
+php_project_doc_root_mode: omit
+
 ## -----------------
 ## gitの設定(名前)
 ## -----------------
@@ -23,7 +35,6 @@ lde_env_vars:
 ## -----------------
 # lde_git_prompt_custom_theme_url: https://raw.githubusercontent.com/wate/Dotfiles/master/.git-prompt-colors.sh
 
-
 ## -----------------
 ## mycliの設定
 ## -----------------
@@ -37,7 +48,7 @@ lde_mycli_cfg:
     enable_pager: false
   favorite_queries:
     list_table: SHOW TABLES
-    list_columns: SHOW COLUMNS FROM $1
+    list_column: SHOW COLUMNS FROM $1
   alias_dsn:
     dev: "mysql://app_dev:app_dev_password@localhost/app_dev"
     test: "mysql://app_test:app_test_password@localhost/app_test"

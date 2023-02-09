@@ -1,12 +1,5 @@
 ---
 ## --------------
-## ドキュメントルートのパス
-## --------------
-# lde_ocument_root_path: /vagrant/webroot
-# lde_ocument_root_path: /vagrant/public
-# lde_ocument_root_path: /vagrant
-
-## --------------
 ## Nginxのバーチャルホストの設定
 ## --------------
 nginx_vhosts:
@@ -14,7 +7,7 @@ nginx_vhosts:
     default: true
     server_name:
       - "{{ domain }}"
-    document_root: "{{ lde_document_root_path | default('/vagrant', true) }}"
+    document_root: /var/www/html{{ (php_project_web_dir | default('') | length > 1) | ternary('/' + php_project_web_dir | default(''), '') }}
     index:
       - index.html
       - index.php
@@ -22,15 +15,11 @@ nginx_vhosts:
     error_log: /var/log/nginx/error.log
     client_max_body_size: 0
     locations:
-      - pattern: "/\\.well-known/acme-challenge/"
-        match_type: "^~"
-        content: |
-          default_type "text/plain";
-          alias /var/lib/dehydrated/acme-challenges/;
-      - pattern: "/\\.well-known/acme-challenge/"
-        match_type: "="
-        content: |
-          return 404;
+      # - pattern: /.well-known/acme-challenge/
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
       - pattern: /
         content: |
           try_files $uri $uri/ /index.php?$query_string;
@@ -44,7 +33,8 @@ nginx_vhosts:
         content: "deny all;"
     ## Vagrant用設定
     ## @see https://developer.hashicorp.com/vagrant/docs/synced-folders/virtualbox
-    extra_setting: sendfile off;
+    extra_setting: |
+      sendfile off;
   - name: phpRedisAdmin
     server_name:
       - "cache.{{ domain }}"
@@ -56,15 +46,15 @@ nginx_vhosts:
     error_log: /var/log/nginx/phpRedisAdmin.error.log
     client_max_body_size: 0
     locations:
-      - pattern: "/\\.well-known/acme-challenge/"
-        match_type: "^~"
-        content: |
-          default_type "text/plain";
-          alias /var/lib/dehydrated/acme-challenges/;
-      - pattern: "/\\.well-known/acme-challenge/"
-        match_type: "="
-        content: |
-          return 404;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "="
+      #   content: |
+      #     return 404;
       - pattern: /
         content: |
           try_files $uri $uri/ /index.php?$query_string;
@@ -76,19 +66,39 @@ nginx_vhosts:
       - pattern: "/\\.ht"
         match_type: "~"
         content: "deny all;"
+  - name: mail
+    server_name: "mail.{{ domain }}"
+    client_max_body_size: 0
+    locations:
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "="
+      #   content: |
+      #     return 404;
+      - pattern: /
+        content: |
+          proxy_pass http://127.0.0.1:8025;
+          include proxy_params;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
   - name: grafana
     server_name: "grafana.{{ domain }}"
     client_max_body_size: 0
     locations:
-      - pattern: "/\\.well-known/acme-challenge/"
-        match_type: "^~"
-        content: |
-          default_type "text/plain";
-          alias /var/lib/dehydrated/acme-challenges/;
-      - pattern: "/\\.well-known/acme-challenge/"
-        match_type: "="
-        content: |
-          return 404;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "="
+      #   content: |
+      #     return 404;
       - pattern: /
         content: |
           proxy_pass http://127.0.0.1:{{ grafana_port }};
@@ -118,9 +128,9 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/error.log
       log_level: warn
-    alias:
-      - from: /.well-known/acme-challenge/
-        to: /var/lib/dehydrated/acme-challenges/
+    # alias:
+    #   - from: /.well-known/acme-challenge/
+    #     to: /var/lib/dehydrated/acme-challenges/
   - name: 090-phpRedisAdmin
     server_name: "cache.{{ domain }}"
     document_root: "{{ phpredisadmin_dest }}"
@@ -137,10 +147,27 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/phpRedisAdmin.error.log
       log_level: warn
-    alias:
-      - from: /.well-known/acme-challenge/
-        to: /var/lib/dehydrated/acme-challenges/
-  - name: 091-grafana
+    # alias:
+    #   - from: /.well-known/acme-challenge/
+    #     to: /var/lib/dehydrated/acme-challenges/
+  - name: 091-mailpit
+    server_name: "mail.{{ domain }}"
+    proxy_pass:
+      - from: /
+        to: "http://127.0.0.1:8025/"
+    proxy_pass_reverse:
+      - from: /
+        to: "http://127.0.0.1:8025/"
+    custom_log:
+      path: /var/log/apache2/grafana.access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/grafana.error.log
+      log_level: warn
+    # alias:
+    #   - from: /.well-known/acme-challenge/
+    #     to: /var/lib/dehydrated/acme-challenges/
+  - name: 092-grafana
     server_name: "grafana.{{ domain }}"
     proxy_pass:
       - from: /
@@ -154,10 +181,9 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/grafana.error.log
       log_level: warn
-    alias:
-      - from: /.well-known/acme-challenge/
-        to: /var/lib/dehydrated/acme-challenges/
-
+    # alias:
+    #   - from: /.well-known/acme-challenge/
+    #     to: /var/lib/dehydrated/acme-challenges/
 
 ## --------------
 ## ApacheのVagrant用設定
@@ -165,6 +191,14 @@ apache_vhosts:
 ## --------------
 apache_extra_cfg: |
   EnableSendfile off
+
+## ---------
+## インストールするPHPのバージョン
+##
+## 対応バージョン：5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0 / **8.1** / 8.2
+## 初期値：8.1
+## ---------
+php_version: "8.1"
 
 ## ---------
 ## インストールするPHP関連パッケージ
@@ -196,12 +230,14 @@ php_packages:
 ## PHPの設定(cli)
 ## ---------
 php_cli_cfg: |
-    date.timezone = Asia/Tokyo
+  date.timezone = Asia/Tokyo
+  sendmail_path = /usr/local/bin/mailpit sendmail
 ## ---------
 ## PHPの設定(php-fpm)
 ## ---------
 php_fpm_cfg: |
   date.timezone = Asia/Tokyo
+  sendmail_path = /usr/local/bin/mailpit sendmail
   [Xdebug]
   xdebug.mode = debug
   xdebug.client_port = 9003
@@ -212,6 +248,7 @@ php_fpm_cfg: |
 ## ---------
 php_apache_cfg: |
   date.timezone = Asia/Tokyo
+  sendmail_path = /usr/local/bin/mailpit sendmail
   [Xdebug]
   xdebug.mode = debug
   xdebug.client_port = 9003

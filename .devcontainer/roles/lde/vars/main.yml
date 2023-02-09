@@ -1,0 +1,10 @@
+---
+## --------------
+## PHPプロジェクトディレクトリ
+## --------------
+php_project_source_dir: /vagrant
+
+## --------------
+## PHPプロジェクト設定用一時ディレクトリ
+## --------------
+php_project_tmp_dir: /tmp/php_project

@@ -1,5 +1,31 @@
 ---
 # code: language=ansible
+- name: Setup PHP project
+  become: true
+  block:
+    - name: Allow development ports
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: any
+      loop: "{{ php_project_allow_dev_ports | default([]) }}"
+    - name: Check Doc root directory
+      ansible.builtin.stat:
+        path: /var/www/html
+      register: result
+    - name: Remove document root directory
+      ansible.builtin.file:
+        path: /var/www/html
+        state: absent
+      when: result.stat.isdir
+    - name: Create Symlink
+      ansible.builtin.file:
+        path: /var/www/html
+        src: /vagrant
+        owner: vagrant
+        group: vagrant
+        mode: "{{ php_project_doc_root_mode }}"
+        state: link
 - name: Create user directory
   ansible.builtin.file:
     path: ~/{{ item }}
@@ -8,6 +34,11 @@
   loop:
     - bin
     - .local/bin
+- name: Create symlink
+  ansible.builtin.file:
+    src: /vagrant
+    dest: ~/src
+    state: link
 - name: Inclde setting tasks
   ansible.builtin.include_tasks:
     file: tasks/setting/{{ setting_task | basename }}

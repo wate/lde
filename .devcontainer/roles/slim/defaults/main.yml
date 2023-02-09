@@ -1,15 +1,5 @@
 ---
 ## --------------
-## Slimプロジェクトディレクトリ
-## --------------
-slim_source_dir: /vagrant
-
-## --------------
-## Slimプロジェクト設定用一時ディレクトリ
-## --------------
-slim_tmp_project_dir: /tmp/php_project
-
-## --------------
 ## 利用するSlimのメジャーバージョン
 ## --------------
 slim_major_version: 4
@@ -27,13 +17,6 @@ slim_project_addtitinal_packages:
     deb: true
 
 ## --------------
-## 開発用に解放するポートの設定
-## --------------
-slim_allow_dev_ports:
-  - 9003
-  - 3306
-
-## --------------
 ## 同期処理から除外するファイル/ディレクトリ
 ## --------------
 slim_project_exclude_synchronize_params:
@@ -48,3 +31,8 @@ slim_project_exclude_synchronize_params:
   - docker-compose.yml
   - README.md
   - CONTRIBUTING.md
+
+## --------------
+## Slimプロジェクト時のドキュメントルートディレクトリ
+## --------------
+php_project_web_dir: public

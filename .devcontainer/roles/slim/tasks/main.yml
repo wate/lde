@@ -1,75 +1,59 @@
 ---
 - name: Setup Slim project
-  become: true
-  block:
-    - name: Allow development ports
-      community.general.ufw:
-        rule: allow
-        port: "{{ item }}"
-        proto: any
-      loop: "{{ slim_allow_dev_ports | default([]) }}"
-    - name: Remove default install index file
-      ansible.builtin.file:
-        path: /var/www/html/{{ item }}
-        state: absent
-      loop:
-        - index.html
-        - index.nginx-debian.html
-- name: Setup Slim project
   become: false
   block:
     - name: Check exists composer.json
       ansible.builtin.stat:
-        path: "{{ slim_source_dir }}/composer.json"
+        path: "{{ php_project_source_dir }}/composer.json"
       register: composer_json_result
     - name: Remove temporary project directory
       ansible.builtin.file:
-        path: "{{ slim_tmp_project_dir }}"
+        path: "{{ php_project_tmp_dir }}"
         state: absent
     - name: Create Slim project
       when: not composer_json_result.stat.exists
       block:
-        - name: Create Slim project temporary
+        - name: Create Slim project
           community.general.composer:
             command: create-project
-            arguments: '"slim/slim-skeleton:^{{ slim_major_version | default(4) | string }}" {{ slim_tmp_project_dir }}'
+            arguments: '"slim/slim-skeleton:^{{ slim_major_version | default(4) | string }}" {{ php_project_tmp_dir }}'
             no_dev: false
             prefer_dist: true
-            working_dir: "{{ slim_tmp_project_dir | dirname }}"
+            working_dir: "{{ php_project_tmp_dir | dirname }}"
     - name: Setup Slim project
       when: composer_json_result.stat.exists
       block:
         - name: Create temporary project directory
           ansible.builtin.file:
-            path: "{{ slim_tmp_project_dir }}"
+            path: "{{ php_project_tmp_dir }}"
             state: directory
             mode: "0755"
         - name: Synchronize project files(VirtualBox shard directory => temporary directory)
           ansible.posix.synchronize:
-            src: "{{ slim_source_dir }}/"
-            dest: "{{ slim_tmp_project_dir }}"
+            src: "{{ php_project_source_dir }}/"
+            dest: "{{ php_project_tmp_dir }}"
             rsync_opts: "{{ slim_project_exclude_synchronize_params | map('regex_replace', '(.+)', '--exclude=\\1') }}"
           delegate_to: "{{ inventory_hostname }}"
         - name: Install php dependency packages
           community.general.composer:
             command: install
             no_dev: false
-            working_dir: "{{ slim_tmp_project_dir }}"
+            working_dir: "{{ php_project_tmp_dir }}"
     - name: Add php project dependency packages
       community.general.composer:
         command: require
         arguments: '"{{ item.name }}" {{ item.dev | default(false) | ternary("--dev", "") }}'
-        working_dir: "{{ slim_tmp_project_dir }}"
+        working_dir: "{{ php_project_tmp_dir }}"
       loop: "{{ slim_project_addtitinal_packages | default([]) }}"
       loop_control:
         label: "{{ item.name }}"
     - name: Synchronize project files(temporary directory => VirtualBox shard directory)
       ansible.posix.synchronize:
-        src: "{{ slim_tmp_project_dir }}/"
-        dest: "{{ slim_source_dir }}"
+        src: "{{ php_project_tmp_dir }}/"
+        dest: "{{ php_project_source_dir }}"
         rsync_opts: "{{ slim_project_exclude_synchronize_params | map('regex_replace', '(.+)', '--exclude=\\1') }}"
       delegate_to: "{{ inventory_hostname }}"
     - name: Remove temporary project directory
       ansible.builtin.file:
-        path: "{{ slim_tmp_project_dir }}"
+        path: "{{ php_project_tmp_dir }}"
         state: absent

@@ -71,6 +71,13 @@
     #   tags:
     #     - role_framework
     #     - role_slim
+    # - name: Setup Laravel Project
+    #   ansible.builtin.import_role:
+    #     name: laravel
+    #   become: false
+    #   tags:
+    #     - role_framework
+    #     - role_laravel
     - name: Check pre-commit config file
       ansible.builtin.stat:
         path: /vagrant/.pre-commit-config.yaml

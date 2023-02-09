@@ -56,6 +56,7 @@ Vagrant.configure("2") do |config|
     vm_hosts = {
       "@" => vm_domain,
       "cache" => "cache." + vm_domain,
+      "mail" => "mail." + vm_domain,
       "grafana" => "grafana." + vm_domain
     }
   end
