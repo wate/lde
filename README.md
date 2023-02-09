@@ -91,7 +91,7 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 * [lizard](http://www.lizard.ws/)
     * [サイクロマティック複雑度の計測ツール「lizard」のセットアップ&使い方](https://qiita.com/uhooi/items/a1a96a2d7f5e081e2049)
 * [osv-scanner](https://github.com/google/osv-scanner)
-* [MailHog](https://github.com/mailhog/MailHog)
+* [Mailpit](https://github.com/axllent/mailpit)
     * ※Vagrant利用時のみ
 
 Tips
