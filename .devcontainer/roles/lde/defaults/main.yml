@@ -42,6 +42,7 @@ lde_mycli_cfg:
   main:
     smart_completion: true
     multi_line: false
+    destructive_warning: false
     table_format: ascii
     syntax_style: default
     less_chatty: true
@@ -63,6 +64,7 @@ lde_pgcli_cfg:
   main:
     smart_completion: true
     multi_line: false
+    destructive_warning: false
     table_format: psql
     syntax_style: default
     less_chatty: true
@@ -80,6 +82,7 @@ lde_litecli_cfg:
   main:
     smart_completion: true
     multi_line: false
+    destructive_warning: false
     table_format: ascii
     syntax_style: default
     less_chatty: true
