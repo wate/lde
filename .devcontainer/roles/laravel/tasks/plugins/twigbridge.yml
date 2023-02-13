@@ -1,0 +1,25 @@
+---
+- name: Check exists TwigBridge
+  ansible.builtin.stat:
+    path: "{{ php_project_tmp_dir }}/vendor/rcrowe/twigbridge"
+  register: package_result
+- name: Setup TwigBridge
+  when: package_result.stat.exists
+  block:
+    - name: Add service provider file
+      ansible.builtin.command:
+        cmd: php artisan vendor:publish --provider="TwigBridge\ServiceProvider"
+        creates: "{{ php_project_tmp_dir }}/config/twigbridge.php"
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: Register provider
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/config/app.php"
+        insertafter: "\\s*Illuminate\\\\View\\\\ViewServiceProvider::class,"
+        regex: "TwigBridge\\\\ServiceProvider,"
+        line: "        TwigBridge\\ServiceProvider::class,"
+    - name: Register aliases
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/config/app.php"
+        insertafter: "'aliases' => Facade::defaultAliases"
+        regex: "TwigBridge\\\\Facade\\\\Twig::class,"
+        line: "        'Twig' => TwigBridge\\Facade\\Twig::class,"
