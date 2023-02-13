@@ -66,6 +66,9 @@
         - app
         - framework
         - logs
+    - name: Setup TwigBridge plugin setting
+      ansible.builtin.include_tasks:
+        file: plugins/twigbridge.yml
     - name: Setup AdminLTE plugin setting
       ansible.builtin.include_tasks:
         file: plugins/adminlte.yml

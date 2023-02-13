@@ -11,6 +11,8 @@ laravel_project_addtitinal_packages: []
   # ## @see https://github.com/jeroennoten/Laravel-AdminLTE/wiki
   # - name: jeroennoten/laravel-adminlte
   # - name: laravel/ui
+  ## @see https://github.com/rcrowe/TwigBridge
+  # - name: rcrowe/twigbridge
   # ## @see https://inertiajs.com/
   # - name: inertiajs/inertia-laravel
 
