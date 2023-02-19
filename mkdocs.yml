@@ -32,10 +32,10 @@ theme:
 # repo_name: wate/lde
 # repo_url: https://github.com/wate/lde
 extra_javascript:
-  - javascripts/extra.js
+  - js/extra.js
 extra_css:
   - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
-  - stylesheets/extra.css
+  - css/extra.css
 markdown_extensions:
   - abbr
   - footnotes
@@ -65,10 +65,14 @@ markdown_extensions:
 plugins:
   - search:
       lang: ja
+  - offline
   # https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
   - git-revision-date-localized:
       type: iso_datetime
-  - offline
   - tags
   # https://roipoussiere.frama.io/mkdocs-tooltips/
   - tooltips
+  # https://github.com/apenwarr/mkdocs-exclude
+  - exclude:
+      glob:
+        - rules/*
