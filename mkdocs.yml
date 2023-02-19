@@ -45,11 +45,6 @@ markdown_extensions:
   - md_in_html
   - admonition
   - pymdownx.betterem
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.caret
@@ -61,6 +56,11 @@ markdown_extensions:
       # auto_append:
       #   - includes/abbreviations.md
       #   - includes/links.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 plugins:
   - search:
