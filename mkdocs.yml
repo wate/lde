@@ -1,8 +1,25 @@
 ---
 site_name: システムドキュメント
 theme:
+  # https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
   name: material
   language: ja
+  # palette:
+  #   scheme: default
+  #   primary: indigo
+  #   accent: indigo
+  # font:
+  #   text: Roboto
+  #   code: Roboto Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    # - navigation.sections
+    # - navigation.expand
+    # - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - search.share
 # nav:
 #   - ホーム: 'index.md'
 #   - サンプル集:
@@ -11,8 +28,11 @@ theme:
 #     - サンプル3: examples/sample3.md
 # docs_dir: docs
 # site_dir: site
-# extra_javascript:
-#   - javascripts/extra.js
+# custom_dir: overrides
+# repo_name: wate/lde
+# repo_url: https://github.com/wate/lde
+extra_javascript:
+  - javascripts/extra.js
 extra_css:
   - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
   - stylesheets/extra.css
@@ -25,11 +45,6 @@ markdown_extensions:
   - md_in_html
   - admonition
   - pymdownx.betterem
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.caret
@@ -41,9 +56,19 @@ markdown_extensions:
       # auto_append:
       #   - includes/abbreviations.md
       #   - includes/links.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 plugins:
-  - search
+  - search:
+      lang: ja
+  # https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
+  - git-revision-date-localized:
+      type: iso_datetime
+  - offline
   - tags
   # https://roipoussiere.frama.io/mkdocs-tooltips/
   - tooltips

@@ -4,6 +4,7 @@ pgcli
 litecli
 mkdocs-material
 mkdocs-tooltips
+mkdocs-git-revision-date-localized-plugin
 lizard
 ansible
 ansible-lint
