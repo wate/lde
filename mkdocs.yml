@@ -31,8 +31,8 @@ theme:
 # custom_dir: overrides
 # repo_name: wate/lde
 # repo_url: https://github.com/wate/lde
-# extra_javascript:
-#   - js/extra.js
+extra_javascript:
+  - javascripts/extra.js
 extra_css:
   - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
   - stylesheets/extra.css
