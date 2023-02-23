@@ -1,7 +1,7 @@
 lde(Local Development Environment)
 =========
 
-ローカル開発環境の構築用キットです。
+ローカル開発環境構築用ファイルです。
 
 必要なもの
 ------------
@@ -11,7 +11,7 @@ lde(Local Development Environment)
 ### Vagrantを利用する場合
 
 * [Vagrant](https://www.vagrantup.com/)
-    * プラグイン：[vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
+    * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)プラグイン
 * [VirtualBox](https://www.virtualbox.org/)
 * [Ansible](https://www.ansible.com/)
 
@@ -80,13 +80,18 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 ### インストール済み開発関連ツール
 
 * [pre-commit](https://pre-commit.com/)
+* [tbls](https://github.com/k1LoW/tbls)
 * [pict](https://github.com/microsoft/pict)
     * [ペアワイズ法によるテストケース抽出ツール「PICT」を使ってテストケースを85%削減する](https://qiita.com/odekekepeanuts/items/6eceddc534d87fc797cc)
 * [Graphviz](https://graphviz.org/)
 * [PlantUML](https://plantuml.com/ja/)
 * [d2](https://d2lang.com/)
+    * [VSCode extension for D2 files](https://marketplace.visualstudio.com/items?itemName=terrastruct.d2)
 * [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
-* [tbls](https://github.com/k1LoW/tbls)
+    * [mkdocs-tooltips](https://squidfunk.github.io/mkdocs-material/reference/tooltips/)
+    * [mkdocs-git-revision-date-localized-plugin](https://timvink.github.io/mkdocs-git-revision-date-localized-plugin/)
+    * [mkdocs-blogging-plugin](https://liang2kl.cn/mkdocs-blogging-plugin/)
+    * [mkdocs-exclude](https://github.com/apenwarr/mkdocs-exclude)
 * [mycli](https://www.mycli.net/)
 * [lizard](http://www.lizard.ws/)
     * [サイクロマティック複雑度の計測ツール「lizard」のセットアップ&使い方](https://qiita.com/uhooi/items/a1a96a2d7f5e081e2049)
