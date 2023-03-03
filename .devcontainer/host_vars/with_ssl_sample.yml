@@ -1,0 +1,368 @@
+---
+## -----------------
+## dehydratedの設定
+## -----------------
+dehydrated_cfg:
+  CHALLENGETYPE: dns-01
+
+## -----------------
+## dehydratedのドメイン設定
+## -----------------
+dehydrated_domains:
+  - name: "{{ domain }}"
+    domains:
+      - "{{ domain }}"
+      - "*.{{ domain }}"
+
+## -----------------
+## dehydratedインストール時に実行するか否か
+## -----------------
+dehydrated_auto_execute: true
+
+## @see https://dns-lexicon.readthedocs.io/en/latest/configuration_reference.html
+lexicon_provider: cloudflare
+lexicon_provider_username: "{{ lookup('env', 'CLOUDFLARE_EMAIL') }}"
+lexicon_provider_token: "{{ lookup('env', 'CLOUDFLARE_API_KEY') }}"
+
+## -----------------
+## dehydratedのフック設定(initialize)
+## -----------------
+dehydrated_hook_initialize: |
+  export PROVIDER_UPDATE_DELAY=${PROVIDER_UPDATE_DELAY:-"30"}
+  export PROVIDER={{ lexicon_provider }}
+  export LEXICON_{{ lexicon_provider | upper }}_USERNAME={{ lexicon_provider_username }}
+  export LEXICON_{{ lexicon_provider | upper }}_TOKEN={{ lexicon_provider_token }}
+
+## -----------------
+## dehydratedのフック設定(deploy challenge)
+## -----------------
+dehydrated_hook_deploy_challenge: |
+  local chain=($@)
+  for ((i=0; i < $#; i+=3)); do
+    local DOMAIN="${chain[i]}" TOKEN_FILENAME="${chain[i+1]}" TOKEN_VALUE="${chain[i+2]}"
+    lexicon $PROVIDER create ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+  done
+  local DELAY_COUNTDOWN=$PROVIDER_UPDATE_DELAY
+  while [ $DELAY_COUNTDOWN -gt 0 ]; do
+    sleep 1
+    : $((DELAY_COUNTDOWN--))
+  done
+
+## -----------------
+## dehydratedのフック設定(clean challenge)
+## -----------------
+dehydrated_hook_clean_challenge: |
+  local chain=($@)
+  for ((i=0; i < $#; i+=3)); do
+    local DOMAIN="${chain[i]}" TOKEN_FILENAME="${chain[i+1]}" TOKEN_VALUE="${chain[i+2]}"
+    lexicon $PROVIDER delete ${DOMAIN} TXT --name="_acme-challenge.${DOMAIN}." --content="${TOKEN_VALUE}"
+  done
+
+## -----------------
+## フック設定(deploy cert)
+## -----------------
+dehydrated_hook_deploy_cert: |
+  if [ -e /etc/systemd/system/multi-user.target.wants/nginx.service ]; then
+    systemctl reload nginx
+  fi
+  if [ -e /etc/systemd/system/multi-user.target.wants/apache2.service ]; then
+    systemctl reload apache2
+  fi
+
+## --------------
+## Nginxのバーチャルホストの設定
+## --------------
+nginx_vhosts:
+  - name: default
+    default: true
+    server_name:
+      - "{{ domain }}"
+    document_root: /var/www/html{{ (php_project_web_dir | default('') | length > 1) | ternary('/' + php_project_web_dir | default(''), '') }}
+    index:
+      - index.html
+      - index.php
+    access_log: /var/log/nginx/access.log
+    error_log: /var/log/nginx/error.log
+    client_max_body_size: 0
+    locations:
+      # - pattern: /.well-known/acme-challenge/
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
+      - pattern: /
+        content: |
+          try_files $uri $uri/ /index.php?$query_string;
+      - pattern: "\\.php"
+        match_type: "~"
+        content: |
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          include snippets/fastcgi-php.conf;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
+    ssl:
+      certificate: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      trusted_certificate: /var/lib/dehydrated/certs/{{ domain }}/chain.pem
+      session_timeout: "1d"
+      session_cache: "shared:SSL:10m"
+      session_tickets: false
+      # hsts: "max-age=31536000;"
+      stapling: true
+      stapling_verify: true
+    ## Vagrant用設定
+    ## @see https://developer.hashicorp.com/vagrant/docs/synced-folders/virtualbox
+    extra_setting: |
+      sendfile off;
+  - name: phpRedisAdmin
+    server_name:
+      - "cache.{{ domain }}"
+    document_root: "{{ phpredisadmin_dest }}"
+    index:
+      - index.html
+      - index.php
+    access_log: /var/log/nginx/phpRedisAdmin.access.log
+    error_log: /var/log/nginx/phpRedisAdmin.error.log
+    client_max_body_size: 0
+    locations:
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "="
+      #   content: |
+      #     return 404;
+      - pattern: /
+        content: |
+          try_files $uri $uri/ /index.php?$query_string;
+      - pattern: "\\.php"
+        match_type: "~"
+        content: |
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          include snippets/fastcgi-php.conf;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
+    ssl:
+      certificate: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      trusted_certificate: /var/lib/dehydrated/certs/{{ domain }}/chain.pem
+      session_timeout: "1d"
+      session_cache: "shared:SSL:10m"
+      session_tickets: false
+      # hsts: "max-age=31536000;"
+      stapling: true
+      stapling_verify: true
+  - name: mail
+    server_name: "mail.{{ domain }}"
+    client_max_body_size: 0
+    locations:
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "="
+      #   content: |
+      #     return 404;
+      - pattern: /
+        content: |
+          proxy_pass http://127.0.0.1:8025;
+          include proxy_params;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
+    ssl:
+      certificate: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      trusted_certificate: /var/lib/dehydrated/certs/{{ domain }}/chain.pem
+      session_timeout: "1d"
+      session_cache: "shared:SSL:10m"
+      session_tickets: false
+      # hsts: "max-age=31536000;"
+      stapling: true
+      stapling_verify: true
+  - name: grafana
+    server_name: "grafana.{{ domain }}"
+    client_max_body_size: 0
+    locations:
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "^~"
+      #   content: |
+      #     default_type "text/plain";
+      #     alias /var/lib/dehydrated/acme-challenges/;
+      # - pattern: "/\\.well-known/acme-challenge/"
+      #   match_type: "="
+      #   content: |
+      #     return 404;
+      - pattern: /
+        content: |
+          proxy_pass http://127.0.0.1:{{ grafana_port }};
+          include proxy_params;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
+    ssl:
+      certificate: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      trusted_certificate: /var/lib/dehydrated/certs/{{ domain }}/chain.pem
+      session_timeout: "1d"
+      session_cache: "shared:SSL:10m"
+      session_tickets: false
+      # hsts: "max-age=31536000;"
+      stapling: true
+      stapling_verify: true
+
+## --------------
+## Apacheのバーチャルホストの設定
+## --------------
+apache_vhosts:
+  - name: 000-default
+    default: true
+    server_name: "{{ domain }}"
+    document_root: "{{ lde_document_root_path | default('/vagrant', true) }}"
+    directory_index:
+      - index.html
+      - index.php
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    custom_log:
+      path: /var/log/apache2/access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/error.log
+      log_level: warn
+    alias:
+      - from: /.well-known/acme-challenge/
+        to: /var/lib/dehydrated/acme-challenges/
+    ssl:
+      certificate_file: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key_file: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      protocol:
+        - all
+        - "-SSLv3"
+        - "-TLSv1"
+        - "-TLSv1.1"
+      cipher_suite:
+        - ECDHE-ECDSA-AES128-GCM-SHA256
+        - ECDHE-RSA-AES128-GCM-SHA256
+        - ECDHE-ECDSA-AES256-GCM-SHA384
+        - ECDHE-RSA-AES256-GCM-SHA384
+        - ECDHE-ECDSA-CHACHA20-POLY1305
+        - ECDHE-RSA-CHACHA20-POLY1305
+        - DHE-RSA-AES128-GCM-SHA256
+        - DHE-RSA-AES256-GCM-SHA384
+      # hsts: "max-age=63072000"
+  - name: 090-phpRedisAdmin
+    server_name: "cache.{{ domain }}"
+    document_root: "{{ phpredisadmin_dest }}"
+    directory_index:
+      - index.html
+      - index.php
+    options:
+      - "-Indexes"
+      - "+FollowSymLinks"
+    allow_override: All
+    custom_log:
+      path: /var/log/apache2/phpRedisAdmin.access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/phpRedisAdmin.error.log
+      log_level: warn
+    alias:
+      - from: /.well-known/acme-challenge/
+        to: /var/lib/dehydrated/acme-challenges/
+    ssl:
+      certificate_file: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key_file: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      protocol:
+        - all
+        - "-SSLv3"
+        - "-TLSv1"
+        - "-TLSv1.1"
+      cipher_suite:
+        - ECDHE-ECDSA-AES128-GCM-SHA256
+        - ECDHE-RSA-AES128-GCM-SHA256
+        - ECDHE-ECDSA-AES256-GCM-SHA384
+        - ECDHE-RSA-AES256-GCM-SHA384
+        - ECDHE-ECDSA-CHACHA20-POLY1305
+        - ECDHE-RSA-CHACHA20-POLY1305
+        - DHE-RSA-AES128-GCM-SHA256
+        - DHE-RSA-AES256-GCM-SHA384
+      # hsts: "max-age=63072000"
+  - name: 091-mailpit
+    server_name: "mail.{{ domain }}"
+    proxy_pass:
+      - from: /
+        to: "http://127.0.0.1:8025/"
+    proxy_pass_reverse:
+      - from: /
+        to: "http://127.0.0.1:8025/"
+    custom_log:
+      path: /var/log/apache2/grafana.access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/grafana.error.log
+      log_level: warn
+    alias:
+      - from: /.well-known/acme-challenge/
+        to: /var/lib/dehydrated/acme-challenges/
+    ssl:
+      certificate_file: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key_file: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      protocol:
+        - all
+        - "-SSLv3"
+        - "-TLSv1"
+        - "-TLSv1.1"
+      cipher_suite:
+        - ECDHE-ECDSA-AES128-GCM-SHA256
+        - ECDHE-RSA-AES128-GCM-SHA256
+        - ECDHE-ECDSA-AES256-GCM-SHA384
+        - ECDHE-RSA-AES256-GCM-SHA384
+        - ECDHE-ECDSA-CHACHA20-POLY1305
+        - ECDHE-RSA-CHACHA20-POLY1305
+        - DHE-RSA-AES128-GCM-SHA256
+        - DHE-RSA-AES256-GCM-SHA384
+      # hsts: "max-age=63072000"
+  - name: 092-grafana
+    server_name: "grafana.{{ domain }}"
+    proxy_pass:
+      - from: /
+        to: "http://127.0.0.1:{{ grafana_port }}/"
+    proxy_pass_reverse:
+      - from: /
+        to: "http://127.0.0.1:{{ grafana_port }}/"
+    custom_log:
+      path: /var/log/apache2/grafana.access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/grafana.error.log
+      log_level: warn
+    alias:
+      - from: /.well-known/acme-challenge/
+        to: /var/lib/dehydrated/acme-challenges/
+    ssl:
+      certificate_file: /var/lib/dehydrated/certs/{{ domain }}/fullchain.pem
+      certificate_key_file: /var/lib/dehydrated/certs/{{ domain }}/privkey.pem
+      protocol:
+        - all
+        - "-SSLv3"
+        - "-TLSv1"
+        - "-TLSv1.1"
+      cipher_suite:
+        - ECDHE-ECDSA-AES128-GCM-SHA256
+        - ECDHE-RSA-AES128-GCM-SHA256
+        - ECDHE-ECDSA-AES256-GCM-SHA384
+        - ECDHE-RSA-AES256-GCM-SHA384
+        - ECDHE-ECDSA-CHACHA20-POLY1305
+        - ECDHE-RSA-CHACHA20-POLY1305
+        - DHE-RSA-AES128-GCM-SHA256
+        - DHE-RSA-AES256-GCM-SHA384
+      # hsts: "max-age=63072000"
