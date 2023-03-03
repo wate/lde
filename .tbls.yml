@@ -3,7 +3,7 @@
 # tbls config file
 # --------------
 ### Name
-# name: mydatabase
+name: Database Schema
 ### Description
 # desc: This is My Database
 ### Document path
@@ -36,7 +36,7 @@ er:
   # distance: 1
   # ER diagram (png/jpg) font (font name, font file, font path or keyword)
   # Default is "" ( system default )
-  font: ""
+  # font: ""
 ### Labels
 # labels:
 #   - cmdb
