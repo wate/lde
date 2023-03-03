@@ -12,8 +12,8 @@ theme:
   #   text: Roboto
   #   code: Roboto Mono
   features:
-    - navigation.tabs
     - navigation.tabs.sticky
+    # - navigation.tabs
     # - navigation.sections
     # - navigation.expand
     # - navigation.indexes
