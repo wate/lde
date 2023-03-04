@@ -1,84 +1,45 @@
 # code: language=ansible
 ---
-- name: リクエスト本文の生成
-  ansible.builtin.set_fact:
-    request_body:
-      wiki_page:
-        text: "{{ lookup('file', '../' + page.file) }}"
-- name: リクエスト本文に親ページの指定を追記
-  ansible.builtin.set_fact:
-    request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
-  when: page.parent is defined
-  vars:
-    merge_var:
-      wiki_page:
-        parent_title: "{{ page.parent }}"
-- name: 添付ファイルのアップロード
-  when:
-    - page.attachments is defined
-    - page.attachments | length >= 0
-  block:
-    - name: 変数を初期化
-      ansible.builtin.set_fact:
-        upload_attachments: []
-    - name: 添付ファイルのアップロードしトークンを取得
-      ansible.builtin.uri:
-        method: POST
-        url: "{{ redmine_url }}uploads.json"
-        src: "../{{ attachment }}"
-        remote_src: true
-        return_content: true
-        status_code:
-          - 200
-          - 201
-        headers:
-          X-Redmine-API-Key: "{{ redmine_api_key }}"
-          Content-Type: application/octet-stream
-      register: upload_attachment
-      loop: "{{ page.attachments }}"
-      loop_control:
-        loop_var: attachment
-    - name: 添付ファイルのトークンを変数を定義
-      ansible.builtin.set_fact:
-        attachment_tokens: "{{ upload_attachment | json_query('results[].json.upload.token') }}"
-    - name: 添付ファイルのMimeTypeを取得
-      ansible.builtin.command:
-        cmd: file --mime-type ../{{ attachment }}
-      register: file_command_result
-      loop: "{{ page.attachments }}"
-      loop_control:
-        loop_var: attachment
-    - name: 各添付ファイルのMimeTypeを変数に設定
-      ansible.builtin.set_fact:
-        attachment_mine_types: "{{ file_command_result | json_query('results[].stdout') | map('regex_replace', '.+: ', '') }}"
-    - name: 添付ファイル用リクエスト本文の変数を設定
-      ansible.builtin.set_fact:
-        upload_attachments: "{{ upload_attachments + [add_attachment] }}"
-      vars:
-        add_attachment:
-          token: "{{ attachment_tokens[ansible_loop.index0] }}"
-          filename: "{{ attachment | basename }}"
-          content_type: "{{ attachment_mine_types[ansible_loop.index0] }}"
-      loop: "{{ page.attachments }}"
-      loop_control:
-        loop_var: attachment
-        extended: true
-    - name: リクエスト本文に添付ファイル変数を追加
-      ansible.builtin.set_fact:
-        request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
-      vars:
-        merge_var:
-          wiki_page:
-            uploads: "{{ upload_attachments }}"
 - name: Wikiページの更新
-  ansible.builtin.uri:
-    method: PUT
-    url: "{{ redmine_url }}/projects/{{ redmine_project }}/wiki/{{ page.name | urlencode }}.json"
-    body: "{{ request_body }}"
-    body_format: json
-    status_code:
-      - 200
-      - 201
-      - 204
-    headers:
-      X-Redmine-API-Key: "{{ redmine_api_key }}"
+  hosts: all
+  become: false
+  connection: local
+  vars:
+    redmine_api_key: "{{ lookup('env', 'REDMINE_API_KEY') }}"
+    redmine_url: "{{ lookup('env', 'REDMINE_URL') }}"
+    redmine_project: "{{ lookup('env', 'REDMINE_PROJECT') }}"
+    wiki_pages:
+      - name: Wiki
+        file: docs/index.md
+      - name: 機能一覧
+        file: docs/features.md
+        parent: Wiki
+      - name: データ構造
+        file: docs/er_diagram.md
+        parent: Wiki
+        attachments:
+          - docs/er_diagram.drawio.png
+      - name: システム構成
+        parent: Wiki
+        file: docs/architecture.md
+        attachments:
+          - docs/architecture.drawio.png
+      - name: デプロイ方法
+        parent: Wiki
+        file: docs/deploy.md
+  pre_tasks:
+    - name: 環境変数の検証
+      ansible.builtin.assert:
+        that:
+          - lookup('env', 'REDMINE_API_KEY') | length > 0
+          - lookup('env', 'REDMINE_URL') | length > 0
+          - lookup('env', 'REDMINE_PROJECT') | length > 0
+        fail_msg: 更新先Redmineを指定する環境変数が設定されていません
+  tasks:
+    - name: Wikiページの更新
+      ansible.builtin.include_tasks:
+        file: update_page.yml
+      loop: "{{ wiki_pages }}"
+      loop_control:
+        label: "{{ page.name }}"
+        loop_var: page
