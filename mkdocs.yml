@@ -22,10 +22,13 @@ theme:
     - search.share
 # nav:
 #   - ホーム: 'index.md'
-#   - サンプル集:
-#     - サンプル1: examples/sample1.md
-#     - サンプル2: examples/sample2.md
-#     - サンプル3: examples/sample3.md
+#   - システム構成: 'architecture.md'
+#   - データ構造: 'er_diagram.md'
+#   - 機能一覧: 'features.md'
+#   - 機能詳細:
+#       - ○○機能: features/circle.md
+#       - △△機能: features/triangle.md
+#       - □□機能: features/square.md
 # docs_dir: docs
 # site_dir: site
 # custom_dir: overrides
@@ -69,6 +72,8 @@ plugins:
   ## https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
   - git-revision-date-localized:
       type: iso_datetime
+      timezone: Asia/Tokyo
+      locale: ja
   - tags
   ## https://roipoussiere.frama.io/mkdocs-tooltips/
   - tooltips
