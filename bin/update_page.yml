@@ -4,7 +4,7 @@
   ansible.builtin.set_fact:
     request_body:
       wiki_page:
-        text: "{{ lookup('file', '../' + page.file) }}"
+        text: "{{ lookup('file',  root_dir + '/' + page.file) }}"
 - name: リクエスト本文に親ページの指定を追記
   ansible.builtin.set_fact:
     request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
@@ -25,7 +25,7 @@
       ansible.builtin.uri:
         method: POST
         url: "{{ redmine_url }}uploads.json"
-        src: "../{{ attachment }}"
+        src: "{{ root_dir + '/' + attachment }}"
         remote_src: true
         return_content: true
         status_code:
@@ -43,7 +43,8 @@
         attachment_tokens: "{{ upload_attachment | json_query('results[].json.upload.token') }}"
     - name: 添付ファイルのMimeTypeを取得
       ansible.builtin.command:
-        cmd: file --mime-type ../{{ attachment }}
+        cmd: file --mime-type {{ root_dir + '/' + attachment }}
+      changed_when: false
       register: file_command_result
       loop: "{{ page.attachments }}"
       loop_control:
@@ -70,7 +71,7 @@
         merge_var:
           wiki_page:
             uploads: "{{ upload_attachments }}"
-- name: Wikiページの更新
+- name: Wikiページ「{{ page.name }}」の更新
   ansible.builtin.uri:
     method: PUT
     url: "{{ redmine_url }}/projects/{{ redmine_project }}/wiki/{{ page.name | urlencode }}.json"
@@ -82,3 +83,5 @@
       - 204
     headers:
       X-Redmine-API-Key: "{{ redmine_api_key }}"
+  register: request_result
+  changed_when: request_result.status in [201, 204]
