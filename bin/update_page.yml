@@ -82,7 +82,3 @@
       - 204
     headers:
       X-Redmine-API-Key: "{{ redmine_api_key }}"
-  register: result
-- name: Debug
-  ansible.builtin.debug:
-    var: result
