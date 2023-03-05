@@ -27,7 +27,7 @@
         registerd_wiki_pages: "{{ request_result.json.wiki_pages | items2dict('title', 'version') }}"
     - name: Wikiページの更新
       ansible.builtin.include_tasks:
-        file: tasks/update_page.yml
+        file: tasks/update_redmine_wiki_page.yml
       loop: "{{ wiki_pages | default([]) }}"
       loop_control:
         label: "{{ page.name }}"
