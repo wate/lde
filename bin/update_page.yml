@@ -8,11 +8,19 @@
 - name: リクエスト本文に親ページの指定を追記
   ansible.builtin.set_fact:
     request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
-  when: page.parent is defined
+  vars:
+    merge_var:
+      wiki_page:
+        version: "{{ registerd_wiki_pages[page.name] | int }}"
+  when: registerd_wiki_pages[page.name] is defined
+- name: リクエスト本文に親ページの指定を追記
+  ansible.builtin.set_fact:
+    request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
   vars:
     merge_var:
       wiki_page:
         parent_title: "{{ page.parent }}"
+  when: page.parent is defined
 - name: 添付ファイルのアップロード
   when:
     - page.attachments is defined
@@ -29,7 +37,6 @@
         remote_src: true
         return_content: true
         status_code:
-          - 200
           - 201
         headers:
           X-Redmine-API-Key: "{{ redmine_api_key }}"
@@ -78,7 +85,6 @@
     body: "{{ request_body }}"
     body_format: json
     status_code:
-      - 200
       - 201
       - 204
     headers:
