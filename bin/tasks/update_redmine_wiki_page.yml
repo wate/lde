@@ -4,7 +4,7 @@
   ansible.builtin.set_fact:
     request_body:
       wiki_page:
-        text: "{{ lookup('file',  root_dir + page.file) }}"
+        text: "{{ lookup('file', root_dir + page.file) }}"
 - name: リクエスト本文に親ページの指定を追記
   ansible.builtin.set_fact:
     request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
@@ -47,7 +47,7 @@
         loop_var: attachment
     - name: 添付ファイルのトークンを変数を定義
       ansible.builtin.set_fact:
-        attachment_tokens: "{{ upload_attachment | json_query('results[].json.upload.token') }}"
+        attachment_tokens: "{{ upload_attachment | default([]) | json_query('results[].json.upload.token') }}"
     - name: 添付ファイルのMimeTypeを取得
       ansible.builtin.command:
         cmd: file --mime-type {{ root_dir + attachment }}
@@ -58,7 +58,7 @@
         loop_var: attachment
     - name: 各添付ファイルのMimeTypeを変数に設定
       ansible.builtin.set_fact:
-        attachment_mine_types: "{{ file_command_result | json_query('results[].stdout') | map('regex_replace', '.+: ', '') }}"
+        attachment_mine_types: "{{ file_command_result | default([]) | json_query('results[].stdout') | map('regex_replace', '.+: ', '') }}"
     - name: 添付ファイル用リクエスト本文の変数を設定
       ansible.builtin.set_fact:
         upload_attachments: "{{ upload_attachments + [add_attachment] }}"
