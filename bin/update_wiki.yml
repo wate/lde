@@ -51,6 +51,17 @@
           - lookup('env', 'REDMINE_PROJECT') | length > 0
         fail_msg: 更新先Redmineを指定する環境変数が設定されていません
   tasks:
+    - name: 登録済みのWikiページ一覧を取得
+      ansible.builtin.uri:
+        method: GET
+        url: "{{ redmine_url }}/projects/{{ redmine_project }}/wiki/index.json"
+        headers:
+          X-Redmine-API-Key: "{{ redmine_api_key }}"
+      register: request_result
+      changed_when: request_result.status in [201, 204]
+    - name: 登録済みWikiページを変数に設定
+      ansible.builtin.set_fact:
+        registerd_wiki_pages: "{{ request_result.json.wiki_pages | items2dict('title', 'version') }}"
     - name: Wikiページの更新
       ansible.builtin.include_tasks:
         file: update_page.yml
