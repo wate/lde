@@ -65,7 +65,7 @@
     - name: Wikiページの更新
       ansible.builtin.include_tasks:
         file: update_page.yml
-      loop: "{{ wiki_pages }}"
+      loop: "{{ wiki_pages | default([]) }}"
       loop_control:
         label: "{{ page.name }}"
         loop_var: page
