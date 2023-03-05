@@ -4,7 +4,7 @@
   ansible.builtin.set_fact:
     request_body:
       wiki_page:
-        text: "{{ lookup('file',  root_dir + '/' + page.file) }}"
+        text: "{{ lookup('file',  root_dir + page.file) }}"
 - name: リクエスト本文に親ページの指定を追記
   ansible.builtin.set_fact:
     request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
@@ -33,7 +33,7 @@
       ansible.builtin.uri:
         method: POST
         url: "{{ redmine_url }}uploads.json"
-        src: "{{ root_dir + '/' + attachment }}"
+        src: "{{ root_dir + attachment }}"
         remote_src: true
         return_content: true
         status_code:
@@ -50,7 +50,7 @@
         attachment_tokens: "{{ upload_attachment | json_query('results[].json.upload.token') }}"
     - name: 添付ファイルのMimeTypeを取得
       ansible.builtin.command:
-        cmd: file --mime-type {{ root_dir + '/' + attachment }}
+        cmd: file --mime-type {{ root_dir + attachment }}
       changed_when: false
       register: file_command_result
       loop: "{{ page.attachments }}"

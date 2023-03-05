@@ -1,0 +1,45 @@
+# code: language=ansible
+---
+- name: Wikiページの取得しローカルのファイルを更新
+  hosts: all
+  become: false
+  gather_facts: false
+  connection: local
+  pre_tasks:
+    - name: Redmine情報の検証
+      ansible.builtin.assert:
+        that:
+          - redmine_api_key | length > 0
+          - redmine_url | length > 0
+          - redmine_project | length > 0
+        fail_msg: 更新対象のRedmine情報が設定されていません
+  tasks:
+    - name: Wikiページとパスの対応変数を設定
+      ansible.builtin.set_fact:
+        wiki_page_paths: "{{ wiki_pages | items2dict('name', 'file') }}"
+    - name: Wikiページの取得
+      ansible.builtin.uri:
+        method: GET
+        url: "{{ redmine_url }}/projects/{{ redmine_project }}/wiki/{{ item.name | urlencode }}.json"
+        headers:
+          X-Redmine-API-Key: "{{ redmine_api_key }}"
+      register: request_results
+      loop: "{{ wiki_pages | default([]) }}"
+      loop_control:
+        label: "{{ item.name }}"
+    - name: 保存先ディレクトリを作成
+      ansible.builtin.file:
+        path: "{{ root_dir + wiki_page_paths[item.title] | dirname }}"
+        state: directory
+        mode: omit
+      loop: "{{ request_results | default([]) | json_query('results[].json.wiki_page') }}"
+      loop_control:
+        label: "{{ root_dir + wiki_page_paths[item.title] | dirname }}"
+    - name: ファイルを更新
+      ansible.builtin.copy:
+        dest: "{{ root_dir + wiki_page_paths[item.title] }}"
+        content: "{{ item.text }}\n"
+        mode: omit
+      loop: "{{ request_results | default([]) | json_query('results[].json.wiki_page') }}"
+      loop_control:
+        label: "{{ root_dir + wiki_page_paths[item.title] }}"
