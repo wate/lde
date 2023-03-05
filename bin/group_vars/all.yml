@@ -1,0 +1,39 @@
+---
+root_dir: ../
+redmine_api_key: "{{ lookup('env', 'REDMINE_API_KEY') }}"
+redmine_url: "{{ lookup('env', 'REDMINE_URL') }}"
+redmine_project: "{{ lookup('env', 'REDMINE_PROJECT') }}"
+wiki_pages:
+  - name: Wiki
+    file: docs/index.md
+  - name: データ構造
+    file: docs/er_diagram.md
+    parent: Wiki
+    attachments:
+      - docs/er_diagram.drawio.png
+  - name: システム構成
+    parent: Wiki
+    file: docs/architecture.md
+    attachments:
+      - docs/architecture.drawio.png
+  - name: 機能一覧
+    file: docs/features.md
+    parent: Wiki
+  - name: 〇〇機能
+    file: docs/features/circle.md
+    parent: 機能一覧
+    attachments:
+      - docs/features/circle_workflow.drawio.png
+  - name: △△機能
+    file: docs/features/triangle.md
+    parent: 機能一覧
+    attachments:
+      - docs/features/triangle_workflow.drawio.png
+  - name: □□機能
+    file: docs/features/square.md
+    parent: 機能一覧
+    attachments:
+      - docs/features/square_workflow.drawio.png
+  - name: デプロイ方法
+    parent: Wiki
+    file: docs/deploy.md
