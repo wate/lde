@@ -23,9 +23,12 @@
         "EditorConfig.EditorConfig",
         "yzhang.markdown-all-in-one",
         "DavidAnson.vscode-markdownlint",
+        "bierner.github-markdown-preview",
+        "shd101wyy.markdown-preview-enhanced",
         "xdebug.php-debug",
         "bmewburn.vscode-intelephense-client",
-        "mrmlnc.vscode-apache",
+        "vscode-icons-team.vscode-icons",
+        "oderwat.indent-rainbow",
         "hediet.vscode-drawio",
         "redhat.vscode-yaml",
         "redhat.ansible"
