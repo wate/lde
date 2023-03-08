@@ -1,7 +1,18 @@
 lde(Local Development Environment)
 =========
 
-ローカル開発環境構築用ファイルです。
+ローカル開発環境構築用のスケルトンリポジトリです。  
+既存プロジェクトにこのリポジトリの内容ダウンロードし利用することを想定しています。
+
+利用環境
+------------
+
+Vagrant + Ansibleの利用を想定しているおり、主にmacOSでの利用を想定しています。
+※VirtualBoxを利用する関係上、M1/M2 Macの環境は想定していません。
+
+※VSCode + Dockerを前提とした[Devcontainer](https://code.visualstudio.com/docs/devcontainers/containers)にも対応させていますが、  
+Vagarnt利用時ほど開発環境としての完成度は見込んでいません。
+(非エンジニア向けの動作確認環境としても利用可能という程度の想定です)
 
 必要なもの
 ------------
@@ -15,7 +26,7 @@ lde(Local Development Environment)
 * [VirtualBox](https://www.virtualbox.org/)
 * [Ansible](https://www.ansible.com/)
 
-### dev containersを利用する場合
+### devcontainerを利用する場合
 
 * [Visual Studio Code](https://code.visualstudio.com/)
     * 拡張機能：[Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
