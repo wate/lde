@@ -14,19 +14,27 @@
           - redmine_project | length > 0
         fail_msg: 更新対象のRedmine情報が設定されていません
   tasks:
-    - name: Wikiページとパスの対応変数を設定
+    - name: Wikiページ一覧を取得する
+      ansible.builtin.uri:
+        method: GET
+        url: "{{ redmine_url }}/projects/{{ redmine_project }}/wiki/index.json"
+        headers:
+          X-Redmine-API-Key: "{{ redmine_api_key }}"
+      register: request_result
+    - name: 登録済みWikiページ一覧のIDと各ページのパスを変数に設定
       ansible.builtin.set_fact:
         wiki_page_paths: "{{ wiki_pages | items2dict('name', 'file') }}"
+        registerd_wiki_pages: "{{ request_result.json.wiki_pages | default([]) | items2dict('title', 'updated_on') }}"
     - name: 各Wikiページの内容を取得
       ansible.builtin.uri:
         method: GET
-        url: "{{ redmine_url }}/projects/{{ redmine_project }}/wiki/{{ item.name | urlencode }}.json?include=attachments"
+        url: "{{ redmine_url }}/projects/{{ redmine_project }}/wiki/{{ item | urlencode }}.json?include=attachments"
         headers:
           X-Redmine-API-Key: "{{ redmine_api_key }}"
       register: request_results
-      loop: "{{ wiki_pages | default([]) }}"
+      loop: "{{ wiki_page_paths.keys() | intersect(registerd_wiki_pages.keys()) }}"
       loop_control:
-        label: "{{ item.name }}"
+        label: "{{ item }}"
     - name: 取得したWekiページの内容を変数に格納
       ansible.builtin.set_fact:
         fetchd_wiki_pages: "{{ request_results | default([]) | json_query('results[].json.wiki_page') }}"
