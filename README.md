@@ -11,7 +11,7 @@ Vagrant + Ansibleの利用を想定しているおり、主にmacOSでの利用�
 ※VirtualBoxを利用する関係上、M1/M2 Macの環境は想定していません。
 
 ※VSCode + Dockerを前提とした[Devcontainer](https://code.visualstudio.com/docs/devcontainers/containers)にも対応させていますが、  
-Vagarnt利用時ほど開発環境としての完成度は見込んでいません。
+Vagarnt利用時ほど開発環境としての完成度は見込んでいません。  
 (非エンジニア向けの動作確認環境としても利用可能という程度の想定です)
 
 必要なもの
