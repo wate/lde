@@ -99,7 +99,7 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 * [d2](https://d2lang.com/)
     * [VSCode extension for D2 files](https://marketplace.visualstudio.com/items?itemName=terrastruct.d2)
 * [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
-    * [mkdocs-tooltips](https://squidfunk.github.io/mkdocs-material/reference/tooltips/)
+    * [mkdocs-tooltips](https://roipoussiere.frama.io/mkdocs-tooltips/)
     * [mkdocs-git-revision-date-localized-plugin](https://timvink.github.io/mkdocs-git-revision-date-localized-plugin/)
     * [mkdocs-blogging-plugin](https://liang2kl.cn/mkdocs-blogging-plugin/)
     * [mkdocs-exclude](https://github.com/apenwarr/mkdocs-exclude)
