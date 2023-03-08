@@ -3,6 +3,11 @@ root_dir: ../
 redmine_api_key: "{{ lookup('env', 'REDMINE_API_KEY') }}"
 redmine_url: "{{ lookup('env', 'REDMINE_URL') }}"
 redmine_project: "{{ lookup('env', 'REDMINE_PROJECT') }}"
+
+backlog_api_key: "{{ lookup('env', 'BACKLOG_API_KEY') }}"
+backlog_url: "{{ lookup('env', 'BACKLOG_URL') }}"
+backlog_project: "{{ lookup('env', 'BACKLOG_PROJECT') }}"
+
 wiki_pages:
   - name: Wiki
     file: docs/index.md
