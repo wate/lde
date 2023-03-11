@@ -1,0 +1,37 @@
+# code: language=ansible
+---
+- name: Wikiページの更新
+  hosts: all
+  become: false
+  gather_facts: false
+  connection: local
+  pre_tasks:
+    - name: Backlog情報の検証
+      ansible.builtin.assert:
+        that:
+          - backlog_api_key | length > 0
+          - backlog_url | length > 0
+          - backlog_project | length > 0
+        fail_msg: 更新対象のBacklog情報が設定されていません
+  tasks:
+    - name: 登録済みのWikiページ一覧を取得
+      ansible.builtin.uri:
+        method: GET
+        url: "{{ backlog_url }}api/v2/wikis?apiKey={{ backlog_api_key }}&projectIdOrKey={{ backlog_project }}"
+      register: wiki_list_request_result
+    - name: プロジェクト情報を取得
+      ansible.builtin.uri:
+        method: GET
+        url: "{{ backlog_url }}api/v2/projects/{{ backlog_project }}?apiKey={{ backlog_api_key }}"
+      register: project_info_request_result
+    - name: 登録済みWikiページを変数に設定
+      ansible.builtin.set_fact:
+        registerd_wiki_page_ids: "{{ wiki_list_request_result.json | default([]) | items2dict('name', 'id') }}"
+        project_info: "{{ project_info_request_result.json | default({}) }}"
+    - name: Wikiページの登録/更新
+      ansible.builtin.include_tasks:
+        file: tasks/update_backlog_wiki_page.yml
+      loop: "{{ wiki_pages | default([]) }}"
+      loop_control:
+        label: "{{ page.name }}"
+        loop_var: page

@@ -1,0 +1,86 @@
+# code: language=ansible
+---
+- name: リクエスト情報の変数を設定(更新時)
+  ansible.builtin.set_fact:
+    request_method: PUT
+    request_endpoint: "{{ backlog_url }}api/v2/wikis/{{ registerd_wiki_page_ids[page.name] }}"
+    request_body:
+      content: "{{ lookup('file', root_dir + page.file) }}"
+  when: registerd_wiki_page_ids[page.name] is defined
+- name: リクエスト情報の変数を設定(人気登録時)
+  when: registerd_wiki_page_ids[page.name] is undefined
+  block:
+    - name: リクエスト情報の変数を設定(人気登録時)
+      ansible.builtin.set_fact:
+        request_method: POST
+        request_endpoint: "{{ backlog_url }}api/v2/wikis"
+        request_body:
+          projectId: "{{ project_info.id }}"
+          name: "{{ page.name }}"
+          content: "{{ lookup('file', root_dir + page.file) }}"
+# - name: 添付ファイルのアップロード
+#   when:
+#     - page.attachments is defined
+#     - page.attachments | length >= 0
+#   block:
+#     - name: 変数を初期化
+#       ansible.builtin.set_fact:
+#         upload_attachments: []
+#     - name: 添付ファイルのアップロードしトークンを取得
+#       ansible.builtin.uri:
+#         method: POST
+#         url: "{{ redmine_url }}uploads.json"
+#         src: "{{ root_dir + attachment }}"
+#         remote_src: true
+#         return_content: true
+#         status_code:
+#           - 201
+#         headers:
+#           X-Redmine-API-Key: "{{ redmine_api_key }}"
+#           Content-Type: application/octet-stream
+#       register: upload_attachment
+#       loop: "{{ page.attachments }}"
+#       loop_control:
+#         loop_var: attachment
+#     - name: 添付ファイルのトークンを変数を定義
+#       ansible.builtin.set_fact:
+#         attachment_tokens: "{{ upload_attachment | default([]) | json_query('results[].json.upload.token') }}"
+#     - name: 添付ファイルのMimeTypeを取得
+#       ansible.builtin.command:
+#         cmd: file --mime-type {{ root_dir + attachment }}
+#       changed_when: false
+#       register: file_command_result
+#       loop: "{{ page.attachments }}"
+#       loop_control:
+#         loop_var: attachment
+#     - name: 各添付ファイルのMimeTypeを変数に設定
+#       ansible.builtin.set_fact:
+#         attachment_mine_types: "{{ file_command_result | default([]) | json_query('results[].stdout') | map('regex_replace', '.+: ', '') }}"
+#     - name: 添付ファイル用リクエスト本文の変数を設定
+#       ansible.builtin.set_fact:
+#         upload_attachments: "{{ upload_attachments + [add_attachment] }}"
+#       vars:
+#         add_attachment:
+#           token: "{{ attachment_tokens[ansible_loop.index0] }}"
+#           filename: "{{ attachment | basename }}"
+#           content_type: "{{ attachment_mine_types[ansible_loop.index0] }}"
+#       loop: "{{ page.attachments }}"
+#       loop_control:
+#         loop_var: attachment
+#         extended: true
+#     - name: リクエスト本文に添付ファイル変数を追加
+#       ansible.builtin.set_fact:
+#         request_body: "{{ request_body | combine(merge_var, recursive=true) }}"
+#       vars:
+#         merge_var:
+#           wiki_page:
+#             uploads: "{{ upload_attachments }}"
+- name: Wikiページ「{{ page.name }}」の登録/更新
+  ansible.builtin.uri:
+    method: "{{ request_method }}"
+    url: "{{ request_endpoint }}?apiKey={{ backlog_api_key }}"
+    body: "{{ request_body }}"
+    body_format: form-urlencoded
+    follow_redirects: true
+    # headers:
+    #   Content-Type: application/x-www-form-urlencoded
