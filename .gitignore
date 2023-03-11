@@ -41,5 +41,8 @@ composer.phar
 .direnv
 .envrc
 
+### API Document ###
+docs/api/
+
 ### project wiki page ###
 wiki/
