@@ -8,8 +8,6 @@
         dest: "{{ item.dest }}"
         state: link
       loop:
-        # - src: /var/cakephp/logs
-        #   dest: ~/logs
         - src: /vagrant
           dest: ~/src
     - name: Check exists composer.json
@@ -100,12 +98,9 @@
         path: "{{ php_project_source_dir }}/.gitignore"
         line: .envrc
     - name: Create/update .env file
-      ansible.builtin.lineinfile:
+      ansible.builtin.blockinfile:
         path: "{{ php_project_source_dir }}/.env"
-        mode: "0644"
-        create: true
-        regex: ^{{ item.key }}=
-        line: "{{ item.key }}={{ (item.value is none) | ternary('null', item.value | string | lower) }}"
-      loop: "{{ laravel_cnf | dict2items }}"
-      loop_control:
-        label: "{{ item.key }}"
+        block: |
+          {% for key, value in laravel_cnf.items() %}
+          {{ key }}={{ (value is none) | ternary('null', value | string | lower) }}
+          {% endfor %}
