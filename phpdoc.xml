@@ -2,7 +2,7 @@
 <phpdocumentor configVersion="3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpdoc.org">
   <title>App Name</title>
   <paths>
-    <output>site/api</output>
+    <output>docs/api</output>
     <!--Optional:-->
     <cache>vendor/.cache</cache>
   </paths>
