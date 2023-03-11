@@ -12,6 +12,11 @@
     - name: Install PlantUML
       ansible.builtin.apt:
         name: plantuml
+    - name: Install phpDocumentor
+      ansible.builtin.get_url:
+        url: https://phpdoc.org/phpDocumentor.phar
+        dest: /usr/local/bin/phpdoc
+        mode: "0755"
 - name: Install pip packages
   ansible.builtin.pip:
     requirements: /vagrant/.devcontainer/requirements.txt
