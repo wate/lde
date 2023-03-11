@@ -4,10 +4,11 @@
 ### Windows ###
 Thumbs.db
 
-# Sphinx documentation
-docs/_build/
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
 
-# mkdocs documentation
+### mkdocs documentation ###
 /site
 
 ### VisualStudioCode ###
@@ -41,7 +42,7 @@ composer.phar
 .direnv
 .envrc
 
-### API Document ###
+### phpDocumenter output directory ###
 docs/api/
 
 ### project wiki page ###
