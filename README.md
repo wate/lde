@@ -10,7 +10,7 @@ lde(Local Development Environment)
 Vagrant + Ansibleの利用を想定しているおり、主にmacOSでの利用を想定しています。
 ※VirtualBoxを利用する関係上、M1/M2 Macの環境は想定していません。
 
-※VSCode + Dockerを前提とした[Devcontainer](https://code.visualstudio.com/docs/devcontainers/containers)にも対応させていますが、  
+※VSCode + Dockerを前提とした[devcontainer](https://code.visualstudio.com/docs/devcontainers/containers)にも対応させていますが、  
 Vagarnt利用時ほど開発環境としての完成度は見込んでいません。  
 (非エンジニア向けの動作確認環境としても利用可能という程度の想定です)
 
@@ -86,7 +86,7 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 利用している環境ごとのデータベースのホスト名は以下のとおりです。
 
 * Vagrantを利用する場合：`localhost`
-* dev containersを利用する場合：`db`
+* devcontainerを利用する場合：`db`
 
 ### インストール済み開発関連ツール
 
