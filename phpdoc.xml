@@ -9,13 +9,22 @@
   <version number="latest">
     <api>
       <source dsn=".">
-        <path>app</path>
         <path>src</path>
+        <path>app</path>
       </source>
       <!--Optional:-->
-      <ignore hidden="true" symlinks="true" />
+      <visibility>private</visibility>
+      <visibility>protected</visibility>
+      <!--Optional:-->
+      <include-source>true</include-source>
+      <!--Optional:-->
+      <ignore hidden="true" symlinks="true">
+        <!--1 or more repetitions:-->
+        <path>tests/**/*</path>
+      </ignore>
     </api>
   </version>
   <!--Optional:-->
   <setting name="graphs.enabled" value="true" />
+  <setting name="guides.enabled" value="true" />
 </phpdocumentor>
