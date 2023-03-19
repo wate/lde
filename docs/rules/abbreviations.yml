@@ -4,10 +4,7 @@
 ##------------
 version: 1
 rules:
-  ### 長音
-  - expected: ベンダー
-    pattern: /ベンダ(?!ー)/
-  - expected: サーバー
-    pattern: /サーバ(?!ー)/
-  - expected: カテゴリー
-    pattern: /カテゴリ(?!ー)/
+  - expected: スプレッドシート
+    pattern: スプシ
+  - expected: パワーポイント
+    pattern: パワポ
