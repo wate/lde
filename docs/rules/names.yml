@@ -13,6 +13,12 @@ rules:
     pattern: /カテゴリ(?!ー)/
   ### OS
   - expected: Linux
+  - expected: Debian
+  - expected: Ubuntu
+  - expected: AlmaLinux
+    pattern: /Alma ?Linux/i
+  - expected: Rocky Linux
+    pattern: /Rocky ?Linux/i
   - expected: Windows
   - expected: Mac
     options:
