@@ -89,4 +89,5 @@
       - 204
     headers:
       X-Redmine-API-Key: "{{ redmine_api_key }}"
+  register: request_result
   changed_when: request_result.status in [201, 204]
