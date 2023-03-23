@@ -1,4 +1,4 @@
 データ構造
 ============================
 
-![ER図](er_diagram.drawio.png)
+![ER図](data_structure.drawio.png)

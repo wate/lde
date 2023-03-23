@@ -50,6 +50,6 @@ AAAパターンとは以下の3つの頭文字をとったものです。
 システムの機能や構成については以下の各ページを参照してください。
 
 * [機能一覧](features.md)
-* [データ構造](er_diagram.md)
+* [データ構造](data_structure.md)
 * [システム構成](architecture.md)
 * [デプロイ方法](deploy.md)

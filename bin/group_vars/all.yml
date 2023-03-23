@@ -12,10 +12,10 @@ wiki_pages:
   - name: Wiki
     file: docs/index.md
   - name: データ構造
-    file: docs/er_diagram.md
+    file: docs/data_structure.md
     parent: Wiki
     attachments:
-      - docs/er_diagram.drawio.png
+      - docs/data_structure.drawio.png
   - name: システム構成
     parent: Wiki
     file: docs/architecture.md
