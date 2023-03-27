@@ -135,7 +135,7 @@ export VAGRANT_VM_NAME=example.local
 # 仮想マシンのCPU
 export VAGRANT_VM_CPU=1
 # 仮想マシンのメモリ
-export VAGRANT_VM_MEMORY=2048
+export VAGRANT_VM_MEMORY=1024
 # 仮想マシンのIPアドレス
 export VAGRAN_IP_ADDRESS="192.168.56.10"
 
