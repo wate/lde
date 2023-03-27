@@ -25,6 +25,9 @@
     - role: grafana
       tags:
         - role_grafana
+    - role: meilisearch
+      tags:
+        - role_meilisearch
     - role: php
       tags:
         - role_php
