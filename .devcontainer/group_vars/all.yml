@@ -168,7 +168,7 @@ apache_vhosts:
     #   - from: /.well-known/acme-challenge/
     #     to: /var/lib/dehydrated/acme-challenges/
   - name: 092-grafana
-    server_name: "grafana.{{ domain }}"
+    server_name: "monitor.{{ domain }}"
     proxy_pass:
       - from: /
         to: "http://127.0.0.1:{{ grafana_port }}/"
