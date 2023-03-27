@@ -57,7 +57,8 @@ Vagrant.configure("2") do |config|
       "@" => vm_domain,
       "phpredisadmin" => "cache." + vm_domain,
       "mailpit" => "mail." + vm_domain,
-      "grafana" => "monitor." + vm_domain
+      "grafana" => "monitor." + vm_domain,
+      "meilisearch" => "search." + vm_domain
     }
   end
   vm_host_aliases = vm_hosts.values
