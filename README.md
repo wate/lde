@@ -109,6 +109,8 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 * [osv-scanner](https://github.com/google/osv-scanner)
 * [Mailpit](https://github.com/axllent/mailpit)
     * ※Vagrant利用時のみ
+* [Meilisearch](https://www.meilisearch.com/)
+    * ※Vagrant利用時のみ
 
 Tips
 ------------
