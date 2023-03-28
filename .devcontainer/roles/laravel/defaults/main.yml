@@ -13,8 +13,11 @@ laravel_project_addtitinal_packages: []
   # - name: laravel/ui
   ## @see https://github.com/rcrowe/TwigBridge
   # - name: rcrowe/twigbridge
-  # ## @see https://inertiajs.com/
+  ## @see https://inertiajs.com/
   # - name: inertiajs/inertia-laravel
+  ## @see http://zircote.github.io/swagger-php/
+  # - name: zircote/swagger-php
+  #   dev: true
 
 ## --------------
 ## データベース接続設定
