@@ -16,6 +16,8 @@ cakephp_project_addtitinal_packages:
   - name: phpoffice/phpspreadsheet
   - name: tecnickcom/tcpdf
   - name: arodu/cakelte
+  ## @see https://book.cakephp.org/queue/1/en/index.html
+  # - name: cakephp/queue
   - name: squizlabs/php_codesniffer
     dev: true
   - name: phpstan/phpstan
@@ -26,6 +28,9 @@ cakephp_project_addtitinal_packages:
     dev: true
   - name: dereuromark/cakephp-ide-helper
     dev: true
+  ## @see http://zircote.github.io/swagger-php/
+  # - name: zircote/swagger-php
+  #   dev: true
 
 ## --------------
 ## データベース接続設定
