@@ -7,7 +7,7 @@ lde(Local Development Environment)
 利用環境
 ------------
 
-Vagrant + Ansibleの利用を想定しているおり、主にmacOSでの利用を想定しています。
+Vagrant + Ansibleの利用を想定しているおり、主にmacOSでの利用を想定しています。  
 ※VirtualBoxを利用する関係上、M1/M2 Macの環境は想定していません。
 
 ※VSCode + Dockerを前提とした[Dev containers](https://code.visualstudio.com/docs/devcontainers/containers)にも対応させていますが、  

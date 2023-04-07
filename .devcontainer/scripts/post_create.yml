@@ -23,6 +23,7 @@
       vars:
         architecture_types:
           x86_64: amd64
+          aarch64: arm64
     - name: Install osv-scanner
       ansible.builtin.get_url:
         url: https://github.com/google/osv-scanner/releases/download/{{ osv_scanner_version }}/{{ osv_scanner_download_file }}
