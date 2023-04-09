@@ -1,4 +1,12 @@
 /*
+:root {
+  --md-text-font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  --md-code-font-family: "Roboto Mono", "Courier New", monospace;
+  --md-text-font: "Roboto";
+  --md-code-font: "Roboto Mono";
+}
+*/
+/*
 [data-md-color-scheme="youtube"] {
   --md-primary-fg-color:        #EE0F0F;
   --md-primary-fg-color--light: #ECB7B7;
