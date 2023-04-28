@@ -4,6 +4,9 @@
 ### Windows ###
 Thumbs.db
 
+### Cache file directory ###
+/.cache/
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

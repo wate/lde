@@ -1,17 +1,33 @@
 /*
+:root {
+  --md-text-font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  --md-code-font-family: "Roboto Mono", "Courier New", monospace;
+  --md-text-font: "Roboto";
+  --md-code-font: "Roboto Mono";
+}
+*/
+/*
 [data-md-color-scheme="youtube"] {
   --md-primary-fg-color:        #EE0F0F;
   --md-primary-fg-color--light: #ECB7B7;
   --md-primary-fg-color--dark:  #90030C;
 }
 */
-[class*=hint--] {
+[class*="hint--"] {
   border-bottom: 0.05rem dotted var(--md-default-fg-color--light);
 }
-[class*=hint--]:hover {
+[class*="hint--"]:hover {
   cursor: help;
   text-decoration: none;
 }
 .md-grid {
   max-width: 80rem;
+}
+.md-content__inner {
+  position: relative;
+}
+.md-source-file {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
