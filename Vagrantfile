@@ -41,35 +41,34 @@ Vagrant.configure("2") do |config|
       config.vm.network "forwarded_port", guest: forward_port_guest, host: forward_port_host
     end
   end
-  VM_IP_ADDRESS = ENV["VAGRAN_IP_ADDRESS"] || "192.168.56.10"
+  VM_IP_ADDRESS = ENV["VAGRANT_IP_ADDRESS"] || "192.168.56.10"
   config.vm.network "private_network", ip: VM_IP_ADDRESS
   # --------
   # Plugin
   # --------
   ## plugin vagrant-vbguest
-  if Vagrant.has_plugin?('vagrant-vbguest')
+  if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
   end
-  vm_domain = ENV["VAGRAN_VM_DOMAIN"] || 'lde.local'
-  vm_hosts = ENV.select { |k,v| k.match?(/^VAGRANT_VM_HOST_/) }
-  if vm_hosts.empty?
-    vm_hosts = {
-      "@" => vm_domain,
-      "phpredisadmin" => "cache." + vm_domain,
-      "mailpit" => "mail." + vm_domain,
-      "grafana" => "monitor." + vm_domain,
-      "meilisearch" => "search." + vm_domain
-    }
+  vm_domain = ENV["VAGRANT_VM_DOMAIN"] || "lde.local"
+  vm_host_aliases = [
+    vm_domain,
+    "cache." + vm_domain,
+    "mail." + vm_domain,
+    "monitor." + vm_domain,
+  ]
+  vm_host_envs = ENV.select { |k,v| k.match?(/^VAGRANT_VM_HOST_/) }
+  unless vm_host_envs.empty?
+    vm_host_aliases.concat vm_host_envs.values
   end
-  vm_host_aliases = vm_hosts.values
   vm_host_aliases.uniq!
   ## plugin vagrant-hostsupdater
-  if Vagrant.has_plugin?('vagrant-hostsupdater')
+  if Vagrant.has_plugin?("vagrant-hostsupdater")
     config.hostsupdater.remove_on_suspend = true
     config.hostsupdater.aliases = vm_host_aliases
   end
   ## plugin vagrant-hostmanager
-  if Vagrant.has_plugin?('vagrant-hostmanager')
+  if Vagrant.has_plugin?("vagrant-hostmanager")
     config.hostmanager.enabled = false
     config.hostmanager.manage_host = true
     config.hostmanager.manage_guest = true
@@ -108,9 +107,9 @@ Vagrant.configure("2") do |config|
   # --------
   # Provisioning
   # --------
-  LDE_CONFIG_DIR = '.devcontainer'
-  ANSIBLR_CONFIG_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, 'ansible.cfg'))
-  ANSIBLR_GALAXY_ROLE_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, 'requirements.yml'))
+  LDE_CONFIG_DIR = ".devcontainer"
+  ANSIBLR_CONFIG_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, "ansible.cfg"))
+  ANSIBLR_GALAXY_ROLE_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, "requirements.yml"))
   ansible_groups = {
     "vagrant" => ["default"],
   }
@@ -142,13 +141,14 @@ Vagrant.configure("2") do |config|
       ansible_skip_tags.push(env_var)
     end
   end
-  ANSIBLR_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, 'playbook.yml'))
+  ANSIBLR_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "playbook.yml"))
   if File.exists?(ANSIBLR_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_PLAYBOOK
       ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
       ansible.galaxy_role_file = ANSIBLR_GALAXY_ROLE_FILE if File.exists?(ANSIBLR_GALAXY_ROLE_FILE)
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
       ansible.tags = ansible_tags
       ansible.skip_tags = ansible_skip_tags
@@ -156,12 +156,13 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  ANSIBLR_USER_SETTING_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, 'custom.yml'))
+  ANSIBLR_USER_SETTING_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "custom.yml"))
   if File.exists?(ANSIBLR_USER_SETTING_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_USER_SETTING_PLAYBOOK
       ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
+      ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
       ansible.tags = ansible_tags
       ansible.skip_tags = ansible_skip_tags
@@ -169,18 +170,19 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  ANSIBLR_VERIFY_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, 'verify.yml'))
+  ANSIBLR_VERIFY_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "verify.yml"))
   if File.exists?(ANSIBLR_VERIFY_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_VERIFY_PLAYBOOK
       ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
+      ansible.compatibility_mode = "2.0"
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.extra_vars = ansible_extra_vars
       ansible.raw_arguments = ansible_raw_arguments
       ansible.groups = ansible_groups
     end
   end
-  unless ENV.has_key?('VAGRANT_TREIGGER_DISABLE') || ENV.has_key?('VAGRANT_TREIGGER_DISABLE_PROVISION')
+  unless ENV.has_key?("VAGRANT_TREIGGER_DISABLE") || ENV.has_key?("VAGRANT_TREIGGER_DISABLE_PROVISION")
     config.trigger.after :provision do |trigger|
       trigger.info = "Restore Database(app_dev) Data"
       trigger.run_remote = {
@@ -188,7 +190,7 @@ Vagrant.configure("2") do |config|
       }
     end
   end
-  unless ENV.has_key?('VAGRANT_TREIGGER_DISABLE') && ENV.has_key?('VAGRANT_TREIGGER_DISABLE_DESTROY')
+  unless ENV.has_key?("VAGRANT_TREIGGER_DISABLE") && ENV.has_key?("VAGRANT_TREIGGER_DISABLE_DESTROY")
     config.trigger.before :destroy do |trigger|
       trigger.info = "Backup Database(app_dev) Data"
       trigger.on_error = :continue

@@ -139,7 +139,7 @@ export VAGRANT_VM_CPU=1
 # 仮想マシンのメモリ
 export VAGRANT_VM_MEMORY=1024
 # 仮想マシンのIPアドレス
-export VAGRAN_IP_ADDRESS="192.168.56.10"
+export VAGRANT_IP_ADDRESS="192.168.56.10"
 
 ## ------------
 ## ホスト名の設定
@@ -148,13 +148,11 @@ export VAGRAN_IP_ADDRESS="192.168.56.10"
 # Webブラウザからこのドメインにアクセスした時に仮想マシンに接続できるようになります
 # デフォルトでは`lde.local`に設定さてれています
 # ※この設定を有効にするにはvagrant-hostsupdaterプラグインが必要になります
-export VAGRAN_VM_DOMAIN="example.com"
+export VAGRANT_VM_DOMAIN="example.com"
 
 # /etc/hostsファイルに設定する追加のホスト名
 # ※この設定を有効にするにはvagrant-hostsupdaterプラグインが必要になります
-export VAGRANT_VM_HOST_PHPREDISADMIN="cache.example.com"
-export VAGRANT_VM_HOST_MAILPIT="mail.example.com"
-export VAGRANT_VM_HOST_GRAFANA="monitor.example.com"
+export VAGRANT_VM_HOST_WWW="www.example.com"
 
 ## ------------
 ## ポートフォワードの設定
