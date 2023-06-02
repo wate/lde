@@ -6,9 +6,6 @@ roles:
   - name: nodejs
     src: https://github.com/wate/ansible-role-nodejs
     version: develop
-  - name: goaccess
-    src: https://github.com/wate/ansible-role-goaccess
-    version: develop
   - name: nginx
     src: https://github.com/wate/ansible-role-nginx
     version: develop
@@ -30,16 +27,13 @@ roles:
   - name: redis
     src: https://github.com/wate/ansible-role-redis
     version: develop
-  - name: grafana
-    src: https://github.com/wate/ansible-role-grafana
-    version: develop
   - name: tools
     src: https://github.com/wate/ansible-role-tools
     version: develop
   - name: logrotate
     src: https://github.com/wate/ansible-role-logrotate
     version: develop
-  - name: meilisearch
-    src: https://github.com/wate/ansible-role-meilisearch
+  - name: grafana
+    src: https://github.com/wate/ansible-role-grafana
     version: develop
 collections: []

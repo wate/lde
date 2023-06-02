@@ -22,18 +22,9 @@
     # - role: postgresql
     #   tags:
     #     - role_postgresql
-    - role: grafana
-      tags:
-        - role_grafana
-    - role: meilisearch
-      tags:
-        - role_meilisearch
     - role: php
       tags:
         - role_php
-    - role: goaccess
-      tags:
-        - role_goaccess
     - role: nginx
       tags:
         - role_nginx
@@ -55,32 +46,26 @@
     - role: phpredisadmin
       tags:
         - role_phpredisadmin
+    - role: grafana
+      tags:
+        - role_grafana
     - role: lde
       become: false
       tags:
         - role_lde
-  tasks:
-    # - name: Setup CakePHP Project
-    #   ansible.builtin.import_role:
-    #     name: cakephp
+    # - role: cakephp
     #   become: false
     #   tags:
-    #     - role_framework
     #     - role_cakephp
-    # - name: Setup Laravel Project
-    #   ansible.builtin.import_role:
-    #     name: laravel
+    # - role: laravel
     #   become: false
     #   tags:
-    #     - role_framework
     #     - role_laravel
-    # - name: Setup Slim Project
-    #   ansible.builtin.import_role:
-    #     name: slim
+    # - role: slim
     #   become: false
     #   tags:
-    #     - role_framework
     #     - role_slim
+  tasks:
     - name: Check pre-commit config file
       ansible.builtin.stat:
         path: /vagrant/.pre-commit-config.yaml
@@ -100,7 +85,7 @@
         state: restarted
       loop:
         - mariadb
-        - php{{ php_version | default('8.1') }}-fpm
+        - php{{ php_version | default('8.2') }}-fpm
         - nginx
         # - postgresql
         # - apache2
