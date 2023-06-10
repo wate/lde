@@ -1,11 +1,11 @@
-ARG VARIANT="8-bullseye"
+ARG VARIANT="8"
 FROM k1low/tbls:latest AS tbls
 FROM mcr.microsoft.com/vscode/devcontainers/php:0-${VARIANT}
 
 RUN . /etc/os-release \
     && echo "deb http://deb.debian.org/debian ${VERSION_CODENAME}-backports main" > /etc/apt/sources.list.d/backports.list \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y -t ${VERSION_CODENAME}-backports mariadb-client libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libzip-dev \
+    && apt-get install -y mariadb-client libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libzip-dev \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql intl zip \
