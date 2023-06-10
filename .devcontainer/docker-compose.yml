@@ -8,16 +8,23 @@ services:
         VARIANT: "8-bullseye"
         NODE_VERSION: "lts/*"
     environment:
-      TZ: Asia/Tokyo
+      - TZ=Asia/Tokyo
+      - VIRTUAL_HOST=example.com,www.example.com
+      # - VIRTUAL_PORT=8000
     volumes:
       - ..:/workspace:cached
       - ./php/z-custom.ini:/usr/local/etc/php/conf.d/z-custom.ini
     command: sleep infinity
-    network_mode: service:db
     depends_on:
       - db
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
   db:
-    image: mariadb:10.6
+    image: mariadb:10.11
     restart: unless-stopped
     volumes:
       - ./mariadb/customize.cnf:/etc/mysql/mariadb.conf.d/customize.cnf

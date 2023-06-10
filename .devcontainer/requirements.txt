@@ -1,11 +1,9 @@
 pre-commit
 mycli
-pgcli
-litecli
 mkdocs-material
 mkdocs-tooltips
 mkdocs-git-revision-date-localized-plugin
-mkdocs-blogging-plugin
+# mkdocs-blogging-plugin
 mkdocs-exclude
 lizard
 ansible
