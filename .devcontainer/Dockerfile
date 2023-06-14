@@ -6,7 +6,7 @@ RUN . /etc/os-release \
     && echo "deb http://deb.debian.org/debian ${VERSION_CODENAME}-backports main" > /etc/apt/sources.list.d/backports.list \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y mariadb-client libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libzip-dev \
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql intl zip \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
