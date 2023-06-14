@@ -40,6 +40,7 @@ php_project_doc_root_mode: omit
 ## -----------------
 lde_pip_install_extra_args:
   - "--user"
+  - "--break-system-packages"
 
 ## -----------------
 ## mycliの設定

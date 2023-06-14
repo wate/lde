@@ -14,13 +14,6 @@ mariadb_append_mroonga_repository: false
 ## --------------
 nginx_append_goaccess_repository: false
 
-## -----------------
-## pipパッケージインストール時の追加引数
-## -----------------
-lde_pip_install_extra_args:
-  - "--user"
-  - "--break-system-packages"
-
 ## --------------
 ## Nginxのバーチャルホストの設定
 ## --------------
