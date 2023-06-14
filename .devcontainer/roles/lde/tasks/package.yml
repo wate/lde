@@ -20,10 +20,10 @@
 - name: Check requirements.txt
   ansible.builtin.stat:
     path: /vagrant/.devcontainer/requirements.txt
-  register: pip_requirements_txt_result
+  register: requirements_txt_result
 - name: Install pip packages
   ansible.builtin.pip:
     requirements: /vagrant/.devcontainer/requirements.txt
     executable: /usr/bin/pip3
     extra_args: "{{ lde_pip_install_extra_args | join(' ') }}"
-  when: pip_requirements_txt_result.stat.exists
+  when: requirements_txt_result.stat.exists
