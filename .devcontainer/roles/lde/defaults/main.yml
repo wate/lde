@@ -36,6 +36,12 @@ php_project_doc_root_mode: omit
 # lde_git_prompt_custom_theme_url: https://raw.githubusercontent.com/wate/Dotfiles/master/.git-prompt-colors.sh
 
 ## -----------------
+## pipパッケージインストール時の追加引数
+## -----------------
+lde_pip_install_extra_args:
+  - "--user"
+
+## -----------------
 ## mycliの設定
 ## -----------------
 lde_mycli_cfg:
