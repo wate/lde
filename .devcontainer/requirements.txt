@@ -1,5 +1,3 @@
-pre-commit
-mycli
 mkdocs-material
 mkdocs-tooltips
 mkdocs-git-revision-date-localized-plugin

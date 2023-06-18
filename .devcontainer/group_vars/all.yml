@@ -1,4 +1,19 @@
 ---
+## ---------
+## backportsをデフォルトリリースに設定するか否か
+## ---------
+common_apt_default_release_backports: false
+
+## -------------------
+## mroongaリポジトリを追加するか否か
+## -------------------
+mariadb_append_mroonga_repository: false
+
+## --------------
+## goaccessリポジトリを追加するか否か
+## --------------
+nginx_append_goaccess_repository: false
+
 ## --------------
 ## Nginxのバーチャルホストの設定
 ## --------------

@@ -25,15 +25,18 @@ __pycache__/
 ### PhpStorm / WebStorm ###
 .idea/
 
+# pipenv(Python)
+.venv/
+
+## bundler(Ruby)
+.bundle/
+
 ### Composer ###
 composer.phar
 /vendor/
 
 ### Node ###
 /node_modules/
-
-## Environment normalization:
-/.bundle/
 
 ### Vagrant ###
 .vagrant/

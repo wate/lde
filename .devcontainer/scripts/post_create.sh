@@ -9,6 +9,10 @@ if type "exa" >/dev/null 2>&1; then
   echo 'alias ls="exa --git --header"' >>~/.bashrc
 fi
 
+if type "batcat" >/dev/null 2>&1; then
+  echo 'alias cat=batcat' >>~/.bashrc
+fi
+
 if type "composer" >/dev/null 2>&1; then
   echo 'eval "$(composer completion)"' >>~/.bashrc
 fi
@@ -50,7 +54,8 @@ fi
 source ~/.bashrc
 
 if [ -f .devcontainer/requirements.txt ]; then
-  pip3 install --user --disable-pip-version-check -r .devcontainer/requirements.txt
+  # export PIPENV_VENV_IN_PROJECT=1
+  pipenv install --python 3 --dev -r .devcontainer/requirements.txt
 fi
 
 cat << EOT >~/.my.cnf
@@ -109,10 +114,10 @@ fi
 
 git config --global --add safe.directory ${PWD}
 
-if [ -f "$(dirname $0)/post_create.yml" ]; then
+if type "ansible" >/dev/null 2>&1 && [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
 fi
 
-if [ -f "${PWD}/.devcontainer/my_env.yml" ]; then
+if type "ansible" >/dev/null 2>&1 && [ -f "${PWD}/.devcontainer/custom.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local "${PWD}/.devcontainer/custom.yml"
 fi

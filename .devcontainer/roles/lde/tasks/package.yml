@@ -17,8 +17,14 @@
         url: https://phpdoc.org/phpDocumentor.phar
         dest: /usr/local/bin/phpdoc
         mode: "0755"
+- name: Check requirements.txt
+  ansible.builtin.stat:
+    path: /vagrant/.devcontainer/requirements.txt
+  register: requirements_txt_result
 - name: Install pip packages
   ansible.builtin.pip:
     requirements: /vagrant/.devcontainer/requirements.txt
-    executable: /usr/bin/pip3
-    extra_args: --user
+    executable: /usr/bin/pipenv
+    extra_args: "{{ lde_pip_install_extra_args | join(' ') }}"
+    chdir: /vagrant
+  when: requirements_txt_result.stat.exists
