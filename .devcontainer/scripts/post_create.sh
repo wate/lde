@@ -54,8 +54,8 @@ fi
 source ~/.bashrc
 
 if [ -f .devcontainer/requirements.txt ]; then
-  pipenv install --python 3 -r .devcontainer/requirements.txt
-  pipenv shell
+  # export PIPENV_VENV_IN_PROJECT=1
+  pipenv install --python 3 --dev -r .devcontainer/requirements.txt
 fi
 
 cat << EOT >~/.my.cnf
