@@ -9,6 +9,10 @@ if type "exa" >/dev/null 2>&1; then
   echo 'alias ls="exa --git --header"' >>~/.bashrc
 fi
 
+if type "bat" >/dev/null 2>&1; then
+  echo 'alias cat=bat' >>~/.bashrc
+fi
+
 if type "composer" >/dev/null 2>&1; then
   echo 'eval "$(composer completion)"' >>~/.bashrc
 fi
@@ -49,10 +53,10 @@ fi
 
 source ~/.bashrc
 
-# if [ -f .devcontainer/requirements.txt ]; then
-#   pipenv install --python 3 -r .devcontainer/requirements.txt
-#   pipenv shell
-# fi
+if [ -f .devcontainer/requirements.txt ]; then
+  pipenv install --python 3 -r .devcontainer/requirements.txt
+  pipenv shell
+fi
 
 cat << EOT >~/.my.cnf
 [mysql]

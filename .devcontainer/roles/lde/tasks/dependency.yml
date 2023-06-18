@@ -5,5 +5,4 @@
     name:
       - python3-pip
       - pipenv
-      - pipx
   become: true

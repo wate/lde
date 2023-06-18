@@ -24,6 +24,7 @@
 - name: Install pip packages
   ansible.builtin.pip:
     requirements: /vagrant/.devcontainer/requirements.txt
-    executable: /usr/bin/pip3
+    executable: /usr/bin/pipenv
     extra_args: "{{ lde_pip_install_extra_args | join(' ') }}"
+    chdir: /vagrant
   when: requirements_txt_result.stat.exists
