@@ -9,8 +9,8 @@ if type "exa" >/dev/null 2>&1; then
   echo 'alias ls="exa --git --header"' >>~/.bashrc
 fi
 
-if type "bat" >/dev/null 2>&1; then
-  echo 'alias cat=bat' >>~/.bashrc
+if type "batcat" >/dev/null 2>&1; then
+  echo 'alias cat=batcat' >>~/.bashrc
 fi
 
 if type "composer" >/dev/null 2>&1; then
