@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euxo pipefail
+
 echo "$(whoami):$(whoami)" | sudo chpasswd
 
 if type "direnv" >/dev/null 2>&1; then
