@@ -6,6 +6,21 @@ lde_env_vars:
   TBLS_DSN: mariadb://app_dev:app_dev_password@localhost/app_dev
   TBLS_DOC_PATH: /vagrant/docs/schema
 
+## -----------------
+## インストールするpipパッケージ
+## -----------------
+lde_pip_packages: []
+#   - name: mkdocs-material
+#     inject_packages:
+#       - mkdocs-tooltips
+#       - mkdocs-git-revision-date-localized-plugin
+#       - mkdocs-exclude
+#       - mkdocs-redirects
+#       # - mkdocs-blogging-plugin
+#   - name: lizard
+#   - name: ansible
+#   - name: ansible-lint
+
 ## --------------
 ## 開発用に解放するポートの設定
 ## --------------

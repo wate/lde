@@ -323,6 +323,21 @@ install_tools:
   ## PDF 向けユーティリティ
   # - poppler-utils
 
+## -----------------
+## インストールするpipパッケージ
+## -----------------
+lde_pip_packages:
+  - name: mkdocs-material
+    inject_packages:
+      - mkdocs-tooltips
+      - mkdocs-git-revision-date-localized-plugin
+      - mkdocs-exclude
+      - mkdocs-redirects
+      # - mkdocs-blogging-plugin
+  - name: lizard
+  - name: ansible
+  - name: ansible-lint
+
 
 ## --------------
 ## CekePHPプロジェクトのデータベース設定
