@@ -40,18 +40,18 @@ if [ ! -f ~/.inputrc ]; then
   echo "set completion-ignore-case on">~/.inputrc
 fi
 
-if [ ! -e ~/.bash-git-prompt ]; then
-  git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
-  cat << EOT >>~/.bashrc
-# BEGIN bash-git-prompt setting ANSIBLE MANAGED BLOCK
-if [ -f "\$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-    GIT_PROMPT_ONLY_IN_REPO=1
-    source \$HOME/.bash-git-prompt/gitprompt.sh
-fi
-# END bash-git-prompt setting ANSIBLE MANAGED BLOCK
-EOT
-
-fi
+# if [ ! -e ~/.bash-git-prompt ]; then
+#   git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
+#   cat << EOT >>~/.bashrc
+# # BEGIN bash-git-prompt setting ANSIBLE MANAGED BLOCK
+# if [ -f "\$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+#     GIT_PROMPT_ONLY_IN_REPO=1
+#     source \$HOME/.bash-git-prompt/gitprompt.sh
+# fi
+# # END bash-git-prompt setting ANSIBLE MANAGED BLOCK
+# EOT
+#
+# fi
 
 source ~/.bashrc
 
