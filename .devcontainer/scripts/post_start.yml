@@ -1,5 +1,5 @@
 ---
-- name: Setup post start
+- name: Setup post start task
   hosts: all
   connection: local
   become: false
