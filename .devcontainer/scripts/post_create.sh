@@ -55,10 +55,11 @@ fi
 
 source ~/.bashrc
 
-if [ -f .devcontainer/requirements.txt ]; then
-  # export PIPENV_VENV_IN_PROJECT=1
-  pipenv install --python 3 --dev -r .devcontainer/requirements.txt
-fi
+pipx install mkdocs-material --include-deps
+pipx inject mkdocs-material mkdocs-redirects mkdocs-git-revision-date-localized-plugin mkdocs-exclude
+pipx install lizard --include-deps
+pipx install ansible --include-deps
+pipx install ansible-lint --include-deps
 
 cat << EOT >~/.my.cnf
 [mysql]
