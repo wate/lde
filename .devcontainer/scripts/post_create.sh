@@ -53,13 +53,17 @@ fi
 #
 # fi
 
-source ~/.bashrc
+sudo chmod a+x "$(pwd)"
+sudo rm -rf /var/www/html
+DOC_ROOT=$(pwd)
+if [ -d public ]; then
+  DOC_ROOT="$(pwd)/public"
+elif [ -d webroot ]; then
+  DOC_ROOT="$(pwd)/webroot"
+fi
+sudo ln -s "${DOC_ROOT}" /var/www/html
 
-pipx install mkdocs-material --include-deps
-pipx inject mkdocs-material mkdocs-redirects mkdocs-git-revision-date-localized-plugin mkdocs-exclude
-pipx install lizard --include-deps
-pipx install ansible --include-deps
-pipx install ansible-lint --include-deps
+source ~/.bashrc
 
 cat << EOT >~/.my.cnf
 [mysql]
@@ -98,22 +102,18 @@ stg = mysql://app_stg:app_stg_password@db:3306/app_stg
 prod = mysql://app_prod:app_prod_password@db:3306/app_prod
 EOT
 
-sudo chmod a+x "$(pwd)"
-sudo rm -rf /var/www/html
-DOC_ROOT=$(pwd)
-if [ -d public ]; then
-  DOC_ROOT="$(pwd)/public"
-elif [ -d webroot ]; then
-  DOC_ROOT="$(pwd)/webroot"
-fi
-sudo ln -s "${DOC_ROOT}" /var/www/html
-
 if [ -f composer.json ]; then
   composer install --no-interaction
 fi
 if [ -f package.json ]; then
   npm install
 fi
+
+pipx install ansible --include-deps
+pipx install mkdocs-material --include-deps
+pipx inject mkdocs-material mkdocs-redirects mkdocs-git-revision-date-localized-plugin mkdocs-exclude
+pipx install lizard --include-deps
+pipx install ansible-lint --include-deps
 
 if type "ansible" >/dev/null 2>&1 && [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
