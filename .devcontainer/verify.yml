@@ -12,7 +12,7 @@
       block:
         - name: php-fpmのパッケージ名/サービス名を変数に設定
           ansible.builtin.set_fact:
-            php_fpm_name: "php{{ php_version | default('8.1') }}-fpm"
+            php_fpm_name: "php{{ php_version | default('8.2') }}-fpm"
         ## パッケージ
         - name: インストール済みパッケージの情報を取得
           ansible.builtin.package_facts:
