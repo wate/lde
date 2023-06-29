@@ -40,25 +40,30 @@ if [ ! -f ~/.inputrc ]; then
   echo "set completion-ignore-case on">~/.inputrc
 fi
 
-if [ ! -e ~/.bash-git-prompt ]; then
-  git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
-  cat << EOT >>~/.bashrc
-# BEGIN bash-git-prompt setting ANSIBLE MANAGED BLOCK
-if [ -f "\$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-    GIT_PROMPT_ONLY_IN_REPO=1
-    source \$HOME/.bash-git-prompt/gitprompt.sh
-fi
-# END bash-git-prompt setting ANSIBLE MANAGED BLOCK
-EOT
+# if [ ! -e ~/.bash-git-prompt ]; then
+#   git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
+#   cat << EOT >>~/.bashrc
+# # BEGIN bash-git-prompt setting ANSIBLE MANAGED BLOCK
+# if [ -f "\$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+#     GIT_PROMPT_ONLY_IN_REPO=1
+#     source \$HOME/.bash-git-prompt/gitprompt.sh
+# fi
+# # END bash-git-prompt setting ANSIBLE MANAGED BLOCK
+# EOT
+#
+# fi
 
+sudo chmod a+x "$(pwd)"
+sudo rm -rf /var/www/html
+DOC_ROOT=$(pwd)
+if [ -d public ]; then
+  DOC_ROOT="$(pwd)/public"
+elif [ -d webroot ]; then
+  DOC_ROOT="$(pwd)/webroot"
 fi
+sudo ln -s "${DOC_ROOT}" /var/www/html
 
 source ~/.bashrc
-
-if [ -f .devcontainer/requirements.txt ]; then
-  # export PIPENV_VENV_IN_PROJECT=1
-  pipenv install --python 3 --dev -r .devcontainer/requirements.txt
-fi
 
 cat << EOT >~/.my.cnf
 [mysql]
@@ -97,16 +102,6 @@ stg = mysql://app_stg:app_stg_password@db:3306/app_stg
 prod = mysql://app_prod:app_prod_password@db:3306/app_prod
 EOT
 
-sudo chmod a+x "$(pwd)"
-sudo rm -rf /var/www/html
-DOC_ROOT=$(pwd)
-if [ -d public ]; then
-  DOC_ROOT="$(pwd)/public"
-elif [ -d webroot ]; then
-  DOC_ROOT="$(pwd)/webroot"
-fi
-sudo ln -s "${DOC_ROOT}" /var/www/html
-
 if [ -f composer.json ]; then
   composer install --no-interaction
 fi
@@ -114,7 +109,11 @@ if [ -f package.json ]; then
   npm install
 fi
 
-git config --global --add safe.directory ${PWD}
+pipx install ansible --include-deps
+pipx install mkdocs-material --include-deps
+pipx inject mkdocs-material mkdocs-redirects mkdocs-git-revision-date-localized-plugin mkdocs-exclude
+pipx install lizard --include-deps
+pipx install ansible-lint --include-deps
 
 if type "ansible" >/dev/null 2>&1 && [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
