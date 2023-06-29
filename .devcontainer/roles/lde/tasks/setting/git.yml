@@ -1,11 +1,11 @@
 ---
 # code: language=ansible
-- name: Install bash git prompt
-  ansible.builtin.git:
-    repo: https://github.com/magicmonty/bash-git-prompt.git
-    dest: ~/.bash-git-prompt
-    version: master
-    depth: 1
+# - name: Install bash git prompt
+#   ansible.builtin.git:
+#     repo: https://github.com/magicmonty/bash-git-prompt.git
+#     dest: ~/.bash-git-prompt
+#     version: master
+#     depth: 1
 # - name: Append bash git prompt setting on .bashrc
 #   ansible.builtin.blockinfile:
 #     path: ~/.bashrc
