@@ -62,7 +62,7 @@ nginx_vhosts:
       - pattern: "\\.php"
         match_type: "~"
         content: |
-          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.2') }}-fpm.sock;
           include snippets/fastcgi-php.conf;
       - pattern: "/\\.ht"
         match_type: "~"
@@ -88,7 +88,7 @@ nginx_vhosts:
     locations:
       - pattern: /
         content: |
-          proxy_pass http://127.0.0.1:{{ grafana_port }};
+          proxy_pass http://127.0.0.1:{{ grafana_port | default('3000') }};
           include proxy_params;
       - pattern: "/\\.ht"
         match_type: "~"
@@ -149,10 +149,10 @@ apache_vhosts:
     server_name: "monitor.{{ domain }}"
     proxy_pass:
       - from: /
-        to: "http://127.0.0.1:{{ grafana_port }}/"
+        to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
     proxy_pass_reverse:
       - from: /
-        to: "http://127.0.0.1:{{ grafana_port }}/"
+        to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
     custom_log:
       path: /var/log/apache2/grafana.access.log
       format: combined

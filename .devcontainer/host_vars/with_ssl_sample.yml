@@ -91,7 +91,7 @@ nginx_vhosts:
       - pattern: "\\.php"
         match_type: "~"
         content: |
-          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.2') }}-fpm.sock;
           include snippets/fastcgi-php.conf;
       - pattern: "/\\.ht"
         match_type: "~"
@@ -127,7 +127,7 @@ nginx_vhosts:
       - pattern: "\\.php"
         match_type: "~"
         content: |
-          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.2') }}-fpm.sock;
           include snippets/fastcgi-php.conf;
       - pattern: "/\\.ht"
         match_type: "~"
@@ -173,7 +173,7 @@ nginx_vhosts:
     locations:
       - pattern: /
         content: |
-          proxy_pass http://127.0.0.1:{{ grafana_port }};
+          proxy_pass http://127.0.0.1:{{ grafana_port | default('3000') }};
           include proxy_params;
       - pattern: "/\\.ht"
         match_type: "~"
