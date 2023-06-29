@@ -1,28 +1,28 @@
 ---
 # code: language=ansible
-- name: Install bash git prompt
-  ansible.builtin.git:
-    repo: https://github.com/magicmonty/bash-git-prompt.git
-    dest: ~/.bash-git-prompt
-    version: master
-    depth: 1
-- name: Append bash git prompt setting on .bashrc
-  ansible.builtin.blockinfile:
-    path: ~/.bashrc
-    marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
-    block: |
-      if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-          GIT_PROMPT_ONLY_IN_REPO=1
-          source $HOME/.bash-git-prompt/gitprompt.sh
-      fi
-- name: Set git-prompt custom theme
-  ansible.builtin.get_url:
-    url: "{{ lde_git_prompt_custom_theme_url }}"
-    dest: ~/.git-prompt-colors.sh
-    mode: "0644"
-  when:
-    - lde_git_prompt_custom_theme_url is defined
-    - lde_git_prompt_custom_theme_url | length > 1
+# - name: Install bash git prompt
+#   ansible.builtin.git:
+#     repo: https://github.com/magicmonty/bash-git-prompt.git
+#     dest: ~/.bash-git-prompt
+#     version: master
+#     depth: 1
+# - name: Append bash git prompt setting on .bashrc
+#   ansible.builtin.blockinfile:
+#     path: ~/.bashrc
+#     marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
+#     block: |
+#       if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+#           GIT_PROMPT_ONLY_IN_REPO=1
+#           source $HOME/.bash-git-prompt/gitprompt.sh
+#       fi
+# - name: Set git-prompt custom theme
+#   ansible.builtin.get_url:
+#     url: "{{ lde_git_prompt_custom_theme_url }}"
+#     dest: ~/.git-prompt-colors.sh
+#     mode: "0644"
+#   when:
+#     - lde_git_prompt_custom_theme_url is defined
+#     - lde_git_prompt_custom_theme_url | length > 1
 - name: Set user git setting
   community.general.git_config:
     name: "{{ item.name }}"
