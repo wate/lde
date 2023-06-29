@@ -44,18 +44,14 @@ php_project_doc_root_mode: omit
 # lde_git_user_email: your_name@example.com
 
 ## -----------------
-## git prompt for bashのテーマ設定ファイルのURL
-## --
-## git prompt for bash:https://github.com/magicmonty/bash-git-prompt
-## -----------------
-# lde_git_prompt_custom_theme_url: https://raw.githubusercontent.com/wate/Dotfiles/master/.git-prompt-colors.sh
+## git prompt for bashを有効にするかどうか
+## @see https://github.com/magicmonty/bash-git-prompt
+lde_git_prompt_enabled: false
 
 ## -----------------
-## pipパッケージインストール時の追加引数
+## git prompt for bashのテーマ設定ファイルのURL
 ## -----------------
-lde_pip_install_extra_args:
-  - "--user"
-  - "--break-system-packages"
+# lde_git_prompt_custom_theme_url: https://raw.githubusercontent.com/wate/Dotfiles/master/.git-prompt-colors.sh
 
 ## -----------------
 ## mycliの設定
