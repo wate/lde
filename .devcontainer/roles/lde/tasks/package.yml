@@ -17,7 +17,7 @@
         url: https://phpdoc.org/phpDocumentor.phar
         dest: /usr/local/bin/phpdoc
         mode: "0755"
-- name: Install pip packages
+- name: Install cmmandline tools
   community.general.pipx:
     name: "{{ item.name }}"
     state: install
