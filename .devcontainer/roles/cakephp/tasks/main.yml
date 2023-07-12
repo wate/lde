@@ -113,9 +113,11 @@
           export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
           export DATABASE_URL="{{ cakephp_database_url }}"
           export DATABASE_TEST_URL="{{ cakephp_database_test_url }}"
-          export LOG_DEBUG_URL=file:///var/cakephp/logs/
-          export LOG_ERROR_URL=file:///var/cakephp/logs/
-          export LOG_QUERIES_URL=file:///var/cakephp/logs/
+          ### 共有ディレクトリ内のログ出力がボトルネックになっている場合は以下の設定を有効化し、
+          ### ログの出出力先を共有ディレクトリ以外に出力させる
+          # export LOG_DEBUG_URL=file:///var/cakephp/logs/
+          # export LOG_ERROR_URL=file:///var/cakephp/logs/
+          # export LOG_QUERIES_URL=file:///var/cakephp/logs/
           {% if lookup('env', 'EMAIL_TRANSPORT_DEFAULT_URL') %}
           export EMAIL_TRANSPORT_DEFAULT_URL={{ lookup('env', 'EMAIL_TRANSPORT_DEFAULT_URL') }}
           {% endif %}
