@@ -76,7 +76,7 @@ Vagrant.configure("2") do |config|
   # --------
   # Synced Folders
   # --------
-  config.vm.synced_folder ".", "/vagrant", :mount_options => ['dmode=777', 'fmode=666']
+  config.vm.synced_folder ".", "/vagrant", :mount_options => ['dmode=777', 'fmode=777']
   sync_folders = ENV.select { |k,v| k.match?(/^VAGRANT_SYNC_FOLDER_/) }
   unless sync_folders.empty?
     sync_folders.each_value do |sync_folder|
@@ -84,7 +84,7 @@ Vagrant.configure("2") do |config|
       if host_folder && guest_folder
         host_folder.strip!
         guest_folder.strip!
-        config.vm.synced_folder host_folder, guest_folder, :mount_options => ['dmode=777', 'fmode=666']
+        config.vm.synced_folder host_folder, guest_folder, :mount_options => ['dmode=777', 'fmode=777']
       end
     end
   end
