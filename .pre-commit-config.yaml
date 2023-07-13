@@ -41,6 +41,9 @@ repos:
     hooks:
       - id: php-lint
       - id: php-cs
+        # args: [--standard=PSR12 -p]
       - id: php-cbf
+        # args: [--standard=PSR12 -p]
       - id: php-stan
+        args: [--memory-limit=512M]
       # - id: php-unit
