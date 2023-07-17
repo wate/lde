@@ -4,15 +4,13 @@
 ## ---------
 common_apt_default_release_backports: false
 
-## -------------------
-## mroongaリポジトリを追加するか否か
-## -------------------
-mariadb_append_mroonga_repository: false
-
-## --------------
-## goaccessリポジトリを追加するか否か
-## --------------
-nginx_append_goaccess_repository: false
+## ---------
+## インストールするPHPのバージョン
+##
+## 対応バージョン：5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0 / 8.2 / **8.2**
+## 初期値：8.2
+## ---------
+php_version: "8.2"
 
 ## --------------
 ## Nginxのバーチャルホストの設定
@@ -168,14 +166,6 @@ apache_extra_cfg: |
   EnableSendfile off
 
 ## ---------
-## インストールするPHPのバージョン
-##
-## 対応バージョン：5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0 / 8.2 / **8.2**
-## 初期値：8.2
-## ---------
-php_version: "8.2"
-
-## ---------
 ## インストールするPHP関連パッケージ
 ## ---------
 php_packages:
@@ -297,31 +287,6 @@ postgresql_databases:
     encoding: utf8
   - <<: *db_app_prod
     encoding: utf8
-
-## --------------
-## インストールする各種ツール類
-## --------------
-install_tools:
-  ## https://direnv.net/
-  # - direnv
-  ## https://github.com/k1LoW/tbls
-  - tbls
-  ## https://github.com/axllent/mailpit
-  - mailpit
-  ## https://github.com/terrastruct/d2
-  - d2
-  ## https://github.com/google/osv-scanner
-  - osv-scanner
-  ## https://github.com/charmbracelet/glow
-  - glow
-  ## https://wp-cli.org/ja/
-  # - wp-cli
-  ## https://github.com/microsoft/pict
-  - pict
-  ## https://github.com/tesseract-ocr/tesseract
-  # - tesseract-ocr
-  ## PDF 向けユーティリティ
-  # - poppler-utils
 
 ## -----------------
 ## インストールするpipパッケージ
