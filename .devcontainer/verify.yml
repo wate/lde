@@ -75,3 +75,5 @@
               - 3306 in listen_tcp_posts
               ## redis
               - 6379 in listen_tcp_posts
+              ## meilisearch
+              - 7700 in listen_tcp_posts

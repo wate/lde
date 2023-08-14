@@ -46,6 +46,9 @@
     - role: phpredisadmin
       tags:
         - role_phpredisadmin
+    - role: meilisearch
+      tags:
+        - role_meilisearch
     - role: grafana
       tags:
         - role_grafana

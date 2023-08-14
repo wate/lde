@@ -52,8 +52,10 @@ Vagrant.configure("2") do |config|
   vm_domain = ENV["VAGRANT_VM_DOMAIN"] || "lde.local"
   vm_host_aliases = [
     vm_domain,
+    "www." + vm_domain,
     "cache." + vm_domain,
     "mail." + vm_domain,
+    "search." + vm_domain,
     "monitor." + vm_domain,
   ]
   vm_host_envs = ENV.select { |k,v| k.match?(/^VAGRANT_VM_HOST_/) }
@@ -94,7 +96,7 @@ Vagrant.configure("2") do |config|
   vm_name = File.basename(PROJECT_DIR)
   vm_name = ENV["VAGRANT_VM_NAME"] if ENV["VAGRANT_VM_NAME"]
   vm_cpu = ENV["VAGRANT_VM_CPU"] || 1
-  vm_memory = ENV["VAGRANT_VM_MEMORY"] || 1024
+  vm_memory = ENV["VAGRANT_VM_MEMORY"] || 2048
   config.vm.provider "virtualbox" do |vm|
     vm.name = vm_name
     vm.cpus = vm_cpu.to_i
