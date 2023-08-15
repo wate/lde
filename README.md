@@ -137,7 +137,7 @@ export VAGRANT_VM_NAME=example.local
 # 仮想マシンのCPU
 export VAGRANT_VM_CPU=1
 # 仮想マシンのメモリ
-export VAGRANT_VM_MEMORY=1024
+export VAGRANT_VM_MEMORY=2048
 # 仮想マシンのIPアドレス
 export VAGRANT_IP_ADDRESS="192.168.56.10"
 
@@ -153,6 +153,10 @@ export VAGRANT_VM_DOMAIN="example.com"
 # /etc/hostsファイルに設定する追加のホスト名
 # ※この設定を有効にするにはvagrant-hostsupdaterプラグインが必要になります
 export VAGRANT_VM_HOST_WWW="www.example.com"
+export VAGRANT_VM_HOST_MAILPIT="mail.example.com"
+export VAGRANT_VM_HOST_PHPREDISADMIN="cache.example.com"
+export VAGRANT_VM_HOST_MEILISEARCH="search.example.com"
+export VAGRANT_VM_HOST_GRAFANA="monitor.example.com"
 
 ## ------------
 ## ポートフォワードの設定

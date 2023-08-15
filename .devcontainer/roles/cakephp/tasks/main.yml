@@ -103,12 +103,23 @@
         state: absent
     - name: Set variables
       ansible.builtin.set_fact:
-        dot_envrc_value: |
+        cakephp_gitignore_value: |
+          ### CakePHP ####
+          /config/app_local.php
+          /config/.env
+          /config/Migrations/schema-dump-default.lock
+          /logs/*
+          /tmp/*
+          /vendor/*
+          ### direnv ###
+          .envrc
+        cakephp_dot_envrc_value: |
           PATH_add bin
           layout php
           layout node
           source_env_if_exists .env
-        dot_env_value: |
+        cakephp_dot_env_value: |
+          export DEBUG="True"
           export APP_DEFAULT_LOCALE="ja_JP"
           export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
           export DATABASE_URL="{{ cakephp_database_url }}"
@@ -132,28 +143,28 @@
         path: "{{ php_project_source_dir }}/.envrc"
         mode: "0644"
         create: true
-        block: "{{ dot_envrc_value }}"
-    - name: Add .gitignore direnv setting file
-      ansible.builtin.lineinfile:
+        block: "{{ cakephp_dot_envrc_value }}"
+    - name: Update .gitignore setting
+      ansible.builtin.blockinfile:
         path: "{{ php_project_source_dir }}/.gitignore"
-        line: .envrc
+        block: "{{ cakephp_gitignore_value }}"
     - name: Display direnv setting
       ansible.builtin.debug:
         msg: |
           自動生成したdirenvの設定(.envrc)は以下の通りです
           ```
-          {{ dot_envrc_value -}}
+          {{ cakephp_dot_envrc_value -}}
           ```
     - name: Create CakePHP setting
       ansible.builtin.blockinfile:
         path: "{{ php_project_source_dir }}/config/.env"
         mode: "0644"
         create: true
-        block: "{{ dot_env_value }}"
+        block: "{{ cakephp_dot_env_value }}"
     - name: Display direnv setting
       ansible.builtin.debug:
         msg: |
           自動生成したCakePHPの設定(config/.env)は以下の通りです
           ```
-          {{ dot_env_value -}}
+          {{ cakephp_dot_env_value -}}
           ```
