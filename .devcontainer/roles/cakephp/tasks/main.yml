@@ -65,7 +65,7 @@
             working_dir: "{{ php_project_tmp_dir }}"
     - name: Check exists cake command completion file
       ansible.builtin.stat:
-        path: "{{ php_project_tmp_dir }}/app/bin/bash_completion.sh"
+        path: "{{ php_project_tmp_dir }}/bin/bash_completion.sh"
       register: cakephp_command_completion_file_result
     - name: Create cake completion file
       ansible.builtin.copy:
