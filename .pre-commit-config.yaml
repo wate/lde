@@ -26,10 +26,12 @@ repos:
     rev: v0.35.0
     hooks:
       - id: markdownlint-fix
+        exclude: ^docs/schema/.*$
   - repo: https://github.com/RyoWakabayashi/pre-commit-mirrors-textlint
     rev: v12.2.1
     hooks:
       - id: textlint
+        exclude: ^docs/schema/.*$
         args: [--fix]
         additional_dependencies:
           - textlint-filter-rule-comments
