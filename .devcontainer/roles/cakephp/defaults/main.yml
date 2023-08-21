@@ -8,34 +8,37 @@ cakephp_major_version: "4"
 ## インストールする追加パッケージ
 ## --------------
 cakephp_project_addtitinal_packages: []
-  # - name: "josegonzalez/dotenv:^4.0"
-  # - name: cakephp/authentication
-  # - name: symfony/yaml
-  # - name: cakephp/localized
-  # - name: robotusers/cakephp-table-inheritance
-  # ## @see https://phpspreadsheet.readthedocs.io/en/latest/
-  # - name: phpoffice/phpspreadsheet
-  # - name: tecnickcom/tcpdf
-  # - name: arodu/cakelte
-  # ## @see https://csv.thephpleague.com/
-  # # - name: league/csv:^9.0
-  # ## @see https://commonmark.thephpleague.com/
-  # # - name: league/commonmark
-  # ## @see https://book.cakephp.org/queue/1/en/index.html
-  # # - name: cakephp/queue
-  # - name: squizlabs/php_codesniffer
-  #   dev: true
-  # - name: phpstan/phpstan
-  #   dev: true
-  # - name: phpunit/phpunit
-  #   deb: true
-  # - name: fakerphp/faker
-  #   dev: true
-  # - name: dereuromark/cakephp-ide-helper
-  #   dev: true
-  # ## @see http://zircote.github.io/swagger-php/
-  # # - name: zircote/swagger-php
-  # #   dev: true
+#   - name: "josegonzalez/dotenv:^4.0"
+#   - name: cakephp/authentication
+#   - name: symfony/yaml
+#   - name: cakephp/localized
+#   - name: robotusers/cakephp-table-inheritance
+#   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
+#   - name: phpoffice/phpspreadsheet
+#   - name: tecnickcom/tcpdf
+#   - name: arodu/cakelte
+#   ## @see https://csv.thephpleague.com/
+#   # - name: league/csv:^9.0
+#   ## @see https://commonmark.thephpleague.com/
+#   # - name: league/commonmark
+#   ## @see https://book.cakephp.org/queue/1/en/index.html
+#   # - name: cakephp/queue
+#   - name: squizlabs/php_codesniffer
+#     dev: true
+#   - name: phpstan/phpstan
+#     dev: true
+#   - name: phpunit/phpunit
+#     deb: true
+#   - name: fakerphp/faker
+#     dev: true
+#   - name: dereuromark/cakephp-ide-helper
+#     dev: true
+#   ## @see https://github.com/cakedc/cakephp-phpstan
+#   - name: cakedc/cakephp-phpstan
+#     dev: true
+#   ## @see http://zircote.github.io/swagger-php/
+#   # - name: zircote/swagger-php
+#   #   dev: true
 
 ## --------------
 ## データベース接続設定
