@@ -47,6 +47,6 @@ repos:
       - id: php-cbf
         # args: [--standard=PSR12 -p]
       - id: php-stan
-        args: [--memory-limit=512M]
+        args: [--memory-limit=1G]
         # exclude: ^tests/.*$
       # - id: php-unit
