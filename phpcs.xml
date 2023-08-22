@@ -11,8 +11,8 @@
     <rule ref="Generic.Files.LineLength">
         <properties>
         <!--
-        lineLimit:1 行の文字数が超過すると WARNING が発生
-        absoluteLineLimit:1 行の文字数が超過すると ERROR が発生
+        lineLimit:1 行の文字数が超過するとWARNINGが発生
+        absoluteLineLimit:1 行の文字数が超過するとERROR が発生
         -->
         <property name="lineLimit" value="160"/>
         <property name="absoluteLineLimit" value="200"/>
