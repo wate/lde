@@ -9,7 +9,8 @@ cakephp_major_version: "4"
 ## --------------
 cakephp_project_addtitinal_packages: []
 #   - name: "josegonzalez/dotenv:^4.0"
-#   - name: cakephp/authentication
+#   - name: "cakephp/authentication^2.0"
+#   - name: "cakephp/authorization:^2.0"
 #   - name: symfony/yaml
 #   - name: cakephp/localized
 #   - name: robotusers/cakephp-table-inheritance
