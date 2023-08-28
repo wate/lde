@@ -60,10 +60,6 @@
     #   become: false
     #   tags:
     #     - role_cakephp
-    # - role: laravel
-    #   become: false
-    #   tags:
-    #     - role_laravel
     # - role: slim
     #   become: false
     #   tags:

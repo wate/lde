@@ -1,0 +1,38 @@
+    /**
+    * Return Authentication service provider instance.
+    *
+    * @param \Psr\Http\Message\ServerRequestInterface $request Request
+    * @return \Authentication\AuthenticationServiceInterface
+    */
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
+        $service = new AuthenticationService();
+        $service->setConfig([
+            'unauthenticatedRedirect' => Router::url([
+                    'prefix' => false,
+                    'plugin' => null,
+                    'controller' => 'Users',
+                    'action' => 'login',
+            ]),
+            'queryParam' => 'redirect',
+        ]);
+
+        $fields = [
+            IdentifierInterface::CREDENTIAL_USERNAME => 'username',
+            IdentifierInterface::CREDENTIAL_PASSWORD => 'password'
+        ];
+        $service->loadAuthenticator('Authentication.Session');
+        //$service->loadAuthenticator('Authentication.Cookie');
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => $fields,
+            'loginUrl' => Router::url([
+                'prefix' => false,
+                'plugin' => null,
+                'controller' => 'Users',
+                'action' => 'login',
+            ]),
+        ]);
+        $service->loadIdentifier('Authentication.Password', compact('fields'));
+
+        return $service;
+    }

@@ -1,0 +1,81 @@
+---
+- name: Check exists Authentication plugin
+  ansible.builtin.stat:
+    path: "{{ php_project_tmp_dir }}/vendor/cakephp/authentication"
+  register: package_result
+- name: Setup plugin
+  when: package_result.stat.exists
+  block:
+    - name: Add addPlugin statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        regexp: "this->addPlugin\\('Authentication'\\)"
+        line: "        $this->addPlugin('Authentication');"
+        insertafter: "^\\s+parent::bootstrap\\(\\);"
+    - name: Add use statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        line: "use {{ item }};"
+        insertafter: "^namespace App;"
+      loop:
+        - Authentication\AuthenticationService
+        - Authentication\AuthenticationServiceInterface
+        - Authentication\AuthenticationServiceProviderInterface
+        - Authentication\Identifier\IdentifierInterface
+        - Authentication\Middleware\AuthenticationMiddleware
+        - Cake\Http\MiddlewareQueue
+        - Cake\Routing\Router
+        - Psr\Http\Message\ServerRequestInterface
+    - name: Add middleware statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        regexp: ">add\\(new AuthenticationMiddleware\\(\\$this\\)\\)"
+        line: "            ->add(new AuthenticationMiddleware($this))"
+        insertafter: "->add\\(new BodyParserMiddleware\\(\\)\\)"
+    - name: Find class statement
+      ansible.builtin.command:
+        cmd: grep "class Application extends BaseApplication implements " {{ php_project_tmp_dir }}/src/Application.php
+      register: class_statement_result
+      changed_when: false
+      failed_when: class_statement_result.rc > 1
+    - name: Initialize implements_statement
+      ansible.builtin.set_fact:
+        implements_statement:
+        - AuthenticationServiceProviderInterface
+    - name: Add AuthenticationServiceProviderInterface on implements statement
+      ansible.builtin.set_fact:
+        implements_statement: "{{ class_statement_result.stdout.split(' implements ')[1].split(', ') + ['AuthenticationServiceProviderInterface'] }}"
+      when: class_statement_result.rc == 0
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ implements_statement | unique }}"
+    - name: Modify Application class statement
+      ansible.builtin.replace:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        regexp: "^class Application extends BaseApplication.*"
+        replace: class Application extends BaseApplication implements {{ implements_statement | unique | join(', ') }}
+    - name: Find getAuthenticationService method statement
+      ansible.builtin.command:
+        cmd: grep "public function getAuthenticationService(" {{ php_project_tmp_dir }}/src/Application.php
+      register: method_statement_result
+      changed_when: false
+      failed_when: method_statement_result.rc > 1
+    - name: Find getAuthenticationService method statement
+      ansible.builtin.command:
+        cmd: grep "public function getAuthenticationService" {{ php_project_tmp_dir }}/src/Application.php
+      register: method_statement_result
+      changed_when: false
+      failed_when: method_statement_result.rc > 1
+    - name: Add getAuthenticationService Method
+      ansible.builtin.blockinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        marker: "// {mark} cakephp/authentication ANSIBLE MANAGED BLOCK"
+        block: "{{ lookup('ansible.builtin.file', 'files/authentication.php') }}"
+        insertbefore: "^\\}"
+      when: method_statement_result.rc == 1
+    - name: Add loadComponent statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
+        regexp: "this->loadComponent\\(\\'Authentication\\.Authentication\\'\\)"
+        line: "        $this->loadComponent('Authentication.Authentication');"
+        insertafter: "^\\s+parent::initialize\\(\\);"

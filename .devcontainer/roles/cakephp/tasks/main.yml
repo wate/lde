@@ -82,6 +82,12 @@
       loop: "{{ cakephp_project_addtitinal_packages | default([]) }}"
       loop_control:
         label: "{{ item.name }}"
+    - name: Setup authentication plugin setting
+      ansible.builtin.include_tasks:
+        file: plugins/authentication.yml
+    - name: Setup authorization plugin setting
+      ansible.builtin.include_tasks:
+        file: plugins/authorization.yml
     - name: Setup localized plugin setting
       ansible.builtin.include_tasks:
         file: plugins/localized.yml

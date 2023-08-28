@@ -9,8 +9,12 @@ cakephp_major_version: "4"
 ## --------------
 cakephp_project_addtitinal_packages: []
 #   - name: "josegonzalez/dotenv:^4.0"
-#   - name: "cakephp/authentication^2.0"
+#   ## @see https://book.cakephp.org/authentication/2/en/index.html
+#   - name: cakephp/authentication
+#   ## @see https://book.cakephp.org/authorization/2/en/index.html
 #   - name: "cakephp/authorization:^2.0"
+#   ## @see https://book.cakephp.org/queue/1/en/index.html
+#   - name: cakephp/queue
 #   - name: symfony/yaml
 #   - name: cakephp/localized
 #   - name: robotusers/cakephp-table-inheritance
@@ -19,11 +23,9 @@ cakephp_project_addtitinal_packages: []
 #   - name: tecnickcom/tcpdf
 #   - name: arodu/cakelte
 #   ## @see https://csv.thephpleague.com/
-#   # - name: league/csv:^9.0
+#   - name: league/csv:^9.0
 #   ## @see https://commonmark.thephpleague.com/
-#   # - name: league/commonmark
-#   ## @see https://book.cakephp.org/queue/1/en/index.html
-#   # - name: cakephp/queue
+#   - name: league/commonmark
 #   - name: squizlabs/php_codesniffer
 #     dev: true
 #   - name: phpstan/phpstan
@@ -38,8 +40,8 @@ cakephp_project_addtitinal_packages: []
 #   - name: cakedc/cakephp-phpstan
 #     dev: true
 #   ## @see http://zircote.github.io/swagger-php/
-#   # - name: zircote/swagger-php
-#   #   dev: true
+#   - name: zircote/swagger-php
+#     dev: true
 
 ## --------------
 ## データベース接続設定

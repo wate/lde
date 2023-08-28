@@ -1,0 +1,74 @@
+---
+- name: Check exists Authorization plugin
+  ansible.builtin.stat:
+    path: "{{ php_project_tmp_dir }}/vendor/cakephp/authorization"
+  register: package_result
+- name: Setup plugin
+  when: package_result.stat.exists
+  block:
+    - name: Add addPlugin statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        regexp: "this->addPlugin\\('Authorization'\\)"
+        line: "        $this->addPlugin('Authorization');"
+        insertafter: "^\\s+parent::bootstrap\\(\\);"
+    - name: Add use statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        line: "use {{ item }};"
+        insertafter: "^namespace App;"
+      loop:
+        - Authorization\AuthorizationService
+        - Authorization\AuthorizationServiceInterface
+        - Authorization\AuthorizationServiceProviderInterface
+        - Authorization\Middleware\AuthorizationMiddleware
+        - Authorization\Policy\OrmResolver
+        - Psr\Http\Message\ResponseInterface
+        - Psr\Http\Message\ServerRequestInterface
+    - name: Add middleware statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        regexp: ">add\\(new AuthorizationMiddleware\\(\\$this\\)\\)"
+        line: "            ->add(new AuthorizationMiddleware($this))"
+        insertafter: "->add\\(new AuthenticationMiddleware\\(\\$this\\)\\)"
+    - name: Find class statement
+      ansible.builtin.command:
+        cmd: grep "class Application extends BaseApplication implements" {{ php_project_tmp_dir }}/src/Application.php
+      register: class_statement_result
+      changed_when: false
+      failed_when: class_statement_result.rc > 1
+    - name: Initialize implements_statement
+      ansible.builtin.set_fact:
+        implements_statement:
+        - AuthorizationServiceProviderInterface
+    - name: Add AuthenticationServiceProviderInterface on implements statement
+      ansible.builtin.set_fact:
+        implements_statement: "{{ class_statement_result.stdout.split(' implements ')[1].split(', ') + ['AuthorizationServiceProviderInterface'] }}"
+      when: class_statement_result.rc == 0
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ implements_statement | unique }}"
+    - name: Modify Application class statement
+      ansible.builtin.replace:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        regexp: "^class Application extends BaseApplication.*"
+        replace: class Application extends BaseApplication implements {{ implements_statement | unique | join(', ') }}
+    - name: Find getAuthorizationService method statement
+      ansible.builtin.command:
+        cmd: grep "public function getAuthorizationService" {{ php_project_tmp_dir }}/src/Application.php
+      register: method_statement_result
+      changed_when: false
+      failed_when: method_statement_result.rc > 1
+    - name: Add getAuthorizationService Method
+      ansible.builtin.blockinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        marker: "// {mark} cakephp/authorization ANSIBLE MANAGED BLOCK"
+        block: "{{ lookup('ansible.builtin.file', 'files/authorization.php') }}"
+        insertbefore: "^\\}"
+      when: method_statement_result.rc == 1
+    - name: Add loadComponent statement
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
+        regexp: "this->loadComponent\\(\\'Authorization\\.Authorization\\'\\)"
+        line: "        $this->loadComponent('Authorization.Authorization');"
+        insertafter: "^\\s+parent::initialize\\(\\);"
