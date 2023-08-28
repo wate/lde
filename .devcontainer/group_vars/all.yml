@@ -13,6 +13,48 @@ common_apt_default_release_backports: false
 php_version: "8.2"
 
 ## --------------
+## インストールする追加パッケージ
+## --------------
+cakephp_project_addtitinal_packages: []
+#   - name: "josegonzalez/dotenv:^4.0"
+#   ## @see https://book.cakephp.org/authentication/2/en/index.html
+#   - name: cakephp/authentication
+#   ## @see https://book.cakephp.org/authorization/2/en/index.html
+#   - name: "cakephp/authorization:^2.0"
+#   - name: symfony/yaml
+#   ## @see https://github.com/cakephp/localized
+#   - name: cakephp/localized
+#   ## @see https://github.com/robotusers/cakephp-table-inheritance
+#   - name: robotusers/cakephp-table-inheritance
+#   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
+#   - name: phpoffice/phpspreadsheet
+#   - name: tecnickcom/tcpdf
+#   ## @see https://github.com/arodu/cakelte
+#   - name: arodu/cakelte
+#   ## @see https://csv.thephpleague.com/
+#   - name: league/csv:^9.0
+#   ## @see https://commonmark.thephpleague.com/
+#   - name: league/commonmark
+#   ## @see https://book.cakephp.org/queue/1/en/index.html
+#   - name: cakephp/queue
+#   - name: squizlabs/php_codesniffer
+#     dev: true
+#   - name: phpstan/phpstan
+#     dev: true
+#   - name: phpunit/phpunit
+#     deb: true
+#   - name: fakerphp/faker
+#     dev: true
+#   - name: dereuromark/cakephp-ide-helper
+#     dev: true
+#   ## @see https://github.com/cakedc/cakephp-phpstan
+#   - name: cakedc/cakephp-phpstan
+#     dev: true
+#   ## @see http://zircote.github.io/swagger-php/
+#   - name: zircote/swagger-php
+#     dev: true
+
+## --------------
 ## Nginxのバーチャルホストの設定
 ## --------------
 nginx_vhosts:

@@ -13,19 +13,22 @@ cakephp_project_addtitinal_packages: []
 #   - name: cakephp/authentication
 #   ## @see https://book.cakephp.org/authorization/2/en/index.html
 #   - name: "cakephp/authorization:^2.0"
-#   ## @see https://book.cakephp.org/queue/1/en/index.html
-#   - name: cakephp/queue
 #   - name: symfony/yaml
+#   ## @see https://github.com/cakephp/localized
 #   - name: cakephp/localized
+#   ## @see https://github.com/robotusers/cakephp-table-inheritance
 #   - name: robotusers/cakephp-table-inheritance
 #   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
 #   - name: phpoffice/phpspreadsheet
 #   - name: tecnickcom/tcpdf
+#   ## @see https://github.com/arodu/cakelte
 #   - name: arodu/cakelte
 #   ## @see https://csv.thephpleague.com/
 #   - name: league/csv:^9.0
 #   ## @see https://commonmark.thephpleague.com/
 #   - name: league/commonmark
+#   ## @see https://book.cakephp.org/queue/1/en/index.html
+#   - name: cakephp/queue
 #   - name: squizlabs/php_codesniffer
 #     dev: true
 #   - name: phpstan/phpstan
