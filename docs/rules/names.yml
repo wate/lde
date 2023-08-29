@@ -46,11 +46,23 @@ rules:
   - expected: Sass
   ### Format
   - expected: Markdown
+    options:
+      wordBoundary: true
   - expected: reStructuredText
+    options:
+      wordBoundary: true
   - expected: AsciiDoc
+    options:
+      wordBoundary: true
   - expected: YAML
+    options:
+      wordBoundary: true
   - expected: JSON
+    options:
+      wordBoundary: true
   - expected: TOML
+    options:
+      wordBoundary: true
   ### Framework name / Library name
   - expected: jQuery
   - expected: jQuery UI
