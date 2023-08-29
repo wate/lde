@@ -44,8 +44,10 @@ repos:
       - id: php-lint
       - id: php-cs
         args: [--standard=PSR12 -p]
+        exclude: ^.devcontainer/*.$
       - id: php-cbf
         args: [--standard=PSR12 -p]
+        exclude: ^.devcontainer/.*$
       - id: php-stan
         args: [--memory-limit=1G]
         # exclude: ^tests/.*$
