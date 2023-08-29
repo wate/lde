@@ -13,6 +13,7 @@ cakephp_project_addtitinal_packages: []
 #   - name: cakephp/authentication
 #   ## @see https://book.cakephp.org/authorization/2/en/index.html
 #   - name: "cakephp/authorization:^2.0"
+#   ## @see https://symfony.com/doc/current/components/yaml.html
 #   - name: symfony/yaml
 #   ## @see https://github.com/cakephp/localized
 #   - name: cakephp/localized
@@ -20,6 +21,7 @@ cakephp_project_addtitinal_packages: []
 #   - name: robotusers/cakephp-table-inheritance
 #   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
 #   - name: phpoffice/phpspreadsheet
+#   ## @see https://github.com/tecnickcom/TCPDF
 #   - name: tecnickcom/tcpdf
 #   ## @see https://github.com/arodu/cakelte
 #   - name: arodu/cakelte
@@ -31,10 +33,12 @@ cakephp_project_addtitinal_packages: []
 #   - name: cakephp/queue
 #   - name: squizlabs/php_codesniffer
 #     dev: true
+#   ## @see https://phpstan.org/
 #   - name: phpstan/phpstan
 #     dev: true
 #   - name: phpunit/phpunit
 #     deb: true
+#   ## @see https://fakerphp.github.io/
 #   - name: fakerphp/faker
 #     dev: true
 #   - name: dereuromark/cakephp-ide-helper
