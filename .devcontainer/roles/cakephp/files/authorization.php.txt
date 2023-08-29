@@ -2,7 +2,7 @@
     * Return Authorization service provider instance.
     *
     * @param \Psr\Http\Message\ServerRequestInterface $request Request
-    * @return \Authentication\AuthorizationServiceInterface
+    * @return \Authorization\AuthorizationServiceInterface
     */
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
