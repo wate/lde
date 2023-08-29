@@ -31,7 +31,11 @@ cakephp_project_addtitinal_packages: []
 #   - name: league/commonmark
 #   ## @see https://book.cakephp.org/queue/1/en/index.html
 #   - name: cakephp/queue
+#   ## @see https://github.com/squizlabs/PHP_CodeSniffer
 #   - name: squizlabs/php_codesniffer
+#     dev: true
+#   ## @see https://github.com/cakephp/cakephp-codesniffer
+#   - name: cakephp/cakephp-codesniffer
 #     dev: true
 #   ## @see https://phpstan.org/
 #   - name: phpstan/phpstan
