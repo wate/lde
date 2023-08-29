@@ -63,7 +63,7 @@
       ansible.builtin.blockinfile:
         path: "{{ php_project_tmp_dir }}/src/Application.php"
         marker: "// {mark} cakephp/authorization ANSIBLE MANAGED BLOCK"
-        block: "{{ lookup('ansible.builtin.file', 'files/authorization.php') }}"
+        block: "{{ lookup('ansible.builtin.file', 'files/authorization.php.txt') }}"
         insertbefore: "^\\}"
       when: method_statement_result.rc == 1
     - name: Add loadComponent statement
