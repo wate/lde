@@ -11,7 +11,8 @@
         path: "{{ php_project_tmp_dir }}/src/Application.php"
         regexp: "this->addPlugin\\('Authentication'\\)"
         line: "        $this->addPlugin('Authentication');"
-        insertafter: "^\\s+parent::bootstrap\\(\\);"
+        insertafter: "// Load more plugins here"
+        firstmatch: true
     - name: Add use statement
       ansible.builtin.lineinfile:
         path: "{{ php_project_tmp_dir }}/src/Application.php"
@@ -35,20 +36,17 @@
     - name: Find class statement
       ansible.builtin.command:
         cmd: grep "class Application extends BaseApplication implements " {{ php_project_tmp_dir }}/src/Application.php
-      register: class_statement_result
+      register: statement_result
       changed_when: false
-      failed_when: class_statement_result.rc > 1
+      failed_when: statement_result.rc > 1
     - name: Initialize implements_statement
       ansible.builtin.set_fact:
         implements_statement:
-        - AuthenticationServiceProviderInterface
+          - AuthenticationServiceProviderInterface
     - name: Add AuthenticationServiceProviderInterface on implements statement
       ansible.builtin.set_fact:
-        implements_statement: "{{ class_statement_result.stdout.split(' implements ')[1].split(', ') + ['AuthenticationServiceProviderInterface'] }}"
-      when: class_statement_result.rc == 0
-    - name: Debug
-      ansible.builtin.debug:
-        msg: "{{ implements_statement | unique }}"
+        implements_statement: "{{ statement_result.stdout.split(' implements ')[1].split(', ') + ['AuthenticationServiceProviderInterface'] }}"
+      when: statement_result.rc == 0
     - name: Modify Application class statement
       ansible.builtin.replace:
         path: "{{ php_project_tmp_dir }}/src/Application.php"
@@ -56,26 +54,33 @@
         replace: class Application extends BaseApplication implements {{ implements_statement | unique | join(', ') }}
     - name: Find getAuthenticationService method statement
       ansible.builtin.command:
-        cmd: grep "public function getAuthenticationService(" {{ php_project_tmp_dir }}/src/Application.php
-      register: method_statement_result
-      changed_when: false
-      failed_when: method_statement_result.rc > 1
-    - name: Find getAuthenticationService method statement
-      ansible.builtin.command:
         cmd: grep "public function getAuthenticationService" {{ php_project_tmp_dir }}/src/Application.php
-      register: method_statement_result
+      register: statement_result
       changed_when: false
-      failed_when: method_statement_result.rc > 1
+      failed_when: statement_result.rc > 1
     - name: Add getAuthenticationService Method
       ansible.builtin.blockinfile:
         path: "{{ php_project_tmp_dir }}/src/Application.php"
         marker: "// {mark} cakephp/authentication ANSIBLE MANAGED BLOCK"
-        block: "{{ lookup('ansible.builtin.file', 'files/authentication.php.txt') }}"
+        block: "{{ lookup('ansible.builtin.file', 'files/authentication/getAuthenticationServiceMethod.txt') }}"
         insertbefore: "^\\}"
-      when: method_statement_result.rc == 1
+      when: statement_result.rc == 1
     - name: Add loadComponent statement
       ansible.builtin.lineinfile:
         path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
         regexp: "this->loadComponent\\(\\'Authentication\\.Authentication\\'\\)"
         line: "        $this->loadComponent('Authentication.Authentication');"
         insertafter: "^\\s+parent::initialize\\(\\);"
+    - name: Find Authentication property statement
+      ansible.builtin.command:
+        cmd: grep "public \$Authentication;" {{ php_project_tmp_dir }}/src/Controller/AppController.php
+      register: statement_result
+      changed_when: false
+      failed_when: statement_result.rc > 1
+    - name: Add Authentication property statement
+      ansible.builtin.blockinfile:
+        path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
+        marker: "// {mark} cakephp/authentication ANSIBLE MANAGED BLOCK"
+        block: "{{ lookup('ansible.builtin.file', 'files/authentication/AuthenticationProperty.txt') }}"
+        insertbefore: "^}"
+      when: statement_result.rc == 1

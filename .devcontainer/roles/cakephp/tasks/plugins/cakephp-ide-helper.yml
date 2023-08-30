@@ -1,0 +1,29 @@
+---
+- name: Check exists IdeHelper plugin
+  ansible.builtin.stat:
+    path: "{{ php_project_tmp_dir }}/vendor/dereuromark/cakephp-ide-helper"
+  register: package_result
+- name: Setup plugin
+  when: package_result.stat.exists
+  block:
+    - name: Find addPlugin statement
+      ansible.builtin.command:
+        cmd: grep "this->addPlugin('IdeHelper')" src/Application.php
+        chdir: "{{ php_project_tmp_dir }}"
+      register: statement_result
+      changed_when: false
+      failed_when: statement_result.rc > 1
+    - name: DEBUG
+      ansible.builtin.debug:
+        var: statement_result
+    - name: Add addPlugin statement
+      ansible.builtin.blockinfile:
+        path: "{{ php_project_tmp_dir }}/src/Application.php"
+        marker: "// {mark} dereuromark/cakephp-ide-helper ANSIBLE MANAGED BLOCK"
+        block: "{{ lookup('ansible.builtin.file', 'files/cakephp-ide-helper/addPlugin.txt') }}"
+        insertafter: "// Load more plugins here"
+      when: statement_result.rc == 1
+    - name: Update .gitignore setting
+      ansible.builtin.lineinfile:
+        path: "{{ php_project_source_dir }}/.gitignore"
+        line: ".phpstorm.meta.php/"

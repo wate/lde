@@ -94,6 +94,9 @@
     - name: Setup Cakelte plugin setting
       ansible.builtin.include_tasks:
         file: plugins/cakelte.yml
+    - name: Setup IdeHelper plugin setting
+      ansible.builtin.include_tasks:
+        file: plugins/cakephp-ide-helper.yml
     - name: Setup tcpdf font files
       ansible.builtin.import_tasks:
         file: plugins/tcpdf.yml

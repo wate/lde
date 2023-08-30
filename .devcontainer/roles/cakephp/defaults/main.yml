@@ -19,6 +19,8 @@ cakephp_project_addtitinal_packages: []
 #   - name: cakephp/localized
 #   ## @see https://github.com/robotusers/cakephp-table-inheritance
 #   - name: robotusers/cakephp-table-inheritance
+#   ## @see https://github.com/burzum/cakephp-service-layer
+#   - name: burzum/cakephp-service-layer
 #   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
 #   - name: phpoffice/phpspreadsheet
 #   ## @see https://github.com/tecnickcom/TCPDF
@@ -31,10 +33,9 @@ cakephp_project_addtitinal_packages: []
 #   - name: league/commonmark
 #   ## @see https://book.cakephp.org/queue/1/en/index.html
 #   - name: cakephp/queue
-#   ## @see https://github.com/squizlabs/PHP_CodeSniffer
 #   - name: squizlabs/php_codesniffer
 #     dev: true
-#   ## @see https://github.com/cakephp/cakephp-codesniffer
+#   # @see https://github.com/cakephp/cakephp-codesniffer
 #   - name: cakephp/cakephp-codesniffer
 #     dev: true
 #   ## @see https://phpstan.org/
@@ -45,6 +46,7 @@ cakephp_project_addtitinal_packages: []
 #   ## @see https://fakerphp.github.io/
 #   - name: fakerphp/faker
 #     dev: true
+#   ## @see https://github.com/dereuromark/cakephp-ide-helper
 #   - name: dereuromark/cakephp-ide-helper
 #     dev: true
 #   ## @see https://github.com/cakedc/cakephp-phpstan

@@ -6,12 +6,13 @@
 - name: Setup plugin
   when: package_result.stat.exists
   block:
-    - name: Load plugin setting
+    - name: Add addPlugin statement
       ansible.builtin.lineinfile:
         path: "{{ php_project_tmp_dir }}/src/Application.php"
         regexp: "this->addPlugin\\('Cake/Localized'\\)"
         line: "        $this->addPlugin('Cake/Localized');"
-        insertafter: "^\\s+parent::bootstrap\\(\\);"
+        insertafter: "// Load more plugins here"
+        firstmatch: true
     - name: Create plugin resource directory
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}/resources/{{ item }}"

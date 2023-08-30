@@ -1,0 +1,5 @@
+    /**
+     * @var \Authentication\Controller\Component\AuthenticationComponent
+     */
+    //phpcs:ignore
+    public $Authentication;
