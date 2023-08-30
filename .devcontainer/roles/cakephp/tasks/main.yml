@@ -117,9 +117,10 @@
           /config/app_local.php
           /config/.env
           /config/Migrations/schema-dump-default.lock
-          /logs/*
-          /tmp/*
-          /vendor/*
+          /logs/
+          /tmp/
+          /vendor/
+          /.phpstorm.meta.php/
           ### direnv ###
           .envrc
         cakephp_dot_envrc_value: |
@@ -157,6 +158,14 @@
       ansible.builtin.blockinfile:
         path: "{{ php_project_source_dir }}/.gitignore"
         block: "{{ cakephp_gitignore_value }}"
+    - name: Generate meta file
+      ansible.builtin.command:
+        cmd: bin/cake {{ item }} generate
+        chdir: "{{ php_project_source_dir}}"
+        removes: "{{ php_project_source_dir}}/vendor/vendor/dereuromark/cakephp-ide-helper"
+      loop:
+        - code_completion
+        - phpstorm
     - name: Display direnv setting
       ansible.builtin.debug:
         msg: |
