@@ -43,9 +43,9 @@ repos:
     hooks:
       - id: php-lint
       - id: php-cs
-        args: [--standard=phpcs.xml -p -n]
+        # args: [--standard=phpcs.xml -p]
       - id: php-cbf
-        args: [--standard=phpcs.xml -p]
+        # args: [--standard=phpcs.xml -p]
       - id: php-stan
         args: [--memory-limit=1G]
         # exclude: ^tests/.*$
