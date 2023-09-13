@@ -15,6 +15,11 @@ parameters:
   # 8：null可能な型に対するメソッド呼び出しとプロパティへのアクセスを報告する
   # 9：混合型に厳密であること、この型で唯一許される操作は、この型を別の`mixed`に渡すことである
   level: 6
+  # checkMissingIterableValueType: false
+  # treatPhpDocTypesAsCertain: false
+  # checkGenericClassInNonGenericObjectType: false
+  # bootstrapFiles:
+  #     - config/paths.php
   paths:
     - config
     - src

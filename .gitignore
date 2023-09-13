@@ -6,6 +6,7 @@ Thumbs.db
 
 ### Cache file directory ###
 /.cache/
+*.cache
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

@@ -66,19 +66,19 @@
     - name: Add loadComponent statement
       ansible.builtin.lineinfile:
         path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
-        regexp: "this->loadComponent\\(\\'Authorization\\.Authorization\\'\\)"
+        regexp: "this->loadComponent\\(\\'Authorization\\.Authorization\\'"
         line: "        $this->loadComponent('Authorization.Authorization');"
         insertafter: "^\\s+parent::initialize\\(\\);"
-#    - name: Find Authorization property statement
-#      ansible.builtin.command:
-#        cmd: grep "public \$Authorization;" {{ php_project_tmp_dir }}/src/Controller/AppController.php
-#      register: statement_result
-#      changed_when: false
-#      failed_when: statement_result.rc > 1
-#    - name: Add Authorization property statement
-#      ansible.builtin.blockinfile:
-#        path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
-#        marker: "// {mark} cakephp/authorization ANSIBLE MANAGED BLOCK"
-#        block: "{{ lookup('ansible.builtin.file', 'files/authorization/AuthorizationProperty.txt') }}"
-#        insertbefore: "^}"
-#      when: statement_result.rc == 1
+    - name: Find Authorization property statement
+      ansible.builtin.command:
+        cmd: grep "public \\Authorization\\Controller\\Component\\AuthorizationComponent \$Authorization;" {{ php_project_tmp_dir }}/src/Controller/AppController.php
+      register: statement_result
+      changed_when: false
+      failed_when: statement_result.rc > 1
+    - name: Add Authorization property statement
+      ansible.builtin.blockinfile:
+        path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
+        marker: "// {mark} cakephp/authorization ANSIBLE MANAGED BLOCK"
+        block: "{{ lookup('ansible.builtin.file', 'files/authorization/AuthorizationProperty.txt') }}"
+        insertbefore: "^}"
+      when: statement_result.rc == 1

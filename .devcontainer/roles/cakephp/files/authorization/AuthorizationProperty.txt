@@ -1,5 +1,4 @@
     /**
      * @var \Authorization\Controller\Component\AuthorizationComponent
      */
-    //phpcs:ignore
-    public $Authorization;
+    public \Authorization\Controller\Component\AuthorizationComponent $Authorization;
