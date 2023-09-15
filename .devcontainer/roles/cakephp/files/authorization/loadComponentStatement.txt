@@ -1,0 +1,5 @@
+        $this->loadComponent('Authorization.Authorization', [
+            'skipAuthorization' => [
+                'login',
+            ]
+        ]);

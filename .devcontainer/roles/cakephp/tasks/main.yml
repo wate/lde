@@ -74,12 +74,21 @@
         mode: "0644"
         remote_src: true
       when: cakephp_command_completion_file_result.stat.exists
+    - name: Set additional package names variable
+      ansible.builtin.set_fact:
+        cakephp_additional_package_names: "{{ cakephp_project_additional_packages | map(attribute='name') | map('regex_replace', ':.+', '') }}"
+    - name: Add allow-plugins setting on composer.json
+      ansible.builtin.command:
+        cmd: composer config --no-plugins allow-plugins.phpstan/extension-installer true
+        chdir: "{{ php_project_tmp_dir }}"
+      changed_when: true
+      when: "'phpstan/extension-installer' in cakephp_additional_package_names"
     - name: Add php project dependency packages
       community.general.composer:
         command: require
         arguments: '"{{ item.name }}" {{ item.dev | default(false) | ternary("--dev", "") }}'
         working_dir: "{{ php_project_tmp_dir }}"
-      loop: "{{ cakephp_project_addtitinal_packages | default([]) }}"
+      loop: "{{ cakephp_project_additional_packages | default([]) }}"
       loop_control:
         label: "{{ item.name }}"
     - name: Setup authentication plugin setting
@@ -110,6 +119,18 @@
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}"
         state: absent
+    - name: Create document files
+      block:
+        - name: Create document directory
+          ansible.builtin.file:
+            path: "{{ php_project_source_dir }}/docs"
+            state: directory
+            mode: "0755"
+        - name: Create cheatsheet file
+          ansible.builtin.template:
+            src: cheatsheet.md.j2
+            dest: "{{ php_project_source_dir }}/docs/cheatsheet.md"
+            mode: "0644"
     - name: Set variables
       ansible.builtin.set_fact:
         cakephp_gitignore_value: |

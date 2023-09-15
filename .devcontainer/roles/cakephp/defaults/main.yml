@@ -7,7 +7,7 @@ cakephp_major_version: "4"
 ## --------------
 ## インストールする追加パッケージ
 ## --------------
-cakephp_project_addtitinal_packages: []
+cakephp_project_additional_packages: []
 #   - name: "josegonzalez/dotenv:^4.0"
 #   ## @see https://book.cakephp.org/authentication/2/en/index.html
 #   - name: cakephp/authentication
@@ -41,6 +41,9 @@ cakephp_project_addtitinal_packages: []
 #   ## @see https://phpstan.org/
 #   - name: phpstan/phpstan
 #     dev: true
+#   ## https://github.com/phpstan/extension-installer
+#   - name: phpstan/extension-installer
+#     dev: true
 #   - name: phpunit/phpunit
 #     deb: true
 #   ## @see https://fakerphp.github.io/
@@ -55,6 +58,12 @@ cakephp_project_addtitinal_packages: []
 #   ## @see http://zircote.github.io/swagger-php/
 #   - name: zircote/swagger-php
 #     dev: true
+
+## --------------
+## Localizedプラグインで利用する言語
+## --------------
+cakephp_localized_locales:
+  - ja_JP
 
 ## --------------
 ## データベース接続設定

@@ -1,0 +1,209 @@
+cake command cheat sheet
+=================================
+
+Bake
+---------------------------------
+
+### Core
+
+```sh
+bin/cake bake all
+```
+
+```sh
+bin/cake bake controller all
+```
+
+```sh
+bin/cake bake controller <name>
+```
+
+```sh
+bin/cake bake model all
+```
+
+```sh
+bin/cake bake model <name>
+```
+
+```sh
+bin/cake bake template all
+```
+
+```sh
+bin/cake bake template [<controller>] [<action>]
+```
+
+```sh
+bin/cake bake command <name>
+```
+
+```sh
+bin/cake bake form <name>
+```
+
+```sh
+bin/cake bake behavior <name>
+```
+
+```sh
+bin/cake bake component <name>
+```
+
+```sh
+bin/cake bake helper <name>
+```
+
+```sh
+bin/cake bake plugin <name>
+```
+
+```sh
+bin/cake bake mailer <name>
+```
+
+### Migrations
+
+```sh
+bin/cake bake migration Create<TableName>
+```
+
+```sh
+bin/cake bake migration Add<ColumnName>To<TableName>
+```
+
+```sh
+bin/cake bake migration Remove<ColumnName>From<TableName>
+```
+
+```sh
+bin/cake bake migration Alter<ColumnName>On<TableName>
+```
+
+```sh
+bin/cake bake migration Drop<TableName>
+```
+
+```sh
+bin/cake bake seed <name>
+```
+
+{% if 'cakephp/authorization' in cakephp_additional_package_names %}
+### Authorization
+
+```sh
+bin/cake bake policy --type=entity <name>
+```
+
+```sh
+bin/cake bake policy --type=table <name>
+```
+
+{% endif %}
+Migrations
+---------------------------------
+
+```sh
+bin/cake migrations migrate
+```
+
+```sh
+bin/cake migrations rollback
+```
+
+```sh
+bin/cake migrations seed
+```
+
+Cache
+---------------------------------
+
+```sh
+bin/cake schema_cache build
+```
+
+```sh
+bin/cake schema_cache clear
+```
+
+```sh
+bin/cake cache clear
+```
+
+```sh
+bin/cake cache clear_all
+```
+
+```sh
+bin/cake cache list
+```
+
+I18n
+---------------------------------
+
+```sh
+bin/cake i18n extract [<locale>]
+```
+
+```sh
+bin/cake i18n init [<locale>]
+```
+
+{% if 'dereuromark/cakephp-ide-helper' in cakephp_additional_package_names %}
+IdeHelper
+---------------------------------
+
+```sh
+bin/cake annotate <all|callbacks|classes|commands|components|controllers|helpers|models|routes|shells|templates|view>
+```
+
+```sh
+bin/cake code_completion generate
+```
+
+```sh
+bin/cake phpstorm generate
+```
+
+```sh
+bin/cake illuminator illuminate
+```
+
+{% endif %}
+Plugin
+---------------------------------
+
+```sh
+bin/cake plugin load <Plugin/Name>
+```
+
+```sh
+bin/cake plugin loaded
+```
+
+```sh
+bin/cake plugin unload <Plugin/Name>
+```
+
+```sh
+bin/cake plugin assets copy
+```
+
+```sh
+bin/cake plugin assets remove
+```
+
+```sh
+bin/cake plugin assets symlink
+```
+
+Routes
+---------------------------------
+
+```sh
+bin/cake routes check <url>
+```
+
+```sh
+bin/cake routes generate
+```

@@ -68,19 +68,19 @@
     - name: Add loadComponent statement
       ansible.builtin.lineinfile:
         path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
-        regexp: "this->loadComponent\\(\\'Authentication\\.Authentication\\'"
+        regexp: "this->loadComponent\\(\\'Authentication\\.Authentication\\'\\)"
         line: "        $this->loadComponent('Authentication.Authentication');"
         insertafter: "^\\s+parent::initialize\\(\\);"
     - name: Find Authentication property statement
       ansible.builtin.command:
-        cmd: grep "public \\Authentication\\Controller\\Component\\AuthenticationComponent \$Authentication;" {{ php_project_tmp_dir }}/src/Controller/AppController.php
+        cmd: grep "public .* \$Authentication;" {{ php_project_tmp_dir }}/src/Controller/AppController.php
       register: statement_result
       changed_when: false
       failed_when: statement_result.rc > 1
     - name: Add Authentication property statement
       ansible.builtin.blockinfile:
         path: "{{ php_project_tmp_dir }}/src/Controller/AppController.php"
-        marker: "// {mark} cakephp/authentication ANSIBLE MANAGED BLOCK"
+        marker: "// {mark} cakephp/authentication property ANSIBLE MANAGED BLOCK"
         block: "{{ lookup('ansible.builtin.file', 'files/authentication/AuthenticationProperty.txt') }}"
         insertbefore: "^}"
       when: statement_result.rc == 1

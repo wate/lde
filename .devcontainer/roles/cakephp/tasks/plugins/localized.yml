@@ -15,17 +15,19 @@
         firstmatch: true
     - name: Create plugin resource directory
       ansible.builtin.file:
-        path: "{{ php_project_tmp_dir }}/resources/{{ item }}"
+        path: "{{ php_project_tmp_dir }}/resources/locales"
         state: directory
         mode: "0755"
-      loop:
-        - locales
-        - locales/ja_JP
-      register: resource_locales_dir_result
+    - name: Create plugin resource directory
+      ansible.builtin.file:
+        path: "{{ php_project_tmp_dir }}/resources/locales/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop: "{{ cakephp_localized_locales }}"
     - name: Copy po files
       ansible.builtin.copy:
-        src: "{{ php_project_tmp_dir }}/vendor/cakephp/localized/resources/locales/ja_JP/cake.po"
-        dest: "{{ php_project_tmp_dir }}/resources/locales/ja_JP/cake.po"
+        src: "{{ php_project_tmp_dir }}/vendor/cakephp/localized/resources/locales/{{ item }}/cake.po"
+        dest: "{{ php_project_tmp_dir }}/resources/locales/{{ item }}/cake.po"
         mode: "0644"
         remote_src: true
-      when: resource_locales_dir_result is changed
+      loop: "{{ cakephp_localized_locales }}"

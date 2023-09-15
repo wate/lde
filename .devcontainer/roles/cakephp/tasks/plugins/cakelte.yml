@@ -49,8 +49,40 @@
         mode: "0644"
         remote_src: true
       when: not plugin_config_file_result.stat.exists
-    - name: Copy AdminLte Template Files
+    - name: Copy CakeLte element files
       ansible.builtin.command:
-        cmd: "{{ php_project_tmp_dir }}/bin/cake cakelte copy_files -a -f"
+        cmd: "{{ php_project_tmp_dir }}/bin/cake cakelte copy_files -q {{ item }}"
         chdir: "{{ php_project_tmp_dir }}"
-        creates: "{{ php_project_tmp_dir }}/templates/layout/login.php"
+        creates: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
+      loop:
+        - content
+        - header
+        - footer
+        - sidebar
+    - name: Create CakeLte plugin templates override directory
+      ansible.builtin.stat:
+        path: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
+      register: stat_result
+    - name: Copy CakeLte plugin override layout files
+      when: not stat_result.stat.exists
+      block:
+        - name: Copy CakeLte plugin override layout files
+          ansible.posix.synchronize:
+            src: "{{ php_project_tmp_dir }}/vendor/arodu/cakelte/templates/layout/"
+            dest: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
+          delegate_to: "{{ inventory_hostname }}"
+    - name: Find CakeLte plugin layout files
+      ansible.builtin.find:
+        paths:
+          - "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
+        patterns:
+          - '*.php'
+      register: layout_files_result
+    - name: Remove annotation
+      ansible.builtin.lineinfile:
+        path: "{{ item.path }}"
+        regexp: '^ \* @var .+ \$this->CakeLte'
+        state: absent
+      loop: "{{ layout_files_result.files }}"
+      loop_control:
+        label: "{{ item.path | basename }}"
