@@ -29,13 +29,13 @@
     - name: Check exists composer.json
       ansible.builtin.stat:
         path: "{{ php_project_source_dir }}/composer.json"
-      register: composer_json_result
+      register: cakephp_composer_json_result
     - name: Remove temporary project directory
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}"
         state: absent
     - name: Create PHP project
-      when: not composer_json_result.stat.exists
+      when: not cakephp_composer_json_result.stat.exists
       block:
         - name: Create PHP project
           community.general.composer:
@@ -45,7 +45,7 @@
             prefer_dist: true
             working_dir: "{{ php_project_tmp_dir | dirname }}"
     - name: Setup PHP project
-      when: composer_json_result.stat.exists
+      when: cakephp_composer_json_result.stat.exists
       block:
         - name: Create temporary project directory
           ansible.builtin.file:
@@ -182,8 +182,8 @@
     - name: Generate meta file
       ansible.builtin.command:
         cmd: bin/cake {{ item }} generate
-        chdir: "{{ php_project_source_dir}}"
-        removes: "{{ php_project_source_dir}}/vendor/vendor/dereuromark/cakephp-ide-helper"
+        chdir: "{{ php_project_source_dir }}"
+        removes: "{{ php_project_source_dir }}/vendor/vendor/dereuromark/cakephp-ide-helper"
       loop:
         - code_completion
         - phpstorm

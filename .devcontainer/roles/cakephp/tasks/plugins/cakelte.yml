@@ -49,28 +49,44 @@
         mode: "0644"
         remote_src: true
       when: not plugin_config_file_result.stat.exists
-    - name: Copy CakeLte element files
-      ansible.builtin.command:
-        cmd: "{{ php_project_tmp_dir }}/bin/cake cakelte copy_files -q {{ item }}"
-        chdir: "{{ php_project_tmp_dir }}"
-        creates: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
-      loop:
-        - content
-        - header
-        - footer
-        - sidebar
+    - name: Find CakeLte plugin element files
+      ansible.builtin.find:
+        paths:
+          - "{{ php_project_tmp_dir }}/vendor/arodu/cakelte/templates/element"
+        patterns:
+          - '*.php'
+        recurse: true
+      register: element_files_result
+    - name: Create element file directory
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop: "{{ element_files_result.files | map(attribute='path') | map('dirname') | unique | replace('vendor/arodu/cakelte/', '') }}"
+    - name: Copy CakeLte template files
+      ansible.builtin.include_tasks:
+        file: cakelte/copy_file.yml
+      vars:
+        copy_src: "{{ item }}"
+        copy_dest: "{{ item | replace('vendor/arodu/cakelte/', '') }}"
+      loop: "{{ element_files_result.files | map(attribute='path') }}"
     - name: Create CakeLte plugin templates override directory
       ansible.builtin.stat:
         path: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
-      register: stat_result
-    - name: Copy CakeLte plugin override layout files
-      when: not stat_result.stat.exists
-      block:
-        - name: Copy CakeLte plugin override layout files
-          ansible.posix.synchronize:
-            src: "{{ php_project_tmp_dir }}/vendor/arodu/cakelte/templates/layout/"
-            dest: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
-          delegate_to: "{{ inventory_hostname }}"
+    - name: Find CakeLte plugin element files
+      ansible.builtin.find:
+        paths:
+          - "{{ php_project_tmp_dir }}/vendor/arodu/cakelte/templates/layout"
+        patterns:
+          - '*.php'
+      register: cakelte_layout_files_result
+    - name: Copy CakeLte template files
+      ansible.builtin.include_tasks:
+        file: cakelte/copy_file.yml
+      vars:
+        copy_src: "{{ item }}"
+        copy_dest: "{{ item | replace('vendor/arodu/cakelte/templates/layout/', 'templates/plugin/CakeLte/layout/') }}"
+      loop: "{{ cakelte_layout_files_result.files | map(attribute='path') }}"
     - name: Find CakeLte plugin layout files
       ansible.builtin.find:
         paths:
