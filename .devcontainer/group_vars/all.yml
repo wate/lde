@@ -15,7 +15,7 @@ php_version: "8.2"
 ## --------------
 ## インストールする追加パッケージ
 ## --------------
-cakephp_project_addtitinal_packages: []
+cakephp_project_additional_packages: []
 #   - name: "josegonzalez/dotenv:^4.0"
 #   ## @see https://book.cakephp.org/authentication/2/en/index.html
 #   - name: cakephp/authentication
