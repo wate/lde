@@ -71,8 +71,10 @@
         copy_dest: "{{ item | replace('vendor/arodu/cakelte/', '') }}"
       loop: "{{ element_files_result.files | map(attribute='path') }}"
     - name: Create CakeLte plugin templates override directory
-      ansible.builtin.stat:
+      ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
+        state: directory
+        mode: "0755"
     - name: Find CakeLte plugin element files
       ansible.builtin.find:
         paths:
