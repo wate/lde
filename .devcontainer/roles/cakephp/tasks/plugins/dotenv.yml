@@ -6,9 +6,13 @@
 - name: Setup plugin
   when: package_result.stat.exists
   block:
-    - name: Add parse envfile statement
-      ansible.builtin.blockinfile:
-        path: "{{ php_project_tmp_dir }}/config/bootstrap.php"
-        marker: "// {mark} .env file load and parse block"
-        block: "{{ lookup('ansible.builtin.file', 'files/dotenv/bootstrap.txt') }}"
-        insertafter: "^{{ 'use Cake\\Utility\\Security;' | regex_escape }}"
+    - name: Apply patch .env file parse statement
+      ansible.posix.patch:
+        src: files/dotenv/bootstrap.php.patch
+        dest: "{{ php_project_tmp_dir }}/config/bootstrap.php"
+    # - name: Add parse envfile statement
+    #   ansible.builtin.blockinfile:
+    #     path: "{{ php_project_tmp_dir }}/config/bootstrap.php"
+    #     marker: "// {mark} .env file load and parse block"
+    #     block: "{{ lookup('ansible.builtin.file', 'files/dotenv/bootstrap.txt') }}"
+    #     insertafter: "^{{ 'use Cake\\Utility\\Security;' | regex_escape }}"
