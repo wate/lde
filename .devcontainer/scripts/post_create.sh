@@ -106,7 +106,8 @@ if [ -f composer.json ]; then
   composer install --no-interaction
 fi
 if [ -f package.json ]; then
-  npm install
+  ## @see https://github.com/antfu/ni
+  ni
 fi
 
 pipx install ansible --include-deps

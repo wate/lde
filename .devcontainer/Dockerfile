@@ -42,4 +42,4 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && a2enmod rewrite
 
 ## [Optional] Uncomment this line to install global node packages.
-RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g @antfu/ni" 2>&1
+RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g yarn pnpm @antfu/ni" 2>&1

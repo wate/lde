@@ -6,7 +6,8 @@ if [ -f composer.json ] && [ ! -e vendor ]; then
 fi
 
 if [ -f package.json ] && [ ! -e node_modules ]; then
-  npm install
+  ## @see https://github.com/antfu/ni
+  ni
 fi
 
 if type "direnv" >/dev/null 2>&1 && [ -f .envrc ]; then
