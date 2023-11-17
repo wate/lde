@@ -91,6 +91,9 @@
       loop: "{{ cakephp_project_additional_packages | default([]) }}"
       loop_control:
         label: "{{ item.name }}"
+    - name: Setup dotenv setting
+      ansible.builtin.include_tasks:
+        file: plugins/dotenv.yml
     - name: Setup authentication plugin setting
       ansible.builtin.include_tasks:
         file: plugins/authentication.yml

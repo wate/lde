@@ -20,21 +20,28 @@
         block: "{{ lookup('ansible.builtin.file', 'files/cakephp-ide-helper/addPlugin.txt') }}"
         insertafter: "// Load more plugins here"
       when: statement_result.rc == 1
-    - name: Generate phpstorm meta file
-      ansible.builtin.command:
-        cmd: bin/cake phpstorm generate
-        creates: "{{ php_project_tmp_dir }}/.phpstorm.meta.php"
-        chdir: "{{ php_project_tmp_dir }}"
-    - name: Add annotation
-      ansible.builtin.command:
-        cmd: bin/cake annotate {{ item }}
-        chdir: "{{ php_project_tmp_dir }}"
-      changed_when: true
-      loop:
-        - routes
-        - controllers
-        - components
-        - models
-        - templates
-        - helpers
-        - commands
+    - name: Check exists dotenv
+      ansible.builtin.stat:
+        path: "{{ php_project_tmp_dir }}/vendor/josegonzalez/dotenv"
+      register: dotenv_package_result
+    - name: Execute IDE helper commands
+      when: dotenv_package_result.stat.exists
+      block:
+        - name: Generate phpstorm meta file
+          ansible.builtin.command:
+            cmd: bin/cake phpstorm generate
+            creates: "{{ php_project_tmp_dir }}/.phpstorm.meta.php"
+            chdir: "{{ php_project_tmp_dir }}"
+        - name: Add annotation
+          ansible.builtin.command:
+            cmd: bin/cake annotate {{ item }}
+            chdir: "{{ php_project_tmp_dir }}"
+          changed_when: true
+          loop:
+            - routes
+            - controllers
+            - components
+            - models
+            - templates
+            - helpers
+            - commands
