@@ -7,5 +7,9 @@
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
         $resolver = new OrmResolver();
-        return new AuthorizationService($resolver);
+        $service = new AuthorizationService($resolver);
+        if ($request->getParam('plugin') === 'DebugKit') {
+            $service->skipAuthorization();
+        }
+        return $service;
     }
