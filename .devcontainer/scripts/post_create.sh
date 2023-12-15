@@ -105,6 +105,9 @@ EOT
 if [ -f composer.json ]; then
   composer install --no-interaction
 fi
+
+pnpm config set store-dir ~/.local/share/pnpm/store
+
 if [ -f package.json ]; then
   ## @see https://github.com/antfu/ni
   ni
