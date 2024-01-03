@@ -52,7 +52,7 @@
       value: branch
     ## alias(status)
     - name: alias.st
-      value: status -s
+      value: status -sb
     ## alias(checkout)
     - name: alias.co
       value: checkout
