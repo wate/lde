@@ -115,7 +115,7 @@ fi
 
 pipx install ansible --include-deps
 pipx install mkdocs-material --include-deps
-pipx inject mkdocs-material mkdocs-redirects mkdocs-git-revision-date-localized-plugin mkdocs-exclude
+pipx inject mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox mkdocs-tooltips mkdocs-exclude
 pipx install lizard --include-deps
 pipx install ansible-lint --include-deps
 

@@ -68,22 +68,25 @@ markdown_extensions:
 # hooks:
 #   - mkdocs_hook.py
 plugins:
+  ## https://squidfunk.github.io/mkdocs-material/plugins/search/
   - search:
       lang: ja
+  ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
   - offline
+  ## https://squidfunk.github.io/mkdocs-material/plugins/tags/
+  - tags
+  ## https://squidfunk.github.io/mkdocs-material/reference/images/#lightbox
+  - glightbox
   ## https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
   - git-revision-date-localized:
       type: iso_datetime
       timezone: Asia/Tokyo
       locale: ja
-  - tags
+  ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
+  # - blog
   ## https://roipoussiere.frama.io/mkdocs-tooltips/
   - tooltips
   ## https://github.com/apenwarr/mkdocs-exclude
   - exclude:
       glob:
         - rules/*
-  ## https://liang2kl.cn/mkdocs-blogging-plugin/
-  # - blogging:
-  #     dirs:
-  #       - blog

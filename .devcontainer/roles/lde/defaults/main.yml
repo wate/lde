@@ -12,11 +12,10 @@ lde_env_vars:
 lde_pip_packages: []
 #   - name: mkdocs-material
 #     inject_packages:
-#       - mkdocs-tooltips
 #       - mkdocs-git-revision-date-localized-plugin
+#       - mkdocs-glightbox
+#       - mkdocs-tooltips
 #       - mkdocs-exclude
-#       - mkdocs-redirects
-#       # - mkdocs-blogging-plugin
 #   - name: lizard
 #   - name: ansible
 #   - name: ansible-lint
