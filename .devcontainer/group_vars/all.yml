@@ -419,3 +419,9 @@ cakephp_database_test_url: "\
   &quoteIdentifiers=false\
   &persistent=false
   "
+
+## --------------
+## smapd(SpamAssassin Server)の起動オプション
+## ※--localを付与し、DNSBLのチェックを無効化
+## --------------
+spamassassin_spamd_option: --create-prefs --max-children 5 --helper-home-dir --local --port {{ spamassassin_spamd_port }}
