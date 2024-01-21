@@ -10,7 +10,7 @@
       tags:
         - verify
       block:
-        - name: php-fpmのパッケージ名/サービス名を変数に設定
+        - name: PHP-FPMのパッケージ名/サービス名を変数に設定
           ansible.builtin.set_fact:
             php_fpm_name: "php{{ php_version | default('8.2') }}-fpm"
         ## パッケージ
@@ -31,28 +31,49 @@
             - name: ソースコードディレクトリのシンボリックリンクの確認
               ansible.builtin.stat:
                 path: ~/src
-              register: result
+              register: src_symlink_result
             - name: シンボリックリンクの検証
               ansible.builtin.assert:
                 that:
-                  - result.stat.exists
-                  - result.stat.islnk
-                  - result.stat.lnk_target == '/vagrant'
+                  - src_symlink_result.stat.exists
+                  - src_symlink_result.stat.islnk
+                  - src_symlink_result.stat.lnk_target == '/vagrant'
         ## サービスのテスト
         - name: サービスの情報を取得
           ansible.builtin.service_facts:
-        - name: サービスの状態を検証
+        - name: MariaDBの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['mariadb.service'] is defined
               - ansible_facts.services['mariadb.service']['state'] == 'running'
               - ansible_facts.services['mariadb.service']['status'] == 'enabled'
+        - name: PHP-FPMの稼働状態を検証
+          ansible.builtin.assert:
+            that:
               - ansible_facts.services[php_fpm_name + '.service'] is defined
               - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
               - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
+        - name: Nginxの稼働状態を検証
+          ansible.builtin.assert:
+            that:
               - ansible_facts.services['nginx.service'] is defined
               - ansible_facts.services['nginx.service']['state'] == 'running'
               - ansible_facts.services['nginx.service']['status'] == 'enabled'
+        - name: SpamAssasinデーモンの稼働状態を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services['spamd.service'] is defined
+              - ansible_facts.services['spamd.service']['state'] == 'running'
+              - ansible_facts.services['spamd.service']['status'] == 'enabled'
+        - name: Mailpitデーモンの稼働状態を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services['mailpit.service'] is defined
+              - ansible_facts.services['mailpit.service']['state'] == 'running'
+              - ansible_facts.services['mailpit.service']['status'] == 'enabled'
+        - name: Redisの稼働状態を検証
+          ansible.builtin.assert:
+            that:
               - ansible_facts.services['redis-server.service'] is defined
               - ansible_facts.services['redis-server.service']['state'] == 'running'
               - ansible_facts.services['redis-server.service']['status'] == 'enabled'
@@ -69,11 +90,16 @@
             that:
               ## Nginx / Apache
               - 80 in listen_tcp_posts
-              ## grafana
-              - 3000 in listen_tcp_posts
               ## MariaDB
               - 3306 in listen_tcp_posts
+              ## spamd
+              - 783 in listen_tcp_posts
               ## redis
               - 6379 in listen_tcp_posts
+              ## mailpit
+              - 1025 in listen_tcp_posts
+              - 8025 in listen_tcp_posts
               ## meilisearch
               - 7700 in listen_tcp_posts
+              ## grafana
+              - 3000 in listen_tcp_posts

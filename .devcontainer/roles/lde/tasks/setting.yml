@@ -34,11 +34,6 @@
   loop:
     - bin
     - .local/bin
-- name: Create symlink
-  ansible.builtin.file:
-    src: /vagrant
-    dest: ~/src
-    state: link
 - name: Inclde setting tasks
   ansible.builtin.include_tasks:
     file: tasks/setting/{{ setting_task | basename }}

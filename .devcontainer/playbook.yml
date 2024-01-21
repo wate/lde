@@ -37,6 +37,12 @@
     - role: redis
       tags:
         - role_redis
+    - role: spamassassin
+      tags:
+        - role_spamassassin
+    - role: mailpit
+      tags:
+        - role_mailpit
     - role: tools
       tags:
         - role_tools
@@ -65,6 +71,12 @@
     #   tags:
     #     - role_slim
   tasks:
+    - name: Create symlink
+      ansible.builtin.file:
+        src: /vagrant
+        dest: ~/src
+        state: link
+      become: false
     - name: Check pre-commit config file
       ansible.builtin.stat:
         path: /vagrant/.pre-commit-config.yaml
