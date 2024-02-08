@@ -1,6 +1,14 @@
+/**
+ * メインカラムの幅を調整
+ */
 .md-grid {
   max-width: 80rem;
 }
+/**
+ * git-revision-date-localized
+ * https: //github.com/timvink/mkdocs-git-revision-date-localized-plugin
+ * 最終更新日を右上に表示するためのスタイル
+ */
 .md-content__inner {
   position: relative;
 }
@@ -10,9 +18,11 @@
   right: 10px;
 }
 /**
-  * hint.css customizations
-  * @see https: //github.com/chinchang/hint.css
-  */
+ * tooltips
+ * https: //roipoussiere.frama.io/mkdocs-tooltips/
+ * ツールチップが設定されている文字列のスタイル
+ * @see https: //github.com/chinchang/hint.css
+ */
 [class*="hint--"] {
   border-bottom: 0.05rem dotted var(--md-default-fg-color--light);
 }
