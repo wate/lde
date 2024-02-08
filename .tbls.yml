@@ -174,3 +174,14 @@ lint:
 #         tables:
 #           - comment_stars
 #           - post_comment_stars
+### Templates
+# templates:
+#   dot:
+#     schema: 'templates/schema.dot.tmpl'
+#     table: 'templates/table.dot.tmpl'
+#   puml:
+#     schema: 'templates/schema.puml.tmpl'
+#     table: 'templates/table.puml.tmpl'
+#   md:
+#     index: 'templates/index.md.tmpl'
+#     table: 'templates/table.md.tmpl'
