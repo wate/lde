@@ -61,6 +61,8 @@ dict:
 ### Filter tables
 exclude:
   - phinxlog
+### disableOutputSchema
+# disableOutputSchema: true
 ### Lint
 lint:
   ## require table comment
@@ -149,3 +151,26 @@ lint:
 #     parentTable: comment_stars
 #     parentColumns:
 #       - id
+### ViewPoints
+# viewpoints:
+#   - name: comments on post
+#     desc: Users can comment on each post multiple times and put a star on each comments.
+#     tables:
+#       - users
+#       - posts
+#       - comments
+#       - comment_stars
+#       - post_comments
+#       - post_comment_stars
+#     groups:
+#       - name: Comments
+#         desc: Tables about comments
+#         tables:
+#           - posts
+#           - comments
+#           - post_comments
+#       - name: Stars
+#         desc: Tables about stars
+#         tables:
+#           - comment_stars
+#           - post_comment_stars
