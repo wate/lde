@@ -10,13 +10,20 @@
       tags:
         - verify
       block:
+        - name: インストール済みパッケージの情報を取得
+          ansible.builtin.package_facts:
+            manager: auto
+        - name: 待受ポートの情報を取得
+          community.general.listen_ports_facts:
+            command: ss
+        - name: 取得した待受ポートの情報を加工してテスト用変数に格納
+          ansible.builtin.set_fact:
+            listen_tcp_posts: "{{ ansible_facts.tcp_listen | map(attribute='port') | unique | sort | list }}"
+            listen_udp_posts: "{{ ansible_facts.udp_listen | map(attribute='port') | unique | sort | list }}"
         - name: PHP-FPMのパッケージ名/サービス名を変数に設定
           ansible.builtin.set_fact:
             php_fpm_name: "php{{ php_version | default('8.2') }}-fpm"
         ## パッケージ
-        - name: インストール済みパッケージの情報を取得
-          ansible.builtin.package_facts:
-            manager: auto
         - name: パッケージのインストール状況を検証
           ansible.builtin.assert:
             that:
@@ -24,6 +31,7 @@
               - ansible_facts.packages[php_fpm_name] is defined
               - ansible_facts.packages['nginx'] is defined
               - ansible_facts.packages['redis'] is defined
+            quiet: true
         ## ファイル・ディレクトリ
         - name: シンボリックリンクの確認
           become: false
@@ -38,6 +46,7 @@
                   - src_symlink_result.stat.exists
                   - src_symlink_result.stat.islnk
                   - src_symlink_result.stat.lnk_target == '/vagrant'
+                quiet: true
         ## サービスのテスト
         - name: サービスの情報を取得
           ansible.builtin.service_facts:
@@ -47,44 +56,43 @@
               - ansible_facts.services['mariadb.service'] is defined
               - ansible_facts.services['mariadb.service']['state'] == 'running'
               - ansible_facts.services['mariadb.service']['status'] == 'enabled'
+            quiet: true
         - name: PHP-FPMの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services[php_fpm_name + '.service'] is defined
               - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
               - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
+            quiet: true
         - name: Nginxの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['nginx.service'] is defined
               - ansible_facts.services['nginx.service']['state'] == 'running'
               - ansible_facts.services['nginx.service']['status'] == 'enabled'
+            quiet: true
         - name: SpamAssasinデーモンの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['spamd.service'] is defined
               - ansible_facts.services['spamd.service']['state'] == 'running'
               - ansible_facts.services['spamd.service']['status'] == 'enabled'
+            quiet: true
         - name: Mailpitデーモンの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['mailpit.service'] is defined
               - ansible_facts.services['mailpit.service']['state'] == 'running'
               - ansible_facts.services['mailpit.service']['status'] == 'enabled'
+            quiet: true
         - name: Redisの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['redis-server.service'] is defined
               - ansible_facts.services['redis-server.service']['state'] == 'running'
               - ansible_facts.services['redis-server.service']['status'] == 'enabled'
+            quiet: true
         ## 待受ポート
-        - name: 待受ポートの情報を取得
-          community.general.listen_ports_facts:
-            command: ss
-        - name: 取得した待受ポートの情報を加工してテスト用変数に格納
-          ansible.builtin.set_fact:
-            listen_tcp_posts: "{{ ansible_facts.tcp_listen | map(attribute='port') | unique | sort | list }}"
-            listen_udp_posts: "{{ ansible_facts.udp_listen | map(attribute='port') | unique | sort | list }}"
         - name: 待受ポートを検証
           ansible.builtin.assert:
             that:
@@ -103,3 +111,4 @@
               - 7700 in listen_tcp_posts
               ## grafana
               - 3000 in listen_tcp_posts
+            quiet: true

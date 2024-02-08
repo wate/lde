@@ -1,10 +1,5 @@
 ---
 ## ---------
-## backportsをデフォルトリリースに設定するか否か
-## ---------
-common_apt_default_release_backports: false
-
-## ---------
 ## インストールするPHPのバージョン
 ##
 ## 対応バージョン：5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0 / 8.2 / **8.2**
@@ -379,22 +374,6 @@ postgresql_databases:
     encoding: utf8
   - <<: *db_app_prod
     encoding: utf8
-
-## -----------------
-## インストールするpipパッケージ
-## -----------------
-lde_pip_packages:
-  - name: mkdocs-material
-    inject_packages:
-      - mkdocs-tooltips
-      - mkdocs-git-revision-date-localized-plugin
-      - mkdocs-exclude
-      - mkdocs-redirects
-      # - mkdocs-blogging-plugin
-  - name: lizard
-  - name: ansible
-  - name: ansible-lint
-
 
 ## --------------
 ## CekePHPプロジェクトのデータベース設定
