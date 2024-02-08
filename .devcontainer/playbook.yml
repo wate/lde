@@ -58,10 +58,10 @@
     - role: grafana
       tags:
         - role_grafana
-    # - role: lde
-    #   become: false
-    #   tags:
-    #     - role_lde
+    - role: lde
+      become: false
+      tags:
+        - role_lde
     # - role: cakephp
     #   become: false
     #   tags:
