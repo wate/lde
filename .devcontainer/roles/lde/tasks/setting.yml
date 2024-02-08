@@ -24,7 +24,7 @@
         src: /vagrant
         owner: vagrant
         group: vagrant
-        mode: "{{ php_project_doc_root_mode }}"
+        mode: "{{ php_project_doc_root_mode | default(omit) }}"
         state: link
 - name: Create user directory
   ansible.builtin.file:

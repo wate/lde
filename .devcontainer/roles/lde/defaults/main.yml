@@ -30,7 +30,7 @@ php_project_allow_dev_ports:
 ## --------------
 ## ドキュメントルートのアクセス権
 ## --------------
-php_project_doc_root_mode: omit
+# php_project_doc_root_mode: "0755"
 
 ## -----------------
 ## gitの設定(名前)
