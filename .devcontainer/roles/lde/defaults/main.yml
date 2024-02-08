@@ -7,9 +7,9 @@ lde_env_vars:
   TBLS_DOC_PATH: /vagrant/docs/schema
 
 ## -----------------
-## インストールするpipパッケージ
+## pipxでインストールするパッケージ
 ## -----------------
-lde_pip_packages: []
+lde_pipx_packages: []
 #   - name: mkdocs-material
 #     inject_packages:
 #       - mkdocs-git-revision-date-localized-plugin

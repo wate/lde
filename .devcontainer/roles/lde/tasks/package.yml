@@ -3,15 +3,6 @@
 - name: Install development tools
   become: true
   block:
-    - name: Install pre-commit
-      ansible.builtin.apt:
-        name: pre-commit
-    - name: Install Graphviz
-      ansible.builtin.apt:
-        name: graphviz
-    # - name: Install PlantUML
-    #   ansible.builtin.apt:
-    #     name: plantuml
     - name: Install phpDocumentor
       ansible.builtin.get_url:
         url: https://phpdoc.org/phpDocumentor.phar
@@ -22,10 +13,10 @@
     name: "{{ item.name }}"
     state: install
     install_deps: true
-  loop: "{{ lde_pip_packages }}"
-- name: Inject pip packages
+  loop: "{{ lde_pipx_packages }}"
+- name: Inject packages
   community.general.pipx:
     name: "{{ item.name }}"
     state: inject
     inject_packages: "{{ item.inject_packages }}"
-  loop: "{{ lde_pip_packages | selectattr('inject_packages', 'defined') | list }}"
+  loop: "{{ lde_pipx_packages | selectattr('inject_packages', 'defined') | list }}"
