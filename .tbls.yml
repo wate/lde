@@ -9,7 +9,7 @@ name: Database Schema
 ### Document path
 docPath: /vagrant/src/docs/schema
 ### DSN(Data Source Name)
-dsn: mariadb://app_dev:app_dev_P455w0rd@localhost:3306/app_dev
+dsn: mariadb://app_dev:app_dev_password@localhost:3306/app_dev
 # dsn: postgres://app_dev:app_dev_P455w0rd@localhost:5432/app_dev
 # dsn: sqlite:///path/to/dbname.db
 ### Table format
