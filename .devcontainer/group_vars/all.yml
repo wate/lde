@@ -278,6 +278,7 @@ php_packages:
 php_cli_cfg: |
   date.timezone = Asia/Tokyo
   sendmail_path = /usr/local/bin/mailpit sendmail
+
 ## ---------
 ## PHPの設定(php-fpm)
 ## ---------
@@ -289,6 +290,7 @@ php_fpm_cfg: |
   xdebug.client_port = 9003
   xdebug.client_host = localhost
   xdebug.start_with_request = yes
+
 ## ---------
 ## PHPの設定(apache)
 ## ---------
