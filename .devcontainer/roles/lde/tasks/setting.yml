@@ -17,7 +17,9 @@
       ansible.builtin.file:
         path: /var/www/html
         state: absent
-      when: result.stat.isdir
+      when:
+        - result.stat.exists
+        - result.stat.isdir
     - name: Create Symlink
       ansible.builtin.file:
         path: /var/www/html
