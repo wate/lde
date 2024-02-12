@@ -52,15 +52,15 @@
     - role: phpredisadmin
       tags:
         - role_phpredisadmin
-    - role: meilisearch
-      tags:
-        - role_meilisearch
     - role: logio
       tags:
         - role_logio
-    - role: grafana
+    - role: meilisearch
       tags:
-        - role_grafana
+        - role_meilisearch
+    # - role: grafana
+    #   tags:
+    #     - role_grafana
     - role: lde
       become: false
       tags:

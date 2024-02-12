@@ -132,6 +132,27 @@ nginx_vhosts:
       - pattern: "/\\.ht"
         match_type: "~"
         content: "deny all;"
+  - name: log.io
+    server_name: "log.{{ domain }}"
+    access_log: /var/log/nginx/logio.access.log
+    error_log: /var/log/nginx/logio.error.log
+    client_max_body_size: 0
+    pre_extra_setting: |
+      map $http_upgrade $connection_upgrade {
+          default upgrade;
+          ''      close;
+      }
+    locations:
+      - pattern: /
+        content: |
+          proxy_pass http://127.0.0.1:{{ logio_server_cfg.httpServer.port | default(6688) }};
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $connection_upgrade;
+          include proxy_params;
+      - pattern: "/\\.ht"
+        match_type: "~"
+        content: "deny all;"
   - name: meilisearch
     server_name: "search.{{ domain }}"
     access_log: /var/log/nginx/meilisearch.access.log
@@ -145,19 +166,19 @@ nginx_vhosts:
       - pattern: "/\\.ht"
         match_type: "~"
         content: "deny all;"
-  - name: grafana
-    server_name: "monitor.{{ domain }}"
-    access_log: /var/log/nginx/grafana.access.log
-    error_log: /var/log/nginx/grafana.error.log
-    client_max_body_size: 0
-    locations:
-      - pattern: /
-        content: |
-          proxy_pass http://127.0.0.1:{{ grafana_port | default('3000') }};
-          include proxy_params;
-      - pattern: "/\\.ht"
-        match_type: "~"
-        content: "deny all;"
+  # - name: grafana
+  #   server_name: "monitor.{{ domain }}"
+  #   access_log: /var/log/nginx/grafana.access.log
+  #   error_log: /var/log/nginx/grafana.error.log
+  #   client_max_body_size: 0
+  #   locations:
+  #     - pattern: /
+  #       content: |
+  #         proxy_pass http://127.0.0.1:{{ grafana_port | default('3000') }};
+  #         include proxy_params;
+  #     - pattern: "/\\.ht"
+  #       match_type: "~"
+  #       content: "deny all;"
 
 ## --------------
 ## Apacheのバーチャルホストの設定
@@ -172,7 +193,7 @@ apache_vhosts:
       - index.php
     options:
       - "-Indexes"
-      - "+FollowSymLinks"
+      - "+SymLinksIfOwnerMatch"
     allow_override: All
     custom_log:
       path: /var/log/apache2/access.log
@@ -210,7 +231,21 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/mailpit.error.log
       log_level: warn
-  - name: 092-meilisearch
+  - name: 092-log.io
+    server_name: "log.{{ domain }}"
+    proxy_pass:
+      - from: /
+        to: "http://127.0.0.1:{{ logio_server_cfg.httpServer.port | default('6688') }}/"
+    proxy_pass_reverse:
+      - from: /
+        to: "http://127.0.0.1:{{ logio_server_cfg.httpServer.port | default('6688') }}/"
+    custom_log:
+      path: /var/log/apache2/logio.access.log
+      format: combined
+    error_log:
+      path: /var/log/apache2/logio.error.log
+      log_level: warn
+  - name: 093-meilisearch
     server_name: "search.{{ domain }}"
     proxy_pass:
       - from: /
@@ -224,20 +259,20 @@ apache_vhosts:
     error_log:
       path: /var/log/apache2/meilisearch.error.log
       log_level: warn
-  - name: 093-grafana
-    server_name: "monitor.{{ domain }}"
-    proxy_pass:
-      - from: /
-        to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
-    proxy_pass_reverse:
-      - from: /
-        to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
-    custom_log:
-      path: /var/log/apache2/grafana.access.log
-      format: combined
-    error_log:
-      path: /var/log/apache2/grafana.error.log
-      log_level: warn
+  # - name: 094-grafana
+  #   server_name: "monitor.{{ domain }}"
+  #   proxy_pass:
+  #     - from: /
+  #       to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
+  #   proxy_pass_reverse:
+  #     - from: /
+  #       to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
+  #   custom_log:
+  #     path: /var/log/apache2/grafana.access.log
+  #     format: combined
+  #   error_log:
+  #     path: /var/log/apache2/grafana.error.log
+  #     log_level: warn
 
 ## --------------
 ## ApacheのVagrant用設定
@@ -406,3 +441,21 @@ cakephp_database_test_url: "\
 ## ※--localを付与し、DNSBLのチェックを無効化
 ## --------------
 spamassassin_spamd_option: --create-prefs --max-children 5 --helper-home-dir --local --port {{ spamassassin_spamd_port }}
+
+logio_file_input_cfg:
+  messageServer:
+    port: 6689
+    host: 127.0.0.1
+  inputs:
+    - source: lde
+      stream: nginx-access
+      config:
+        path: /var/log/nginx/access.log
+    - source: lde
+      stream: nginx-error
+      config:
+        path: /var/log/nginx/error.log
+    - source: lde
+      stream: mail
+      config:
+        path: /var/log/mail.log
