@@ -442,6 +442,20 @@ cakephp_database_test_url: "\
 ## --------------
 spamassassin_spamd_option: --create-prefs --max-children 5 --helper-home-dir --local --port {{ spamassassin_spamd_port }}
 
+## --------------
+## Material for Mkdocsのインストール
+## --------------
+lde_pipx_packages:
+  - name: mkdocs-material
+    inject_packages:
+      - mkdocs-git-revision-date-localized-plugin
+      - mkdocs-glightbox
+      - mkdocs-tooltips
+      - mkdocs-exclude
+
+## --------------
+## ログファイルのブラウザ出力設定
+## --------------
 logio_file_input_cfg:
   messageServer:
     port: 6689
