@@ -1,6 +1,5 @@
 ---
 # code: language=ansible
-# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json
 - name: 仮想マシンの検証
   hosts: all
   gather_facts: false
@@ -13,6 +12,8 @@
         - name: インストール済みパッケージの情報を取得
           ansible.builtin.package_facts:
             manager: auto
+        - name: サービスの情報を取得
+          ansible.builtin.service_facts:
         - name: 待受ポートの情報を取得
           community.general.listen_ports_facts:
             command: ss
@@ -47,16 +48,20 @@
                   - src_symlink_result.stat.islnk
                   - src_symlink_result.stat.lnk_target == '/vagrant'
                 quiet: true
-        ## サービスのテスト
-        - name: サービスの情報を取得
-          ansible.builtin.service_facts:
-        - name: MariaDBの稼働状態を検証
+        ## データベースサーバーのテスト
+        - name: データベースサーバーの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['mariadb.service'] is defined
               - ansible_facts.services['mariadb.service']['state'] == 'running'
               - ansible_facts.services['mariadb.service']['status'] == 'enabled'
             quiet: true
+        - name: データベースサーバーの待受ポートを検証
+          ansible.builtin.assert:
+            that:
+              - 3306 in listen_tcp_posts
+            quiet: true
+        ## PHP-FPMのテスト
         - name: PHP-FPMの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -64,27 +69,48 @@
               - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
               - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
             quiet: true
-        - name: Nginxの稼働状態を検証
+        ## Webサーバーのテスト
+        - name: Webサーバーの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['nginx.service'] is defined
               - ansible_facts.services['nginx.service']['state'] == 'running'
               - ansible_facts.services['nginx.service']['status'] == 'enabled'
             quiet: true
-        - name: SpamAssasinデーモンの稼働状態を検証
+        - name: Webサーバーの待受ポートを検証
+          ansible.builtin.assert:
+            that:
+              ## Nginx / Apache
+              - 80 in listen_tcp_posts
+            quiet: true
+        ## SpamAssasinのテスト
+        - name: SpamAssasinの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['spamd.service'] is defined
               - ansible_facts.services['spamd.service']['state'] == 'running'
               - ansible_facts.services['spamd.service']['status'] == 'enabled'
             quiet: true
-        - name: Mailpitデーモンの稼働状態を検証
+        - name: SpammAssasinの待受ポートを検証
+          ansible.builtin.assert:
+            that:
+              - 783 in listen_tcp_posts
+            quiet: true
+        ## Mailpitのテスト
+        - name: Mailpitの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['mailpit.service'] is defined
               - ansible_facts.services['mailpit.service']['state'] == 'running'
               - ansible_facts.services['mailpit.service']['status'] == 'enabled'
             quiet: true
+        - name: Mailpitの待受ポートを検証
+          ansible.builtin.assert:
+            that:
+              - 1025 in listen_tcp_posts
+              - 8025 in listen_tcp_posts
+            quiet: true
+        ## Redisのテスト
         - name: Redisの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -92,23 +118,43 @@
               - ansible_facts.services['redis-server.service']['state'] == 'running'
               - ansible_facts.services['redis-server.service']['status'] == 'enabled'
             quiet: true
-        ## 待受ポート
-        - name: 待受ポートを検証
+        - name: Redisの待受ポートを検証
           ansible.builtin.assert:
             that:
-              ## Nginx / Apache
-              - 80 in listen_tcp_posts
-              ## MariaDB
-              - 3306 in listen_tcp_posts
-              ## spamd
-              - 783 in listen_tcp_posts
-              ## redis
               - 6379 in listen_tcp_posts
-              ## mailpit
-              - 1025 in listen_tcp_posts
-              - 8025 in listen_tcp_posts
-              ## meilisearch
+            quiet: true
+        ## Log.ioサーバーのテスト
+        - name: Log.ioサーバーの稼働状態を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services['log.io-server.service'] is defined
+              - ansible_facts.services['log.io-server.service']['state'] == 'running'
+              - ansible_facts.services['log.io-server.service']['status'] == 'enabled'
+            quiet: true
+        - name: Log.ioサーバーの待受ポートを検証
+          ansible.builtin.assert:
+            that:
+              - 6688 in listen_tcp_posts
+              - 6689 in listen_tcp_posts
+            quiet: true
+        ## Log.ioファイル監視サーバーのテスト
+        - name: Log.ioファイル監視サーバーの稼働状態を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services['log.io-file-input.service'] is defined
+              - ansible_facts.services['log.io-file-input.service']['state'] == 'running'
+              - ansible_facts.services['log.io-file-input.service']['status'] == 'enabled'
+            quiet: true
+        ## Meilisearchのテスト
+        - name: Meilisearchの稼働状態を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services['meilisearch.service'] is defined
+              - ansible_facts.services['meilisearch.service']['state'] == 'running'
+              - ansible_facts.services['meilisearch.service']['status'] == 'enabled'
+            quiet: true
+        - name: Meilisearchの待受ポートを検証
+          ansible.builtin.assert:
+            that:
               - 7700 in listen_tcp_posts
-              ## grafana
-              - 3000 in listen_tcp_posts
             quiet: true
