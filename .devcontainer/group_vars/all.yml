@@ -457,9 +457,6 @@ lde_pipx_packages:
 ## ログファイルのブラウザ出力設定
 ## --------------
 logio_file_input_cfg:
-  messageServer:
-    port: 6689
-    host: 127.0.0.1
   inputs:
     - source: lde
       stream: nginx-access
