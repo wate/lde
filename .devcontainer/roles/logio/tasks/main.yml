@@ -1,0 +1,60 @@
+---
+- name: Install log.io
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+  loop:
+    - log.io
+    - log.io-file-input
+- name: Create log.io server group
+  ansible.builtin.group:
+    name: "{{ logio_server_group }}"
+    system: true
+- name: Create log.io server user
+  ansible.builtin.user:
+    name: "{{ logio_server_user }}"
+    group: "{{ logio_server_group }}"
+    system: true
+- name: Create log.io file input group
+  ansible.builtin.group:
+    name: "{{ logio_file_input_group }}"
+    system: true
+- name: Create log.io file input user
+  ansible.builtin.user:
+    name: "{{ logio_file_input_user }}"
+    group: "{{ logio_file_input_group }}"
+    groups: "{{ logio_file_input_groups }}"
+    system: true
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ logio_config_dir }}"
+    state: directory
+    mode: "0755"
+- name: Create/update server config
+  ansible.builtin.template:
+    src: server.json.j2
+    dest: "{{ logio_config_dir }}/server.json"
+    owner: "{{ logio_server_user }}"
+    group: "{{ logio_server_group }}"
+    mode: "0644"
+  notify: Restart log.io-server
+- name: Create/update file input config
+  ansible.builtin.template:
+    src: file.json.j2
+    dest: "{{ logio_config_dir }}/file.json"
+    owner: "{{ logio_file_input_user }}"
+    group: "{{ logio_file_input_group }}"
+    mode: "0644"
+  notify: Restart log.io-file-input
+- name: Create/update log.io-server systemd unit file
+  ansible.builtin.template:
+    src: log.io-server.service.j2
+    dest: /lib/systemd/system/log.io-server.service
+    mode: "0644"
+  notify: Restart log.io-server
+- name: Create/update log.io-server systemd unit file
+  ansible.builtin.template:
+    src: log.io-file-input.service.j2
+    dest: /lib/systemd/system/log.io-file-input.service
+    mode: "0644"
+  notify: Restart log.io-file-input

@@ -56,6 +56,7 @@ Vagrant.configure("2") do |config|
     "cache." + vm_domain,
     "mail." + vm_domain,
     "search." + vm_domain,
+    "log." + vm_domain,
     "monitor." + vm_domain,
   ]
   vm_host_envs = ENV.select { |k,v| k.match?(/^VAGRANT_VM_HOST_/) }

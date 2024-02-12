@@ -1,0 +1,10 @@
+---
+logio_config_dir: /etc/log.io
+## ログ表示サーバー用ユーザー
+logio_server_user: logio-server
+## ログ表示サーバー用グループ
+logio_server_group: logio-server
+## ログファイル監視用ユーザー
+logio_file_input_user: logio-file-input
+## ログファイル監視用グループ
+logio_file_input_group: logio-file-input

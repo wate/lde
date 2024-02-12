@@ -55,6 +55,9 @@
     - role: meilisearch
       tags:
         - role_meilisearch
+    - role: logio
+      tags:
+        - role_logio
     - role: grafana
       tags:
         - role_grafana
