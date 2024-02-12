@@ -17,7 +17,6 @@ logio_server_cfg:
   #   users:
   #     username1: password1
 
-
 ## ---
 ## ログファイル監視ユーザーが所属するグループ
 ## ---
@@ -33,14 +32,15 @@ logio_file_input_cfg:
     port: 6689
     host: 127.0.0.1
   inputs: []
-  #   - source: server1
-  #     stream: app1
-  #     config:
-  #       path: log.io-demo/file-generator/app1-server1.log
-  #   - source: server2
-  #     stream: system-logs
-  #     config:
-  #       path: /var/log/**/*.log
-  #       watcherOptions:
-  #         ignored: "*.txt"
-  #         depth: 99
+    # - source: lde
+    #   stream: nginx-access
+    #   config:
+    #     path: /var/log/nginx/access.log
+    # - source: lde
+    #   stream: nginx-error
+    #   config:
+    #     path: /var/log/nginx/error.log
+    # - source: lde
+    #   stream: mail
+    #   config:
+    #     path: /var/log/mail.log

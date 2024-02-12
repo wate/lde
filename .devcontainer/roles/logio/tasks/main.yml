@@ -58,3 +58,15 @@
     dest: /lib/systemd/system/log.io-file-input.service
     mode: "0644"
   notify: Restart log.io-file-input
+- name: Service log.io-server is active and enabled on system startup
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: log.io-server
+    state: started
+    enabled: true
+- name: Service log.io-file-input is active and enabled on system startup
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: log.io-file-input
+    state: started
+    enabled: true
