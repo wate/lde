@@ -1,0 +1,15 @@
+[Unit]
+Description=log.io - Real-time log monitoring server
+Documentation=http://logio.org/
+After=network.target
+
+[Service]
+Type=exec
+Environment=LOGIO_SERVER_CONFIG_PATH={{ logio_config_dir }}/server.json
+User={{ logio_server_user }}
+Group={{ logio_server_group }}
+ExecStart=/usr/bin/log.io-server
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

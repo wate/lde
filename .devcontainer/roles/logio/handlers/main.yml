@@ -1,0 +1,12 @@
+# code: language=ansible
+---
+- name: Restart log.io-server
+  ansible.builtin.systemd:
+    name: log.io-server
+    state: restarted
+    daemon_reload: true
+- name: Restart log.io-file-input
+  ansible.builtin.systemd:
+    name: log.io-file-input
+    state: restarted
+    daemon_reload: true

@@ -45,10 +45,6 @@ Vagrant.configure("2") do |config|
   # --------
   # Plugin
   # --------
-  ## plugin vagrant-vbguest
-  if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = false
-  end
   vm_domain = ENV["VAGRANT_VM_DOMAIN"] || "lde.local"
   vm_host_aliases = [
     vm_domain,
@@ -56,7 +52,8 @@ Vagrant.configure("2") do |config|
     "cache." + vm_domain,
     "mail." + vm_domain,
     "search." + vm_domain,
-    "monitor." + vm_domain,
+    "log." + vm_domain,
+    # "monitor." + vm_domain,
   ]
   vm_host_envs = ENV.select { |k,v| k.match?(/^VAGRANT_VM_HOST_/) }
   unless vm_host_envs.empty?

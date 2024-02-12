@@ -1,0 +1,17 @@
+[Unit]
+Description=log.io - Real-time log monitoring
+Documentation=http://logio.org/
+After=network.target
+
+[Service]
+Type=exec
+Environment=LOGIO_FILE_INPUT_CONFIG_PATH={{ logio_config_dir }}/file.json
+User={{ logio_file_input_user }}
+Group={{ logio_file_input_group }}
+ExecStart=/usr/bin/log.io-file-input
+Restart=always
+RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target
+

@@ -74,7 +74,7 @@ plugins:
   - offline
   ## https://squidfunk.github.io/mkdocs-material/plugins/tags/
   - tags
-  ## https://squidfunk.github.io/mkdocs-material/reference/images/#lightbox
+  ## https://github.com/blueswen/mkdocs-glightbox
   - glightbox
   ## https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
   - git-revision-date-localized:
