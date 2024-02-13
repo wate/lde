@@ -442,6 +442,12 @@ cakephp_database_test_url: "\
 ## --------------
 spamassassin_spamd_option: --create-prefs --max-children 5 --helper-home-dir --local --port {{ spamassassin_spamd_port }}
 
+## -----------------
+## Meilisearchのマスターキー
+## ※`meilisearch_cfg.env`が`production`の場合に、16バイト以上のUTF-8文字列を必須
+## -----------------
+# meilisearch_master_key: aSampleMasterKey
+
 ## --------------
 ## Material for Mkdocsのインストール
 ## --------------
