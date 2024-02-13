@@ -1,5 +1,7 @@
 ---
 site_name: システムドキュメント
+##「sitemap.xml」を正しく出力するには「site_url」の設定を有効化する必要あり
+# site_url: http://doc.example.com/
 theme:
   # https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
   name: material
