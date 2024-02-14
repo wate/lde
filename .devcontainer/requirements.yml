@@ -42,7 +42,4 @@ roles:
   - name: meilisearch
     src: https://github.com/wate/ansible-role-meilisearch
     version: develop
-  - name: grafana
-    src: https://github.com/wate/ansible-role-grafana
-    version: develop
 collections: []
