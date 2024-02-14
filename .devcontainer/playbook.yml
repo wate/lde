@@ -58,9 +58,6 @@
     - role: meilisearch
       tags:
         - role_meilisearch
-    # - role: grafana
-    #   tags:
-    #     - role_grafana
     - role: lde
       become: false
       tags:
@@ -69,10 +66,6 @@
     #   become: false
     #   tags:
     #     - role_cakephp
-    # - role: slim
-    #   become: false
-    #   tags:
-    #     - role_slim
   tasks:
     - name: Create symlink
       ansible.builtin.file:
