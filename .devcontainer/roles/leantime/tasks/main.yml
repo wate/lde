@@ -1,0 +1,14 @@
+---
+- name: Execute dependency task
+  ansible.builtin.import_tasks:
+    file: dependency.yml
+- name: Setup Leantime
+  become: true
+  become_user: "{{ leantime_owner }}"
+  block:
+    - name: Execute package task
+      ansible.builtin.import_tasks:
+        file: package.yml
+    - name: Execute setting task
+      ansible.builtin.import_tasks:
+        file: setting.yml

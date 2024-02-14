@@ -1,0 +1,8 @@
+---
+- name: Create install directory
+  ansible.builtin.file:
+    path: "{{ leantime_dest }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ leantime_owner }}"
+    group: "{{ leantime_group }}"

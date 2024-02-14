@@ -1,0 +1,38 @@
+---
+- name: Replace Apache option
+  ansible.builtin.replace:
+    path: "{{ leantime_dest }}/public/.htaccess"
+    regexp: FollowSymLinks
+    replace: SymLinksIfOwnerMatch
+- name: Check .env file
+  ansible.builtin.stat:
+    path: "{{ leantime_dest }}/config/.env"
+  register: dotenv_stat_result
+- name: Copy default .env file
+  ansible.builtin.copy:
+    src: "{{ leantime_dest }}/config/sample.env"
+    dest: "{{ leantime_dest }}/config/.env"
+    mode: "0600"
+    remote_src: true
+  when: not dotenv_stat_result.stat.exists
+  register: generate_dotenv
+- name: Update .env file
+  ansible.builtin.lineinfile:
+    path: "{{ leantime_dest }}/config/.env"
+    regexp: ^{{ item.key }}\s+=
+    line: "{{ item.key }} = {{ '\"' + item.value + '\"' if item.value is string else item.value }}"
+  loop: "{{ leantime_env | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+- name: Execute database migration
+  ansible.builtin.command:
+    cmd: >
+      ./bin/leantime db:migrate
+      {% if generate_dotenv is changed -%}
+      --email={{ leantime_initial_acount.admin_email }}
+      --password={{ leantime_initial_acount.admin_password }}
+      --company-name={{ leantime_initial_acount.company_name }}
+      --first-name={{ leantime_initial_acount.first_name }}
+      --last-name={{ leantime_initial_acount.last_name }}
+      {% endif %}
+    chdir: "{{ leantime_dest }}"
