@@ -20,7 +20,7 @@ leantime_env:
 ## --------------
 ## 初期インストール時に登録するアカウント
 ## --------------
-leantime_initial_acount:
+leantime_initial_account:
   admin_email: admin@{{ inventory_hostname }}
   admin_password: password
   company_name: 山田商店

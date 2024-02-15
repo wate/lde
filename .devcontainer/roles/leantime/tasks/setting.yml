@@ -29,10 +29,10 @@
     cmd: >
       ./bin/leantime db:migrate
       {% if generate_dotenv is changed -%}
-      --email={{ leantime_initial_acount.admin_email }}
-      --password={{ leantime_initial_acount.admin_password }}
-      --company-name={{ leantime_initial_acount.company_name }}
-      --first-name={{ leantime_initial_acount.first_name }}
-      --last-name={{ leantime_initial_acount.last_name }}
+      --email={{ leantime_initial_account.admin_email }}
+      --password={{ leantime_initial_account.admin_password }}
+      --company-name={{ leantime_initial_account.company_name }}
+      --first-name={{ leantime_initial_account.first_name }}
+      --last-name={{ leantime_initial_account.last_name }}
       {% endif %}
     chdir: "{{ leantime_dest }}"
