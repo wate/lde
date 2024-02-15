@@ -19,7 +19,7 @@
 - name: Update .env file
   ansible.builtin.lineinfile:
     path: "{{ leantime_dest }}/config/.env"
-    regexp: ^{{ item.key }}\s+=
+    regexp: ^{{ item.key }}\s*=
     line: "{{ item.key }} = {{ '\"' + item.value + '\"' if item.value is string else item.value }}"
   loop: "{{ leantime_env | default({}) | dict2items }}"
   loop_control:
