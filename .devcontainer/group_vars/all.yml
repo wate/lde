@@ -161,24 +161,11 @@ nginx_vhosts:
     locations:
       - pattern: /
         content: |
-          proxy_pass http://127.0.0.1:{{ meilisearch_port | default('7700') }};
+          proxy_pass http://127.0.0.1:{{ meilisearch_port | default(7700) }};
           include proxy_params;
       - pattern: "/\\.ht"
         match_type: "~"
         content: "deny all;"
-  # - name: grafana
-  #   server_name: "monitor.{{ domain }}"
-  #   access_log: /var/log/nginx/grafana.access.log
-  #   error_log: /var/log/nginx/grafana.error.log
-  #   client_max_body_size: 0
-  #   locations:
-  #     - pattern: /
-  #       content: |
-  #         proxy_pass http://127.0.0.1:{{ grafana_port | default('3000') }};
-  #         include proxy_params;
-  #     - pattern: "/\\.ht"
-  #       match_type: "~"
-  #       content: "deny all;"
 
 ## --------------
 ## Apacheのバーチャルホストの設定
@@ -235,10 +222,10 @@ apache_vhosts:
     server_name: "log.{{ domain }}"
     proxy_pass:
       - from: /
-        to: "http://127.0.0.1:{{ logio_server_cfg.httpServer.port | default('6688') }}/"
+        to: "http://127.0.0.1:{{ logio_server_cfg.httpServer.port | default(6688) }}/"
     proxy_pass_reverse:
       - from: /
-        to: "http://127.0.0.1:{{ logio_server_cfg.httpServer.port | default('6688') }}/"
+        to: "http://127.0.0.1:{{ logio_server_cfg.httpServer.port | default(6688) }}/"
     custom_log:
       path: /var/log/apache2/logio.access.log
       format: combined
@@ -249,30 +236,16 @@ apache_vhosts:
     server_name: "search.{{ domain }}"
     proxy_pass:
       - from: /
-        to: "http://127.0.0.1:{{ meilisearch_port | default('7700') }}/"
+        to: "http://127.0.0.1:{{ meilisearch_port | default(7700) }}/"
     proxy_pass_reverse:
       - from: /
-        to: "http://127.0.0.1:{{ meilisearch_port | default('7700') }}/"
+        to: "http://127.0.0.1:{{ meilisearch_port | default(7700) }}/"
     custom_log:
       path: /var/log/apache2/meilisearch.access.log
       format: combined
     error_log:
       path: /var/log/apache2/meilisearch.error.log
       log_level: warn
-  # - name: 094-grafana
-  #   server_name: "monitor.{{ domain }}"
-  #   proxy_pass:
-  #     - from: /
-  #       to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
-  #   proxy_pass_reverse:
-  #     - from: /
-  #       to: "http://127.0.0.1:{{ grafana_port | default('3000') }}/"
-  #   custom_log:
-  #     path: /var/log/apache2/grafana.access.log
-  #     format: combined
-  #   error_log:
-  #     path: /var/log/apache2/grafana.error.log
-  #     log_level: warn
 
 ## --------------
 ## ApacheのVagrant用設定
@@ -411,6 +384,33 @@ postgresql_databases:
     encoding: utf8
   - <<: *db_app_prod
     encoding: utf8
+
+
+## -------------------
+## MariaDBの設定
+## -------------------
+mariadb_mysqld_cfg:
+  ## General
+  # sql_mode:
+  #   - STRICT_TRANS_TABLES
+  #   - NO_ZERO_IN_DATE
+  #   - NO_ZERO_DATE
+  #   - ERROR_FOR_DIVISION_BY_ZERO
+  #   - NO_AUTO_CREATE_USER
+  #   - NO_ENGINE_SUBSTITUTION
+  #   # - ONLY_FULL_GROUP_BY
+  # -----------------
+  # Logging
+  # -----------------
+  slow_query_log: true
+  long_query_time: 1
+  # log_warnings: 0
+  # min_examined_row_limit: 0
+  # log_queries_not_using_indexes: false
+  # log_slow_admin_statements: false
+  slow_query_log_file: /var/log/mysql/mysql-slow.log
+  general_log: true
+  general_log_file: /var/log/mysql/general.log
 
 ## --------------
 ## CekePHPプロジェクトのデータベース設定
