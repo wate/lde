@@ -389,28 +389,28 @@ postgresql_databases:
 ## -------------------
 ## MariaDBの設定
 ## -------------------
-mariadb_mysqld_cfg:
-  ## General
-  # sql_mode:
-  #   - STRICT_TRANS_TABLES
-  #   - NO_ZERO_IN_DATE
-  #   - NO_ZERO_DATE
-  #   - ERROR_FOR_DIVISION_BY_ZERO
-  #   - NO_AUTO_CREATE_USER
-  #   - NO_ENGINE_SUBSTITUTION
-  #   # - ONLY_FULL_GROUP_BY
-  # -----------------
-  # Logging
-  # -----------------
-  slow_query_log: true
-  long_query_time: 1
-  # log_warnings: 0
-  # min_examined_row_limit: 0
-  # log_queries_not_using_indexes: false
-  # log_slow_admin_statements: false
-  slow_query_log_file: /var/log/mysql/mysql-slow.log
-  general_log: true
-  general_log_file: /var/log/mysql/general.log
+# mariadb_mysqld_cfg:
+#   ## General
+#   # sql_mode:
+#   #   - STRICT_TRANS_TABLES
+#   #   - NO_ZERO_IN_DATE
+#   #   - NO_ZERO_DATE
+#   #   - ERROR_FOR_DIVISION_BY_ZERO
+#   #   - NO_AUTO_CREATE_USER
+#   #   - NO_ENGINE_SUBSTITUTION
+#   #   # - ONLY_FULL_GROUP_BY
+#   # -----------------
+#   # Logging
+#   # -----------------
+#   slow_query_log: true
+#   long_query_time: 1
+#   # log_warnings: 0
+#   # min_examined_row_limit: 0
+#   # log_queries_not_using_indexes: false
+#   # log_slow_admin_statements: false
+#   slow_query_log_file: /var/log/mysql/mysql-slow.log
+#   general_log: true
+#   general_log_file: /var/log/mysql/general.log
 
 ## --------------
 ## CekePHPプロジェクトのデータベース設定
@@ -476,3 +476,49 @@ logio_file_input_cfg:
       stream: mail
       config:
         path: /var/log/mail.log
+
+
+## --------------------------
+## インストールする各種ツール
+## --------------------------
+install_tools:
+  # https://direnv.net/
+  - direnv
+  ## https://github.com/eza-community/eza
+  - eza
+  ## https://github.com/sharkdp/fd
+  - fd
+  ## https://github.com/sharkdp/bat
+  - bat
+  ## https://github.com/k1LoW/tbls
+  - tbls
+  ## https://github.com/k1LoW/runn
+  - runn
+  ## https://github.com/dandavison/delta
+  - delta
+  ## https://github.com/terrastruct/d2
+  - d2
+  ## https://github.com/google/osv-scanner
+  - osv-scanner
+  ## https://github.com/charmbracelet/glow
+  - glow
+  ## https://www.mycli.net/
+  - mycli
+  ## https://pre-commit.com/
+  - pre-commit
+  ## https://graphviz.org/
+  - graphviz
+  ## https://wp-cli.org/ja/
+  - wp-cli
+  ## https://github.com/microsoft/pict
+  - pict
+  # https://plantuml.com/ja/
+  - plantuml
+  # https://github.com/tesseract-ocr/tesseract
+  # - tesseract-ocr
+  # PDF 向けユーティリティ
+  - poppler-utils
+  # https://github.com/jgm/pandoc
+  - pandoc
+  # https://taku910.github.io/mecab/
+  - mecab
