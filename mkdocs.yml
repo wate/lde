@@ -37,10 +37,10 @@ theme:
 # repo_name: wate/lde
 # repo_url: https://github.com/wate/lde
 extra_javascript:
-  - js/extra.js
+  - assets/javascripts/extra.js
 extra_css:
   - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
-  - css/extra.css
+  - assets/stylesheets/extra.css
 markdown_extensions:
   - abbr
   - footnotes

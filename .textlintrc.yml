@@ -18,7 +18,8 @@ rules:
   ## https://github.com/textlint-rule/textlint-rule-prh
   prh:
     rulePaths:
+      - docs/rules/glossary.yml
+      - docs/rules/abbreviations.yml
       - docs/rules/kanji-open.yml
       - docs/rules/names.yml
-      - docs/rules/abbreviations.yml
       - docs/rules/typo.yml
