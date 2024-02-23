@@ -15,11 +15,18 @@ rules:
     ja-space-after-exclamation: true
     ja-space-after-question: true
     ja-space-around-code: false
+  ## https://github.com/lostandfound/textlint-rule-ja-hiragana-fukushi
+  ja-hiragana-fukushi: true
+  ## https://github.com/lostandfound/textlint-rule-ja-hiragana-keishikimeishi
+  ja-hiragana-keishikimeishi: true
+  ## https://github.com/lostandfound/textlint-rule-ja-hiragana-hojodoushi
+  ja-hiragana-hojodoushi: true
+  ## https://github.com/textlint-ja/textlint-rule-no-synonyms
+  "@textlint-ja/no-synonyms": true
   ## https://github.com/textlint-rule/textlint-rule-prh
   prh:
     rulePaths:
       - docs/rules/glossary.yml
       - docs/rules/abbreviations.yml
-      - docs/rules/kanji-open.yml
       - docs/rules/names.yml
       - docs/rules/typo.yml

@@ -37,6 +37,11 @@ repos:
           - textlint-filter-rule-comments
           - textlint-rule-preset-ja-technical-writing
           - textlint-rule-preset-ja-spacing
+          - textlint-rule-ja-hiragana-fukushi
+          - textlint-rule-ja-hiragana-keishikimeishi
+          - textlint-rule-ja-hiragana-hojodoushi
+          - "@textlint-ja/textlint-rule-no-synonyms"
+          - sudachi-synonyms-dictionary
           - textlint-rule-prh
   - repo: https://github.com/digitalpulp/pre-commit-php
     rev: "1.4.0"
