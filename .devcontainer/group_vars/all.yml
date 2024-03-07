@@ -112,7 +112,7 @@ nginx_vhosts:
         match_type: "~"
         content: "deny all;"
   - name: mailpit
-    server_name: "mail.{{ domain }}"
+    server_name: "mailpit.{{ domain }}"
     access_log: /var/log/nginx/mailpit.access.log
     error_log: /var/log/nginx/mailpit.error.log
     client_max_body_size: 0
@@ -205,7 +205,7 @@ apache_vhosts:
       path: /var/log/apache2/phpRedisAdmin.error.log
       log_level: warn
   - name: 091-mailpit
-    server_name: "mail.{{ domain }}"
+    server_name: "mailpit.{{ domain }}"
     proxy_pass:
       - from: /
         to: "http://127.0.0.1:{{ mailpit_ui_bind_addr.split(':')[1] }}/"

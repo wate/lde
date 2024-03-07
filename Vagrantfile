@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
     vm_domain,
     "www." + vm_domain,
     "cache." + vm_domain,
-    "mail." + vm_domain,
+    "mailpit." + vm_domain,
     "search." + vm_domain,
     "log." + vm_domain,
   ]
