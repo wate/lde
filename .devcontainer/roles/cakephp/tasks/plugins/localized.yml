@@ -13,6 +13,22 @@
         line: "        $this->addPlugin('Cake/Localized');"
         insertafter: "// Load more plugins here"
         firstmatch: true
+    - name: Add default provider
+      block:
+        - name: Add use Validator statement
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/config/bootstrap.php"
+            line: 'use Cake\Validation\Validator;'
+            insertafter: 'use Cake\\Utility\\Security;'
+        - name: Add use JpValidation statement
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/config/bootstrap.php"
+            line: 'use Cake\Localized\Validation\JpValidation;'
+            insertafter: 'use Cake\\Validation\\Validator;'
+        - name: Add default provider
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/config/bootstrap.php"
+            line: "Validator::addDefaultProvider('ja', JpValidation::class);"
     - name: Create plugin resource directory
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}/resources/locales"

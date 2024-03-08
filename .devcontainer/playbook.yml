@@ -62,10 +62,10 @@
       become: false
       tags:
         - role_lde
-    # - role: cakephp
-    #   become: false
-    #   tags:
-    #     - role_cakephp
+    - role: cakephp
+      become: false
+      tags:
+        - role_cakephp
   tasks:
     - name: Create symlink
       ansible.builtin.file:

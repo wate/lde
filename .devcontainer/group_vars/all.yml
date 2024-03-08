@@ -8,18 +8,23 @@
 php_version: "8.2"
 
 ## --------------
+## 利用するCakePHPのメジャーバージョン
+## --------------
+cakephp_major_version: "5"
+
+## --------------
 ## インストールする追加パッケージ
 ## --------------
 cakephp_project_additional_packages: []
 #   - name: "josegonzalez/dotenv:^4.0"
 #   ## @see https://book.cakephp.org/authentication/2/en/index.html
-#   - name: cakephp/authentication
+#   - name: "cakephp/authentication:^3.0"
 #   ## @see https://book.cakephp.org/authorization/2/en/index.html
-#   - name: "cakephp/authorization:^2.0"
+#   - name: "cakephp/authorization:^3.0"
 #   ## @see https://symfony.com/doc/current/components/yaml.html
 #   - name: symfony/yaml
 #   ## @see https://github.com/cakephp/localized
-#   - name: cakephp/localized
+#   - name: "cakephp/localized:^5.0"
 #   ## @see https://github.com/robotusers/cakephp-table-inheritance
 #   - name: robotusers/cakephp-table-inheritance
 #   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
@@ -27,7 +32,7 @@ cakephp_project_additional_packages: []
 #   ## @see https://github.com/tecnickcom/TCPDF
 #   - name: tecnickcom/tcpdf
 #   ## @see https://github.com/arodu/cakelte
-#   - name: arodu/cakelte
+#   - name: "arodu/cakelte:^2.0"
 #   ## @see https://csv.thephpleague.com/
 #   - name: league/csv:^9.0
 #   ## @see https://commonmark.thephpleague.com/
@@ -48,13 +53,8 @@ cakephp_project_additional_packages: []
 #   ## @see https://fakerphp.github.io/
 #   - name: fakerphp/faker
 #     dev: true
-#   - name: dereuromark/cakephp-ide-helper
-#     dev: true
-#   ## @see https://github.com/cakedc/cakephp-phpstan
-#   - name: cakedc/cakephp-phpstan
-#     dev: true
-#   ## @see http://zircote.github.io/swagger-php/
-#   - name: zircote/swagger-php
+#   ## https://github.com/dereuromark/cakephp-ide-helper
+#   - name: "dereuromark/cakephp-ide-helper:^2.0"
 #     dev: true
 
 ## --------------
