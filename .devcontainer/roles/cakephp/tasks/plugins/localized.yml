@@ -28,7 +28,7 @@
         - name: Add default provider
           ansible.builtin.lineinfile:
             path: "{{ php_project_tmp_dir }}/config/bootstrap.php"
-            line: "Validator::addDefaultProvider('ja', JpValidation::class);"
+            line: "Validator::addDefaultProvider('jp', JpValidation::class);"
     - name: Create plugin resource directory
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}/resources/locales"
