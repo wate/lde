@@ -8,6 +8,9 @@
     src: font_ja_subset_string.txt
     dest: /usr/local/etc/font_ja_subset_string.txt
     mode: "0644"
+- name: Install Noto Sans Japanese font
+  ansible.builtin.import_tasks:
+    file: fonts/Noto_Sans_Japanese.yml
 - name: Install HackGen font
   ansible.builtin.import_tasks:
     file: fonts/HackGen.yml

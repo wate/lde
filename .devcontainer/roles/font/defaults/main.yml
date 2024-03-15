@@ -3,17 +3,10 @@
 ## インストールするパッケージ
 ## -----------------
 font_packages:
+  - fonts-ipaexfont-gothic
+  - fonts-ipaexfont-mincho
   - fonts-morisawa-bizud-gothic
   - fonts-morisawa-bizud-mincho
-  # - fonts-noto
-  - fonts-noto-cjk
-  - fonts-noto-cjk-extra
-  # - fonts-noto-color-emoji
-  # - fonts-noto-extra
-  # - fonts-noto-mono
-  # - fonts-noto-ui-core
-  # - fonts-noto-ui-extra
-  # - fonts-noto-unhinted
   - fontforge
   - fonttools
   - woff-tools

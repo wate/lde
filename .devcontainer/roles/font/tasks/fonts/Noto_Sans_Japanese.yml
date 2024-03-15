@@ -1,0 +1,5 @@
+
+---
+- name: Install font file
+  ansible.builtin.apt:
+    deb: http://bootes.ethz.ch/fonts/deb/fonts-notosansjp_1.0_all.deb
