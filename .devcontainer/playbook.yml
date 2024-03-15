@@ -58,6 +58,9 @@
     - role: meilisearch
       tags:
         - role_meilisearch
+    - role: font
+      tags:
+        - role_font
     - role: lde
       become: false
       tags:

@@ -1,0 +1,24 @@
+# code: language=ansible
+---
+- name: Install fonts packages
+  ansible.builtin.apt:
+    name: "{{ font_packages }}"
+- name: Copy font subset text file
+  ansible.builtin.copy:
+    src: font_ja_subset_string.txt
+    dest: /usr/local/etc/font_ja_subset_string.txt
+    mode: "0644"
+- name: Install HackGen font
+  ansible.builtin.import_tasks:
+    file: fonts/HackGen.yml
+- name: Install PlemolJP font
+  ansible.builtin.import_tasks:
+    file: fonts/PlemolJP.yml
+- name: Install UDEV Gothic font
+  ansible.builtin.import_tasks:
+    file: fonts/UDEV-Gothic.yml
+- name: Install ttc2ttf
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/yhchen/ttc2ttf/master/ttc2ttf.py
+    dest: /usr/local/bin/ttc2ttf
+    mode: "0755"
