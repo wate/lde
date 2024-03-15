@@ -522,3 +522,15 @@ install_tools:
   - pandoc
   # https://taku910.github.io/mecab/
   - mecab
+  # https://squidfunk.github.io/mkdocs-material/
+  # - mkdocs-material
+  # https://github.com/fontforge/fontforge
+  - fontforge
+  # https://github.com/fonttools/fonttools
+  - fonttools
+  # https://packages.debian.org/search?keywords=woff-tools
+  - woff-tools
+  # https://github.com/google/woff2
+  - woff2
+  # https://gist.github.com/fatum12/941a10f31ac1ad48ccbc
+  - ttc2ttf
