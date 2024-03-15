@@ -5,8 +5,8 @@
     name: "{{ font_packages }}"
 - name: Copy font subset text file
   ansible.builtin.copy:
-    src: font_ja_subset_string.txt
-    dest: /usr/local/etc/font_ja_subset_string.txt
+    src: ja_subset.txt
+    dest: /usr/local/etc/ja_subset.txt
     mode: "0644"
 - name: Install Noto Sans Japanese font
   ansible.builtin.import_tasks:
@@ -19,9 +19,4 @@
     file: fonts/PlemolJP.yml
 - name: Install UDEV Gothic font
   ansible.builtin.import_tasks:
-    file: fonts/UDEV-Gothic.yml
-- name: Install ttc2ttf
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/yhchen/ttc2ttf/master/ttc2ttf.py
-    dest: /usr/local/bin/ttc2ttf
-    mode: "0755"
+    file: fonts/UDEV_Gothic.yml
