@@ -29,16 +29,15 @@
     - name: Find convert font files
       ansible.builtin.find:
         path:
-          - /usr/share/fonts/truetype/HackGen
-          - /usr/share/fonts/truetype/PlemolJP
-          - /usr/share/fonts/truetype/UDEVGothic
           - /usr/share/fonts/truetype/bizud-gothic
           - /usr/share/fonts/truetype/bizud-mincho
           - /usr/share/fonts/opentype/ipaexfont-gothic
           - /usr/share/fonts/opentype/ipaexfont-mincho
           - /usr/share/fonts/opentype/ipafont-gothic
           - /usr/share/fonts/opentype/ipafont-mincho
+          - /usr/local/share/fonts
         patterns: "{{ find_font_patterns }}"
+        recurse: true
       register: find_src_result
     - name: Create font subset
       ansible.builtin.command:

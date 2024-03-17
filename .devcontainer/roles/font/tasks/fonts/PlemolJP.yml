@@ -26,13 +26,13 @@
     asset_url: https://github.com/{{ font_plemoljp_repo }}/releases/download/{{ font_plemoljp_version }}/PlemolJP_{{ font_plemoljp_version }}.zip
 - name: Create font extract directory
   ansible.builtin.file:
-    path: "{{ font_dir }}/truetype/PlemolJP"
+    path: "{{ font_dir }}/PlemolJP"
     state: directory
     mode: "0755"
 - name: Install font file
   ansible.builtin.unarchive:
     src: "{{ asset_url }}"
-    dest: "{{ font_dir }}/truetype/PlemolJP"
+    dest: "{{ font_dir }}/PlemolJP"
     extra_opts:
       - -j
     remote_src: true

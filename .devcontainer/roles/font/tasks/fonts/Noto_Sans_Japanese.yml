@@ -1,6 +1,0 @@
----
-# @see https://github.com/google/fonts?tab=readme-ov-file#local-installation-package-managers
-- name: Install Noto Sans Japanese font
-  ansible.builtin.command:
-    cmd: fnt install google-notosansjp
-    creates: /usr/share/fonts/opentype/notosansjp/NotoSansJP-Regular.otf

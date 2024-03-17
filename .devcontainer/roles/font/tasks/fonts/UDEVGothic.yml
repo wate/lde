@@ -26,13 +26,13 @@
     asset_url: https://github.com/{{ font_udevgothic_repo }}/releases/download/{{ font_udevgothic_version }}/UDEVGothic_{{ font_udevgothic_version }}.zip
 - name: Create font extract directory
   ansible.builtin.file:
-    path: "{{ font_dir }}/truetype/UDEVGothic"
+    path: "{{ font_dir }}/UDEVGothic"
     state: directory
     mode: "0755"
 - name: Install font file
   ansible.builtin.unarchive:
     src: "{{ asset_url }}"
-    dest: "{{ font_dir }}/truetype/UDEVGothic"
+    dest: "{{ font_dir }}/UDEVGothic"
     extra_opts:
       - -j
     remote_src: true

@@ -1,0 +1,21 @@
+
+---
+# code: language=ansible
+- name: Create font directory
+  ansible.builtin.file:
+    path: "{{ font_dir }}/NotoSerifCJKjp"
+    state: directory
+    mode: "0755"
+- name: Install Noto Sans JP font
+  ansible.builtin.get_url:
+    url: https://github.com/notofonts/noto-cjk/raw/main/Serif/OTF/Japanese/{{ item }}
+    dest: "{{ font_dir }}/NotoSerifCJKjp/{{ item }}"
+    mode: "0644"
+  loop:
+    - NotoSerifCJKjp-Black.otf
+    - NotoSerifCJKjp-Bold.otf
+    - NotoSerifCJKjp-ExtraLight.otf
+    - NotoSerifCJKjp-Light.otf
+    - NotoSerifCJKjp-Medium.otf
+    - NotoSerifCJKjp-Regular.otf
+    - NotoSerifCJKjp-SemiBold.otf
