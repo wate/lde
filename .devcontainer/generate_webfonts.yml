@@ -38,7 +38,6 @@
           - /usr/share/fonts/opentype/ipaexfont-mincho
           - /usr/share/fonts/opentype/ipafont-gothic
           - /usr/share/fonts/opentype/ipafont-mincho
-          - /usr/share/fonts/opentype/notosansjp
         patterns: "{{ find_font_patterns }}"
       register: find_src_result
     - name: Create font subset
