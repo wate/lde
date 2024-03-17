@@ -62,9 +62,9 @@
       become: false
       tags:
         - role_lde
-    # - role: font
-    #   tags:
-    #     - role_font
+    - role: font
+      tags:
+        - role_font
     # - role: cakephp
     #   become: false
     #   tags:
