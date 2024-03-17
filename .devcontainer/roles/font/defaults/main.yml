@@ -7,10 +7,17 @@ font_packages:
   - fonts-ipaexfont-mincho
   - fonts-morisawa-bizud-gothic
   - fonts-morisawa-bizud-mincho
+  # - fonts-noto
+  # - fonts-noto-extra
+  # - fonts-noto-cjk
+  # - fonts-noto-cjk-extra
+  # - fonts-noto-mono
+  # - fonts-noto-color-emoji
   - fnt
   - fontforge
   - fonttools
   - woff-tools
+  - sfnt2woff-zopfli
   - woff2
 
 font_hackgen_version: latest
@@ -19,6 +26,5 @@ font_hackgen_repo: yuru7/HackGen
 font_plemoljp_version: latest
 font_plemoljp_repo: yuru7/PlemolJP
 
-font_udev_gothic_version: latest
-font_udev_gothic_repo: yuru7/udev-gothic
-
+font_udevgothic_version: latest
+font_udevgothic_repo: yuru7/udev-gothic
