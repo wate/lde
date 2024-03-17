@@ -1,0 +1,3 @@
+{% for subset_file in subset_files %}
+{{ lookup('ansible.builtin.file', subset_file) }}
+{% endfor %}
