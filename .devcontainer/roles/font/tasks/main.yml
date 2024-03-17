@@ -15,10 +15,3 @@
 - name: Install UDEV Gothic font
   ansible.builtin.import_tasks:
     file: fonts/UDEVGothic.yml
-- name: Create subset text file
-  ansible.builtin.template:
-    src: subset_all.txt.j2
-    dest: /usr/local/etc/subset_all.txt
-    mode: "0644"
-  vars:
-    subset_files: "{{ lookup('ansible.builtin.fileglob', 'files/subset_*.txt', wantlist=True) }}"
