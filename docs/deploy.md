@@ -22,7 +22,7 @@ GitHub Actionsにより各ブランチに対応した環境に自動でデプロ
 `develop`ブランチの内容が開発環境にデプロイされます。
 
 ```sh
-ansible-playbook deploy.yml --limit development
+ansible-playbook deploy.yml --limit develop
 ```
 
 ### ステージング環境への手動デプロイ
