@@ -14,22 +14,7 @@ all:
       - .github
       - .devcontainer
       - .vagrant
-developers:
-  host:
-    wate:
-      ## ホスト変数
-      # ansible_host: 123.123.123.123
-      # ansible_port: 1234
-      # ansible_user: wate
-      # ansible_password: password_not_found
-      # ansible_ssh_private_key_file: ~/.ssh/id_rsa
-  ## グループ変数
-  vars:
-    ## ブランチ名(現在のブランチ)
-    app_repo_branch: "{{ lookup('pipe', 'git branch --contains | cut -d ' ' -f 2') }}"
-    ## 動作モード
-    app_env: development
-development:
+develop:
   host:
     dev.example.com:
       # ansible_host: 123.123.123.123
