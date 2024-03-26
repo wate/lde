@@ -1,0 +1,58 @@
+---
+- name: Generate subset text file
+  ansible.builtin.template:
+    src: subset_all.txt.j2
+    dest: "{{ webfont_output_dir.font }}/subset.txt"
+    mode: "0644"
+  vars:
+    subset_files:
+      - files/subset_alphanumeric.txt
+      - files/subset_symbol.txt
+      - files/subset_fullwidth_alphanumeric.txt
+      - files/subset_fullwidth_symbol.txt
+      - files/subset_hiragana.txt
+      - files/subset_katakana.txt
+      - files/subset_kanji.txt
+- name: Find convert font files
+  ansible.builtin.find:
+    paths: "{{ webfont_find_font_files.paths }}"
+    patterns: "{{ webfont_find_font_files.patterns }}"
+    recurse: "{{ webfont_find_font_files.recurse | default(true) }}"
+    use_regex: "{{ webfont_find_font_files.use_regex | default(false) }}"
+  register: find_file_result
+- name: Debug
+  ansible.builtin.debug:
+    var: find_file_result.files
+- name: Convert font file subset
+  ansible.builtin.command:
+    cmd: >
+      fonttools subset
+      --text-file={{ webfont_output_dir.font }}/subset.txt
+      --output-file={{ webfont_output_dir.font }}/{{ item.path | basename }}
+      {{ item.path }}
+    chdir: "{{ output_dir.font }}"
+  loop: "{{ find_file_result.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+# - name: Find convert font files
+#   ansible.builtin.find:
+#     path:
+#       - "{{ output_dir }}"
+#     patterns:
+#       - "*.ttf"
+#       - "*.otf"
+#   register: find_subset_result
+# - name: Convert woff
+#   ansible.builtin.command:
+#     cmd: sfnt2woff {{ item.path }}
+#     chdir: "{{ output_dir }}"
+#   loop: "{{ find_subset_result.files }}"
+#   loop_control:
+#     label: "{{ item.path | basename }}"
+# - name: Convert woff2
+#   ansible.builtin.command:
+#     cmd: woff2_compress {{ item.path }}
+#     chdir: "{{ output_dir }}"
+#   loop: "{{ find_subset_result.files }}"
+#   loop_control:
+#     label: "{{ item.path | basename }}"

@@ -1,0 +1,19 @@
+---
+webfont_find_font_files:
+  paths:
+    - /usr/share/fonts/truetype/bizud-gothic
+    - /usr/share/fonts/truetype/bizud-mincho
+    - /usr/share/fonts/opentype/ipaexfont-gothic
+    - /usr/share/fonts/opentype/ipaexfont-mincho
+    - /usr/share/fonts/opentype/ipafont-gothic
+    - /usr/share/fonts/opentype/ipafont-mincho
+    - /usr/local/share/fonts
+  patterns:
+    - "*.ttf"
+    - "*.otf"
+  # recurse: true
+  # use_regex: false
+
+webfont_output_dir:
+  font: /vagrant/docs/assets/fonts
+  css: /vagrant/docs/assets/css
