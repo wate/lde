@@ -1,8 +1,12 @@
 ---
+- name: Install font tools
+  ansible.builtin.apt:
+    name: "{{ webfont_packages }}"
+  become: true
 - name: Generate subset text file
   ansible.builtin.template:
     src: subset_all.txt.j2
-    dest: "{{ webfont_output_dir.font }}/subset.txt"
+    dest: "{{ webfont_output_font_dir }}/subset.txt"
     mode: "0644"
   vars:
     subset_files:
@@ -15,10 +19,11 @@
       - files/subset_kanji.txt
 - name: Find convert font files
   ansible.builtin.find:
-    paths: "{{ webfont_find_font_files.paths }}"
-    patterns: "{{ webfont_find_font_files.patterns }}"
-    recurse: "{{ webfont_find_font_files.recurse | default(true) }}"
-    use_regex: "{{ webfont_find_font_files.use_regex | default(false) }}"
+    paths: "{{ webfont_find_font_paths }}"
+    patterns: "{{ webfont_find_font_patterns }}"
+    excludes: "{{ webfont_find_font_excludes | default(omit) }}"
+    recurse: "{{ webfont_find_font_recurse | default(true) }}"
+    use_regex: "{{ webfont_find_font_use_regex | default(false) }}"
   register: find_file_result
 - name: Debug
   ansible.builtin.debug:
@@ -27,32 +32,32 @@
   ansible.builtin.command:
     cmd: >
       fonttools subset
-      --text-file={{ webfont_output_dir.font }}/subset.txt
-      --output-file={{ webfont_output_dir.font }}/{{ item.path | basename }}
+      --text-file={{ webfont_output_font_dir }}/subset.txt
+      --output-file={{ webfont_output_font_dir }}/{{ item.path | basename }}
       {{ item.path }}
-    chdir: "{{ output_dir.font }}"
+    chdir: "{{ webfont_output_font_dir }}"
   loop: "{{ find_file_result.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
-# - name: Find convert font files
-#   ansible.builtin.find:
-#     path:
-#       - "{{ output_dir }}"
-#     patterns:
-#       - "*.ttf"
-#       - "*.otf"
-#   register: find_subset_result
-# - name: Convert woff
-#   ansible.builtin.command:
-#     cmd: sfnt2woff {{ item.path }}
-#     chdir: "{{ output_dir }}"
-#   loop: "{{ find_subset_result.files }}"
-#   loop_control:
-#     label: "{{ item.path | basename }}"
-# - name: Convert woff2
-#   ansible.builtin.command:
-#     cmd: woff2_compress {{ item.path }}
-#     chdir: "{{ output_dir }}"
-#   loop: "{{ find_subset_result.files }}"
-#   loop_control:
-#     label: "{{ item.path | basename }}"
+- name: Find convert font files
+  ansible.builtin.find:
+    paths:
+      - "{{ webfont_output_font_dir }}"
+    patterns:
+      - "*.ttf"
+      - "*.otf"
+  register: find_subset_result
+- name: Convert woff
+  ansible.builtin.command:
+    cmd: sfnt2woff {{ item.path }}
+    chdir: "{{ webfont_output_font_dir }}"
+  loop: "{{ find_subset_result.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+- name: Convert woff2
+  ansible.builtin.command:
+    cmd: woff2_compress {{ item.path }}
+    chdir: "{{ webfont_output_font_dir }}"
+  loop: "{{ find_subset_result.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"

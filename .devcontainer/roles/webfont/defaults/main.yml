@@ -1,19 +1,45 @@
 ---
-webfont_find_font_files:
-  paths:
-    - /usr/share/fonts/truetype/bizud-gothic
-    - /usr/share/fonts/truetype/bizud-mincho
-    - /usr/share/fonts/opentype/ipaexfont-gothic
-    - /usr/share/fonts/opentype/ipaexfont-mincho
-    - /usr/share/fonts/opentype/ipafont-gothic
-    - /usr/share/fonts/opentype/ipafont-mincho
-    - /usr/local/share/fonts
-  patterns:
-    - "*.ttf"
-    - "*.otf"
-  # recurse: true
-  # use_regex: false
+webfont_packages:
+  - fnt
+  - fontforge
+  - fonttools
+  - woff-tools
+  - sfnt2woff-zopfli
+  - woff2
 
-webfont_output_dir:
-  font: /vagrant/docs/assets/fonts
-  css: /vagrant/docs/assets/css
+webfont_find_font_paths:
+  - /usr/share/fonts/truetype/bizud-gothic
+  - /usr/share/fonts/truetype/bizud-mincho
+  - /usr/share/fonts/opentype/ipaexfont-gothic
+  - /usr/share/fonts/opentype/ipaexfont-mincho
+  - /usr/share/fonts/opentype/ipafont-gothic
+  - /usr/share/fonts/opentype/ipafont-mincho
+  - /usr/local/share/fonts
+
+webfont_find_font_patterns:
+  ## TrueType
+  - "*-Regular.ttf"
+  - "*-Bold.ttf"
+  - "*-Italic.ttf"
+  - "*-Bold.ttf"
+  - "*-BoldItalic.ttf"
+  ## OpenType
+  - "*-Regular.otf"
+  - "*-Bold.otf"
+  - "*-Italic.otf"
+  - "*-Bold.otf"
+  - "*-BoldItalic.otf"
+
+webfont_find_font_excludes:
+  - "*35*"
+  - "*Console*"
+  - "*JPDOC-*"
+  - "*LG-*"
+  - "*NotoSansMono*"
+
+# webfont_find_font_recurse: true
+# webfont_find_font_use_regex: false
+
+webfont_output_font_dir: /vagrant/docs/assets/fonts
+webfont_output_css_dir: /vagrant/docs/assets/stylesheets
+webfont_css_font_path: "../fonts"
