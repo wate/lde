@@ -2,8 +2,8 @@
 {% set file_name = font_file[:-4] %}
 {% set font_name = file_name.split('-')[0] %}
 {% set font_name_maps = {
-  'NotoSansCJKjp': 'Noto Sans Japanese',
-  'NotoSerifCJKjp': 'Noto Serif Japanese',
+  'NotoSansCJKjp': 'Noto Sans JP',
+  'NotoSerifCJKjp': 'Noto Serif JP',
   'BIZUDGothic': 'BIZ UDGothic',
   'BIZUDPGothic': 'BIZ UDPGothic',
   'BIZUDMincho': 'BIZ UDMincho',
@@ -25,10 +25,15 @@
 {% elif font_file.endswith('.otf') %}
     url('{{ webfont_css_font_path}}/{{ font_file | basename }}') format('opentype');
 {% endif %}
-{% if file_name.endswith('-Bold') %}
+{% if file_name.endswith('-Regular') %}
+  font-style: normal;
+  font-weight: normal;
+{% elif file_name.endswith('-Bold') %}
+  font-style: normal;
   font-weight: bold;
 {% elif file_name.endswith('-Italic') %}
   font-style: italic;
+  font-weight: normal;
 {% elif file_name.endswith('-BoldItalic') %}
   font-style: italic;
   font-weight: bold;

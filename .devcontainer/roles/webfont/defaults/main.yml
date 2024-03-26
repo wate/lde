@@ -10,10 +10,10 @@ webfont_packages:
 webfont_find_font_paths:
   - /usr/share/fonts/truetype/bizud-gothic
   - /usr/share/fonts/truetype/bizud-mincho
-  - /usr/share/fonts/opentype/ipaexfont-gothic
-  - /usr/share/fonts/opentype/ipaexfont-mincho
-  - /usr/share/fonts/opentype/ipafont-gothic
-  - /usr/share/fonts/opentype/ipafont-mincho
+  # - /usr/share/fonts/opentype/ipaexfont-gothic
+  # - /usr/share/fonts/opentype/ipaexfont-mincho
+  # - /usr/share/fonts/opentype/ipafont-gothic
+  # - /usr/share/fonts/opentype/ipafont-mincho
   - /usr/local/share/fonts
 
 webfont_find_font_patterns:
@@ -35,7 +35,13 @@ webfont_find_font_excludes:
   - "*Console*"
   - "*JPDOC-*"
   - "*LG-*"
-  - "*NotoSansMono*"
+  - "BIZUDGothic*"
+  - "BIZUDPGothic*"
+  - "BIZUDMincho*"
+  - "BIZUDPMincho*"
+  - "NotoSansMono*"
+  - "NotoSansCJKjp*"
+  - "NotoSerifCJKjp*"
 
 # webfont_find_font_recurse: true
 # webfont_find_font_use_regex: false
