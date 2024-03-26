@@ -1,36 +1,76 @@
 @font-face {
+  font-family: 'BIZ UDGothic';
+  src:
+    url('../fonts/BIZUDGothic-Bold.woff2') format('woff2'),
+    url('../fonts/BIZUDGothic-Bold.woff') format('woff'),
+    url('../fonts/BIZUDGothic-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BIZ UDGothic';
+  src:
+    url('../fonts/BIZUDGothic-Regular.woff2') format('woff2'),
+    url('../fonts/BIZUDGothic-Regular.woff') format('woff'),
+    url('../fonts/BIZUDGothic-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BIZ UDMincho';
+  src:
+    url('../fonts/BIZUDMincho-Regular.woff2') format('woff2'),
+    url('../fonts/BIZUDMincho-Regular.woff') format('woff'),
+    url('../fonts/BIZUDMincho-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BIZ UDPGothic';
+  src:
+    url('../fonts/BIZUDPGothic-Bold.woff2') format('woff2'),
+    url('../fonts/BIZUDPGothic-Bold.woff') format('woff'),
+    url('../fonts/BIZUDPGothic-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BIZ UDPGothic';
+  src:
+    url('../fonts/BIZUDPGothic-Regular.woff2') format('woff2'),
+    url('../fonts/BIZUDPGothic-Regular.woff') format('woff'),
+    url('../fonts/BIZUDPGothic-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BIZ UDPMincho';
+  src:
+    url('../fonts/BIZUDPMincho-Regular.woff2') format('woff2'),
+    url('../fonts/BIZUDPMincho-Regular.woff') format('woff'),
+    url('../fonts/BIZUDPMincho-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HackGen';
+  src:
+    url('../fonts/HackGen-Bold.woff2') format('woff2'),
+    url('../fonts/HackGen-Bold.woff') format('woff'),
+    url('../fonts/HackGen-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HackGen';
+  src:
+    url('../fonts/HackGen-Regular.woff2') format('woff2'),
+    url('../fonts/HackGen-Regular.woff') format('woff'),
+    url('../fonts/HackGen-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
   font-family: 'Noto Sans Japanese';
   src:
     url('../fonts/NotoSansCJKjp-Bold.woff2') format('woff2'),
     url('../fonts/NotoSansCJKjp-Bold.woff') format('woff'),
     url('../fonts/NotoSansCJKjp-Bold.otf') format('opentype');
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'UDEV Gothic';
-  src:
-    url('../fonts/UDEVGothic-Regular.woff2') format('woff2'),
-    url('../fonts/UDEVGothic-Regular.woff') format('woff'),
-    url('../fonts/UDEVGothic-Regular.ttf') format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'PlemolJP';
-  src:
-    url('../fonts/PlemolJP-Bold.woff2') format('woff2'),
-    url('../fonts/PlemolJP-Bold.woff') format('woff'),
-    url('../fonts/PlemolJP-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'PlemolJP';
-  src:
-    url('../fonts/PlemolJP-BoldItalic.woff2') format('woff2'),
-    url('../fonts/PlemolJP-BoldItalic.woff') format('woff'),
-    url('../fonts/PlemolJP-BoldItalic.ttf') format('truetype');
-  font-style: italic;
   font-weight: bold;
   font-display: swap;
 }
@@ -62,9 +102,20 @@
 @font-face {
   font-family: 'PlemolJP';
   src:
-    url('../fonts/PlemolJP-Regular.woff2') format('woff2'),
-    url('../fonts/PlemolJP-Regular.woff') format('woff'),
-    url('../fonts/PlemolJP-Regular.ttf') format('truetype');
+    url('../fonts/PlemolJP-Bold.woff2') format('woff2'),
+    url('../fonts/PlemolJP-Bold.woff') format('woff'),
+    url('../fonts/PlemolJP-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PlemolJP';
+  src:
+    url('../fonts/PlemolJP-BoldItalic.woff2') format('woff2'),
+    url('../fonts/PlemolJP-BoldItalic.woff') format('woff'),
+    url('../fonts/PlemolJP-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: bold;
   font-display: swap;
 }
 @font-face {
@@ -77,54 +128,11 @@
   font-display: swap;
 }
 @font-face {
-  font-family: 'BIZ UDPGothic';
+  font-family: 'PlemolJP';
   src:
-    url('../fonts/BIZUDPGothic-Regular.woff2') format('woff2'),
-    url('../fonts/BIZUDPGothic-Regular.woff') format('woff'),
-    url('../fonts/BIZUDPGothic-Regular.ttf') format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'HackGen';
-  src:
-    url('../fonts/HackGen-Bold.woff2') format('woff2'),
-    url('../fonts/HackGen-Bold.woff') format('woff'),
-    url('../fonts/HackGen-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'BIZ UDGothic';
-  src:
-    url('../fonts/BIZUDGothic-Bold.woff2') format('woff2'),
-    url('../fonts/BIZUDGothic-Bold.woff') format('woff'),
-    url('../fonts/BIZUDGothic-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'BIZ UDPGothic';
-  src:
-    url('../fonts/BIZUDPGothic-Bold.woff2') format('woff2'),
-    url('../fonts/BIZUDPGothic-Bold.woff') format('woff'),
-    url('../fonts/BIZUDPGothic-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'BIZ UDMincho';
-  src:
-    url('../fonts/BIZUDMincho-Regular.woff2') format('woff2'),
-    url('../fonts/BIZUDMincho-Regular.woff') format('woff'),
-    url('../fonts/BIZUDMincho-Regular.ttf') format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'BIZ UDPMincho';
-  src:
-    url('../fonts/BIZUDPMincho-Regular.woff2') format('woff2'),
-    url('../fonts/BIZUDPMincho-Regular.woff') format('woff'),
-    url('../fonts/BIZUDPMincho-Regular.ttf') format('truetype');
+    url('../fonts/PlemolJP-Regular.woff2') format('woff2'),
+    url('../fonts/PlemolJP-Regular.woff') format('woff'),
+    url('../fonts/PlemolJP-Regular.ttf') format('truetype');
   font-display: swap;
 }
 @font-face {
@@ -139,23 +147,6 @@
 @font-face {
   font-family: 'UDEV Gothic';
   src:
-    url('../fonts/UDEVGothic-Italic.woff2') format('woff2'),
-    url('../fonts/UDEVGothic-Italic.woff') format('woff'),
-    url('../fonts/UDEVGothic-Italic.ttf') format('truetype');
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'HackGen';
-  src:
-    url('../fonts/HackGen-Regular.woff2') format('woff2'),
-    url('../fonts/HackGen-Regular.woff') format('woff'),
-    url('../fonts/HackGen-Regular.ttf') format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'UDEV Gothic';
-  src:
     url('../fonts/UDEVGothic-BoldItalic.woff2') format('woff2'),
     url('../fonts/UDEVGothic-BoldItalic.woff') format('woff'),
     url('../fonts/UDEVGothic-BoldItalic.ttf') format('truetype');
@@ -164,10 +155,19 @@
   font-display: swap;
 }
 @font-face {
-  font-family: 'BIZ UDGothic';
+  font-family: 'UDEV Gothic';
   src:
-    url('../fonts/BIZUDGothic-Regular.woff2') format('woff2'),
-    url('../fonts/BIZUDGothic-Regular.woff') format('woff'),
-    url('../fonts/BIZUDGothic-Regular.ttf') format('truetype');
+    url('../fonts/UDEVGothic-Italic.woff2') format('woff2'),
+    url('../fonts/UDEVGothic-Italic.woff') format('woff'),
+    url('../fonts/UDEVGothic-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'UDEV Gothic';
+  src:
+    url('../fonts/UDEVGothic-Regular.woff2') format('woff2'),
+    url('../fonts/UDEVGothic-Regular.woff') format('woff'),
+    url('../fonts/UDEVGothic-Regular.ttf') format('truetype');
   font-display: swap;
 }

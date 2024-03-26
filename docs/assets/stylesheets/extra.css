@@ -1,3 +1,13 @@
+
+@import url('./fonts.css');
+
+/**
+ * テキスト及びコードのフォントを指定
+ */
+:root {
+  --md-text-font: "BIZ UDPGothic";
+  --md-code-font: "HackGen";
+}
 /**
  * メインカラムの幅を調整
  */
