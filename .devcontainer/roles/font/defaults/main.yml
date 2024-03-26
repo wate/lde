@@ -13,12 +13,6 @@ font_packages:
   # - fonts-noto-cjk-extra
   # - fonts-noto-mono
   # - fonts-noto-color-emoji
-  - fnt
-  - fontforge
-  - fonttools
-  - woff-tools
-  - sfnt2woff-zopfli
-  - woff2
 
 font_hackgen_version: latest
 font_plemoljp_version: latest
