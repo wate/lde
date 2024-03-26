@@ -65,6 +65,10 @@
     - role: font
       tags:
         - role_font
+    # - role: webfont
+    #   become: false
+    #   tags:
+    #     - role_webfont
     # - role: cakephp
     #   become: false
     #   tags:
