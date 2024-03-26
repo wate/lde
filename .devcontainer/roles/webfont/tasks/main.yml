@@ -50,7 +50,7 @@
     dest: "{{ webfont_output_css_dir }}/fonts.css"
     mode: "0644"
   vars:
-    font_files: "{{ find_subset_result.files | map(attribute='path') | map('basename') }}"
+    font_files: "{{ find_subset_result.files | map(attribute='path') | map('basename') | sort }}"
 - name: Convert woff
   ansible.builtin.command:
     cmd: sfnt2woff {{ item.path }}
