@@ -49,7 +49,7 @@ Vagarnt利用時ほど開発環境としての完成度は見込んでいませ�
 
 ターミナルを起動し、以下のコマンドを実行するとローカル開発環境が開始されます。
 
-```
+```sh
 cd ${PROJECT_ROOT}
 vagrant up
 ```
@@ -119,13 +119,13 @@ Tips
 ※以下の設定は[mailtrap](https://mailtrap.io/)を使ってメールの送信テストを行う場合の設定例です。  
 (`<username>`および`<password>`は適時変更してください。)
 
-```
+```sh
 export EMAIL_TRANSPORT_DEFAULT_URL=smtp://<username>:<password>@smtp.mailtrap.io:2525
 ```
 
 ### 環境変数を利用したVagrantの制御
 
-```
+```sh
 ## ------------
 ## 仮想マシンの設定
 ## ------------

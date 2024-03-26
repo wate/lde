@@ -15,6 +15,7 @@ theme:
   #   code: Roboto Mono
   features:
     - navigation.tabs.sticky
+    - content.code.copy
     # - navigation.tabs
     # - navigation.sections
     # - navigation.expand
@@ -28,9 +29,9 @@ theme:
 #   - データ構造: 'er_diagram.md'
 #   - 機能一覧: 'features.md'
 #   - 機能詳細:
-#       - ○○機能: features/circle.md
-#       - △△機能: features/triangle.md
-#       - □□機能: features/square.md
+#     - ○○機能: features/circle.md
+#     - △△機能: features/triangle.md
+#     - □□機能: features/square.md
 # docs_dir: docs
 # site_dir: site
 # custom_dir: overrides
