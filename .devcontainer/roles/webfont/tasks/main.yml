@@ -25,9 +25,6 @@
     recurse: "{{ webfont_find_font_recurse | default(true) }}"
     use_regex: "{{ webfont_find_font_use_regex | default(false) }}"
   register: find_file_result
-- name: Debug
-  ansible.builtin.debug:
-    var: find_file_result.files
 - name: Convert font file subset
   ansible.builtin.command:
     cmd: >
@@ -39,7 +36,7 @@
   loop: "{{ find_file_result.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
-- name: Find convert font files
+- name: Find converted subset font files
   ansible.builtin.find:
     paths:
       - "{{ webfont_output_font_dir }}"
@@ -47,6 +44,13 @@
       - "*.ttf"
       - "*.otf"
   register: find_subset_result
+- name: Generate CSS file
+  ansible.builtin.template:
+    src: fonts.css.j2
+    dest: "{{ webfont_output_css_dir }}/fonts.css"
+    mode: "0644"
+  vars:
+    font_files: "{{ find_subset_result.files | map(attribute='path') | map('basename') }}"
 - name: Convert woff
   ansible.builtin.command:
     cmd: sfnt2woff {{ item.path }}

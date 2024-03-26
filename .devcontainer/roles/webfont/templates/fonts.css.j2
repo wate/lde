@@ -1,0 +1,38 @@
+{% for font_file in font_files %}
+{% set file_name = font_file[:-4] %}
+{% set font_name = file_name.split('-')[0] %}
+{% set font_name_maps = {
+  'NotoSansCJKjp': 'Noto Sans Japanese',
+  'NotoSerifCJKjp': 'Noto Serif Japanese',
+  'BIZUDGothic': 'BIZ UDGothic',
+  'BIZUDPGothic': 'BIZ UDPGothic',
+  'BIZUDMincho': 'BIZ UDMincho',
+  'BIZUDPMincho': 'BIZ UDPMincho',
+  'UDEVGothic': 'UDEV Gothic',
+}
+%}
+{% set convert_font_names = font_name_maps.keys() %}
+{% if font_name in convert_font_names %}
+{% set font_name = font_name_maps[font_name] %}
+{% endif %}
+@font-face {
+  font-family: '{{ font_name }}';
+  src:
+    url('{{ webfont_css_font_path}}/{{ file_name }}.woff2') format('woff2'),
+    url('{{ webfont_css_font_path}}/{{ file_name }}.woff') format('woff'),
+{% if font_file.endswith('.ttf') %}
+    url('{{ webfont_css_font_path}}/{{ font_file | basename }}') format('truetype');
+{% elif font_file.endswith('.otf') %}
+    url('{{ webfont_css_font_path}}/{{ font_file | basename }}') format('opentype');
+{% endif %}
+{% if file_name.endswith('-Bold') %}
+  font-weight: bold;
+{% elif file_name.endswith('-Italic') %}
+  font-style: italic;
+{% elif file_name.endswith('-BoldItalic') %}
+  font-style: italic;
+  font-weight: bold;
+{% endif %}
+  font-display: swap;
+}
+{% endfor %}
