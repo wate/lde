@@ -4,13 +4,13 @@
 /* BIZ UDPGothic */
 @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap');
 /* BIZ UDMincho */
-@import url('https://fonts.googleapis.com/css2?family=BIZ+UDMincho:wght@400;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=BIZ+UDMincho:wght@400;700&display=swap'); */
 /* BIZ UDPMincho */
-@import url('https://fonts.googleapis.com/css2?family=BIZ+UDPMincho:wght@400;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPMincho:wght@400;700&display=swap'); */
 /* Noto Sans JP */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap'); */
 /* Noto Serif JP */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap'); */
 /* HackGen / PlemolJP / UDEV Gothic */
 @import url('./fonts.css');
 
@@ -19,7 +19,7 @@
  */
 :root {
   --md-text-font: "BIZ UDPGothic";
-  /* --md-code-font: "HackGen"; */
+  --md-code-font: "CodeFontH";
 }
 /**
  * メインカラムの幅を調整

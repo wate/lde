@@ -1,100 +1,123 @@
+/*
+ *
+ * "白源/HackGen" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+ * https://github.com/yuru7/HackGen
+ *
+ * "PlemolJP" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+ * https://github.com/yuru7/PlemolJP
+ *
+ * "UDEV Gothic" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+ * https://github.com/yuru7/udev-gothic
+ * 
+ *
+ */
 @font-face {
-  font-family: 'HackGen';
+  /* Original: HackGen */
+  font-family: 'CodeFontH';
   src:
-    url('../fonts/HackGen-Bold.woff2') format('woff2'),
-    url('../fonts/HackGen-Bold.woff') format('woff'),
-    url('../fonts/HackGen-Bold.ttf') format('truetype');
-  font-style: normal;
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'HackGen';
-  src:
-    url('../fonts/HackGen-Regular.woff2') format('woff2'),
-    url('../fonts/HackGen-Regular.woff') format('woff'),
-    url('../fonts/HackGen-Regular.ttf') format('truetype');
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'PlemolJP';
-  src:
-    url('../fonts/PlemolJP-Bold.woff2') format('woff2'),
-    url('../fonts/PlemolJP-Bold.woff') format('woff'),
-    url('../fonts/PlemolJP-Bold.ttf') format('truetype');
-  font-style: normal;
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'PlemolJP';
-  src:
-    url('../fonts/PlemolJP-BoldItalic.woff2') format('woff2'),
-    url('../fonts/PlemolJP-BoldItalic.woff') format('woff'),
-    url('../fonts/PlemolJP-BoldItalic.ttf') format('truetype');
-  font-style: italic;
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'PlemolJP';
-  src:
-    url('../fonts/PlemolJP-Italic.woff2') format('woff2'),
-    url('../fonts/PlemolJP-Italic.woff') format('woff'),
-    url('../fonts/PlemolJP-Italic.ttf') format('truetype');
-  font-style: italic;
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'PlemolJP';
-  src:
-    url('../fonts/PlemolJP-Regular.woff2') format('woff2'),
-    url('../fonts/PlemolJP-Regular.woff') format('woff'),
-    url('../fonts/PlemolJP-Regular.ttf') format('truetype');
+    url('../fonts/CodeFontH-Regular.woff2') format('woff2'),
+    url('../fonts/CodeFontH-Regular.woff') format('woff'),
+    url('../fonts/CodeFontH-Regular.ttf') format('truetype');
   font-style: normal;
   font-weight: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'UDEV Gothic';
+  /* Original: HackGen */
+  font-family: 'CodeFontH';
   src:
-    url('../fonts/UDEVGothic-Bold.woff2') format('woff2'),
-    url('../fonts/UDEVGothic-Bold.woff') format('woff'),
-    url('../fonts/UDEVGothic-Bold.ttf') format('truetype');
+    url('../fonts/CodeFontH-Bold.woff2') format('woff2'),
+    url('../fonts/CodeFontH-Bold.woff') format('woff'),
+    url('../fonts/CodeFontH-Bold.ttf') format('truetype');
   font-style: normal;
   font-weight: bold;
   font-display: swap;
 }
 @font-face {
-  font-family: 'UDEV Gothic';
+  /* Original: PlemolJP */
+  font-family: 'CodeFontP';
   src:
-    url('../fonts/UDEVGothic-BoldItalic.woff2') format('woff2'),
-    url('../fonts/UDEVGothic-BoldItalic.woff') format('woff'),
-    url('../fonts/UDEVGothic-BoldItalic.ttf') format('truetype');
-  font-style: italic;
-  font-weight: bold;
+    url('../fonts/CodeFontP-Regular.woff2') format('woff2'),
+    url('../fonts/CodeFontP-Regular.woff') format('woff'),
+    url('../fonts/CodeFontP-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'UDEV Gothic';
+  /* Original: PlemolJP */
+  font-family: 'CodeFontP';
   src:
-    url('../fonts/UDEVGothic-Italic.woff2') format('woff2'),
-    url('../fonts/UDEVGothic-Italic.woff') format('woff'),
-    url('../fonts/UDEVGothic-Italic.ttf') format('truetype');
+    url('../fonts/CodeFontP-Italic.woff2') format('woff2'),
+    url('../fonts/CodeFontP-Italic.woff') format('woff'),
+    url('../fonts/CodeFontP-Italic.ttf') format('truetype');
   font-style: italic;
   font-weight: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'UDEV Gothic';
+  /* Original: PlemolJP */
+  font-family: 'CodeFontP';
   src:
-    url('../fonts/UDEVGothic-Regular.woff2') format('woff2'),
-    url('../fonts/UDEVGothic-Regular.woff') format('woff'),
-    url('../fonts/UDEVGothic-Regular.ttf') format('truetype');
+    url('../fonts/CodeFontP-Bold.woff2') format('woff2'),
+    url('../fonts/CodeFontP-Bold.woff') format('woff'),
+    url('../fonts/CodeFontP-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  /* Original: PlemolJP */
+  font-family: 'CodeFontP';
+  src:
+    url('../fonts/CodeFontP-BoldItalic.woff2') format('woff2'),
+    url('../fonts/CodeFontP-BoldItalic.woff') format('woff'),
+    url('../fonts/CodeFontP-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  /* Original: UDEV Gothic */
+  font-family: 'CodeFontU';
+  src:
+    url('../fonts/CodeFontU-Regular.woff2') format('woff2'),
+    url('../fonts/CodeFontU-Regular.woff') format('woff'),
+    url('../fonts/CodeFontU-Regular.ttf') format('truetype');
   font-style: normal;
   font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  /* Original: UDEV Gothic */
+  font-family: 'CodeFontU';
+  src:
+    url('../fonts/CodeFontU-Italic.woff2') format('woff2'),
+    url('../fonts/CodeFontU-Italic.woff') format('woff'),
+    url('../fonts/CodeFontU-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  /* Original font: UDEV Gothic */
+  font-family: 'CodeFontU';
+  src:
+    url('../fonts/CodeFontU-Bold.woff2') format('woff2'),
+    url('../fonts/CodeFontU-Bold.woff') format('woff'),
+    url('../fonts/CodeFontU-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  /* Original font: UDEV Gothic */
+  font-family: 'CodeFontU';
+  src:
+    url('../fonts/CodeFontU-BoldItalic.woff2') format('woff2'),
+    url('../fonts/CodeFontU-BoldItalic.woff') format('woff'),
+    url('../fonts/CodeFontU-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: bold;
   font-display: swap;
 }

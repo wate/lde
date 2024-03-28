@@ -1,43 +1,24 @@
-{% for font_file in font_files %}
-{% set file_name = font_file[:-4] %}
-{% set font_name = file_name.split('-')[0] %}
-{% set font_name_maps = {
-  'NotoSansCJKjp': 'Noto Sans JP',
-  'NotoSerifCJKjp': 'Noto Serif JP',
-  'BIZUDGothic': 'BIZ UDGothic',
-  'BIZUDPGothic': 'BIZ UDPGothic',
-  'BIZUDMincho': 'BIZ UDMincho',
-  'BIZUDPMincho': 'BIZ UDPMincho',
-  'UDEVGothic': 'UDEV Gothic',
-}
-%}
-{% set convert_font_names = font_name_maps.keys() %}
-{% if font_name in convert_font_names %}
-{% set font_name = font_name_maps[font_name] %}
+{% if webfont_css_output_license_text is defined %}
+{{ webfont_css_output_license_text | comment('cblock') }}
 {% endif %}
+{% for webfont_font_file in webfont_font_files if webfont_font_file.css is defined %}
+{% set font_file = webfont_font_file.output_file %}
+{% set file_name = font_file[:-4] %}
 @font-face {
-  font-family: '{{ font_name }}';
+{% if webfont_font_file.css.comment is defined %}
+  /* {{ webfont_font_file.css.comment }} */
+{% endif %}
+  font-family: '{{ webfont_font_file.css.family }}';
   src:
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff2') format('woff2'),
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff') format('woff'),
 {% if font_file.endswith('.ttf') %}
-    url('{{ webfont_css_font_path}}/{{ font_file | basename }}') format('truetype');
+    url('{{ webfont_css_font_path}}/{{ font_file }}') format('truetype');
 {% elif font_file.endswith('.otf') %}
-    url('{{ webfont_css_font_path}}/{{ font_file | basename }}') format('opentype');
+    url('{{ webfont_css_font_path}}/{{ font_file }}') format('opentype');
 {% endif %}
-{% if file_name.endswith('-Regular') %}
-  font-style: normal;
-  font-weight: normal;
-{% elif file_name.endswith('-Bold') %}
-  font-style: normal;
-  font-weight: bold;
-{% elif file_name.endswith('-Italic') %}
-  font-style: italic;
-  font-weight: normal;
-{% elif file_name.endswith('-BoldItalic') %}
-  font-style: italic;
-  font-weight: bold;
-{% endif %}
-  font-display: swap;
+  font-style: {{ webfont_font_file.css.style | default(webfont_css_default.style) }};
+  font-weight: {{ webfont_font_file.css.weight | default(webfont_css_default.weight) }};
+  font-display: {{ webfont_font_file.css.display | default(webfont_css_default.display) }};
 }
 {% endfor %}

@@ -3,49 +3,161 @@ webfont_packages:
   - fnt
   - fontforge
   - fonttools
-  - woff-tools
+  # - zopfli
+  # - brotli
   - sfnt2woff-zopfli
+  # - woff-tools
   - woff2
-
-webfont_find_font_paths:
-  - /usr/share/fonts/truetype/bizud-gothic
-  - /usr/share/fonts/truetype/bizud-mincho
-  # - /usr/share/fonts/opentype/ipaexfont-gothic
-  # - /usr/share/fonts/opentype/ipaexfont-mincho
-  # - /usr/share/fonts/opentype/ipafont-gothic
-  # - /usr/share/fonts/opentype/ipafont-mincho
-  - /usr/local/share/fonts
-
-webfont_find_font_patterns:
-  ## TrueType
-  - "*-Regular.ttf"
-  - "*-Bold.ttf"
-  - "*-Italic.ttf"
-  - "*-Bold.ttf"
-  - "*-BoldItalic.ttf"
-  ## OpenType
-  - "*-Regular.otf"
-  - "*-Bold.otf"
-  - "*-Italic.otf"
-  - "*-Bold.otf"
-  - "*-BoldItalic.otf"
-
-webfont_find_font_excludes:
-  - "*35*"
-  - "*Console*"
-  - "*JPDOC-*"
-  - "*LG-*"
-  - "BIZUDGothic*"
-  - "BIZUDPGothic*"
-  - "BIZUDMincho*"
-  - "BIZUDPMincho*"
-  - "NotoSansMono*"
-  - "NotoSansCJKjp*"
-  - "NotoSerifCJKjp*"
-
-# webfont_find_font_recurse: true
-# webfont_find_font_use_regex: false
 
 webfont_output_font_dir: /vagrant/docs/assets/fonts
 webfont_output_css_dir: /vagrant/docs/assets/stylesheets
 webfont_css_font_path: "../fonts"
+
+webfont_css_output_license_text: |
+  "白源/HackGen" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+  https://github.com/yuru7/HackGen
+
+  "PlemolJP" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+  https://github.com/yuru7/PlemolJP
+
+  "UDEV Gothic" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+  https://github.com/yuru7/udev-gothic
+
+## 出力するファイル名のプレフィックス
+webfont_font_prefix: CodeFont
+
+## CSS出力時の
+
+webfont_css_default:
+  style: normal
+  weight: normal
+  display: swap
+
+### font-weight map ###
+# Thin 100
+# ExtraLight 200
+# Light 300
+# Regular 400
+# Medium 500
+# SemiBold 600
+# Bold 700
+# ExtraBold 800
+# Black 900
+webfont_font_files:
+  ## HackGen
+  - src: /usr/local/share/fonts/HackGen/HackGen-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}H-Regular.ttf"
+    css:
+      comment: "Original: HackGen"
+      family: "{{ webfont_font_prefix }}H"
+  - src: /usr/local/share/fonts/HackGen/HackGen-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}H-Bold.ttf"
+    css:
+      comment: "Original: HackGen"
+      family: "{{ webfont_font_prefix }}H"
+      weight: bold
+  ## PlemolJP
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Thin.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-Thin.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     weight: 100
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-ThinItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-ThinItalic.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     style: italic
+  #     weight: 100
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Light.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-Light.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     weight: 200
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-LightItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-LightItalic.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     style: italic
+  #     weight: 200
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-ExtraLight.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-ExtraLight.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     weight: 300
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-ExtraLightItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-ExtraLightItalic.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     style: italic
+  #     weight: 300
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}P-Regular.ttf"
+    css:
+      comment: "Original: PlemolJP"
+      family: "{{ webfont_font_prefix }}P"
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Italic.ttf
+    output_file: "{{ webfont_font_prefix }}P-Italic.ttf"
+    css:
+      comment: "Original: PlemolJP"
+      family: "{{ webfont_font_prefix }}P"
+      style: italic
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Medium.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-Medium.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     weight: 500
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-MediumItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-MediumItalic.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     style: italic
+  #     weight: 500
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-SemiBold.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-SemiBold.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     weight: 600
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-SemiBoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-SemiBoldItalic.ttf"
+  #   css:
+  #     family: "{{ webfont_font_prefix }}P"
+  #     style: italic
+  #     weight: 600
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}P-Bold.ttf"
+    css:
+      comment: "Original: PlemolJP"
+      family: "{{ webfont_font_prefix }}P"
+      weight: bold
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-BoldItalic.ttf
+    output_file: "{{ webfont_font_prefix }}P-BoldItalic.ttf"
+    css:
+      comment: "Original: PlemolJP"
+      family: "{{ webfont_font_prefix }}P"
+      style: italic
+      weight: bold
+  ## UDEV Gothic
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}U-Regular.ttf"
+    css:
+      comment: "Original: UDEV Gothic"
+      family: "{{ webfont_font_prefix }}U"
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-Italic.ttf
+    output_file: "{{ webfont_font_prefix }}U-Italic.ttf"
+    css:
+      comment: "Original: UDEV Gothic"
+      family: "{{ webfont_font_prefix }}U"
+      style: italic
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}U-Bold.ttf"
+    css:
+      comment: "Original font: UDEV Gothic"
+      family: "{{ webfont_font_prefix }}U"
+      weight: bold
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-BoldItalic.ttf
+    output_file: "{{ webfont_font_prefix }}U-BoldItalic.ttf"
+    css:
+      comment: "Original font: UDEV Gothic"
+      family: "{{ webfont_font_prefix }}U"
+      style: italic
+      weight: bold
