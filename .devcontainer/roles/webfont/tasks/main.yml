@@ -17,39 +17,39 @@
       - files/subset_hiragana.txt
       - files/subset_katakana.txt
       - files/subset_kanji.txt
-# - name: Generate subset font
-#   ansible.builtin.command:
-#     cmd: >
-#       fonttools subset
-#       --text-file={{ webfont_output_font_dir }}/subset.txt
-#       --output-file={{ item.output_file }}
-#       {{ item.src }}
-#     chdir: "{{ webfont_output_font_dir }}"
-#   loop: "{{ webfont_font_files }}"
-#   loop_control:
-#     label: "{{ item.src | basename }}"
-# - name: Find subset font files
-#   ansible.builtin.find:
-#     paths:
-#       - "{{ webfont_output_font_dir }}"
-#     patterns:
-#       - "*.ttf"
-#       - "*.otf"
-#   register: find_subset_result
-# - name: Convert woff
-#   ansible.builtin.command:
-#     cmd: sfnt2woff-zopfli {{ item.path }}
-#     chdir: "{{ webfont_output_font_dir }}"
-#   loop: "{{ find_subset_result.files }}"
-#   loop_control:
-#     label: "{{ item.path | basename }}"
-# - name: Convert woff2
-#   ansible.builtin.command:
-#     cmd: woff2_compress {{ item.path }}
-#     chdir: "{{ webfont_output_font_dir }}"
-#   loop: "{{ find_subset_result.files }}"
-#   loop_control:
-#     label: "{{ item.path | basename }}"
+- name: Generate subset font
+  ansible.builtin.command:
+    cmd: >
+      fonttools subset
+      --text-file={{ webfont_output_font_dir }}/subset.txt
+      --output-file={{ item.output_file }}
+      {{ item.src }}
+    chdir: "{{ webfont_output_font_dir }}"
+  loop: "{{ webfont_font_files }}"
+  loop_control:
+    label: "{{ item.src | basename }}"
+- name: Find subset font files
+  ansible.builtin.find:
+    paths:
+      - "{{ webfont_output_font_dir }}"
+    patterns:
+      - "*.ttf"
+      - "*.otf"
+  register: find_subset_result
+- name: Generate woff
+  ansible.builtin.command:
+    cmd: sfnt2woff-zopfli {{ item.path }}
+    chdir: "{{ webfont_output_font_dir }}"
+  loop: "{{ find_subset_result.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+- name: Generate woff2
+  ansible.builtin.command:
+    cmd: woff2_compress {{ item.path }}
+    chdir: "{{ webfont_output_font_dir }}"
+  loop: "{{ find_subset_result.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
 - name: Generate CSS file
   ansible.builtin.template:
     src: fonts.css.j2

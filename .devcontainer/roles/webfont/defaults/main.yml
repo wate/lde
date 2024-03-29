@@ -1,6 +1,5 @@
 ---
 webfont_packages:
-  - fnt
   - fontforge
   - fonttools
   # - zopfli

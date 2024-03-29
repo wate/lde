@@ -3,6 +3,7 @@
 ## インストールするパッケージ
 ## -----------------
 font_packages:
+  - fnt
   - fonts-ipaexfont-gothic
   - fonts-ipaexfont-mincho
   - fonts-morisawa-bizud-gothic
