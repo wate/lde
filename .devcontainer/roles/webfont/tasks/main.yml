@@ -22,7 +22,7 @@
     cmd: >
       fonttools subset
       --text-file={{ webfont_output_font_dir }}/subset.txt
-      --output-file={{ item.output_file }}
+      --output-file={{ item.output_file | default(item.src | basename) }}
       {{ item.src }}
     chdir: "{{ webfont_output_font_dir }}"
   loop: "{{ webfont_font_files }}"

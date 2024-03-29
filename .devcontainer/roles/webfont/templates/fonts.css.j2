@@ -2,7 +2,7 @@
 {{ webfont_css_output_license_text | comment('cblock') }}
 {% endif %}
 {% for webfont_font_file in webfont_font_files if webfont_font_file.css is defined %}
-{% set font_file = webfont_font_file.output_file %}
+{% set font_file = webfont_font_file.output_file | default(webfont_font_file.src | basename) %}
 {% set file_name = font_file[:-4] %}
 @font-face {
 {% if webfont_font_file.css.comment is defined %}

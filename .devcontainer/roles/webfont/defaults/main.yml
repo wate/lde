@@ -43,6 +43,50 @@ webfont_css_default:
 # ExtraBold 800
 # Black 900
 webfont_font_files:
+  ## BIZ UDGothic
+  # - src: /usr/share/fonts/truetype/bizud-gothic/BIZUDGothic-Regular.ttf
+  #   css:
+  #     family: "BIZ UDGothic"
+  # - src: /usr/share/fonts/truetype/bizud-gothic/BIZUDGothic-Bold.ttf
+  #   css:
+  #     family: "BIZ UDGothic"
+  #     weight: bold
+  ## BIZ UDPGothic
+  # - src: /usr/share/fonts/truetype/bizud-gothic/BIZUDPGothic-Regular.ttf
+  #   css:
+  #     family: "BIZ UDPGothic"
+  # - src: /usr/share/fonts/truetype/bizud-gothic/BIZUDPGothic-Bold.ttf
+  #   css:
+  #     family: "BIZ UDPGothic"
+  #     weight: bold
+  ## BIZ UDMincho
+  # - src: /usr/share/fonts/truetype/bizud-mincho/BIZUDMincho-Regular.ttf
+  #   css:
+  #     family: "BIZ UDMincho"
+  ## BIZ UDPMincho
+  # - src: /usr/share/fonts/truetype/bizud-mincho/BIZUDPMincho-Regular.ttf
+  #   css:
+  #     family: "BIZ UDPMincho"
+  ## Noto Sans JP
+  # - src: /usr/local/share/fonts/NotoSansCJKjp/NotoSansCJKjp-Regular.otf
+  #   output_file: "NotoSansJP-Regular.otf"
+  #   css:
+  #     family: "Noto Sans JP"
+  # - src: /usr/local/share/fonts/NotoSansCJKjp/NotoSansCJKjp-Bold.otf
+  #   output_file: "NotoSansJP-Bold.otf"
+  #   css:
+  #     family: "Noto Sans JP"
+  #     weight: bold
+  ## Noto Serif JP
+  # - src: /usr/local/share/fonts/NotoSerifCJKjp/NotoSerifCJKjp-Regular.otf
+  #   output_file: "NotoSerifJP-Regular.otf"
+  #   css:
+  #     family: "Noto Serif JP"
+  # - src: /usr/local/share/fonts/NotoSerifCJKjp/NotoSerifCJKjp-Bold.otf
+  #   output_file: "NotoSerifJP-Bold.otf"
+  #   css:
+  #     family: "Noto Serif JP"
+  #     weight: bold
   ## HackGen
   - src: /usr/local/share/fonts/HackGen/HackGen-Regular.ttf
     output_file: "{{ webfont_font_prefix }}H-Regular.ttf"
