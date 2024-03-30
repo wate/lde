@@ -194,13 +194,139 @@ webfont_font_files:
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-Bold.ttf
     output_file: "{{ webfont_font_prefix }}U-Bold.ttf"
     css:
-      comment: "Original font: UDEV Gothic"
+      comment: "Original: UDEV Gothic"
       family: "{{ webfont_font_prefix }}U"
       weight: bold
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-BoldItalic.ttf
     output_file: "{{ webfont_font_prefix }}U-BoldItalic.ttf"
     css:
-      comment: "Original font: UDEV Gothic"
+      comment: "Original: UDEV Gothic"
       family: "{{ webfont_font_prefix }}U"
       style: italic
       weight: bold
+  ## Moralerspace
+  ### Moralerspace Argon
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceArgon-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}MA-Regular.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Argon"
+  #     family: "{{ webfont_font_prefix }}MA"
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceArgon-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MA-Italic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Argon"
+  #     family: "{{ webfont_font_prefix }}MA"
+  #     style: italic
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceArgon-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}MA-Bold.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Argon"
+  #     family: "{{ webfont_font_prefix }}MA"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceArgon-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MA-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Argon"
+  #     family: "{{ webfont_font_prefix }}MA"
+  #     style: italic
+  #     weight: bold
+  ### Moralerspace Krypton
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceKrypton-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}MK-Regular.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Krypton"
+  #     family: "{{ webfont_font_prefix }}MK"
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceKrypton-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MK-Italic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Krypton"
+  #     family: "{{ webfont_font_prefix }}MK"
+  #     style: italic
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceKrypton-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}MK-Bold.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Krypton"
+  #     family: "{{ webfont_font_prefix }}MK"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceKrypton-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MK-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Krypton"
+  #     family: "{{ webfont_font_prefix }}MK"
+  #     style: italic
+  #     weight: bold
+  ### Moralerspace Neon
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceNeon-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}MN-Regular.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Neon"
+  #     family: "{{ webfont_font_prefix }}MN"
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceNeon-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MN-Italic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Neon"
+  #     family: "{{ webfont_font_prefix }}MN"
+  #     style: italic
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceNeon-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}MN-Bold.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Neon"
+  #     family: "{{ webfont_font_prefix }}MN"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceNeon-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MN-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Neon"
+  #     family: "{{ webfont_font_prefix }}MN"
+  #     style: italic
+  #     weight: bold
+  ### Moralerspace Radon
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceRadon-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}MR-Regular.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Radon"
+  #     family: "{{ webfont_font_prefix }}MR"
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceRadon-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MR-Italic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Radon"
+  #     family: "{{ webfont_font_prefix }}MR"
+  #     style: italic
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceRadon-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}MR-Bold.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Radon"
+  #     family: "{{ webfont_font_prefix }}MR"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceRadon-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MR-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Radon"
+  #     family: "{{ webfont_font_prefix }}MR"
+  #     style: italic
+  #     weight: bold
+  ### Moralerspace Xenon
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceXenon-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}MX-Regular.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Xenon"
+  #     family: "{{ webfont_font_prefix }}MX"
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceXenon-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MX-Italic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Xenon"
+  #     family: "{{ webfont_font_prefix }}MX"
+  #     style: italic
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceXenon-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}MX-Bold.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Xenon"
+  #     family: "{{ webfont_font_prefix }}MX"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceXenon-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}MX-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: Moralerspace Xenon"
+  #     family: "{{ webfont_font_prefix }}MX"
+  #     style: italic
+  #     weight: bold
