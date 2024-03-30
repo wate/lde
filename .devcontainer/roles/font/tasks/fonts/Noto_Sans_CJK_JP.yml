@@ -1,4 +1,3 @@
-
 ---
 # code: language=ansible
 - name: Create font directory
@@ -12,10 +11,10 @@
     dest: "{{ font_dir }}/NotoSansCJKjp/{{ item }}"
     mode: "0644"
   loop:
-    - NotoSansCJKjp-Black.otf
-    - NotoSansCJKjp-Bold.otf
-    - NotoSansCJKjp-DemiLight.otf
-    - NotoSansCJKjp-Light.otf
-    - NotoSansCJKjp-Medium.otf
-    - NotoSansCJKjp-Regular.otf
     - NotoSansCJKjp-Thin.otf
+    - NotoSansCJKjp-Light.otf
+    - NotoSansCJKjp-DemiLight.otf
+    - NotoSansCJKjp-Regular.otf
+    - NotoSansCJKjp-Medium.otf
+    - NotoSansCJKjp-Bold.otf
+    - NotoSansCJKjp-Black.otf

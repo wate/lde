@@ -24,3 +24,9 @@
 - name: Install Moralerspace font
   ansible.builtin.import_tasks:
     file: fonts/Moralerspace.yml
+- name: Install Firge font
+  ansible.builtin.import_tasks:
+    file: fonts/Firge.yml
+- name: Install Juisee font
+  ansible.builtin.import_tasks:
+    file: fonts/Juisee.yml

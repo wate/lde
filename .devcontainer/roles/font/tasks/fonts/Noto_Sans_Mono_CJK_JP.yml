@@ -1,4 +1,3 @@
-
 ---
 # code: language=ansible
 - name: Create font directory
@@ -8,8 +7,8 @@
     mode: "0755"
 - name: Install Noto Sans JP font
   ansible.builtin.get_url:
-    url: https://github.com/{{ font_notocjk_repo }}/raw/main/Sans/Mono/NotoSansMonoCJKjp-Regular.otf
-    dest: "{{ font_dir }}/NotoSansCJKjp/{{ item }}"
+    url: https://github.com/{{ font_notocjk_repo }}/raw/main/Sans/Mono/{{ item }}
+    dest: "{{ font_dir }}/NotoSansMonoCJKjp/{{ item }}"
     mode: "0644"
   loop:
     - NotoSansMonoCJKjp-Regular.otf

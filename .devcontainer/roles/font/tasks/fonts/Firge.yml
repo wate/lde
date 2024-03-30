@@ -1,6 +1,6 @@
 ---
 - name: Set Install version variable
-  when: font_moralerspace_version == 'latest'
+  when: font_firge_version == 'latest'
   block:
     - name: Set Github API request header
       ansible.builtin.set_fact:
@@ -15,25 +15,25 @@
       when: lookup('env', 'GITHUB_TOKEN') | length > 0
     - name: Get latest release
       ansible.builtin.uri:
-        url: https://api.github.com/repos/{{ font_moralerspace_repo }}/releases/latest
+        url: https://api.github.com/repos/{{ font_firge_repo }}/releases/latest
         headers: "{{ github_api_request_headers }}"
       register: latest_releases
     - name: Set package version variable
       ansible.builtin.set_fact:
-        font_moralerspace_version: "{{ latest_releases.json.tag_name }}"
+        font_firge_version: "{{ latest_releases.json.tag_name }}"
 - name: Set asset file variable
   ansible.builtin.set_fact:
     asset_url: |-
-      https://github.com/{{ font_moralerspace_repo }}/releases/download/{{ font_moralerspace_version }}/Moralerspace_{{ font_moralerspace_version }}.zip
+      https://github.com/{{ font_firge_repo }}/releases/download/{{ font_firge_version }}/Firge_{{ font_firge_version }}.zip
 - name: Create font extract directory
   ansible.builtin.file:
-    path: "{{ font_dir }}/Moralerspace"
+    path: "{{ font_dir }}/Firge"
     state: directory
     mode: "0755"
 - name: Install font file
   ansible.builtin.unarchive:
     src: "{{ asset_url }}"
-    dest: "{{ font_dir }}/Moralerspace"
+    dest: "{{ font_dir }}/Firge"
     extra_opts:
       - -j
     remote_src: true
