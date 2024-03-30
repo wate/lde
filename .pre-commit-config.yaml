@@ -12,7 +12,11 @@ repos:
       - id: check-merge-conflict
       - id: fix-byte-order-marker
       - id: mixed-line-ending
+      - id: check-case-conflict
       - id: end-of-file-fixer
+      # - id: check-added-large-files
+      #   args:
+      #     - "--maxkb=500"
       - id: trailing-whitespace
         args:
           - --markdown-linebreak-ext=md

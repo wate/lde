@@ -18,7 +18,7 @@
         osv_scanner_download_file: "\
           osv-scanner_{{ osv_scanner_version[1:] }}\
           _{{ ansible_facts['system'] | lower }}\
-          _{{ architecture_types[ansible_facts['architecture']] }}
+          _{{ architecture_types[ansible_facts['architecture']] }}\
           "
       vars:
         architecture_types:
