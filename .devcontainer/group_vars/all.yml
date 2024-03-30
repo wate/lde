@@ -457,7 +457,6 @@ lde_pipx_packages:
       - mkdocs-git-revision-date-localized-plugin
       - mkdocs-glightbox
       - mkdocs-tooltips
-      - mkdocs-exclude
 
 ## --------------
 ## ログファイルのブラウザ出力設定

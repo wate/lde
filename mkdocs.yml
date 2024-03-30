@@ -23,7 +23,7 @@ theme:
     # - navigation.indexes
     - search.suggest
     - search.highlight
-    - search.share
+    # - search.share
 # nav:
 #   - ホーム: 'index.md'
 #   - システム構成: 'architecture.md'
@@ -68,14 +68,13 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-# hooks:
-#   - mkdocs_hook.py
+## https://www.mkdocs.org/about/release-notes/#excluded-doc-files
+exclude_docs: |
+  rules
 plugins:
   ## https://squidfunk.github.io/mkdocs-material/plugins/search/
   - search:
       lang: ja
-  ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
-  - offline
   ## https://squidfunk.github.io/mkdocs-material/plugins/tags/
   - tags
   ## https://github.com/blueswen/mkdocs-glightbox
@@ -85,11 +84,9 @@ plugins:
       type: iso_datetime
       timezone: Asia/Tokyo
       locale: ja
-  ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
-  # - blog
   ## https://roipoussiere.frama.io/mkdocs-tooltips/
   - tooltips
-  ## https://github.com/apenwarr/mkdocs-exclude
-  - exclude:
-      glob:
-        - rules/*
+  ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
+  # - blog
+  ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
+  # - offline

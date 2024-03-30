@@ -15,8 +15,6 @@ lde_pipx_packages: []
 #       - mkdocs-git-revision-date-localized-plugin
 #       - mkdocs-glightbox
 #       - mkdocs-tooltips
-#       - mkdocs-exclude
-#   - name: lizard
 #   - name: ansible
 #   - name: ansible-lint
 
