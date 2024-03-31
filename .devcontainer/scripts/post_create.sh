@@ -113,11 +113,11 @@ if [ -f package.json ]; then
   ni
 fi
 
-pipx install ansible --include-deps
 pipx install mkdocs-material --include-deps
-pipx inject mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox mkdocs-tooltips mkdocs-exclude
-pipx install lizard --include-deps
+pipx inject mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox mkdocs-tooltips
+pipx install ansible --include-deps
 pipx install ansible-lint --include-deps
+pipx install lizard --include-deps
 
 if type "ansible" >/dev/null 2>&1 && [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
