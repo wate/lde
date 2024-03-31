@@ -43,7 +43,6 @@ extra_javascript:
   - assets/javascripts/extra.js
 extra_css:
   # - /pagefind/pagefind-ui.css
-  - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
   - assets/stylesheets/extra.css
 markdown_extensions:
   - abbr
