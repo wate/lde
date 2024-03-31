@@ -43,6 +43,7 @@ extra_javascript:
   - assets/javascripts/extra.js
 extra_css:
   # - /pagefind/pagefind-ui.css
+  - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
   - assets/stylesheets/extra.css
 markdown_extensions:
   - abbr
@@ -82,7 +83,7 @@ plugins:
   - glightbox
   ## https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
   - git-revision-date-localized:
-      type: iso_datetime
+      type: iso_date
       timezone: Asia/Tokyo
       locale: ja
   ## https://roipoussiere.frama.io/mkdocs-tooltips/

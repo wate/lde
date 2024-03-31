@@ -40,7 +40,6 @@
  * ツールチップが設定されている文字列のスタイル
  * @see https://github.com/chinchang/hint.css
  */
-@import url('https://cdn.jsdelivr.net/npm/hint.css/hint.min.css');
 [class*="hint--"] {
   border-bottom: 0.05rem dotted var(--md-default-fg-color--light);
 }
