@@ -23,7 +23,7 @@
 }
 /**
  * git-revision-date-localized
- * https: //github.com/timvink/mkdocs-git-revision-date-localized-plugin
+ * https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
  * 最終更新日を右上に表示するためのスタイル
  */
 .md-content__inner {
@@ -36,9 +36,9 @@
 }
 /**
  * tooltips
- * https: //roipoussiere.frama.io/mkdocs-tooltips/
+ * https://roipoussiere.frama.io/mkdocs-tooltips/
  * ツールチップが設定されている文字列のスタイル
- * @see https: //github.com/chinchang/hint.css
+ * @see https://github.com/chinchang/hint.css
  */
 [class*="hint--"] {
   border-bottom: 0.05rem dotted var(--md-default-fg-color--light);
