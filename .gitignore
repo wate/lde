@@ -5,7 +5,7 @@
 Thumbs.db
 
 ### Cache file directory ###
-/.cache/
+.cache
 *.cache
 
 ### Python ###
