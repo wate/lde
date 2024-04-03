@@ -1,0 +1,25 @@
+---
+# code: language=ansible
+- name: Create font directory
+  ansible.builtin.file:
+    path: "{{ font_dir }}/NotoSerifJP"
+    state: directory
+    mode: "0755"
+- name: Install Noto Serif JP font
+  ansible.builtin.get_url:
+    url: https://github.com/{{ font_notocjk_repo }}/raw/main/Serif/SubsetOTF/JP/{{ item }}
+    dest: "{{ font_dir }}/NotoSerifJP/{{ item }}"
+    mode: "0644"
+  loop:
+    - NotoSerifJP-ExtraLight.otf
+    - NotoSerifJP-Light.otf
+    - NotoSerifJP-Regular.otf
+    - NotoSerifJP-Medium.otf
+    - NotoSerifJP-SemiBold.otf
+    - NotoSerifJP-Bold.otf
+    - NotoSerifJP-Black.otf
+- name: Install Noto Serif JP variable font
+  ansible.builtin.get_url:
+    url: https://github.com/{{ font_notocjk_repo }}/raw/main/Serif/Variable/OTF/Subset/NotoSerifJP-VF.otf
+    dest: "{{ font_dir }}/NotoSerifJP/NotoSerifJP-VF.otf"
+    mode: "0644"

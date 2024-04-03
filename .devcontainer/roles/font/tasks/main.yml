@@ -3,15 +3,12 @@
 - name: Install fonts packages
   ansible.builtin.apt:
     name: "{{ font_packages }}"
-- name: Install Noto Sans CJK JP font
+- name: Install Noto Sans JP font
   ansible.builtin.import_tasks:
-    file: fonts/Noto_Sans_CJK_JP.yml
-- name: Install Noto Serif CJK JP font
+    file: fonts/Noto_Sans_JP.yml
+- name: Install Noto Serif JP font
   ansible.builtin.import_tasks:
-    file: fonts/Noto_Serif_CJK_JP.yml
-- name: Install Noto Sans Mono JP font
-  ansible.builtin.import_tasks:
-    file: fonts/Noto_Sans_Mono_CJK_JP.yml
+    file: fonts/Noto_Serif_JP.yml
 - name: Install HackGen font
   ansible.builtin.import_tasks:
     file: fonts/HackGen.yml
