@@ -25,7 +25,7 @@
   ansible.builtin.set_fact:
     asset_url: |-
       https://github.com/{{ font_juisee_repo }}/releases/download/{{ font_juisee_version }}/Juisee_{{ font_juisee_version }}.zip
-- name: Create font extract directory
+- name: Create font directory
   ansible.builtin.file:
     path: "{{ font_dir }}/Juisee"
     state: directory

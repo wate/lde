@@ -100,7 +100,7 @@
   font-display: swap;
 }
 @font-face {
-  /* Original font: UDEV Gothic */
+  /* Original: UDEV Gothic */
   font-family: 'CodeFontU';
   src:
     url('../fonts/CodeFontU-Bold.woff2') format('woff2'),
@@ -111,7 +111,7 @@
   font-display: swap;
 }
 @font-face {
-  /* Original font: UDEV Gothic */
+  /* Original: UDEV Gothic */
   font-family: 'CodeFontU';
   src:
     url('../fonts/CodeFontU-BoldItalic.woff2') format('woff2'),

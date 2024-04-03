@@ -25,7 +25,7 @@
   ansible.builtin.set_fact:
     asset_url: |-
       https://github.com/{{ font_moralerspace_repo }}/releases/download/{{ font_moralerspace_version }}/Moralerspace_{{ font_moralerspace_version }}.zip
-- name: Create font extract directory
+- name: Create font directory
   ansible.builtin.file:
     path: "{{ font_dir }}/Moralerspace"
     state: directory

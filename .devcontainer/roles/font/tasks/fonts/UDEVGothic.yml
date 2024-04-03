@@ -24,7 +24,7 @@
 - name: Set asset file variable
   ansible.builtin.set_fact:
     asset_url: https://github.com/{{ font_udevgothic_repo }}/releases/download/{{ font_udevgothic_version }}/UDEVGothic_{{ font_udevgothic_version }}.zip
-- name: Create font extract directory
+- name: Create font directory
   ansible.builtin.file:
     path: "{{ font_dir }}/UDEVGothic"
     state: directory

@@ -5,10 +5,10 @@
     name: "{{ font_packages }}"
 - name: Install Noto Sans JP font
   ansible.builtin.import_tasks:
-    file: fonts/Noto_Sans_JP.yml
+    file: fonts/NotoSansJP.yml
 - name: Install Noto Serif JP font
   ansible.builtin.import_tasks:
-    file: fonts/Noto_Serif_JP.yml
+    file: fonts/NotoSerifJP.yml
 - name: Install HackGen font
   ansible.builtin.import_tasks:
     file: fonts/HackGen.yml

@@ -24,7 +24,7 @@
 - name: Set asset file variable
   ansible.builtin.set_fact:
     asset_url: https://github.com/{{ font_plemoljp_repo }}/releases/download/{{ font_plemoljp_version }}/PlemolJP_{{ font_plemoljp_version }}.zip
-- name: Create font extract directory
+- name: Create font directory
   ansible.builtin.file:
     path: "{{ font_dir }}/PlemolJP"
     state: directory

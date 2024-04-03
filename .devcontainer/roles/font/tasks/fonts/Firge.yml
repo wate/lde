@@ -25,7 +25,7 @@
   ansible.builtin.set_fact:
     asset_url: |-
       https://github.com/{{ font_firge_repo }}/releases/download/{{ font_firge_version }}/Firge_{{ font_firge_version }}.zip
-- name: Create font extract directory
+- name: Create font directory
   ansible.builtin.file:
     path: "{{ font_dir }}/Firge"
     state: directory
