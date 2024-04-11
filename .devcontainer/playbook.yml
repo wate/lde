@@ -62,15 +62,15 @@
       become: false
       tags:
         - role_lde
-    - role: font
-      tags:
-        - role_font
-        - doc_font
-    - role: webfont
-      become: false
-      tags:
-        - role_webfont
-        - doc_font
+    # - role: font
+    #   tags:
+    #     - role_font
+    #     - doc_font
+    # - role: webfont
+    #   become: false
+    #   tags:
+    #     - role_webfont
+    #     - doc_font
     # - role: cakephp
     #   become: false
     #   tags:
@@ -86,11 +86,11 @@
       ansible.builtin.stat:
         path: /vagrant/.pre-commit-config.yaml
       register: pre_commit_config_result
-    - name: pre-commit config auto update
+    - name: Update pre-commit config
       when: pre_commit_config_result.stat.exists
       become: false
       block:
-        - name: pre-commit config auto update
+        - name: Update pre-commit config
           ansible.builtin.command:
             cmd: pre-commit autoupdate
             chdir: /vagrant
