@@ -25,14 +25,13 @@ theme:
     - search.highlight
     # - search.share
 # nav:
-#   - ホーム: 'index.md'
-#   - システム構成: 'architecture.md'
-#   - データ構造: 'er_diagram.md'
-#   - 機能一覧: 'features.md'
-#   - 機能詳細:
-#     - ○○機能: features/circle.md
-#     - △△機能: features/triangle.md
-#     - □□機能: features/square.md
+#   - ホーム: index.md
+#   - システム構成: architecture.md
+#   - データ構造: data_structure.md
+#   - 機能一覧: features.md
+#   - デプロイ方法: deploy.md
+#   - 機能詳細: features/
+#   - テーブル定義: schema/
 # docs_dir: docs
 # site_dir: site
 # custom_dir: overrides
@@ -88,6 +87,10 @@ plugins:
       locale: ja
   ## https://roipoussiere.frama.io/mkdocs-tooltips/
   - tooltips
+  ## https://oprypin.github.io/mkdocs-section-index/
+  - section-index
+  ## https://oprypin.github.io/mkdocs-literate-nav/
+  - literate-nav
   ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/

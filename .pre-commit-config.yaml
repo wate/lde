@@ -31,6 +31,8 @@ repos:
     hooks:
       - id: markdownlint-fix
         exclude: ^docs/schema/.*$
+      - id: markdownlint
+        exclude: ^docs/schema/.*$
   - repo: https://github.com/wate/pre-commit-mirrors-textlint
     rev: v14.0.4
     hooks:
