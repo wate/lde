@@ -34,12 +34,25 @@ repos:
       - id: markdownlint
         exclude: ^docs/schema/.*$
   - repo: https://github.com/wate/pre-commit-mirrors-textlint
-    rev: v14.0.4
+    rev: v14.0.4-1
     hooks:
+      - id: textlint-fix
+        exclude: ^docs/schema/.*$
+        additional_dependencies:
+          - textlint
+          - textlint-filter-rule-comments
+          - textlint-rule-preset-ja-technical-writing
+          - textlint-rule-preset-ja-spacing
+          - textlint-rule-ja-hiragana-fukushi
+          - textlint-rule-ja-hiragana-keishikimeishi
+          - textlint-rule-ja-hiragana-hojodoushi
+          - "@textlint-ja/textlint-rule-no-synonyms"
+          - sudachi-synonyms-dictionary
+          - textlint-rule-prh
       - id: textlint
         exclude: ^docs/schema/.*$
-        args: [--fix]
         additional_dependencies:
+          - textlint
           - textlint-filter-rule-comments
           - textlint-rule-preset-ja-technical-writing
           - textlint-rule-preset-ja-spacing
