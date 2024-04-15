@@ -80,7 +80,7 @@ webfont_font_files:
       family: "{{ webfont_font_prefix }}H"
       weight: bold
   - src: /usr/local/share/fonts/HackGen/HackGen-Regular.ttf
-    output_file: "{{ webfont_font_prefix }}H-Regular.ttf"
+    output_file: "{{ webfont_font_prefix }}H35-Regular.ttf"
     css:
       comment: "Original: HackGen35"
       family: "{{ webfont_font_prefix }}H35"
