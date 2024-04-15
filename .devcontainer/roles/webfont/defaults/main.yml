@@ -67,22 +67,6 @@ webfont_font_files:
   # - src: /usr/share/fonts/truetype/bizud-mincho/BIZUDPMincho-Regular.ttf
   #   css:
   #     family: "BIZ UDPMincho"
-  ## Noto Sans JP
-  # - src: /usr/local/share/fonts/NotoSansJP/NotoSansJP-Regular.otf
-  #   css:
-  #     family: "Noto Sans JP"
-  # - src: /usr/local/share/fonts/NotoSansJP/NotoSansJP-Bold.otf
-  #   css:
-  #     family: "Noto Sans JP"
-  #     weight: bold
-  ## Noto Serif JP
-  # - src: /usr/local/share/fonts/NotoSerifJP/NotoSerifJP-Regular.otf
-  #   css:
-  #     family: "Noto Serif JP"
-  # - src: /usr/local/share/fonts/NotoSerifJP/NotoSerifJP-Bold.otf
-  #   css:
-  #     family: "Noto Serif JP"
-  #     weight: bold
   ## HackGen
   - src: /usr/local/share/fonts/HackGen/HackGen-Regular.ttf
     output_file: "{{ webfont_font_prefix }}H-Regular.ttf"
@@ -95,37 +79,54 @@ webfont_font_files:
       comment: "Original: HackGen"
       family: "{{ webfont_font_prefix }}H"
       weight: bold
+  - src: /usr/local/share/fonts/HackGen/HackGen-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}H-Regular.ttf"
+    css:
+      comment: "Original: HackGen35"
+      family: "{{ webfont_font_prefix }}H35"
+  - src: /usr/local/share/fonts/HackGen/HackGen35-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}H35-Bold.ttf"
+    css:
+      comment: "Original: HackGen35"
+      family: "{{ webfont_font_prefix }}H35"
+      weight: bold
   ## PlemolJP
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Thin.ttf
   #   output_file: "{{ webfont_font_prefix }}P-Thin.ttf"
   #   css:
+  #     comment: "Original: PlemolJP"
   #     family: "{{ webfont_font_prefix }}P"
   #     weight: 100
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-ThinItalic.ttf
   #   output_file: "{{ webfont_font_prefix }}P-ThinItalic.ttf"
   #   css:
+  #     comment: "Original: PlemolJP"
   #     family: "{{ webfont_font_prefix }}P"
   #     style: italic
   #     weight: 100
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Light.ttf
   #   output_file: "{{ webfont_font_prefix }}P-Light.ttf"
   #   css:
+  #     comment: "Original: PlemolJP"
   #     family: "{{ webfont_font_prefix }}P"
   #     weight: 200
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-LightItalic.ttf
   #   output_file: "{{ webfont_font_prefix }}P-LightItalic.ttf"
   #   css:
+  #     comment: "Original: PlemolJP"
   #     family: "{{ webfont_font_prefix }}P"
   #     style: italic
   #     weight: 200
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-ExtraLight.ttf
   #   output_file: "{{ webfont_font_prefix }}P-ExtraLight.ttf"
   #   css:
+  #     comment: "Original: PlemolJP"
   #     family: "{{ webfont_font_prefix }}P"
   #     weight: 300
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-ExtraLightItalic.ttf
   #   output_file: "{{ webfont_font_prefix }}P-ExtraLightItalic.ttf"
   #   css:
+  #     comment: "Original: PlemolJP"
   #     family: "{{ webfont_font_prefix }}P"
   #     style: italic
   #     weight: 300
@@ -175,6 +176,95 @@ webfont_font_files:
       family: "{{ webfont_font_prefix }}P"
       style: italic
       weight: bold
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Thin.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-Thin.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     weight: 100
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-ThinItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-ThinItalic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     style: italic
+  #     weight: 100
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Light.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-Light.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     weight: 200
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-LightItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-LightItalic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     style: italic
+  #     weight: 200
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-ExtraLight.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-ExtraLight.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     weight: 300
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-ExtraLightItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-ExtraLightItalic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     style: italic
+  #     weight: 300
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}P35-Regular.ttf"
+    css:
+      comment: "Original: PlemolJP35"
+      family: "{{ webfont_font_prefix }}P35"
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Italic.ttf
+    output_file: "{{ webfont_font_prefix }}P35-Italic.ttf"
+    css:
+      comment: "Original: PlemolJP35"
+      family: "{{ webfont_font_prefix }}P35"
+      style: italic
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Medium.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-Medium.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     weight: 500
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-MediumItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-MediumItalic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     style: italic
+  #     weight: 500
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-SemiBold.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-SemiBold.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     weight: 600
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-SemiBoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-SemiBoldItalic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     style: italic
+  #     weight: 600
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}P35-Bold.ttf"
+    css:
+      comment: "Original: PlemolJP35"
+      family: "{{ webfont_font_prefix }}P35"
+      weight: bold
+  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-BoldItalic.ttf
+    output_file: "{{ webfont_font_prefix }}P35-BoldItalic.ttf"
+    css:
+      comment: "Original: PlemolJP35"
+      family: "{{ webfont_font_prefix }}P35"
+      style: italic
+      weight: bold
   ## UDEV Gothic
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-Regular.ttf
     output_file: "{{ webfont_font_prefix }}U-Regular.ttf"
@@ -198,6 +288,30 @@ webfont_font_files:
     css:
       comment: "Original: UDEV Gothic"
       family: "{{ webfont_font_prefix }}U"
+      style: italic
+      weight: bold
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}U-Regular.ttf"
+    css:
+      comment: "Original: UDEV Gothic35"
+      family: "{{ webfont_font_prefix }}U35"
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Italic.ttf
+    output_file: "{{ webfont_font_prefix }}U-Italic.ttf"
+    css:
+      comment: "Original: UDEV Gothic35"
+      family: "{{ webfont_font_prefix }}U35"
+      style: italic
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}U-Bold.ttf"
+    css:
+      comment: "Original: UDEV Gothic35"
+      family: "{{ webfont_font_prefix }}U35"
+      weight: bold
+  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-BoldItalic.ttf
+    output_file: "{{ webfont_font_prefix }}U-BoldItalic.ttf"
+    css:
+      comment: "Original: UDEV Gothic35"
+      family: "{{ webfont_font_prefix }}U35"
       style: italic
       weight: bold
   ## Moralerspace
