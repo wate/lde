@@ -79,7 +79,7 @@ webfont_font_files:
       comment: "Original: HackGen"
       family: "{{ webfont_font_prefix }}H"
       weight: bold
-  - src: /usr/local/share/fonts/HackGen/HackGen-Regular.ttf
+  - src: /usr/local/share/fonts/HackGen/HackGen35-Regular.ttf
     output_file: "{{ webfont_font_prefix }}H35-Regular.ttf"
     css:
       comment: "Original: HackGen35"
@@ -291,24 +291,24 @@ webfont_font_files:
       style: italic
       weight: bold
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Regular.ttf
-    output_file: "{{ webfont_font_prefix }}U-Regular.ttf"
+    output_file: "{{ webfont_font_prefix }}U35-Regular.ttf"
     css:
       comment: "Original: UDEV Gothic35"
       family: "{{ webfont_font_prefix }}U35"
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Italic.ttf
-    output_file: "{{ webfont_font_prefix }}U-Italic.ttf"
+    output_file: "{{ webfont_font_prefix }}U35-Italic.ttf"
     css:
       comment: "Original: UDEV Gothic35"
       family: "{{ webfont_font_prefix }}U35"
       style: italic
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Bold.ttf
-    output_file: "{{ webfont_font_prefix }}U-Bold.ttf"
+    output_file: "{{ webfont_font_prefix }}U35-Bold.ttf"
     css:
       comment: "Original: UDEV Gothic35"
       family: "{{ webfont_font_prefix }}U35"
       weight: bold
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-BoldItalic.ttf
-    output_file: "{{ webfont_font_prefix }}U-BoldItalic.ttf"
+    output_file: "{{ webfont_font_prefix }}U35-BoldItalic.ttf"
     css:
       comment: "Original: UDEV Gothic35"
       family: "{{ webfont_font_prefix }}U35"
