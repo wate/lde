@@ -24,25 +24,19 @@ theme:
     - search.suggest
     - search.highlight
     # - search.share
-# nav:
-#   - ホーム: index.md
-#   - システム構成: architecture.md
-#   - データ構造: data_structure.md
-#   - 機能一覧: features.md
-#   - デプロイ方法: deploy.md
-#   - 機能詳細: features/
-#   - テーブル定義: schema/
+# nav: []
 # docs_dir: docs
 # site_dir: site
 # custom_dir: overrides
 # repo_name: wate/lde
 # repo_url: https://github.com/wate/lde
 extra_javascript:
-  # - /pagefind/pagefind-ui.js
   - assets/javascripts/extra.js
+  # - /pagefind/pagefind-ui.js
 extra_css:
-  # - /pagefind/pagefind-ui.css
+  ## @see https://kushagra.dev/lab/hint/
   - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
+  # - /pagefind/pagefind-ui.css
   - assets/stylesheets/extra.css
 markdown_extensions:
   - abbr
@@ -90,7 +84,8 @@ plugins:
   ## https://oprypin.github.io/mkdocs-section-index/
   - section-index
   ## https://oprypin.github.io/mkdocs-literate-nav/
-  - literate-nav
+  - literate-nav:
+      # nav_file: SUMMARY.md
   ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
