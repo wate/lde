@@ -2,10 +2,7 @@
 webfont_packages:
   - fontforge
   - fonttools
-  # - zopfli
-  # - brotli
   - sfnt2woff-zopfli
-  # - woff-tools
   - woff2
 
 webfont_output_font_dir: /vagrant/docs/assets/fonts
@@ -79,17 +76,17 @@ webfont_font_files:
       comment: "Original: HackGen"
       family: "{{ webfont_font_prefix }}H"
       weight: bold
-  - src: /usr/local/share/fonts/HackGen/HackGen35-Regular.ttf
-    output_file: "{{ webfont_font_prefix }}H35-Regular.ttf"
-    css:
-      comment: "Original: HackGen35"
-      family: "{{ webfont_font_prefix }}H35"
-  - src: /usr/local/share/fonts/HackGen/HackGen35-Bold.ttf
-    output_file: "{{ webfont_font_prefix }}H35-Bold.ttf"
-    css:
-      comment: "Original: HackGen35"
-      family: "{{ webfont_font_prefix }}H35"
-      weight: bold
+  # - src: /usr/local/share/fonts/HackGen/HackGen35-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}H35-Regular.ttf"
+  #   css:
+  #     comment: "Original: HackGen35"
+  #     family: "{{ webfont_font_prefix }}H35"
+  # - src: /usr/local/share/fonts/HackGen/HackGen35-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}H35-Bold.ttf"
+  #   css:
+  #     comment: "Original: HackGen35"
+  #     family: "{{ webfont_font_prefix }}H35"
+  #     weight: bold
   ## PlemolJP
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Thin.ttf
   #   output_file: "{{ webfont_font_prefix }}P-Thin.ttf"
@@ -215,17 +212,17 @@ webfont_font_files:
   #     family: "{{ webfont_font_prefix }}P35"
   #     style: italic
   #     weight: 300
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Regular.ttf
-    output_file: "{{ webfont_font_prefix }}P35-Regular.ttf"
-    css:
-      comment: "Original: PlemolJP35"
-      family: "{{ webfont_font_prefix }}P35"
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Italic.ttf
-    output_file: "{{ webfont_font_prefix }}P35-Italic.ttf"
-    css:
-      comment: "Original: PlemolJP35"
-      family: "{{ webfont_font_prefix }}P35"
-      style: italic
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-Regular.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-Italic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     style: italic
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Medium.ttf
   #   output_file: "{{ webfont_font_prefix }}P35-Medium.ttf"
   #   css:
@@ -252,19 +249,19 @@ webfont_font_files:
   #     family: "{{ webfont_font_prefix }}P35"
   #     style: italic
   #     weight: 600
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Bold.ttf
-    output_file: "{{ webfont_font_prefix }}P35-Bold.ttf"
-    css:
-      comment: "Original: PlemolJP35"
-      family: "{{ webfont_font_prefix }}P35"
-      weight: bold
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-BoldItalic.ttf
-    output_file: "{{ webfont_font_prefix }}P35-BoldItalic.ttf"
-    css:
-      comment: "Original: PlemolJP35"
-      family: "{{ webfont_font_prefix }}P35"
-      style: italic
-      weight: bold
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-Bold.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P35-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP35"
+  #     family: "{{ webfont_font_prefix }}P35"
+  #     style: italic
+  #     weight: bold
   ## UDEV Gothic
   - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic-Regular.ttf
     output_file: "{{ webfont_font_prefix }}U-Regular.ttf"
@@ -290,30 +287,30 @@ webfont_font_files:
       family: "{{ webfont_font_prefix }}U"
       style: italic
       weight: bold
-  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Regular.ttf
-    output_file: "{{ webfont_font_prefix }}U35-Regular.ttf"
-    css:
-      comment: "Original: UDEV Gothic35"
-      family: "{{ webfont_font_prefix }}U35"
-  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Italic.ttf
-    output_file: "{{ webfont_font_prefix }}U35-Italic.ttf"
-    css:
-      comment: "Original: UDEV Gothic35"
-      family: "{{ webfont_font_prefix }}U35"
-      style: italic
-  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Bold.ttf
-    output_file: "{{ webfont_font_prefix }}U35-Bold.ttf"
-    css:
-      comment: "Original: UDEV Gothic35"
-      family: "{{ webfont_font_prefix }}U35"
-      weight: bold
-  - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-BoldItalic.ttf
-    output_file: "{{ webfont_font_prefix }}U35-BoldItalic.ttf"
-    css:
-      comment: "Original: UDEV Gothic35"
-      family: "{{ webfont_font_prefix }}U35"
-      style: italic
-      weight: bold
+  # - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}U35-Regular.ttf"
+  #   css:
+  #     comment: "Original: UDEV Gothic35"
+  #     family: "{{ webfont_font_prefix }}U35"
+  # - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}U35-Italic.ttf"
+  #   css:
+  #     comment: "Original: UDEV Gothic35"
+  #     family: "{{ webfont_font_prefix }}U35"
+  #     style: italic
+  # - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}U35-Bold.ttf"
+  #   css:
+  #     comment: "Original: UDEV Gothic35"
+  #     family: "{{ webfont_font_prefix }}U35"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/UDEVGothic/UDEVGothic35-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}U35-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: UDEV Gothic35"
+  #     family: "{{ webfont_font_prefix }}U35"
+  #     style: italic
+  #     weight: bold
   ## Moralerspace
   ### Moralerspace Argon
   # - src: /usr/local/share/fonts/Moralerspace/MoralerspaceArgon-Regular.ttf
