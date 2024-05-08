@@ -48,26 +48,52 @@ extra_css:
   # - /pagefind/pagefind-ui.css
   - assets/stylesheets/extra.css
 markdown_extensions:
+  ## Python Markdown
+  ## @see https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/
+  ### Abbreviations
   - abbr
-  - footnotes
-  - attr_list
-  - def_list
-  - tables
-  - md_in_html
+  ### Admonition
   - admonition
+  ### Attribute Lists
+  - attr_list
+  ### Definition Lists
+  - def_list
+  ### Footnotes
+  - footnotes
+  ### Markdown in HTML
+  - md_in_html
+  ### Table of Contents
+  # - toc
+  ### Tables
+  - tables
+  ## Python Markdown Extensions
+  ## @see https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown-extensions/
+  ### BetterEm
   - pymdownx.betterem
-  - pymdownx.highlight:
-      anchor_linenums: true
+  ### Caret, Mark & Tilde
   - pymdownx.caret
   - pymdownx.mark
   - pymdownx.tilde
+  ### Details
   - pymdownx.details
+  ### Highlight
+  - pymdownx.highlight:
+      anchor_linenums: true
+  ### InlineHilite
   - pymdownx.inlinehilite
+  ### Keys
+  # - pymdownx.keys
+  ### SmartSymbols
+  # - pymdownx.smartsymbols
+  ### Snippets
   - pymdownx.snippets:
       base_path: docs
       # auto_append:
       #   - includes/abbreviations.md
       #   - includes/links.md
+  ### Tabbed
+  # - pymdownx.tabbed
+  ### SuperFences
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
