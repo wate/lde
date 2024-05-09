@@ -105,6 +105,13 @@ exclude_docs: |
   rules
   includes
   SUMMARY.md
+## Validation
+## @see https://www.mkdocs.org/user-guide/configuration/#validation
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
 plugins:
   ## https://squidfunk.github.io/mkdocs-material/plugins/search/
   - search:
