@@ -1,7 +1,7 @@
 ---
 site_name: システムドキュメント
 ##「sitemap.xml」を正しく出力するには「site_url」の設定を有効化する必要あり
-# site_url: http://doc.example.com/
+site_url: http://doc.example.com/
 theme:
   # https://squidfunk.github.io/mkdocs-material/
   name: material
@@ -89,8 +89,8 @@ markdown_extensions:
   - pymdownx.snippets:
       base_path: docs
       # auto_append:
+      #   - includes/urls.md
       #   - includes/abbreviations.md
-      #   - includes/links.md
   ### Tabbed
   # - pymdownx.tabbed
   ### SuperFences
@@ -99,7 +99,8 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-## https://www.mkdocs.org/about/release-notes/#excluded-doc-files
+## Excluded doc files
+## @see https://www.mkdocs.org/about/release-notes/#excluded-doc-files
 exclude_docs: |
   rules
   includes

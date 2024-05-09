@@ -1,8 +1,19 @@
 開発環境の構築
 ============================
 
-[VSCode][]{Visual Studio Code} + [Dev Containers][]を利用
------------------------
+以下のいずれかの方法で開発環境を構築することができます。
+
+* [Docker][] + [VSCode][] + [Dev Containers][]
+* [Vagrant][] + [VirtualBox][]
+
+[Docker]: https://www.docker.com/
+[VSCode]: https://code.visualstudio.com/
+[Dev Containers]: https://code.visualstudio.com/docs/remote/containers
+[Vagrant]: https://www.vagrantup.com/
+[VirtualBox]: https://www.virtualbox.org/
+
+[Docker][] + [VSCode][] + [Dev Containers][]
+--------------------------------------------
 
 ### 前提条件
 
@@ -12,8 +23,6 @@
         * Windowsの場合は、WSL2を有効にしておくこと
 
 [Docker Desktop]: https://www.docker.com/ja-jp/products/docker-desktop/
-[VSCode]: https://code.visualstudio.com/
-[Dev Containers]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 
 ### 手順
 
@@ -25,16 +34,13 @@
    * 初回起動時は構築処理が発生するため時間がかかります
 5. 開発を開始する
 
-[Vagrant][] + [VirtualBox][]を利用
------------------------
+[Vagrant][] + [VirtualBox][]
+--------------------------------------------
 
 ### 前提条件
 
 * [Vagrant][]がインストールされていること
 * [VirtualBox][]がインストールされていること
-
-[Vagrant]: https://www.vagrantup.com/
-[VirtualBox]: https://www.virtualbox.org/
 
 ### 手順
 
