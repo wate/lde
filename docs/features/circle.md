@@ -4,7 +4,7 @@
 ワークフロー
 ----------------------------
 
-![ワークフロー](circle_workflow.drawio.png)
+![ワークフロー](circle_workflow.drawio.svg)
 
 詳細
 ----------------------------

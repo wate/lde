@@ -1,7 +1,7 @@
 ---
 site_name: システムドキュメント
 ##「sitemap.xml」を正しく出力するには「site_url」の設定を有効化する必要あり
-# site_url: http://doc.example.com/
+site_url: http://doc.example.com/
 theme:
   # https://squidfunk.github.io/mkdocs-material/
   name: material
@@ -13,7 +13,7 @@ theme:
   font:
     # https://squidfunk.github.io/mkdocs-material/setup/changing-the-fonts/
     text: BIZ UDPGothic
-    code: CodeFontH
+    code: CodeFontP
   features:
     - navigation.tabs.sticky
     - content.code.copy
@@ -26,52 +26,85 @@ theme:
     # - search.share
 # nav:
 #   - ホーム: index.md
+#   - 機能一覧: features/
 #   - システム構成: architecture.md
 #   - データ構造: data_structure.md
-#   - 機能一覧: features.md
-#   - デプロイ方法: deploy.md
-#   - 機能詳細: features/
 #   - テーブル定義: schema/
+#   - ディレクトリ構造: directory_structure.md
+#   - 開発環境の構築: setup_environment.md
+#   - Gitの運用方法: git_operation.md
+#   - デプロイ方法: deploy.md
 # docs_dir: docs
 # site_dir: site
 # custom_dir: overrides
 # repo_name: wate/lde
 # repo_url: https://github.com/wate/lde
 extra_javascript:
-  # - /pagefind/pagefind-ui.js
   - assets/javascripts/extra.js
+  # - /pagefind/pagefind-ui.js
 extra_css:
-  # - /pagefind/pagefind-ui.css
+  ## @see https://kushagra.dev/lab/hint/
   - https://cdn.jsdelivr.net/npm/hint.css/hint.min.css
+  # - /pagefind/pagefind-ui.css
   - assets/stylesheets/extra.css
 markdown_extensions:
+  ## Python Markdown
+  ## @see https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/
+  ### Abbreviations
   - abbr
-  - footnotes
-  - attr_list
-  - def_list
-  - tables
-  - md_in_html
+  ### Admonition
   - admonition
+  ### Attribute Lists
+  - attr_list
+  ### Definition Lists
+  - def_list
+  ### Footnotes
+  - footnotes
+  ### Markdown in HTML
+  - md_in_html
+  ### Table of Contents
+  # - toc
+  ### Tables
+  - tables
+  ## Python Markdown Extensions
+  ## @see https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown-extensions/
+  ### BetterEm
   - pymdownx.betterem
-  - pymdownx.highlight:
-      anchor_linenums: true
+  ### Caret, Mark & Tilde
   - pymdownx.caret
   - pymdownx.mark
   - pymdownx.tilde
+  ### Details
   - pymdownx.details
+  ### Highlight
+  - pymdownx.highlight:
+      anchor_linenums: true
+  ### InlineHilite
   - pymdownx.inlinehilite
+  ### Keys
+  # - pymdownx.keys
+  ### SmartSymbols
+  # - pymdownx.smartsymbols
+  ### Snippets
   - pymdownx.snippets:
+      base_path: docs
       # auto_append:
+      #   - includes/urls.md
       #   - includes/abbreviations.md
-      #   - includes/links.md
+  ### Tabbed
+  # - pymdownx.tabbed
+  ### SuperFences
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-## https://www.mkdocs.org/about/release-notes/#excluded-doc-files
+## Excluded doc files
+## @see https://www.mkdocs.org/about/release-notes/#excluded-doc-files
 exclude_docs: |
   rules
+  includes
+  SUMMARY.md
 plugins:
   ## https://squidfunk.github.io/mkdocs-material/plugins/search/
   - search:
@@ -85,12 +118,13 @@ plugins:
       type: iso_date
       timezone: Asia/Tokyo
       locale: ja
-  ## https://roipoussiere.frama.io/mkdocs-tooltips/
-  - tooltips
   ## https://oprypin.github.io/mkdocs-section-index/
   - section-index
   ## https://oprypin.github.io/mkdocs-literate-nav/
-  - literate-nav
+  - literate-nav:
+      # nav_file: SUMMARY.md
+  ## https://roipoussiere.frama.io/mkdocs-tooltips/
+  - tooltips
   ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/

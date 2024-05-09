@@ -4,7 +4,7 @@
 ワークフロー
 ----------------------------
 
-![ワークフロー](square_workflow.drawio.png)
+![ワークフロー](square_workflow.drawio.svg)
 
 詳細
 ----------------------------
