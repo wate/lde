@@ -118,13 +118,13 @@ plugins:
       type: iso_date
       timezone: Asia/Tokyo
       locale: ja
-  ## https://roipoussiere.frama.io/mkdocs-tooltips/
-  - tooltips
   ## https://oprypin.github.io/mkdocs-section-index/
   - section-index
   ## https://oprypin.github.io/mkdocs-literate-nav/
   - literate-nav:
       # nav_file: SUMMARY.md
+  ## https://roipoussiere.frama.io/mkdocs-tooltips/
+  - tooltips
   ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
