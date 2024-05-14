@@ -98,7 +98,6 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
 ## Excluded doc files
 ## @see https://www.mkdocs.org/about/release-notes/#excluded-doc-files
 exclude_docs: |
