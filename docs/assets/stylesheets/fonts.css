@@ -8,6 +8,9 @@
  *
  * "UDEV Gothic" are licensed under SIL OPEN FONT LICENSE Version 1.1.
  * https://github.com/yuru7/udev-gothic
+ *
+ * "Bizin Gothic" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+ * https://github.com/yuru7/bizin-gothic
  * 
  *
  */
@@ -118,6 +121,28 @@
     url('../fonts/CodeFontU-BoldItalic.woff') format('woff'),
     url('../fonts/CodeFontU-BoldItalic.ttf') format('truetype');
   font-style: italic;
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  /* Original: Bizin Gothic */
+  font-family: 'CodeFontB';
+  src:
+    url('../fonts/CodeFontB-Regular.woff2') format('woff2'),
+    url('../fonts/CodeFontB-Regular.woff') format('woff'),
+    url('../fonts/CodeFontB-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  /* Original: Bizin Gothic */
+  font-family: 'CodeFontB';
+  src:
+    url('../fonts/CodeFontB-Bold.woff2') format('woff2'),
+    url('../fonts/CodeFontB-Bold.woff') format('woff'),
+    url('../fonts/CodeFontB-Bold.ttf') format('truetype');
+  font-style: normal;
   font-weight: bold;
   font-display: swap;
 }
