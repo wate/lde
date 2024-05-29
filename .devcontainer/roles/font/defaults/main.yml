@@ -3,7 +3,6 @@
 ## インストールするパッケージ
 ## -----------------
 font_packages:
-  - fnt
   - fonts-ipafont
   - fonts-ipaexfont
   - fonts-morisawa-bizud-gothic
@@ -14,6 +13,7 @@ font_packages:
   # - fonts-noto-cjk-extra
   # - fonts-noto-mono
   # - fonts-noto-color-emoji
+  - fnt
 
 font_hackgen_version: latest
 font_plemoljp_version: latest
@@ -21,3 +21,4 @@ font_udevgothic_version: latest
 font_moralerspace_version: latest
 font_firge_version: latest
 font_juisee_version: latest
+font_bizingothic_version: latest

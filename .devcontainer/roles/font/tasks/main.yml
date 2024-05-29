@@ -12,6 +12,9 @@
 - name: Install UDEV Gothic font
   ansible.builtin.import_tasks:
     file: fonts/UDEVGothic.yml
+- name: Install Bizin Gothic font
+  ansible.builtin.import_tasks:
+    file: fonts/BizinGothic.yml
 - name: Install Moralerspace font
   ansible.builtin.import_tasks:
     file: fonts/Moralerspace.yml

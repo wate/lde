@@ -19,11 +19,13 @@ webfont_css_output_license_text: |
   "UDEV Gothic" are licensed under SIL OPEN FONT LICENSE Version 1.1.
   https://github.com/yuru7/udev-gothic
 
+  "Bizin Gothic" are licensed under SIL OPEN FONT LICENSE Version 1.1.
+  https://github.com/yuru7/bizin-gothic
+
 ## 出力するファイル名のプレフィックス
 webfont_font_prefix: CodeFont
 
-## CSS出力時の
-
+## CSS出力時の初期値
 webfont_css_default:
   style: normal
   weight: normal
@@ -437,3 +439,15 @@ webfont_font_files:
   #     family: "{{ webfont_font_prefix }}MX"
   #     style: italic
   #     weight: bold
+  ## Bizin Gothic
+  - src: /usr/local/share/fonts/BizinGothic/BizinGothic-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}B-Regular.ttf"
+    css:
+      comment: "Original: Bizin Gothic"
+      family: "{{ webfont_font_prefix }}B"
+  - src: /usr/local/share/fonts/BizinGothic/BizinGothic-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}B-Bold.ttf"
+    css:
+      comment: "Original: Bizin Gothic"
+      family: "{{ webfont_font_prefix }}B"
+      weight: bold
