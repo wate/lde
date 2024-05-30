@@ -4,13 +4,6 @@
 ##------------
 version: 1
 rules:
-  ### 長音
-  - expected: ベンダー
-    pattern: /ベンダ(?!ー)/
-  - expected: サーバー
-    pattern: /サーバ(?!ー)/
-  - expected: カテゴリー
-    pattern: /カテゴリ(?!ー)/
   ### OS
   - expected: Linux
   - expected: Debian
