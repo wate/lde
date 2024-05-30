@@ -17,6 +17,7 @@ theme:
   features:
     - navigation.tabs.sticky
     - content.code.copy
+    - content.tooltips
     # - navigation.tabs
     # - navigation.sections
     # - navigation.expand
@@ -88,9 +89,8 @@ markdown_extensions:
   ### Snippets
   - pymdownx.snippets:
       base_path: docs
-      # auto_append:
-      #   - includes/urls.md
-      #   - includes/abbreviations.md
+      auto_append:
+        - includes/links.md
   ### Tabbed
   # - pymdownx.tabbed
   ### SuperFences
