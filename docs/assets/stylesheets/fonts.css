@@ -16,7 +16,7 @@
  */
 @font-face {
   /* Original: HackGen */
-  font-family: 'CodeFontH';
+  font-family: 'CodeFontH', monospace;
   src:
     url('../fonts/CodeFontH-Regular.woff2') format('woff2'),
     url('../fonts/CodeFontH-Regular.woff') format('woff'),
@@ -27,7 +27,7 @@
 }
 @font-face {
   /* Original: HackGen */
-  font-family: 'CodeFontH';
+  font-family: 'CodeFontH', monospace;
   src:
     url('../fonts/CodeFontH-Bold.woff2') format('woff2'),
     url('../fonts/CodeFontH-Bold.woff') format('woff'),
@@ -38,7 +38,7 @@
 }
 @font-face {
   /* Original: PlemolJP */
-  font-family: 'CodeFontP';
+  font-family: 'CodeFontP', monospace;
   src:
     url('../fonts/CodeFontP-Regular.woff2') format('woff2'),
     url('../fonts/CodeFontP-Regular.woff') format('woff'),
@@ -49,7 +49,7 @@
 }
 @font-face {
   /* Original: PlemolJP */
-  font-family: 'CodeFontP';
+  font-family: 'CodeFontP', monospace;
   src:
     url('../fonts/CodeFontP-Italic.woff2') format('woff2'),
     url('../fonts/CodeFontP-Italic.woff') format('woff'),
@@ -60,7 +60,7 @@
 }
 @font-face {
   /* Original: PlemolJP */
-  font-family: 'CodeFontP';
+  font-family: 'CodeFontP', monospace;
   src:
     url('../fonts/CodeFontP-Bold.woff2') format('woff2'),
     url('../fonts/CodeFontP-Bold.woff') format('woff'),
@@ -71,7 +71,7 @@
 }
 @font-face {
   /* Original: PlemolJP */
-  font-family: 'CodeFontP';
+  font-family: 'CodeFontP', monospace;
   src:
     url('../fonts/CodeFontP-BoldItalic.woff2') format('woff2'),
     url('../fonts/CodeFontP-BoldItalic.woff') format('woff'),
@@ -82,7 +82,7 @@
 }
 @font-face {
   /* Original: UDEV Gothic */
-  font-family: 'CodeFontU';
+  font-family: 'CodeFontU', monospace;
   src:
     url('../fonts/CodeFontU-Regular.woff2') format('woff2'),
     url('../fonts/CodeFontU-Regular.woff') format('woff'),
@@ -93,7 +93,7 @@
 }
 @font-face {
   /* Original: UDEV Gothic */
-  font-family: 'CodeFontU';
+  font-family: 'CodeFontU', monospace;
   src:
     url('../fonts/CodeFontU-Italic.woff2') format('woff2'),
     url('../fonts/CodeFontU-Italic.woff') format('woff'),
@@ -104,7 +104,7 @@
 }
 @font-face {
   /* Original: UDEV Gothic */
-  font-family: 'CodeFontU';
+  font-family: 'CodeFontU', monospace;
   src:
     url('../fonts/CodeFontU-Bold.woff2') format('woff2'),
     url('../fonts/CodeFontU-Bold.woff') format('woff'),
@@ -115,7 +115,7 @@
 }
 @font-face {
   /* Original: UDEV Gothic */
-  font-family: 'CodeFontU';
+  font-family: 'CodeFontU', monospace;
   src:
     url('../fonts/CodeFontU-BoldItalic.woff2') format('woff2'),
     url('../fonts/CodeFontU-BoldItalic.woff') format('woff'),
@@ -126,7 +126,7 @@
 }
 @font-face {
   /* Original: Bizin Gothic */
-  font-family: 'CodeFontB';
+  font-family: 'CodeFontB', monospace;
   src:
     url('../fonts/CodeFontB-Regular.woff2') format('woff2'),
     url('../fonts/CodeFontB-Regular.woff') format('woff'),
@@ -137,11 +137,33 @@
 }
 @font-face {
   /* Original: Bizin Gothic */
-  font-family: 'CodeFontB';
+  font-family: 'CodeFontB', monospace;
   src:
     url('../fonts/CodeFontB-Bold.woff2') format('woff2'),
     url('../fonts/CodeFontB-Bold.woff') format('woff'),
     url('../fonts/CodeFontB-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  /* Original: Bizin Gothic */
+  font-family: 'CodeFontBD', monospace;
+  src:
+    url('../fonts/CodeFontBD-Regular.woff2') format('woff2'),
+    url('../fonts/CodeFontBD-Regular.woff') format('woff'),
+    url('../fonts/CodeFontBD-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  /* Original: Bizin Gothic */
+  font-family: 'CodeFontBD', monospace;
+  src:
+    url('../fonts/CodeFontBD-Bold.woff2') format('woff2'),
+    url('../fonts/CodeFontBD-Bold.woff') format('woff'),
+    url('../fonts/CodeFontBD-Bold.ttf') format('truetype');
   font-style: normal;
   font-weight: bold;
   font-display: swap;

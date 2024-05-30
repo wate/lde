@@ -8,7 +8,7 @@
 {% if webfont_font_file.css.comment is defined %}
   /* {{ webfont_font_file.css.comment }} */
 {% endif %}
-  font-family: '{{ webfont_font_file.css.family }}';
+  font-family: '{{ webfont_font_file.css.family }}', monospace;
   src:
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff2') format('woff2'),
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff') format('woff'),
