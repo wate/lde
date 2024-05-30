@@ -23,7 +23,9 @@
         font_bizingothic_version: "{{ latest_releases.json.tag_name }}"
 - name: Set asset file variable
   ansible.builtin.set_fact:
-    asset_url: https://github.com/{{ font_bizingothic_repo }}/releases/download/{{ font_bizingothic_version }}/BizinGothic_{{ font_bizingothic_version }}.zip
+    asset_urls:
+      - https://github.com/{{ font_bizingothic_repo }}/releases/download/{{ font_bizingothic_version }}/BizinGothic_{{ font_bizingothic_version }}.zip
+      - https://github.com/{{ font_bizingothic_repo }}/releases/download/{{ font_bizingothic_version }}/BizinGothicDiscord_{{ font_bizingothic_version }}.zip
 - name: Create font directory
   ansible.builtin.file:
     path: "{{ font_dir }}/BizinGothic"
@@ -31,8 +33,9 @@
     mode: "0755"
 - name: Install font file
   ansible.builtin.unarchive:
-    src: "{{ asset_url }}"
+    src: "{{ item }}"
     dest: "{{ font_dir }}/BizinGothic"
     extra_opts:
       - -j
     remote_src: true
+  loop: "{{ asset_urls }}"

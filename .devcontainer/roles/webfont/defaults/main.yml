@@ -451,3 +451,14 @@ webfont_font_files:
       comment: "Original: Bizin Gothic"
       family: "{{ webfont_font_prefix }}B"
       weight: bold
+  - src: /usr/local/share/fonts/BizinGothic/BizinGothicDiscord-Regular.ttf
+    output_file: "{{ webfont_font_prefix }}BD-Regular.ttf"
+    css:
+      comment: "Original: Bizin Gothic"
+      family: "{{ webfont_font_prefix }}BD"
+  - src: /usr/local/share/fonts/BizinGothic/BizinGothicDiscord-Bold.ttf
+    output_file: "{{ webfont_font_prefix }}BD-Bold.ttf"
+    css:
+      comment: "Original: Bizin Gothic"
+      family: "{{ webfont_font_prefix }}BD"
+      weight: bold
