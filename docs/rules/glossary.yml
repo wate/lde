@@ -1,6 +1,12 @@
 ---
 ##------------
-## 略語
+## 用語
 ##------------
 version: 1
-rules: []
+rules:
+  - expected: ベンダー
+    pattern: /ベンダ(?!ー)/
+  - expected: サーバー
+    pattern: /サーバ(?!ー)/
+  - expected: カテゴリー
+    pattern: /カテゴリ(?!ー)/
