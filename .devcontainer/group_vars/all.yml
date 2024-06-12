@@ -455,10 +455,10 @@ lde_pipx_packages:
   - name: mkdocs-material
     inject_packages:
       - mkdocs-git-revision-date-localized-plugin
-      - mkdocs-tooltips
       - mkdocs-section-index
       - mkdocs-literate-nav
       - mkdocs-glightbox
+      # - mkdocs-tooltips
 
 ## --------------
 ## ログファイルのブラウザ出力設定
