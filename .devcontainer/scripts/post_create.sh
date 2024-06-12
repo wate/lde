@@ -114,7 +114,7 @@ if [ -f package.json ]; then
 fi
 
 pipx install mkdocs-material --include-deps
-pipx inject mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox mkdocs-tooltips
+pipx inject mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
 pipx install ansible --include-deps
 pipx install ansible-lint --include-deps
 pipx install lizard --include-deps
