@@ -1,0 +1,106 @@
+
+/* Webフォント化したプログラミング向けフォント定義の読み込み */
+@import url('./fonts.css');
+
+/**
+ * メインカラムの幅を調整
+ */
+.md-grid {
+  max-width: 80rem;
+}
+
+/**
+ * 最終更新日を右上に表示するためのスタイル
+ *
+ * git-revision-date-localized
+ * https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
+ */
+.md-content__inner {
+  position: relative;
+}
+
+.md-source-file {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+/**
+ * リンクとツールチップ表示
+ */
+[dir=ltr] .md-typeset { // テーマのセレクタと一致させる
+
+	// アンカーと略語定義タグ
+	a[href="#"] ,
+	a[href=""],
+	abbr {
+		// 一様に下線をなくす（通常のリンクとみなさないため）
+		text-decoration: none;
+	}
+
+	a {
+		// 簡易ツールチップ表示対象
+		// --------------------------------------------------
+		// title属性を持っている場合
+		&[title] {
+      &[href="#"], &[href=""]{
+        color: #3f475d;
+      }
+      position: relative; // ツールチップの絶対配置用
+			text-decoration: underline dotted #707072; // 下線
+
+			// ツールチップ本体
+			// --------------------------------------------------
+			&::after {
+				// 位置
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 1;
+				display: block;
+				padding-block: 0.4em 0.5em;
+				padding-inline: 0.6em;
+				font-size: 14px; // 固定値
+				line-height: 1;
+				color: #555;
+				white-space: nowrap;
+				visibility: hidden;
+				content: attr(title); // titleからテキストを抜き出して表示
+				background-color: #ddd;
+				border-radius: 4px;
+				opacity: 0;
+				// アニメーション用処理
+				transition:
+					opacity 0.3s 0.4s, /* アニメーション時間 ディレイ*/
+					translate 0.3s 0.4s,; // アニメーション時間 ディレイ
+				translate: 0 -90%;
+			}
+
+			// ホバー時
+			@media (any-hover: hover) {
+				&:hover {
+					cursor: help;
+
+					&::after {
+						// アニメーション用処理
+						visibility: visible;
+						opacity: 1;
+						translate: 0 -140%;
+					}
+				}
+			}
+		}
+
+		// 値が空のtitle属性が存在する場合
+		// --------------------------------------------------
+		// 空のボックスが出ないように初期化
+		&[title=""] {
+			text-decoration: none;
+
+			&::after {
+				all: unset;
+			}
+		}
+
+	}
+}
+
