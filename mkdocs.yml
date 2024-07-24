@@ -13,7 +13,7 @@ theme:
   font:
     # https://squidfunk.github.io/mkdocs-material/setup/changing-the-fonts/
     text: BIZ UDPGothic
-    code: CodeFontBD
+    # code: CodeFontBD
   features:
     - navigation.tabs.sticky
     - content.code.copy
