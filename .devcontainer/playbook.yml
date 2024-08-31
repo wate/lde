@@ -11,57 +11,42 @@
         update_cache: true
   roles:
     - role: common
-      tags:
-        - role_common
+      tags: role_common
     - role: nodejs
-      tags:
-        - role_nodejs
+      tags: role_nodejs
     - role: mariadb
-      tags:
-        - role_mariadb
+      tags: role_mariadb
     # - role: postgresql
-    #   tags:
-    #     - role_postgresql
+    #   tags: role_postgresql
     - role: php
-      tags:
-        - role_php
+      tags: role_php
     - role: nginx
-      tags:
-        - role_nginx
+      tags: role_nginx
     # - role: apache
-    #   tags:
-    #     - role_apache
+    #   tags: role_apache
     - role: dehydrated
-      tags:
-        - role_dehydrated
+      tags: role_dehydrated
     - role: redis
-      tags:
-        - role_redis
+      tags: role_redis
     - role: spamassassin
-      tags:
-        - role_spamassassin
+      tags: role_spamassassin
     - role: mailpit
-      tags:
-        - role_mailpit
+      tags: role_mailpit
     - role: tools
-      tags:
-        - role_tools
+      tags: role_tools
+    - role: backup
+      tags: role_backup
     - role: logrotate
-      tags:
-        - role_logrotate
+      tags: role_logrotate
     - role: phpredisadmin
-      tags:
-        - role_phpredisadmin
+      tags: role_phpredisadmin
     - role: logio
-      tags:
-        - role_logio
+      tags: role_logio
     - role: meilisearch
-      tags:
-        - role_meilisearch
+      tags: role_meilisearch
     - role: lde
       become: false
-      tags:
-        - role_lde
+      tags: role_lde
     # - role: font
     #   tags:
     #     - role_font
@@ -73,8 +58,7 @@
     #     - doc_font
     # - role: cakephp
     #   become: false
-    #   tags:
-    #     - role_cakephp
+    #   tags: role_cakephp
   tasks:
     - name: Create symlink
       ansible.builtin.file:
