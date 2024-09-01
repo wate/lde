@@ -521,3 +521,20 @@ install_tools:
   - pandoc
   # https://taku910.github.io/mecab/
   - mecab
+
+## --------------
+## バックアップ設定
+## --------------
+backup_settings:
+  db_backup:
+    user: vagrant
+    cron:
+      minute: "0,30"
+    command: |
+      mariadb-dump -u app_dev -papp_dev_password --single-transaction app_dev | sed -e '/^\/\*\!50013 DEFINER=/d' >${BACKUP_DATA_DIR}/dump.sql
+    restic:
+      repo_password: lde_db_backup
+      forget_keep_type: hourly
+      forget_keep_value: "12"
+      forget_other_options:
+        - --keep-within-daily 7d
