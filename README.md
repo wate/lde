@@ -103,7 +103,6 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
     * [mkdocs-git-revision-date-localized-plugin](https://timvink.github.io/mkdocs-git-revision-date-localized-plugin/)
     * [mkdocs-section-index](https://oprypin.github.io/mkdocs-section-index/)
     * [mkdocs-literate-nav](https://oprypin.github.io/mkdocs-literate-nav/)
-    * [mkdocs-tooltips](https://roipoussiere.frama.io/mkdocs-tooltips/)
 * [mycli](https://www.mycli.net/)
 * [osv-scanner](https://github.com/google/osv-scanner)
 * [Mailpit](https://github.com/axllent/mailpit)
