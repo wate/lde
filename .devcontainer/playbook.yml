@@ -70,6 +70,42 @@
       ansible.builtin.stat:
         path: /vagrant/.pre-commit-config.yaml
       register: pre_commit_config_result
+    - name: Setup custom script
+      tags:
+        - custom
+        - custom_script
+      block:
+        - name: Find custom sctipts
+          ansible.builtin.set_fact:
+            custom_scripts: "{{ lookup('fileglob', 'custom_scripts/*.sh', wantlist=True) }}"
+            custom_script_templates: "{{ lookup('fileglob', 'custom_scripts/*.sh.j2', wantlist=True) }}"
+        - name: Include custom tasks
+          when: custom_scripts | length > 0 or custom_script_templates | length > 0
+          become: false
+          block:
+            - name: Create custom script directory
+              ansible.builtin.file:
+                path: ~/bin
+                state: directory
+                mode: "0755"
+            - name: Deploy custom script
+              ansible.builtin.copy:
+                src: "{{ custom_script }}"
+                dest: ~/bin/{{ (custom_script | basename)[:-3] }}
+                mode: "0700"
+              loop: "{{ custom_scripts }}"
+              loop_control:
+                loop_var: custom_script
+                label: "{{ (custom_script | basename)[:-3] }}"
+            - name: Deploy custom script template
+              ansible.builtin.template:
+                src: "{{ custom_script_template }}"
+                dest: ~/bin/{{ (custom_script_template | basename)[:-6] }}
+                mode: "0700"
+              loop: "{{ custom_script_templates }}"
+              loop_control:
+                loop_var: custom_script_template
+                label: "{{ (custom_script_template | basename)[:-6] }}"
     - name: Update pre-commit config
       when: pre_commit_config_result.stat.exists
       become: false
