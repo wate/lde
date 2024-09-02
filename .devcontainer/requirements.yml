@@ -39,6 +39,9 @@ roles:
   - name: logrotate
     src: https://github.com/wate/ansible-role-logrotate
     version: develop
+  - name: backup
+    src: https://github.com/wate/ansible-role-backup
+    version: develop
   - name: meilisearch
     src: https://github.com/wate/ansible-role-meilisearch
     version: develop
