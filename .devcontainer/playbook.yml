@@ -66,10 +66,6 @@
         dest: ~/src
         state: link
       become: false
-    - name: Check pre-commit config file
-      ansible.builtin.stat:
-        path: /vagrant/.pre-commit-config.yaml
-      register: pre_commit_config_result
     - name: Setup custom script
       tags:
         - custom
@@ -107,14 +103,11 @@
                 loop_var: custom_script_template
                 label: "{{ (custom_script_template | basename)[:-6] }}"
     - name: Update pre-commit config
-      when: pre_commit_config_result.stat.exists
+      ansible.builtin.command:
+        cmd: pre-commit autoupdate
+        chdir: /vagrant
+        removes: /vagrant/.pre-commit-config.yaml
       become: false
-      block:
-        - name: Update pre-commit config
-          ansible.builtin.command:
-            cmd: pre-commit autoupdate
-            chdir: /vagrant
-          register: cmd_result
     - name: Restart Searvices
       ansible.builtin.systemd:
         name: "{{ item }}"

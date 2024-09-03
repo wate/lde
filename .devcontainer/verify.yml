@@ -6,8 +6,7 @@
   become: true
   tasks:
     - name: Verify local development environment
-      tags:
-        - verify
+      tags: verify
       block:
         - name: インストール済みパッケージの情報を取得
           ansible.builtin.package_facts:
