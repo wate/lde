@@ -520,12 +520,12 @@ install_tools:
 ## バックアップ設定
 ## --------------
 backup_settings:
-  db_backup:
+  auto_backup:
     user: vagrant
     cron:
       minute: "0,30"
     command: >
-      mariadb-dump -u {{ db_dev.user }} -p{{ db_dev.password }} {{ db_dev.name }}
+      mariadb-dump -u {{ db_dev.user }} -p{{ db_dev.password }} --single-transaction {{ db_dev.name }}
       |
       sed -e '/^\/\*\!50013 DEFINER=/d'
       >${BACKUP_DATA_DIR}/dump.sql

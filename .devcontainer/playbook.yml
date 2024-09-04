@@ -67,9 +67,7 @@
         state: link
       become: false
     - name: Setup custom script
-      tags:
-        - custom
-        - custom_script
+      tags: custom_script
       block:
         - name: Find custom sctipts
           ansible.builtin.set_fact:
