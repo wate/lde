@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+export DB_NAME="{{ db_dev.name }}"
+export DB_USER="{{ db_dev.user }}"
+export DB_PASSWORD="{{ db_dev.password }}"
+# export DB_HOST=localhost
+
+if [ -n "${DB_NAME}" ]; then
+  DB_PARAMS=()
+  if [ -n "${DB_USER}" ]; then
+    DB_PARAMS+=(-u "${DB_USER}")
+  fi
+  if [ -n "${DB_PASSWORD}" ]; then
+    DB_PARAMS+=(-p"${DB_PASSWORD}")
+  fi
+  if [ -n "${DB_HOST}" ]; then
+    DB_PARAMS+=(-h "${DB_HOST}")
+  fi
+  echo "## Optimize datbase"
+  mariadb-optimize "${DB_PARAMS[@]}" ${DB_NAME}
+fi
+

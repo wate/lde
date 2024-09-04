@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+if [ -n "${TBLS_DSN}" ]; then
+  TBLS_PARAMS=(--force --adjust-table)
+  if [  -e /vagrant/.tbls.yml ]; then
+    TBLS_PARAMS+=(--config /vagrant/.tbls.yml)
+  elif [ -e /vagrant/tbls.yml ]; then
+    TBLS_PARAMS+=(--config /vagrant/tbls.yml)
+  fi
+  echo "## Update datbase document"
+  printenv | grep TBLS_
+  tbls doc "${TBLS_PARAMS[@]}"
+else
+  echo "環境変数「TBLS_DSN」が未設定です"
+fi
+

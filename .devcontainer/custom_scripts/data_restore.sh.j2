@@ -2,27 +2,26 @@
 
 set -eo pipefail
 
-export BACKUP_TARGET="{{ backup_data_dir }}/db_backup"
+export BACKUP_TARGET="{{ backup_data_dir }}/auto_backup"
 
 export DB_NAME="{{ db_dev.name }}"
 export DB_USER="{{ db_dev.user }}"
 export DB_PASSWORD="{{ db_dev.password }}"
 # export DB_HOST=localhost
 
-# export FILES_DIR="${HOME}/public/files"
+# export FILES_DIR="${HOME}/src/public/files"
 
-export RESTIC_REPOSITORY="{{ backup_repo_dir }}/db_backup"
-export RESTIC_PASSWORD="{{ backup_settings.db_backup.restic.repo_password }}"
+export RESTIC_REPOSITORY="{{ backup_repo_dir }}/auto_backup"
+export RESTIC_PASSWORD="{{ backup_settings.auto_backup.restic.repo_password }}"
 
 if [ ! -e "${BACKUP_TARGET}" ]; then
   echo "Create backup target directory"
   mkdir -p "${BACKUP_TARGET}"
 fi
 
-export RESTIC_SNAPSHOT_ID="${1}"
+RESTIC_SNAPSHOT_ID="${1:=latest}"
 if [ -n "${RESTIC_SNAPSHOT_ID}" ]; then
-	## スナップショットの指定がある場合はスナップショットからバックアップデータを復元
-  echo "Restore snapshot: ${RESTIC_SNAPSHOT_ID}"
+  echo "## Restore snapshot: ${RESTIC_SNAPSHOT_ID}"
   restic restore "${RESTIC_SNAPSHOT_ID}" --target "${BACKUP_TARGET}"
 fi
 
@@ -37,12 +36,12 @@ if [ -n "${DB_NAME}" ] && [ -f "${BACKUP_TARGET}/dump.sql" ]; then
   if [ -n "${DB_HOST}" ]; then
     DB_PARAMS+=(-h "${DB_HOST}")
   fi
-  echo "Resore datbase"
+  echo "## Resore datbase"
   mysql "${DB_PARAMS[@]}" ${DB_NAME} <${BACKUP_TARGET}/dump.sql
 fi
 
 if [ -n "${FILES_DIR}" ] && [ -f "${BACKUP_TARGET}/files.tar.gz" ]; then
-  echo "Unarchive files: ${FILES_DIR}"
+  echo "## Unarchive files: ${FILES_DIR}"
   cd "${FILES_DIR}" || exit 1;
   tar vxfz ${BACKUP_TARGET}/files.tar.gz
 fi
