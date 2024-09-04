@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+set -eo pipefail
 
 if [ -f composer.json ] && [ ! -e vendor ]; then
   composer install --no-interaction
