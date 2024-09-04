@@ -108,6 +108,7 @@ Vagrant利用時は以下のツールがインストールされています。
     * [mkdocs-literate-nav](https://oprypin.github.io/mkdocs-literate-nav/)
 * [mycli](https://www.mycli.net/)
 * [osv-scanner](https://github.com/google/osv-scanner)
+* [Task](https://taskfile.dev/)
 * [Mailpit](https://github.com/axllent/mailpit)
 * [Meilisearch](https://www.meilisearch.com/)
 
