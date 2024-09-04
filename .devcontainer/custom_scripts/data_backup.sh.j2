@@ -2,14 +2,14 @@
 
 set -eo pipefail
 
-export BACKUP_TARGET="{{ backup_data_dir }}/auto_backup"
+BACKUP_TARGET="{{ backup_data_dir }}/auto_backup"
 
-export DB_NAME="{{ db_dev.name }}"
-export DB_USER="{{ db_dev.user }}"
-export DB_PASSWORD="{{ db_dev.password }}"
-# export DB_HOST=localhost
+DB_NAME="{{ db_dev.name }}"
+DB_USER="{{ db_dev.user }}"
+DB_PASSWORD="{{ db_dev.password }}"
+# DB_HOST=localhost
 
-# export FILES_DIR="${HOME}/src/public/files"
+# FILES_DIR="${HOME}/src/public/files"
 
 export RESTIC_REPOSITORY="{{ backup_repo_dir }}/auto_backup"
 export RESTIC_PASSWORD="{{ backup_settings.auto_backup.restic.repo_password }}"
@@ -35,7 +35,7 @@ if [ -n "${DB_NAME}" ]; then
 fi
 
 if [ -n "${FILES_DIR}" ] && [ -d "${FILES_DIR}" ]; then
-  echo "## Archive files: ${FILES_DIR}"
+  echo "## Backup files: ${FILES_DIR}"
   cd "${FILES_DIR}" || exit 1;
   tar vcfz ${BACKUP_TARGET}/files.tar.gz ./*
 fi

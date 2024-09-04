@@ -2,10 +2,10 @@
 
 set -eo pipefail
 
-export DB_NAME="{{ db_dev.name }}"
-export DB_USER="{{ db_dev.user }}"
-export DB_PASSWORD="{{ db_dev.password }}"
-# export DB_HOST=localhost
+DB_NAME="{{ db_dev.name }}"
+DB_USER="{{ db_dev.user }}"
+DB_PASSWORD="{{ db_dev.password }}"
+# DB_HOST=localhost
 
 if [ -n "${DB_NAME}" ]; then
   DB_PARAMS=()

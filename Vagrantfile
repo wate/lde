@@ -175,6 +175,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.extra_vars = ansible_extra_vars
+      ansible.tags = ansible_tags
+      ansible.skip_tags = ansible_skip_tags
       ansible.raw_arguments = ansible_raw_arguments
       ansible.groups = ansible_groups
     end
