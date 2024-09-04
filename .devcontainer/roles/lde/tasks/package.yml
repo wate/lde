@@ -14,9 +14,13 @@
     state: install
     install_deps: true
   loop: "{{ lde_pipx_packages }}"
+  loop_control:
+    label: "{{ item.name }}"
 - name: Inject packages
   community.general.pipx:
     name: "{{ item.name }}"
     state: inject
     inject_packages: "{{ item.inject_packages }}"
   loop: "{{ lde_pipx_packages | selectattr('inject_packages', 'defined') | list }}"
+  loop_control:
+    label: "{{ item.name + ':' + item.inject_packages | join('/') }}"

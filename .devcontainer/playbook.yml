@@ -10,53 +10,53 @@
       ansible.builtin.apt:
         update_cache: true
   roles:
-    - role: common
+    - name: common
       tags: role_common
-    - role: nodejs
+    - name: nodejs
       tags: role_nodejs
-    - role: mariadb
+    - name: mariadb
       tags: role_mariadb
-    # - role: postgresql
+    # - name: postgresql
     #   tags: role_postgresql
-    - role: php
+    - name: php
       tags: role_php
-    - role: nginx
+    - name: nginx
       tags: role_nginx
     # - role: apache
     #   tags: role_apache
-    - role: dehydrated
+    - name: dehydrated
       tags: role_dehydrated
-    - role: redis
+    - name: redis
       tags: role_redis
-    - role: spamassassin
+    - name: spamassassin
       tags: role_spamassassin
-    - role: mailpit
+    - name: mailpit
       tags: role_mailpit
-    - role: tools
+    - name: tools
       tags: role_tools
-    - role: backup
+    - name: backup
       tags: role_backup
-    - role: logrotate
+    - name: logrotate
       tags: role_logrotate
-    - role: phpredisadmin
+    - name: phpredisadmin
       tags: role_phpredisadmin
-    - role: logio
+    - name: logio
       tags: role_logio
-    - role: meilisearch
+    - name: meilisearch
       tags: role_meilisearch
-    - role: lde
+    - name: lde
       become: false
       tags: role_lde
-    # - role: font
-    #   tags:
-    #     - role_font
-    #     - doc_font
-    # - role: webfont
-    #   become: false
-    #   tags:
-    #     - role_webfont
-    #     - doc_font
-    # - role: cakephp
+    - name: font
+      tags:
+        - role_font
+        - doc_font
+    - name: webfont
+      become: false
+      tags:
+        - role_webfont
+        - doc_font
+    # - name: cakephp
     #   become: false
     #   tags: role_cakephp
   tasks:
@@ -102,12 +102,12 @@
               loop_control:
                 loop_var: custom_script_template
                 label: "{{ (custom_script_template | basename)[:-6] }}"
-    - name: Update pre-commit config
+    - name: Update .pre-commit-config.yaml
+      become: false
       ansible.builtin.command:
-        cmd: pre-commit autoupdate
+        cmd: ~/.local/bin/pre-commit autoupdate
         chdir: /vagrant
         removes: /vagrant/.pre-commit-config.yaml
-      become: false
     - name: Restart Searvices
       ansible.builtin.systemd:
         name: "{{ item }}"

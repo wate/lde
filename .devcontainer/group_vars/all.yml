@@ -435,16 +435,18 @@ spamassassin_spamd_option: --create-prefs --max-children 5 --helper-home-dir --l
 # meilisearch_master_key: aSampleMasterKey
 
 ## --------------
-## Material for Mkdocsのインストール
+## インストールするpip関連パッケージ
 ## --------------
 lde_pipx_packages:
-  - name: mkdocs-material
+  - name: mkdocs
     inject_packages:
+      - mkdocs-material
       - mkdocs-git-revision-date-localized-plugin
       - mkdocs-section-index
       - mkdocs-literate-nav
       - mkdocs-glightbox
-      # - mkdocs-tooltips
+  - name: mycli
+  - name: pre-commit
 
 ## --------------
 ## ログファイルのブラウザ出力設定

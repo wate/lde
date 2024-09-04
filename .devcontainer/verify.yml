@@ -23,7 +23,6 @@
         - name: PHP-FPMのパッケージ名/サービス名を変数に設定
           ansible.builtin.set_fact:
             php_fpm_name: "php{{ php_version | default('8.2') }}-fpm"
-        ## パッケージ
         - name: パッケージのインストール状況を検証
           ansible.builtin.assert:
             that:
@@ -31,8 +30,9 @@
               - ansible_facts.packages[php_fpm_name] is defined
               - ansible_facts.packages['nginx'] is defined
               - ansible_facts.packages['redis'] is defined
+              - ansible_facts.packages['restic'] is defined
+              - ansible_facts.packages['rclone'] is defined
             quiet: true
-        ## ファイル・ディレクトリ
         - name: シンボリックリンクの確認
           become: false
           block:
@@ -47,7 +47,6 @@
                   - src_symlink_result.stat.islnk
                   - src_symlink_result.stat.lnk_target == '/vagrant'
                 quiet: true
-        ## データベースサーバーのテスト
         - name: データベースサーバーの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -60,7 +59,6 @@
             that:
               - 3306 in listen_tcp_posts
             quiet: true
-        ## PHP-FPMのテスト
         - name: PHP-FPMの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -68,7 +66,6 @@
               - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
               - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
             quiet: true
-        ## Webサーバーのテスト
         - name: Webサーバーの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -82,7 +79,6 @@
               ## Nginx / Apache
               - 80 in listen_tcp_posts
             quiet: true
-        ## SpamAssasinのテスト
         - name: SpamAssasinの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -95,7 +91,6 @@
             that:
               - 783 in listen_tcp_posts
             quiet: true
-        ## Mailpitのテスト
         - name: Mailpitの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -109,7 +104,6 @@
               - 1025 in listen_tcp_posts
               - 8025 in listen_tcp_posts
             quiet: true
-        ## Redisのテスト
         - name: Redisの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -122,7 +116,6 @@
             that:
               - 6379 in listen_tcp_posts
             quiet: true
-        ## Log.ioサーバーのテスト
         - name: Log.ioサーバーの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -136,7 +129,6 @@
               - 6688 in listen_tcp_posts
               - 6689 in listen_tcp_posts
             quiet: true
-        ## Log.ioファイル監視サーバーのテスト
         - name: Log.ioファイル監視サーバーの稼働状態を検証
           ansible.builtin.assert:
             that:
@@ -144,7 +136,6 @@
               - ansible_facts.services['log.io-file-input.service']['state'] == 'running'
               - ansible_facts.services['log.io-file-input.service']['status'] == 'enabled'
             quiet: true
-        ## Meilisearchのテスト
         - name: Meilisearchの稼働状態を検証
           ansible.builtin.assert:
             that:

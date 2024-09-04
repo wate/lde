@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+export RESTIC_REPOSITORY="{{ backup_repo_dir }}/db_backup"
+export RESTIC_PASSWORD="{{ backup_settings.db_backup.restic.repo_password }}"
+
+restic snapshots
