@@ -3,12 +3,15 @@
 - name: Include dependency task
   ansible.builtin.import_tasks:
     file: dependency.yml
+  become: true
   tags: dependency
 - name: Include package task
   ansible.builtin.import_tasks:
     file: package.yml
+  become: false
   tags: package
 - name: Include setting task
   ansible.builtin.import_tasks:
     file: setting.yml
+  become: false
   tags: setting

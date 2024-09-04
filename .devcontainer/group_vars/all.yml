@@ -320,28 +320,27 @@ mailpit_envs:
 ## --------------
 ## データベースの設定(共通)
 ## --------------
-lde_common_databases:
-  dev: &db_app_dev
-    name: app_dev
-    user: app_dev
-    password: app_dev_password
-  test: &db_app_test
-    name: app_test
-    user: app_test
-    password: app_test_password
-  stg: &db_app_stg
-    name: app_stg
-    user: app_stg
-    password: app_stg_password
-  prod: &db_app_prod
-    name: app_prod
-    user: app_prod
-    password: app_prod_password
+db_dev:
+  name: app_dev
+  user: app_dev
+  password: app_dev_password
+db_test:
+  name: app_test
+  user: app_test
+  password: app_test_password
+db_stg:
+  name: app_stg
+  user: app_stg
+  password: app_stg_password
+db_prod:
+  name: app_prod
+  user: app_prod
+  password: app_prod_password
 
 ## --------------
 ## 接続を許可するホストの設定(MariaDB)
 ## --------------
-lde_common_db_connection_hosts: &mariadb_common_db_connection_hosts
+mariadb_conn_hosts:
   - "127.0.0.1"
   - "localhost"
   - "192.168.%"
@@ -351,18 +350,10 @@ lde_common_db_connection_hosts: &mariadb_common_db_connection_hosts
 ## MariaDBのデータベース設定
 ## --------------
 mariadb_databases:
-  - <<: *db_app_dev
-    encoding: utf8mb4
-    hosts: *mariadb_common_db_connection_hosts
-  - <<: *db_app_test
-    encoding: utf8mb4
-    hosts: *mariadb_common_db_connection_hosts
-  - <<: *db_app_stg
-    encoding: utf8mb4
-    hosts: *mariadb_common_db_connection_hosts
-  - <<: *db_app_prod
-    encoding: utf8mb4
-    hosts: *mariadb_common_db_connection_hosts
+  - "{{ db_dev | combine({'encoding': 'utf8mb4', 'hosts': mariadb_conn_hosts}) }}"
+  - "{{ db_test | combine({'encoding': 'utf8mb4', 'hosts': mariadb_conn_hosts}) }}"
+  - "{{ db_stg | combine({'encoding': 'utf8mb4', 'hosts': mariadb_conn_hosts}) }}"
+  - "{{ db_prod | combine({'encoding': 'utf8mb4', 'hosts': mariadb_conn_hosts}) }}"
 
 ## --------------
 ## 接続を許可するホストの設定(PostgreSQL)
@@ -376,15 +367,10 @@ postgresql_pg_hba_cfg: |
 ## PostgreSQLのデータベース設定
 ## --------------
 postgresql_databases:
-  - <<: *db_app_dev
-    encoding: utf8
-  - <<: *db_app_test
-    encoding: utf8
-  - <<: *db_app_stg
-    encoding: utf8
-  - <<: *db_app_prod
-    encoding: utf8
-
+  - "{{ db_dev | combine({'encoding': 'utf8'}) }}"
+  - "{{ db_test | combine({'encoding': 'utf8'}) }}"
+  - "{{ db_stg | combine({'encoding': 'utf8'}) }}"
+  - "{{ db_prod | combine({'encoding': 'utf8'}) }}"
 
 ## -------------------
 ## MariaDBの設定
@@ -449,16 +435,18 @@ spamassassin_spamd_option: --create-prefs --max-children 5 --helper-home-dir --l
 # meilisearch_master_key: aSampleMasterKey
 
 ## --------------
-## Material for Mkdocsのインストール
+## インストールするpip関連パッケージ
 ## --------------
 lde_pipx_packages:
-  - name: mkdocs-material
+  - name: mkdocs
     inject_packages:
+      - mkdocs-material
       - mkdocs-git-revision-date-localized-plugin
       - mkdocs-section-index
       - mkdocs-literate-nav
       - mkdocs-glightbox
-      # - mkdocs-tooltips
+  - name: mycli
+  - name: pre-commit
 
 ## --------------
 ## ログファイルのブラウザ出力設定
@@ -483,14 +471,30 @@ logio_file_input_cfg:
 ## インストールする各種ツール
 ## --------------------------
 install_tools:
-  # https://direnv.net/
-  - direnv
   ## https://github.com/eza-community/eza
   - eza
+  ## https://graphviz.org/
+  - graphviz
   ## https://github.com/sharkdp/fd
   - fd
   ## https://github.com/sharkdp/bat
   - bat
+  ## https://jonas.github.io/tig/
+  - tig
+  ## https://github.com/jesseduffield/lazygit
+  - lazygit
+  ## https://github.com/google/osv-scanner
+  - osv-scanner
+  # https://direnv.net/
+  - direnv
+  ## https://taskfile.dev/
+  - task
+  # https://github.com/kellyjonbrazil/jc
+  - jc
+  ## https://github.com/jgm/pandoc
+  - pandoc
+  ## https://plantuml.com/ja/
+  - plantuml
   ## https://github.com/k1LoW/tbls
   - tbls
   ## https://github.com/k1LoW/runn
@@ -499,28 +503,18 @@ install_tools:
   - delta
   ## https://github.com/terrastruct/d2
   - d2
-  ## https://github.com/google/osv-scanner
-  - osv-scanner
   ## https://github.com/charmbracelet/glow
   - glow
-  ## https://www.mycli.net/
-  - mycli
-  ## https://pre-commit.com/
-  - pre-commit
-  ## https://graphviz.org/
-  - graphviz
   ## https://wp-cli.org/ja/
   - wp-cli
   ## https://github.com/microsoft/pict
   - pict
-  # https://plantuml.com/ja/
-  - plantuml
-  # PDF 向けユーティリティ
+  ## https://github.com/alexmyczko/fnt
+  - fnt
+  ## PDF 向けユーティリティ
   - poppler-utils
-  # https://github.com/jgm/pandoc
-  - pandoc
-  # https://taku910.github.io/mecab/
-  - mecab
+  ## https://github.com/google/zx
+  - zx
 
 ## --------------
 ## バックアップ設定
@@ -530,8 +524,11 @@ backup_settings:
     user: vagrant
     cron:
       minute: "0,30"
-    command: |
-      mariadb-dump -u app_dev -papp_dev_password --single-transaction app_dev | sed -e '/^\/\*\!50013 DEFINER=/d' >${BACKUP_DATA_DIR}/dump.sql
+    command: >
+      mariadb-dump -u {{ db_dev.user }} -p{{ db_dev.password }} {{ db_dev.name }}
+      |
+      sed -e '/^\/\*\!50013 DEFINER=/d'
+      >${BACKUP_DATA_DIR}/dump.sql
     restic:
       repo_password: lde_db_backup
       forget_keep_type: hourly

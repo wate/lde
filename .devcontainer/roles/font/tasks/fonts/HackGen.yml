@@ -24,12 +24,12 @@
 - name: Set asset file variable
   ansible.builtin.set_fact:
     asset_url: https://github.com/{{ font_hackgen_repo }}/releases/download/{{ font_hackgen_version }}/HackGen_{{ font_hackgen_version }}.zip
-- name: Create font directory
+- name: Create HackGen font install directory
   ansible.builtin.file:
     path: "{{ font_dir }}/HackGen"
     state: directory
     mode: "0755"
-- name: Install font file
+- name: Install HackGen font
   ansible.builtin.unarchive:
     src: "{{ asset_url }}"
     dest: "{{ font_dir }}/HackGen"

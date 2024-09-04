@@ -37,50 +37,6 @@
   font-display: swap;
 }
 @font-face {
-  /* Original: PlemolJP */
-  font-family: 'CodeFontP', monospace;
-  src:
-    url('../fonts/CodeFontP-Regular.woff2') format('woff2'),
-    url('../fonts/CodeFontP-Regular.woff') format('woff'),
-    url('../fonts/CodeFontP-Regular.ttf') format('truetype');
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  /* Original: PlemolJP */
-  font-family: 'CodeFontP', monospace;
-  src:
-    url('../fonts/CodeFontP-Italic.woff2') format('woff2'),
-    url('../fonts/CodeFontP-Italic.woff') format('woff'),
-    url('../fonts/CodeFontP-Italic.ttf') format('truetype');
-  font-style: italic;
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  /* Original: PlemolJP */
-  font-family: 'CodeFontP', monospace;
-  src:
-    url('../fonts/CodeFontP-Bold.woff2') format('woff2'),
-    url('../fonts/CodeFontP-Bold.woff') format('woff'),
-    url('../fonts/CodeFontP-Bold.ttf') format('truetype');
-  font-style: normal;
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
-  /* Original: PlemolJP */
-  font-family: 'CodeFontP', monospace;
-  src:
-    url('../fonts/CodeFontP-BoldItalic.woff2') format('woff2'),
-    url('../fonts/CodeFontP-BoldItalic.woff') format('woff'),
-    url('../fonts/CodeFontP-BoldItalic.ttf') format('truetype');
-  font-style: italic;
-  font-weight: bold;
-  font-display: swap;
-}
-@font-face {
   /* Original: UDEV Gothic */
   font-family: 'CodeFontU', monospace;
   src:

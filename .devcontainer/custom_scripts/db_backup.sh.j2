@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+export BACKUP_TARGET="{{ backup_data_dir }}/db_backup"
+
+export DB_NAME="{{ db_dev.name }}"
+export DB_USER="{{ db_dev.user }}"
+export DB_PASSWORD="{{ db_dev.password }}"
+# export DB_HOST=localhost
+
+# export FILES_DIR="${HOME}/public/files"
+
+export RESTIC_REPOSITORY="{{ backup_repo_dir }}/db_backup"
+export RESTIC_PASSWORD="{{ backup_settings.db_backup.restic.repo_password }}"
+
+if [ ! -e "${BACKUP_TARGET}" ]; then
+  echo "Create backup target directory"
+  mkdir -p "${BACKUP_TARGET}"
+fi
+
+if [ -n "${DB_NAME}" ]; then
+  DB_PARAMS=(--single-transaction)
+  if [ -n "${DB_USER}" ]; then
+    DB_PARAMS+=(-u "${DB_USER}")
+  fi
+  if [ -n "${DB_PASSWORD}" ]; then
+    DB_PARAMS+=(-p"${DB_PASSWORD}")
+  fi
+  if [ -n "${DB_HOST}" ]; then
+    DB_PARAMS+=(-h "${DB_HOST}")
+  fi
+  echo "backup datbase"
+  mariadb-dump "${DB_PARAMS[@]}" ${DB_NAME} | sed -e '/^\/\*\!50013 DEFINER=/d' >${BACKUP_TARGET}/dump.sql
+fi
+
+if [ -n "${FILES_DIR}" ] && [ -d "${FILES_DIR}" ]; then
+  echo "Archive files: ${FILES_DIR}"
+  cd "${FILES_DIR}" || exit 1;
+  tar vcfz ${BACKUP_TARGET}/files.tar.gz ./*
+fi
+
+if [ ! -e "${RESTIC_REPOSITORY}" ]; then
+  echo "Create restic repository directory"
+  mkdir -p "${RESTIC_REPOSITORY}"
+  chmod 0700 "${RESTIC_REPOSITORY}"
+fi
+
+if [ ! -e "${RESTIC_REPOSITORY}/config" ]; then
+	echo "Initialize restic repository"
+  restic init
+fi
+
+restic backup "${BACKUP_TARGET}" --tag "manual backup"
