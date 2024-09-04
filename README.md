@@ -90,8 +90,11 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 
 ### インストール済み開発関連ツール
 
+Vagrant利用時は以下のツールがインストールされています。
+
 * [pre-commit](https://pre-commit.com/)
 * [tbls](https://github.com/k1LoW/tbls)
+* [runn](https://github.com/k1LoW/runn)
 * [pict](https://github.com/microsoft/pict)
     * [ペアワイズ法によるテストケース抽出ツール「PICT」を使ってテストケースを85%削減する](https://qiita.com/odekekepeanuts/items/6eceddc534d87fc797cc)
 * [Graphviz](https://graphviz.org/)
@@ -106,9 +109,7 @@ dev containersの詳細な使い方は公式サイトなどを参照してくだ
 * [mycli](https://www.mycli.net/)
 * [osv-scanner](https://github.com/google/osv-scanner)
 * [Mailpit](https://github.com/axllent/mailpit)
-    * ※Vagrant利用時のみ
 * [Meilisearch](https://www.meilisearch.com/)
-    * ※Vagrant利用時のみ
 
 Tips
 ------------

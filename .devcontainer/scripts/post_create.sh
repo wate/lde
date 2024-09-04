@@ -36,22 +36,18 @@ if type "tbls" >/dev/null 2>&1; then
   echo "# END environment variable ANSIBLE MANAGED BLOCK" >>~/.bashrc
 fi
 
-if [ ! -f ~/.inputrc ]; then
-  echo "set completion-ignore-case on">~/.inputrc
+if [ ! -e ~/.bash-git-prompt ]; then
+  git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
+  cat << EOT >>~/.bashrc
+# BEGIN bash-git-prompt setting ANSIBLE MANAGED BLOCK
+if [ -f "\$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+    GIT_PROMPT_ONLY_IN_REPO=1
+    source \$HOME/.bash-git-prompt/gitprompt.sh
 fi
+# END bash-git-prompt setting ANSIBLE MANAGED BLOCK
+EOT
 
-# if [ ! -e ~/.bash-git-prompt ]; then
-#   git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
-#   cat << EOT >>~/.bashrc
-# # BEGIN bash-git-prompt setting ANSIBLE MANAGED BLOCK
-# if [ -f "\$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-#     GIT_PROMPT_ONLY_IN_REPO=1
-#     source \$HOME/.bash-git-prompt/gitprompt.sh
-# fi
-# # END bash-git-prompt setting ANSIBLE MANAGED BLOCK
-# EOT
-#
-# fi
+fi
 
 sudo chmod a+x "$(pwd)"
 sudo rm -rf /var/www/html
@@ -113,16 +109,15 @@ if [ -f package.json ]; then
   ni
 fi
 
-pipx install mkdocs-material --include-deps
-pipx inject mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+pipx install mkdocs --include-deps
+pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
 pipx install ansible --include-deps
 pipx install ansible-lint --include-deps
 pipx install lizard --include-deps
 
-if type "ansible" >/dev/null 2>&1 && [ -f "$(dirname $0)/post_create.yml" ]; then
+if [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
 fi
-
-if type "ansible" >/dev/null 2>&1 && [ -f "${PWD}/.devcontainer/custom.yml" ]; then
-  ansible-playbook -i 127.0.0.1, -c local "${PWD}/.devcontainer/custom.yml"
+if [ -f "${PWD}/.devcontainer/custom.yml" ]; then
+  ansible-playbook -i 127.0.0.1, -c local --diff "${PWD}/.devcontainer/custom.yml"
 fi

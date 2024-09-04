@@ -19,7 +19,7 @@ if [ ! -e "${BACKUP_TARGET}" ]; then
   mkdir -p "${BACKUP_TARGET}"
 fi
 
-RESTIC_SNAPSHOT_ID="${1:=latest}"
+RESTIC_SNAPSHOT_ID="${1:-latest}"
 if [ -n "${RESTIC_SNAPSHOT_ID}" ]; then
   echo "## Restore snapshot: ${RESTIC_SNAPSHOT_ID}"
   restic restore "${RESTIC_SNAPSHOT_ID}" --target "${BACKUP_TARGET}"
