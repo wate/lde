@@ -21,21 +21,25 @@
     - name: Set package version variable
       ansible.builtin.set_fact:
         font_bizingothic_version: "{{ latest_releases.json.tag_name }}"
-- name: Set asset file variable
-  ansible.builtin.set_fact:
-    asset_urls:
-      - https://github.com/{{ font_bizingothic_repo }}/releases/download/{{ font_bizingothic_version }}/BizinGothic_{{ font_bizingothic_version }}.zip
-      - https://github.com/{{ font_bizingothic_repo }}/releases/download/{{ font_bizingothic_version }}/BizinGothicDiscord_{{ font_bizingothic_version }}.zip
-- name: Create font directory
+- name: Create BizinGothic font install directory
   ansible.builtin.file:
-    path: "{{ font_dir }}/BizinGothic"
+    path: "{{ font_dir }}/{{ item }}"
     state: directory
     mode: "0755"
-- name: Install font file
+  loop:
+    - BizinGothic
+    - BizinGothicDiscord
+- name: Install BizinGothic font
   ansible.builtin.unarchive:
-    src: "{{ item }}"
+    src: https://github.com/{{ font_bizingothic_repo }}/releases/download/{{ font_bizingothic_version }}/BizinGothic_{{ font_bizingothic_version }}.zip
     dest: "{{ font_dir }}/BizinGothic"
     extra_opts:
       - -j
     remote_src: true
-  loop: "{{ asset_urls }}"
+- name: Install BizinGothic Discord font
+  ansible.builtin.unarchive:
+    src: https://github.com/{{ font_bizingothic_repo }}/releases/download/{{ font_bizingothic_version }}/BizinGothicDiscord_{{ font_bizingothic_version }}.zip
+    dest: "{{ font_dir }}/BizinGothicDiscord"
+    extra_opts:
+      - -j
+    remote_src: true

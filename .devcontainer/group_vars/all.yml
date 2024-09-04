@@ -469,14 +469,30 @@ logio_file_input_cfg:
 ## インストールする各種ツール
 ## --------------------------
 install_tools:
-  # https://direnv.net/
-  - direnv
   ## https://github.com/eza-community/eza
   - eza
+  ## https://graphviz.org/
+  - graphviz
   ## https://github.com/sharkdp/fd
   - fd
   ## https://github.com/sharkdp/bat
   - bat
+  ## https://jonas.github.io/tig/
+  - tig
+  ## https://github.com/jesseduffield/lazygit
+  - lazygit
+  ## https://github.com/google/osv-scanner
+  - osv-scanner
+  # https://direnv.net/
+  - direnv
+  ## https://taskfile.dev/
+  - task
+  # https://github.com/kellyjonbrazil/jc
+  - jc
+  ## https://github.com/jgm/pandoc
+  - pandoc
+  ## https://plantuml.com/ja/
+  - plantuml
   ## https://github.com/k1LoW/tbls
   - tbls
   ## https://github.com/k1LoW/runn
@@ -485,28 +501,18 @@ install_tools:
   - delta
   ## https://github.com/terrastruct/d2
   - d2
-  ## https://github.com/google/osv-scanner
-  - osv-scanner
   ## https://github.com/charmbracelet/glow
   - glow
-  ## https://www.mycli.net/
-  - mycli
-  ## https://pre-commit.com/
-  - pre-commit
-  ## https://graphviz.org/
-  - graphviz
   ## https://wp-cli.org/ja/
   - wp-cli
   ## https://github.com/microsoft/pict
   - pict
-  # https://plantuml.com/ja/
-  - plantuml
-  # PDF 向けユーティリティ
+  ## https://github.com/alexmyczko/fnt
+  - fnt
+  ## PDF 向けユーティリティ
   - poppler-utils
-  # https://github.com/jgm/pandoc
-  - pandoc
-  # https://taku910.github.io/mecab/
-  - mecab
+  ## https://github.com/google/zx
+  - zx
 
 ## --------------
 ## バックアップ設定
@@ -517,7 +523,7 @@ backup_settings:
     cron:
       minute: "0,30"
     command: >
-      mariadb-dump -u {{ db_dev.user }} -p{{ db_dev.password }} --single-transaction {{ db_dev.name }}
+      mariadb-dump -u {{ db_dev.user }} -p{{ db_dev.password }} {{ db_dev.name }}
       |
       sed -e '/^\/\*\!50013 DEFINER=/d'
       >${BACKUP_DATA_DIR}/dump.sql

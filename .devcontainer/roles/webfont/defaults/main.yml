@@ -129,17 +129,17 @@ webfont_font_files:
   #     family: "{{ webfont_font_prefix }}P"
   #     style: italic
   #     weight: 300
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Regular.ttf
-    output_file: "{{ webfont_font_prefix }}P-Regular.ttf"
-    css:
-      comment: "Original: PlemolJP"
-      family: "{{ webfont_font_prefix }}P"
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Italic.ttf
-    output_file: "{{ webfont_font_prefix }}P-Italic.ttf"
-    css:
-      comment: "Original: PlemolJP"
-      family: "{{ webfont_font_prefix }}P"
-      style: italic
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Regular.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-Regular.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP"
+  #     family: "{{ webfont_font_prefix }}P"
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Italic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-Italic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP"
+  #     family: "{{ webfont_font_prefix }}P"
+  #     style: italic
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Medium.ttf
   #   output_file: "{{ webfont_font_prefix }}P-Medium.ttf"
   #   css:
@@ -162,19 +162,19 @@ webfont_font_files:
   #     family: "{{ webfont_font_prefix }}P"
   #     style: italic
   #     weight: 600
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Bold.ttf
-    output_file: "{{ webfont_font_prefix }}P-Bold.ttf"
-    css:
-      comment: "Original: PlemolJP"
-      family: "{{ webfont_font_prefix }}P"
-      weight: bold
-  - src: /usr/local/share/fonts/PlemolJP/PlemolJP-BoldItalic.ttf
-    output_file: "{{ webfont_font_prefix }}P-BoldItalic.ttf"
-    css:
-      comment: "Original: PlemolJP"
-      family: "{{ webfont_font_prefix }}P"
-      style: italic
-      weight: bold
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-Bold.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-Bold.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP"
+  #     family: "{{ webfont_font_prefix }}P"
+  #     weight: bold
+  # - src: /usr/local/share/fonts/PlemolJP/PlemolJP-BoldItalic.ttf
+  #   output_file: "{{ webfont_font_prefix }}P-BoldItalic.ttf"
+  #   css:
+  #     comment: "Original: PlemolJP"
+  #     family: "{{ webfont_font_prefix }}P"
+  #     style: italic
+  #     weight: bold
   # - src: /usr/local/share/fonts/PlemolJP/PlemolJP35-Thin.ttf
   #   output_file: "{{ webfont_font_prefix }}P35-Thin.ttf"
   #   css:
@@ -451,12 +451,12 @@ webfont_font_files:
       comment: "Original: Bizin Gothic"
       family: "{{ webfont_font_prefix }}B"
       weight: bold
-  - src: /usr/local/share/fonts/BizinGothic/BizinGothicDiscord-Regular.ttf
+  - src: /usr/local/share/fonts/BizinGothicDiscord/BizinGothicDiscord-Regular.ttf
     output_file: "{{ webfont_font_prefix }}BD-Regular.ttf"
     css:
       comment: "Original: Bizin Gothic"
       family: "{{ webfont_font_prefix }}BD"
-  - src: /usr/local/share/fonts/BizinGothic/BizinGothicDiscord-Bold.ttf
+  - src: /usr/local/share/fonts/BizinGothicDiscord/BizinGothicDiscord-Bold.ttf
     output_file: "{{ webfont_font_prefix }}BD-Bold.ttf"
     css:
       comment: "Original: Bizin Gothic"
