@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+set -eo pipefail
 
 echo "$(whoami):$(whoami)" | sudo chpasswd
 
@@ -7,12 +7,8 @@ if type "direnv" >/dev/null 2>&1; then
   echo 'eval "$(direnv hook bash)"' >>~/.bashrc
 fi
 
-if type "exa" >/dev/null 2>&1; then
-  echo 'alias ls="exa --git --header"' >>~/.bashrc
-fi
-
-if type "batcat" >/dev/null 2>&1; then
-  echo 'alias cat=batcat' >>~/.bashrc
+if type "eza" >/dev/null 2>&1; then
+  echo 'alias ls="eza --git --header"' >>~/.bashrc
 fi
 
 if type "composer" >/dev/null 2>&1; then
@@ -102,8 +98,6 @@ if [ -f composer.json ]; then
   composer install --no-interaction
 fi
 
-pnpm config set store-dir ~/.local/share/pnpm/store
-
 if [ -f package.json ]; then
   ## @see https://github.com/antfu/ni
   ni
@@ -111,9 +105,10 @@ fi
 
 pipx install mkdocs --include-deps
 pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+pipx install mycli --include-deps
+pipx install pre-commit --include-deps
 pipx install ansible --include-deps
 pipx install ansible-lint --include-deps
-pipx install lizard --include-deps
 
 if [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
