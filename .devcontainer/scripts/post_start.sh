@@ -19,7 +19,7 @@ if type "ansible" >/dev/null 2>&1 && [ -f "$(dirname $0)/post_start.yml" ]; then
 fi
 
 if [ -z "${__GIT_PROMPT_SHOW_CHANGED_FILES_COUNT}" ]; then
-  source ~/.bashrc
+  source "${HOME}/.bashrc"
 fi
 
 apache2ctl start
