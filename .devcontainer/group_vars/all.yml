@@ -532,6 +532,6 @@ backup_settings:
     restic:
       repo_password: lde_auto_backup
       forget_keep_type: hourly
-      forget_keep_value: "8"
+      forget_keep_value: "12"
       forget_other_options:
         - --keep-within-daily 7d
