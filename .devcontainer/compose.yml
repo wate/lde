@@ -5,11 +5,10 @@ services:
       dockerfile: Dockerfile
       args:
         VARIANT: "8"
-        NODE_VERSION: "lts/*"
     environment:
-      - TZ=Asia/Tokyo
-      - VIRTUAL_HOST=example.com,www.example.com
-      # - VIRTUAL_PORT=8000
+      TZ: Asia/Tokyo
+      VIRTUAL_HOST: example.com,www.example.com
+      # VIRTUAL_PORT: 8000
     volumes:
       - ..:/workspace:cached
       - ./php/z-custom.ini:/usr/local/etc/php/conf.d/z-custom.ini

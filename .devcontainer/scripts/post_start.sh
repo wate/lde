@@ -18,4 +18,8 @@ if type "ansible" >/dev/null 2>&1 && [ -f "$(dirname $0)/post_start.yml" ]; then
   ansible-playbook  -i 127.0.0.1, -c local --diff "$(dirname $0)/post_start.yml"
 fi
 
+if [ -z "${__GIT_PROMPT_SHOW_CHANGED_FILES_COUNT}" ]; then
+  source "${HOME}/.bashrc"
+fi
+
 apache2ctl start
