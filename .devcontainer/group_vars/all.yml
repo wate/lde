@@ -535,3 +535,9 @@ backup_settings:
       forget_keep_value: "12"
       forget_other_options:
         - --keep-within-daily 7d
+
+## ---------
+## ログインバナー
+## ---------
+banner_text: "{{ domain }}"
+
