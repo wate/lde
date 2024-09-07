@@ -6,4 +6,12 @@ export RESTIC_REPOSITORY="{{ backup_repo_dir }}/auto_backup"
 export RESTIC_PASSWORD_FILE="{{ backup_repo_password_dir }}/auto_backup"
 
 ARGS=("$@")
-restic forget "${ARGS[@]}" --prune
+
+{% raw -%}
+if [ "${#ARGS[@]}" -ge 1 ]; then
+  restic forget "${ARGS[@]}" --prune
+else
+  echo "引数が指定されていません"
+  exit 1
+fi
+{% endraw %}
