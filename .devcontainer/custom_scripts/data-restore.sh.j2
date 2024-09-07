@@ -12,7 +12,7 @@ DB_PASSWORD="{{ db_dev.password }}"
 # FILES_DIR="${HOME}/src/public/files"
 
 export RESTIC_REPOSITORY="{{ backup_repo_dir }}/auto_backup"
-export RESTIC_PASSWORD="{{ backup_settings.auto_backup.restic.repo_password }}"
+export RESTIC_PASSWORD_FILE="{{ backup_repo_password_dir }}/auto_backup"
 
 if [ ! -e "${BACKUP_TARGET}" ]; then
   echo "Create backup target directory"
