@@ -530,7 +530,7 @@ backup_settings:
       sed -e '/^\/\*\!50013 DEFINER=/d'
       >${BACKUP_DATA_DIR}/dump.sql
     restic:
-      repo_password: lde_auto_backup
+      repo_password: auto_backup_password
       forget_keep_type: hourly
       forget_keep_value: "12"
       forget_other_options:
