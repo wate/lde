@@ -535,7 +535,7 @@ backup_settings:
       forget_keep_type: hourly
       forget_keep_value: "12"
       forget_other_options:
-        - --keep-within-daily 7d
+        - --keep-within-daily 3d
 
 ## ---------
 ## ログインバナー
