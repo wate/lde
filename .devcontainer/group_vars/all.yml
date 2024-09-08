@@ -524,6 +524,7 @@ backup_settings:
     user: vagrant
     cron:
       minute: "0,30"
+      job_suffix: "1>/dev/null"
     command: >
       mariadb-dump -u {{ db_dev.user }} -p{{ db_dev.password }} --single-transaction {{ db_dev.name }}
       |
