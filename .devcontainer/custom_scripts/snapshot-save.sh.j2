@@ -51,4 +51,5 @@ if [ ! -e "${RESTIC_REPOSITORY}/config" ]; then
   restic init
 fi
 
-restic backup "${BACKUP_TARGET}" --tag "manual backup"
+SNAPSHOT_TAG="${1:-manual backup}"
+restic backup "${BACKUP_TARGET}" --tag "${SNAPSHOT_TAG}"
