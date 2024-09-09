@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -eo pipefail
-
-export RESTIC_REPOSITORY="{{ backup_repo_dir }}/auto_backup"
-export RESTIC_PASSWORD_FILE="{{ backup_repo_password_dir }}/auto_backup"
-
-restic stats
