@@ -462,3 +462,16 @@ webfont_font_files:
       comment: "Original: Bizin Gothic"
       family: "{{ webfont_font_prefix }}BD"
       weight: bold
+  ## Nerd Font
+  # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf
+  #   output_file: "NerdFont.ttf"
+  #   skip_convert_subset: true
+  #   css:
+  #     comment: "Original: Nerd Font SymbolsOnly"
+  #     family: "NerdFont"
+  # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.ttf
+  #   output_file: "NerdFontMono.ttf"
+  #   skip_convert_subset: true
+  #   css:
+  #     comment: "Original: Nerd Font SymbolsOnly"
+  #     family: "NerdFontMono"
