@@ -73,7 +73,7 @@
           ansible.builtin.set_fact:
             custom_scripts: "{{ lookup('fileglob', 'custom_scripts/*.sh', wantlist=True) }}"
             custom_script_templates: "{{ lookup('fileglob', 'custom_scripts/*.sh.j2', wantlist=True) }}"
-        - name: Include custom tasks
+        - name: Install custom scripts
           when: custom_scripts | length > 0 or custom_script_templates | length > 0
           become: false
           block:
