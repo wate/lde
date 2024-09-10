@@ -52,5 +52,8 @@ composer.phar
 ### phpDocumenter output directory ###
 docs/api/
 
-### project wiki page ###
+### other ###
+.devcontainer/host_vars/default.yml
+provision_tags.yml
 wiki/
+issues/

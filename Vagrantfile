@@ -1,5 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require "yaml"
 
 Vagrant.configure("2") do |config|
   # --------
@@ -123,19 +124,23 @@ Vagrant.configure("2") do |config|
       ansible_raw_arguments.push(env_var)
     end
   end
-  ansible_tags = nil
-  ansible_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_TAG_/) }
-  unless ansible_tags_env_vars.empty?
-    ansible_tags = []
-    ansible_tags_env_vars.each_value do |env_var|
-      ansible_tags.push(env_var)
+
+  ansible_provision_tags, ansible_provision_skip_tags = []
+  provision_tags = nil
+  provision_tag_file_dirs = ['.', LDE_CONFIG_DIR]
+  provision_tag_file_dirs.each do |target_dir|
+    provision_tag_file = File.expand_path(File.join(target_dir.to_s, 'provision_tags.yml'))
+    if File.exists?(File.expand_path(provision_tag_file))
+      provision_tags = YAML.load_file(provision_tag_file)
+      break
     end
   end
-  ansible_skip_tags = []
-  ansible_skip_tags_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_SKIP_TAG_/) }
-  unless ansible_skip_tags_env_vars.empty?
-    ansible_skip_tags_env_vars.each_value do |env_var|
-      ansible_skip_tags.push(env_var)
+  if provision_tags
+    if provision_tags.key?('tags') && !provision_tags['tags'].nil?
+      ansible_provision_tags = provision_tags['tags']
+    end
+    if provision_tags.key?('skip_tags') && !provision_tags['skip_tags'].nil?
+      ansible_provision_skip_tags = provision_tags['skip_tags']
     end
   end
   ANSIBLR_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "playbook.yml"))
@@ -147,8 +152,8 @@ Vagrant.configure("2") do |config|
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
-      ansible.tags = ansible_tags
-      ansible.skip_tags = ansible_skip_tags
+      ansible.tags = ansible_provision_tags
+      ansible.skip_tags = ansible_provision_skip_tags
       ansible.raw_arguments = ansible_raw_arguments
       ansible.groups = ansible_groups
     end
@@ -161,8 +166,8 @@ Vagrant.configure("2") do |config|
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars
-      ansible.tags = ansible_tags
-      ansible.skip_tags = ansible_skip_tags
+      ansible.tags = ansible_provision_tags
+      ansible.skip_tags = ansible_provision_skip_tags
       ansible.raw_arguments = ansible_raw_arguments
       ansible.groups = ansible_groups
     end
@@ -175,8 +180,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.extra_vars = ansible_extra_vars
-      ansible.tags = ansible_tags
-      ansible.skip_tags = ansible_skip_tags
+      ansible.tags = ansible_provision_tags
+      ansible.skip_tags = ansible_provision_skip_tags
       ansible.raw_arguments = ansible_raw_arguments
       ansible.groups = ansible_groups
     end
