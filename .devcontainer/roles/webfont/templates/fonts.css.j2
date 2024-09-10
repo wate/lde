@@ -1,14 +1,23 @@
-{% if webfont_css_output_license_text is defined %}
-{{ webfont_css_output_license_text | comment('cblock') }}
+{% if webfont_css_header_comment is defined %}
+{{ webfont_css_header_comment | comment('cblock') }}
 {% endif %}
 {% for webfont_font_file in webfont_font_files if webfont_font_file.css is defined %}
 {% set font_file = webfont_font_file.output_file | default(webfont_font_file.src | basename) %}
 {% set file_name = font_file[:-4] %}
-@font-face {
-{% if webfont_font_file.css.comment is defined %}
-  /* {{ webfont_font_file.css.comment }} */
+{% set font_css = webfont_font_file.css %}
+{% set alternative_font = 'monospace' -%}
+{% if font_css.alternative is defined -%}
+{% if font_css.alternative is not boolean -%}
+{% set alternative_font = font_css.alternative -%}
+{% elif not font_css.alternative %}
+{% set alternative_font = false -%}
 {% endif %}
-  font-family: '{{ webfont_font_file.css.family }}', monospace;
+{% endif %}
+@font-face {
+{% if font_css.comment is defined %}
+  /* {{ font_css.comment }} */
+{% endif %}
+  font-family: '{{ font_css.family }}'{% if alternative_font %}, {{ alternative_font }}{% endif %};
   src:
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff2') format('woff2'),
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff') format('woff'),
@@ -17,8 +26,9 @@
 {% elif font_file.endswith('.otf') %}
     url('{{ webfont_css_font_path}}/{{ font_file }}') format('opentype');
 {% endif %}
-  font-style: {{ webfont_font_file.css.style | default(webfont_css_default.style) }};
-  font-weight: {{ webfont_font_file.css.weight | default(webfont_css_default.weight) }};
-  font-display: {{ webfont_font_file.css.display | default(webfont_css_default.display) }};
+  font-style: {{ font_css.style | default(webfont_css_default.style) }};
+  font-weight: {{ font_css.weight | default(webfont_css_default.weight) }};
+  font-display: {{ font_css.display | default(webfont_css_default.display) }};
 }
 {% endfor %}
+{{ webfont_css_extra }}

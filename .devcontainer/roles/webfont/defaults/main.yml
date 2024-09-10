@@ -9,7 +9,7 @@ webfont_output_font_dir: /vagrant/docs/assets/fonts
 webfont_output_css_dir: /vagrant/docs/assets/stylesheets
 webfont_css_font_path: "../fonts"
 
-webfont_css_output_license_text: |
+webfont_css_header_comment: |
   "白源/HackGen" are licensed under SIL OPEN FONT LICENSE Version 1.1.
   https://github.com/yuru7/HackGen
 
@@ -463,15 +463,19 @@ webfont_font_files:
       family: "{{ webfont_font_prefix }}BD"
       weight: bold
   ## Nerd Font
-  # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf
-  #   output_file: "NerdFont.ttf"
-  #   skip_convert_subset: true
-  #   css:
-  #     comment: "Original: Nerd Font SymbolsOnly"
-  #     family: "NerdFont"
+  - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf
+    output_file: "NerdFontSymbolsOnly.ttf"
+    skip_convert_subset: true
+    css:
+      comment: "Original: Nerd Font SymbolsOnly"
+      family: "NerdFont"
+      alternative: false
   # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.ttf
-  #   output_file: "NerdFontMono.ttf"
+  #   output_file: "NerdFontsSymbolsMono.ttf"
   #   skip_convert_subset: true
   #   css:
   #     comment: "Original: Nerd Font SymbolsOnly"
-  #     family: "NerdFontMono"
+  #     family: "NerdFontSymbolsMono"
+  #     alternative: false
+
+webfont_css_extra: ""
