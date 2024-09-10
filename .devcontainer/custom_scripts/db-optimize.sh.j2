@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+SCRIPT_DIR=$(dirname "$0")
+
 DB_NAME="{{ db_dev.name }}"
 DB_USER="{{ db_dev.user }}"
 DB_PASSWORD="{{ db_dev.password }}"

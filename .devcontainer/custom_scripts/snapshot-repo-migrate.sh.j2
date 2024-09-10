@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+SCRIPT_DIR=$(dirname "$0")
+
 export RESTIC_REPOSITORY="{{ backup_repo_dir }}/auto_backup"
 export RESTIC_PASSWORD_FILE="{{ backup_repo_password_dir }}/auto_backup"
 

@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+SCRIPT_DIR=$(dirname "$0")
+
 if [ -n "${TBLS_DSN}" ]; then
   TBLS_PARAMS=(--force --adjust-table)
   if [  -e /vagrant/.tbls.yml ]; then
