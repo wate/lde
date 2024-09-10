@@ -184,12 +184,4 @@ export VAGRANT_SYNC_FOLDER_DB_SCHMA_DOC="path/to/scheme => /vagrant/docs/schema"
 # プロビジョニング実行時にAnsibleの追加パラメーター
 # 「VAGRANT_ANSIBLE_RAW_ARGMENT_」で始まる環境変数が設定として認識されます
 export VAGRANT_ANSIBLE_RAW_ARGMENT_DIFF="--diff"
-
-# プロビジョニング実行時に実行するタグ
-# 「VAGRANT_ANSIBLE_TAG_」で始まる環境変数が設定として認識されます
-export VAGRANT_ANSIBLE_TAG_CAKEPHP="role_cakephp"
-
-# プロビジョニング実行時にスキップするタグ
-# 「VAGRANT_ANSIBLE_SKIP_TAG_」で始まる環境変数が設定として認識されます
-export VAGRANT_ANSIBLE_SKIP_TAG_COMMON="role_common"
 ```
