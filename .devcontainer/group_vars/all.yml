@@ -525,11 +525,11 @@ backup_settings:
     cron:
       minute: "0"
       job_suffix: "1>/dev/null"
-    command: >
-      mariadb-dump -u {{ db_dev.user }} -p{{ db_dev.password }} --single-transaction {{ db_dev.name }}
-      |
-      sed -e '/^\/\*\!50013 DEFINER=/d'
-      >${BACKUP_DATA_DIR}/dump.sql
+    command: |
+      {% set db_name = db_dev.name -%}
+      {% set db_user = db_dev.user -%}
+      {% set db_password = db_dev.password -%}
+      mariadb-dump -u {{ db_user }} -p{{ db_password }} --single-transaction {{ db_name }} | sed -e '/^\/\*\!50013 DEFINER=/d' >${BACKUP_DATA_DIR}/dump.sql
     restic:
       repo_password: auto_backup_password
       forget_keep_type: hourly
