@@ -1,0 +1,12 @@
+---
+- name: Get glyph names
+  ansible.builtin.uri:
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/glyphnames.json
+    return_content: true
+  register: glyphnames_result
+- name: Set glyph names variable
+  ansible.builtin.set_fact:
+    glyph_names: "{{ glyphnames_result.content | from_json }}"
+- name: Append extra css
+  ansible.builtin.set_fact:
+    webfont_css_extra: "{{ webfont_css_extra + lookup('ansible.builtin.template', 'extra/nerd_fonts.css.j2') }}"

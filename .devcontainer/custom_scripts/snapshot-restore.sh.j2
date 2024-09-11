@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+SCRIPT_DIR=$(dirname "$0")
+
 BACKUP_TARGET="{{ backup_data_dir }}/auto_backup"
 
 DB_NAME="{{ db_dev.name }}"

@@ -23,7 +23,10 @@
     convert_subset_fonts: "{{ webfont_font_files | rejectattr('skip_convert_subset', 'defined') | list }}"
     copy_original_fonts: "{{ webfont_font_files | selectattr('skip_convert_subset', 'defined') | list }}"
 - name: Update subset font and Web font
-  when: update_subset_text_result is changed
+  when: >
+    update_subset_text_result is changed
+    or
+    webfont_force_regenerate
   block:
     - name: Generate subset font
       ansible.builtin.command:
@@ -67,6 +70,10 @@
       loop: "{{ find_subset_result.files }}"
       loop_control:
         label: "{{ item.path | basename }}"
+- name: Appned extra css(Nerd fonts)
+  ansible.builtin.import_tasks:
+    file: extra/nerd_fonts.yml
+  when: webfont_css_extra_nerd_fonts is defined
 - name: Generate CSS file
   ansible.builtin.template:
     src: fonts.css.j2
