@@ -70,10 +70,10 @@
       loop: "{{ find_subset_result.files }}"
       loop_control:
         label: "{{ item.path | basename }}"
-- name: Appned extra css(Nerd font)
+- name: Appned extra css(Nerd fonts)
   ansible.builtin.import_tasks:
-    file: extra/nerd.yml
-  when: webfont_css_extra_nerd is defined
+    file: extra/nerd_fonts.yml
+  when: webfont_css_extra_nerd_fonts is defined
 - name: Generate CSS file
   ansible.builtin.template:
     src: fonts.css.j2

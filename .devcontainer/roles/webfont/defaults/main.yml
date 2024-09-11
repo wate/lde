@@ -13,9 +13,6 @@ webfont_css_header_comment: |
   "白源/HackGen" are licensed under SIL OPEN FONT LICENSE Version 1.1.
   https://github.com/yuru7/HackGen
 
-  "PlemolJP" are licensed under SIL OPEN FONT LICENSE Version 1.1.
-  https://github.com/yuru7/PlemolJP
-
   "UDEV Gothic" are licensed under SIL OPEN FONT LICENSE Version 1.1.
   https://github.com/yuru7/udev-gothic
 
@@ -453,26 +450,26 @@ webfont_font_files:
       comment: "Original: Bizin Gothic"
       family: "{{ webfont_font_prefix }}B"
       weight: bold
-  - src: /usr/local/share/fonts/BizinGothicDiscord/BizinGothicDiscord-Regular.ttf
+  - src: /usr/local/share/fonts/BizinGothic/BizinGothicDiscord-Regular.ttf
     output_file: "{{ webfont_font_prefix }}BD-Regular.ttf"
     css:
       comment: "Original: Bizin Gothic"
       family: "{{ webfont_font_prefix }}BD"
-  - src: /usr/local/share/fonts/BizinGothicDiscord/BizinGothicDiscord-Bold.ttf
+  - src: /usr/local/share/fonts/BizinGothic/BizinGothicDiscord-Bold.ttf
     output_file: "{{ webfont_font_prefix }}BD-Bold.ttf"
     css:
       comment: "Original: Bizin Gothic"
       family: "{{ webfont_font_prefix }}BD"
       weight: bold
   ## Nerd Font
-  # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf
+  # - src: /usr/local/share/fonts/NerdFonts/SymbolsNerdFont-Regular.ttf
   #   output_file: "NerdFontSymbolsOnly.ttf"
   #   skip_convert_subset: true
   #   css:
   #     comment: "Original: Nerd Font SymbolsOnly"
   #     family: "NerdFont"
   #     alternative: false
-  # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.ttf
+  # - src: /usr/local/share/fonts/NerdFonts/SymbolsNerdFontMono-Regular.ttf
   #   output_file: "NerdFontsSymbolsMono.ttf"
   #   skip_convert_subset: true
   #   css:
@@ -482,5 +479,5 @@ webfont_font_files:
 
 webfont_css_extra: ""
 
-# webfont_css_extra_nerd:
+# webfont_css_extra_nerd_fonts:
 #   family: NerdFont
