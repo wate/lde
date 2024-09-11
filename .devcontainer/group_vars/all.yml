@@ -533,7 +533,7 @@ backup_settings:
     restic:
       repo_password: auto_backup_password
       forget_keep_type: hourly
-      forget_keep_value: "12"
+      forget_keep_value: "8"
       forget_other_options:
         - --keep-within-daily 3d
 

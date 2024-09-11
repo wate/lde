@@ -31,6 +31,8 @@ webfont_css_default:
   weight: normal
   display: swap
 
+webfont_force_regenerate: false
+
 ### font-weight map ###
 # Thin 100
 # ExtraLight 200
@@ -463,13 +465,13 @@ webfont_font_files:
       family: "{{ webfont_font_prefix }}BD"
       weight: bold
   ## Nerd Font
-  - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf
-    output_file: "NerdFontSymbolsOnly.ttf"
-    skip_convert_subset: true
-    css:
-      comment: "Original: Nerd Font SymbolsOnly"
-      family: "NerdFont"
-      alternative: false
+  # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf
+  #   output_file: "NerdFontSymbolsOnly.ttf"
+  #   skip_convert_subset: true
+  #   css:
+  #     comment: "Original: Nerd Font SymbolsOnly"
+  #     family: "NerdFont"
+  #     alternative: false
   # - src: /usr/local/share/fonts/Nerd_NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.ttf
   #   output_file: "NerdFontsSymbolsMono.ttf"
   #   skip_convert_subset: true
@@ -479,3 +481,6 @@ webfont_font_files:
   #     alternative: false
 
 webfont_css_extra: ""
+
+# webfont_css_extra_nerd:
+#   family: NerdFont

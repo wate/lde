@@ -124,14 +124,3 @@
   font-weight: bold;
   font-display: swap;
 }
-@font-face {
-  /* Original: Nerd Font SymbolsOnly */
-  font-family: 'NerdFont';
-  src:
-    url('../fonts/NerdFontSymbolsOnly.woff2') format('woff2'),
-    url('../fonts/NerdFontSymbolsOnly.woff') format('woff'),
-    url('../fonts/NerdFontSymbolsOnly.ttf') format('truetype');
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-}

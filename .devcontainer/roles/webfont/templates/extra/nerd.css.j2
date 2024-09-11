@@ -1,0 +1,23 @@
+/*
+ * BEGIN extra nerd
+ */
+.nf, .nerd-font, .nerd-fonts {
+  font-family: '{{ webfont_css_extra_nerd.family }}';
+  /* speak: none; */
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering (from devicons, et al) */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+{% for name, value in glyph_names.items() if value.code is defined %}
+.nf-{{ name }}:before {
+  content: "\{{ value.code }}";
+}
+{% endfor %}
+/*
+ * END extra nerd
+ */
