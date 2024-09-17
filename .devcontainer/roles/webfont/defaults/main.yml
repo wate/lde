@@ -465,6 +465,7 @@ webfont_font_files:
   # - src: /usr/local/share/fonts/NerdFonts/SymbolsNerdFont-Regular.ttf
   #   output_file: "NerdFontSymbolsOnly.ttf"
   #   skip_convert_subset: true
+  #   convert_svg: true
   #   css:
   #     comment: "Original: Nerd Font SymbolsOnly"
   #     family: "NerdFont"
@@ -472,6 +473,7 @@ webfont_font_files:
   # - src: /usr/local/share/fonts/NerdFonts/SymbolsNerdFontMono-Regular.ttf
   #   output_file: "NerdFontsSymbolsMono.ttf"
   #   skip_convert_subset: true
+  #   convert_svg: true
   #   css:
   #     comment: "Original: Nerd Font SymbolsOnly"
   #     family: "NerdFontSymbolsMono"

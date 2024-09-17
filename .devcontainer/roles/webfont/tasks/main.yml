@@ -22,6 +22,19 @@
   ansible.builtin.set_fact:
     convert_subset_fonts: "{{ webfont_font_files | rejectattr('skip_convert_subset', 'defined') | list }}"
     copy_original_fonts: "{{ webfont_font_files | selectattr('skip_convert_subset', 'defined') | list }}"
+- name: Set convert svg variable
+  ansible.builtin.set_fact:
+    convert_svg_fonts: "{{ convert_svg_fonts | default({}) | combine({converted_file: convert_svg}) }}"
+  vars:
+    converted_file: "{{ webfont_font_file.output_file | default(webfont_font_file.src | basename) }}"
+    convert_svg: "{{ webfont_font_file.convert_svg | default(false) }}"
+  loop: "{{ webfont_font_files }}"
+  loop_control:
+    loop_var: webfont_font_file
+    label: "{{ webfont_font_file.src | basename }}"
+- name: Debug
+  ansible.builtin.debug:
+    var: convert_svg_fonts
 - name: Update subset font and Web font
   when: >
     update_subset_text_result is changed
@@ -55,21 +68,35 @@
         patterns:
           - "*.ttf"
           - "*.otf"
-      register: find_subset_result
+      register: find_convert_font_file_result
+    - name: Set conevert font files
+      ansible.builtin.set_fact:
+        convert_font_files: "{{ find_convert_font_file_result.files | map(attribute='path') | sort }}"
     - name: Generate woff file
       ansible.builtin.command:
-        cmd: sfnt2woff-zopfli "{{ item.path }}"
+        cmd: sfnt2woff-zopfli "{{ font_file }}"
         chdir: "{{ webfont_output_font_dir }}"
-      loop: "{{ find_subset_result.files }}"
+      loop: "{{ convert_font_files }}"
       loop_control:
-        label: "{{ item.path | basename }}"
+        loop_var: font_file
+        label: "{{ font_file | basename }}"
     - name: Generate woff2 file
       ansible.builtin.command:
-        cmd: woff2_compress "{{ item.path }}"
+        cmd: woff2_compress "{{ font_file }}"
         chdir: "{{ webfont_output_font_dir }}"
-      loop: "{{ find_subset_result.files }}"
+      loop: "{{ convert_font_files }}"
       loop_control:
-        label: "{{ item.path | basename }}"
+        loop_var: font_file
+        label: "{{ font_file | basename }}"
+    - name: Generate svg file
+      ansible.builtin.command:
+        cmd: fontforge -lang=ff -c "Open('{{ font_file | basename }}'); Generate('{{ (font_file | basename)[:-4] }}.svg')"
+        chdir: "{{ webfont_output_font_dir }}"
+      when: convert_svg_fonts[(font_file | basename)] | default(false)
+      loop: "{{ convert_font_files }}"
+      loop_control:
+        loop_var: font_file
+        label: "{{ font_file | basename }}"
 - name: Appned extra css(Nerd fonts)
   ansible.builtin.import_tasks:
     file: extra/nerd_fonts.yml
