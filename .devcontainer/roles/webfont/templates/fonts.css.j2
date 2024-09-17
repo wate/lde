@@ -21,6 +21,9 @@
   src:
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff2') format('woff2'),
     url('{{ webfont_css_font_path}}/{{ file_name }}.woff') format('woff'),
+{% if webfont_font_file.convert_svg | default(false) %}
+    url('{{ webfont_css_font_path}}/{{ file_name }}.svg') format('svg'),
+{% endif %}
 {% if font_file.endswith('.ttf') %}
     url('{{ webfont_css_font_path}}/{{ font_file }}') format('truetype');
 {% elif font_file.endswith('.otf') %}
