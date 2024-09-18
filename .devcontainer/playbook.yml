@@ -22,7 +22,7 @@
       tags: role_php
     - name: nginx
       tags: role_nginx
-    # - role: apache
+    # - name: apache
     #   tags: role_apache
     - name: dehydrated
       tags: role_dehydrated
