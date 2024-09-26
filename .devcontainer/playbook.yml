@@ -10,53 +10,53 @@
       ansible.builtin.apt:
         update_cache: true
   roles:
-    - name: common
+    - role: common
       tags: role_common
-    - name: nodejs
+    - role: nodejs
       tags: role_nodejs
-    - name: mariadb
+    - role: mariadb
       tags: role_mariadb
-    # - name: postgresql
+    # - role: postgresql
     #   tags: role_postgresql
-    - name: php
+    - role: php
       tags: role_php
-    - name: nginx
+    - role: nginx
       tags: role_nginx
     # - role: apache
     #   tags: role_apache
-    - name: dehydrated
+    - role: dehydrated
       tags: role_dehydrated
-    - name: redis
+    - role: redis
       tags: role_redis
-    - name: spamassassin
+    - role: spamassassin
       tags: role_spamassassin
-    - name: mailpit
+    - role: mailpit
       tags: role_mailpit
-    - name: tools
+    - role: tools
       tags: role_tools
-    - name: backup
+    - role: backup
       tags: role_backup
-    - name: logrotate
+    - role: logrotate
       tags: role_logrotate
-    - name: phpredisadmin
+    - role: phpredisadmin
       tags: role_phpredisadmin
-    - name: logio
+    - role: logio
       tags: role_logio
-    - name: meilisearch
+    - role: meilisearch
       tags: role_meilisearch
-    - name: lde
+    - role: lde
       become: false
       tags: role_lde
-    - name: font
+    - role: font
       tags:
         - role_font
         - doc_font
-    - name: webfont
+    - role: webfont
       become: false
       tags:
         - role_webfont
         - doc_font
-    # - name: cakephp
+    # - role: cakephp
     #   become: false
     #   tags: role_cakephp
   tasks:

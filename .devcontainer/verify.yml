@@ -4,6 +4,9 @@
   hosts: all
   gather_facts: false
   become: true
+  vars:
+    web_server: nginx
+    # web_server: apache2
   tasks:
     - name: Verify local development environment
       tags: verify
@@ -28,7 +31,6 @@
             that:
               - ansible_facts.packages['mariadb-server'] is defined
               - ansible_facts.packages[php_fpm_name] is defined
-              - ansible_facts.packages['nginx'] is defined
               - ansible_facts.packages['redis'] is defined
               - ansible_facts.packages['restic'] is defined
               - ansible_facts.packages['rclone'] is defined
@@ -66,12 +68,17 @@
               - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
               - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
             quiet: true
+        - name: Webサーバーのインストール状況を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.packages[web_server] is defined
+            quiet: true
         - name: Webサーバーの稼働状態を検証
           ansible.builtin.assert:
             that:
-              - ansible_facts.services['nginx.service'] is defined
-              - ansible_facts.services['nginx.service']['state'] == 'running'
-              - ansible_facts.services['nginx.service']['status'] == 'enabled'
+              - ansible_facts.services[web_server + '.service'] is defined
+              - ansible_facts.services[web_server + '.service']['state'] == 'running'
+              - ansible_facts.services[web_server + '.service']['status'] == 'enabled'
             quiet: true
         - name: Webサーバーの待受ポートを検証
           ansible.builtin.assert:
