@@ -108,7 +108,7 @@ pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkd
 pipx install mycli --include-deps
 pipx install pre-commit --include-deps
 pipx install ansible --include-deps
-pipx install ansible-lint --include-deps
+pipx inject ansible ansible-lint --include-apps
 
 if [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
