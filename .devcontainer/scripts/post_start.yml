@@ -1,4 +1,6 @@
 ---
+# code: language=ansible
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json
 - name: Setup post start task
   hosts: all
   connection: local
