@@ -99,8 +99,8 @@ markdown_extensions:
           class: mermaid
   ## PlantUML Extension for Python-Markdown
   ## @see https://github.com/mikitex70/plantuml-markdown
-  # - plantuml_markdown:
-  #     server: http://www.plantuml.com/plantuml
+  - plantuml_markdown:
+      server: http://www.plantuml.com/plantuml
 
 ## Excluded doc files
 ## @see https://www.mkdocs.org/about/release-notes/#excluded-doc-files
@@ -136,7 +136,7 @@ plugins:
   - literate-nav:
       # nav_file: SUMMARY.md
   ## https://github.com/landmaj/mkdocs-d2-plugin
-  # - d2
+  - d2
   ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
