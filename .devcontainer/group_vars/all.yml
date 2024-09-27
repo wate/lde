@@ -445,6 +445,8 @@ lde_pipx_packages:
       - mkdocs-section-index
       - mkdocs-literate-nav
       - mkdocs-glightbox
+      - mkdocs-d2-plugin
+      - plantuml-markdown
   - name: mycli
   - name: pre-commit
 
