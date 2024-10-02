@@ -9,6 +9,8 @@
     dest: "{{ webfont_output_font_dir }}/subset.txt"
     mode: "0644"
   vars:
+    ## 日本語WEBフォントをサブセット化する際の参考文字列一覧 | U-618WEB
+    ## https://u-618.org/webfont-subset/
     subset_text_files:
       - files/subset_alphanumeric.txt
       - files/subset_symbol.txt
