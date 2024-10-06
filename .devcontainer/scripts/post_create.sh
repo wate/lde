@@ -104,7 +104,8 @@ if [ -f package.json ]; then
 fi
 
 pipx install mkdocs --include-deps
-pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox mkdocs-d2-plugin
+pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown
 pipx install mycli --include-deps
 pipx install pre-commit --include-deps
 pipx install ansible --include-deps
