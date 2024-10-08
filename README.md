@@ -156,7 +156,6 @@ export VAGRANT_VM_HOST_WWW="www.example.com"
 export VAGRANT_VM_HOST_MAILPIT="mail.example.com"
 export VAGRANT_VM_HOST_PHPREDISADMIN="cache.example.com"
 export VAGRANT_VM_HOST_MEILISEARCH="search.example.com"
-export VAGRANT_VM_HOST_GRAFANA="monitor.example.com"
 
 ## ------------
 ## ポートフォワードの設定
@@ -184,4 +183,41 @@ export VAGRANT_SYNC_FOLDER_DB_SCHMA_DOC="path/to/scheme => /vagrant/docs/schema"
 # プロビジョニング実行時にAnsibleの追加パラメーター
 # 「VAGRANT_ANSIBLE_RAW_ARGMENT_」で始まる環境変数が設定として認識されます
 export VAGRANT_ANSIBLE_RAW_ARGMENT_DIFF="--diff"
+```
+
+### 設定ファイルを利用したVagrantのプロビジョニングの制御
+
+ディレクトリ直下に`provision_config.yml`というファイルを作成し、以下のように設定を記述することで、
+Vagrantのプロビジョニング時の設定を制御することができます。
+
+各設定項目の詳細は以下のとおりです。
+
+* `tags`: `ansible-playbook`コマンドの`--tags`パラメーターに設定するタグを指定します。
+* `skip_tags`: `ansible-playbook`コマンドの`--skip-tags`パラメーターに設定するタグを指定します。
+* `role_update`: `ansible-galaxy`コマンドでインストールしたロールを更新するかどうかを指定します。
+* `extra_var`: `ansible-playbook`コマンドの`--extra-vars`パラメーターに設定する変数を指定します。
+
+```yml
+---
+## 適用するタグ
+## ------------------
+# tags:
+#   - custom_script
+#   - role_backup
+#   - role_webfont
+#   - verify
+
+## スキップするタグ
+## ------------------
+# skip_tags:
+#   - verify
+
+## ロールのインストール/更新
+## ------------------
+# role_update: true
+
+## 追加/上書きする変数
+## ------------------
+extra_var:
+  php_version: 8.3
 ```

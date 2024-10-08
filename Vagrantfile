@@ -106,17 +106,22 @@ Vagrant.configure("2") do |config|
   # Provisioning
   # --------
   LDE_CONFIG_DIR = ".devcontainer"
+  ## Ansible config path
   ANSIBLR_CONFIG_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, "ansible.cfg"))
+  ## Ansible playbook paths
+  ANSIBLR_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "playbook.yml"))
+  ANSIBLR_CUSTOM_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "custom.yml"))
+  ANSIBLR_VERIFY_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "verify.yml"))
+  ## Ansible galaxy role file
   ANSIBLR_GALAXY_ROLE_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, "requirements.yml"))
+  ## Ansible roles path
+  ANSIBLE_GALAXY_ROLES_PATH = File.join('.vagrant', 'provisioners', 'ansible', 'roles')
   ansible_groups = {
     "vagrant" => ["default"],
   }
   ansible_extra_vars = {
     "domain" => vm_domain,
   }
-  if File.exists?(File.join(LDE_CONFIG_DIR, "extra_vars.yml"))
-    ansible_extra_vars.merge!(YAML.load_file(File.join(LDE_CONFIG_DIR, "extra_vars.yml")))
-  end
   ansible_raw_arguments = []
   ansible_argument_env_vars = ENV.select { |k,v| k.match?(/^VAGRANT_ANSIBLE_RAW_ARGMENT_/) }
   unless ansible_argument_env_vars.empty?
@@ -124,65 +129,72 @@ Vagrant.configure("2") do |config|
       ansible_raw_arguments.push(env_var)
     end
   end
-
-  ansible_provision_tags, ansible_provision_skip_tags = []
-  provision_tags = nil
-  provision_tag_file_dirs = ['.', LDE_CONFIG_DIR]
-  provision_tag_file_dirs.each do |target_dir|
-    provision_tag_file = File.expand_path(File.join(target_dir.to_s, 'provision_tags.yml'))
-    if File.exists?(File.expand_path(provision_tag_file))
-      provision_tags = YAML.load_file(provision_tag_file)
+  ## Ansible roles update
+  provision_role_update = !File.exists?(ANSIBLE_GALAXY_ROLES_PATH)
+  ## Ansible provision tags
+  ansible_provision_tags = []
+  ansible_provision_skip_tags = []
+  provision_config = nil
+  provision_config_file_dirs = ['.', LDE_CONFIG_DIR]
+  provision_config_file_dirs.each do |target_dir|
+    provision_config_file = File.expand_path(File.join(target_dir.to_s, 'provision_config.yml'))
+    if File.exists?(File.expand_path(provision_config_file))
+      provision_config = YAML.load_file(provision_config_file)
       break
     end
   end
-  if provision_tags
-    if provision_tags.key?('tags') && !provision_tags['tags'].nil?
-      ansible_provision_tags = provision_tags['tags']
+  if provision_config
+    if provision_config.key?('tags') && !provision_config['tags'].nil?
+      ansible_provision_tags = provision_config['tags']
     end
-    if provision_tags.key?('skip_tags') && !provision_tags['skip_tags'].nil?
-      ansible_provision_skip_tags = provision_tags['skip_tags']
+    if provision_config.key?('skip_tags') && !provision_config['skip_tags'].nil?
+      ansible_provision_skip_tags = provision_config['skip_tags']
+    end
+    if provision_config.key?('role_update') && !provision_config['role_update'].nil?
+      provision_role_update = provision_config['role_update']
+    end
+    if provision_config.key?('extra_var') && !provision_config['extra_var'].nil?
+      ansible_extra_vars.merge!(provision_config['extra_var'])
     end
   end
-  ANSIBLR_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "playbook.yml"))
+
   if File.exists?(ANSIBLR_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_PLAYBOOK
       ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
-      ansible.galaxy_role_file = ANSIBLR_GALAXY_ROLE_FILE if File.exists?(ANSIBLR_GALAXY_ROLE_FILE)
-      ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
+      ansible.galaxy_role_file = ANSIBLR_GALAXY_ROLE_FILE if File.exists?(ANSIBLR_GALAXY_ROLE_FILE) && provision_role_update
+      ansible.galaxy_roles_path = ANSIBLE_GALAXY_ROLES_PATH
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = ansible_extra_vars
-      ansible.tags = ansible_provision_tags
-      ansible.skip_tags = ansible_provision_skip_tags
-      ansible.raw_arguments = ansible_raw_arguments
+      ansible.extra_vars = ansible_extra_vars if ansible_extra_vars.length > 0
+      ansible.tags = ansible_provision_tags if ansible_provision_tags.length > 0
+      ansible.skip_tags = ansible_provision_skip_tags if ansible_provision_skip_tags.length > 0
+      ansible.raw_arguments = ansible_raw_arguments if ansible_raw_arguments.length > 0
       ansible.groups = ansible_groups
     end
   end
-  ANSIBLR_USER_SETTING_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "custom.yml"))
-  if File.exists?(ANSIBLR_USER_SETTING_PLAYBOOK)
+  if File.exists?(ANSIBLR_CUSTOM_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = ANSIBLR_USER_SETTING_PLAYBOOK
+      ansible.playbook = ANSIBLR_CUSTOM_PLAYBOOK
       ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
-      ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
+      ansible.galaxy_roles_path = ANSIBLE_GALAXY_ROLES_PATH
       ansible.compatibility_mode = "2.0"
-      ansible.extra_vars = ansible_extra_vars
-      ansible.tags = ansible_provision_tags
-      ansible.skip_tags = ansible_provision_skip_tags
-      ansible.raw_arguments = ansible_raw_arguments
+      ansible.extra_vars = ansible_extra_vars if ansible_extra_vars.length > 0
+      ansible.tags = ansible_provision_tags if ansible_provision_tags.length > 0
+      ansible.skip_tags = ansible_provision_skip_tags if ansible_provision_skip_tags.length > 0
+      ansible.raw_arguments = ansible_raw_arguments if ansible_raw_arguments.length > 0
       ansible.groups = ansible_groups
     end
   end
-  ANSIBLR_VERIFY_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "verify.yml"))
   if File.exists?(ANSIBLR_VERIFY_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_VERIFY_PLAYBOOK
       ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
       ansible.compatibility_mode = "2.0"
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
-      ansible.extra_vars = ansible_extra_vars
-      ansible.tags = ansible_provision_tags
-      ansible.skip_tags = ansible_provision_skip_tags
-      ansible.raw_arguments = ansible_raw_arguments
+      ansible.extra_vars = ansible_extra_vars if ansible_extra_vars.length > 0
+      ansible.tags = ansible_provision_tags if ansible_provision_tags.length > 0
+      ansible.skip_tags = ansible_provision_skip_tags if ansible_provision_skip_tags.length > 0
+      ansible.raw_arguments = ansible_raw_arguments if ansible_raw_arguments.length > 0
       ansible.groups = ansible_groups
     end
   end
