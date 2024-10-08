@@ -54,6 +54,6 @@ docs/api/
 
 ### other ###
 .devcontainer/host_vars/default.yml
-provision_tags.yml
+provision_config.yml
 wiki/
 issues/
