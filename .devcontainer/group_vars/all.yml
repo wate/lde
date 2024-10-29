@@ -472,51 +472,60 @@ logio_file_input_cfg:
 ## --------------------------
 ## インストールする各種ツール
 ## --------------------------
+## --------------------------
+## インストールするツール
+## --------------------------
 install_tools:
   ## https://github.com/eza-community/eza
   - eza
-  ## https://graphviz.org/
-  - graphviz
   ## https://github.com/sharkdp/fd
   - fd
   ## https://github.com/sharkdp/bat
   - bat
   ## https://jonas.github.io/tig/
   - tig
-  ## https://github.com/jesseduffield/lazygit
-  - lazygit
+  ## https://github.com/dandavison/delta
+  - delta
+  ## https://goaccess.io/
+  - goaccess
   ## https://github.com/google/osv-scanner
   - osv-scanner
   # https://direnv.net/
   - direnv
   ## https://taskfile.dev/
   - task
-  # https://github.com/kellyjonbrazil/jc
+  ## https://restic.net/
+  - restic
+  ## https://rclone.org/
+  - rclone
+  ## https://github.com/kellyjonbrazil/jc
   - jc
+  ## https://httpie.io/
+  - httpie
+  ## https://duckdb.org/
+  - duckdb
+  ## https://github.com/charmbracelet/glow
+  - glow
   ## https://github.com/jgm/pandoc
   - pandoc
+  ## https://graphviz.org/
+  - graphviz
   ## https://plantuml.com/ja/
-  - plantuml
+  # - plantuml
+  ## https://github.com/terrastruct/d2
+  - d2
   ## https://github.com/k1LoW/tbls
   - tbls
   ## https://github.com/k1LoW/runn
   - runn
-  ## https://github.com/dandavison/delta
-  - delta
-  ## https://github.com/terrastruct/d2
-  - d2
-  ## https://github.com/charmbracelet/glow
-  - glow
-  ## https://wp-cli.org/ja/
-  - wp-cli
   ## https://github.com/microsoft/pict
   - pict
-  ## https://github.com/alexmyczko/fnt
-  - fnt
-  ## PDF 向けユーティリティ
-  - poppler-utils
-  ## https://github.com/google/zx
+  ## https://google.github.io/zx/
   - zx
+  ## https://wp-cli.org/ja/
+  - wp-cli
+  # https://github.com/alexmyczko/fnt
+  - fnt
 
 ## --------------
 ## バックアップ設定
