@@ -23,7 +23,7 @@ repos:
       - id: no-commit-to-branch
         args: [--branch, master, --branch, main, --branch, staging]
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.0
+    rev: v8.21.2
     hooks:
       - id: gitleaks
   - repo: https://github.com/igorshubovych/markdownlint-cli
