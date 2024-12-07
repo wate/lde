@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
 
   vagrantfile_dir = Dir.pwd
-  until File.exists?(File.join(vagrantfile_dir, "Vagrantfile")) do
+  until File.exist?(File.join(vagrantfile_dir, "Vagrantfile")) do
     vagrantfile_dir = File.dirname(vagrantfile_dir)
   end
   PROJECT_DIR = vagrantfile_dir
@@ -130,7 +130,7 @@ Vagrant.configure("2") do |config|
     end
   end
   ## Ansible roles update
-  provision_role_update = !File.exists?(ANSIBLE_GALAXY_ROLES_PATH)
+  provision_role_update = !File.exist?(ANSIBLE_GALAXY_ROLES_PATH)
   ## Ansible provision tags
   ansible_provision_tags = []
   ansible_provision_skip_tags = []
@@ -138,7 +138,7 @@ Vagrant.configure("2") do |config|
   provision_config_file_dirs = ['.', LDE_CONFIG_DIR]
   provision_config_file_dirs.each do |target_dir|
     provision_config_file = File.expand_path(File.join(target_dir.to_s, 'provision_config.yml'))
-    if File.exists?(File.expand_path(provision_config_file))
+    if File.exist?(File.expand_path(provision_config_file))
       provision_config = YAML.load_file(provision_config_file)
       break
     end
@@ -158,11 +158,11 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  if File.exists?(ANSIBLR_PLAYBOOK)
+  if File.exist?(ANSIBLR_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_PLAYBOOK
-      ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
-      ansible.galaxy_role_file = ANSIBLR_GALAXY_ROLE_FILE if File.exists?(ANSIBLR_GALAXY_ROLE_FILE) && provision_role_update
+      ansible.config_file = ANSIBLR_CONFIG_FILE if File.exist?(ANSIBLR_CONFIG_FILE)
+      ansible.galaxy_role_file = ANSIBLR_GALAXY_ROLE_FILE if File.exist?(ANSIBLR_GALAXY_ROLE_FILE) && provision_role_update
       ansible.galaxy_roles_path = ANSIBLE_GALAXY_ROLES_PATH
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars if ansible_extra_vars.length > 0
@@ -172,10 +172,10 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  if File.exists?(ANSIBLR_CUSTOM_PLAYBOOK)
+  if File.exist?(ANSIBLR_CUSTOM_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_CUSTOM_PLAYBOOK
-      ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
+      ansible.config_file = ANSIBLR_CONFIG_FILE if File.exist?(ANSIBLR_CONFIG_FILE)
       ansible.galaxy_roles_path = ANSIBLE_GALAXY_ROLES_PATH
       ansible.compatibility_mode = "2.0"
       ansible.extra_vars = ansible_extra_vars if ansible_extra_vars.length > 0
@@ -185,10 +185,10 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  if File.exists?(ANSIBLR_VERIFY_PLAYBOOK)
+  if File.exist?(ANSIBLR_VERIFY_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLR_VERIFY_PLAYBOOK
-      ansible.config_file = ANSIBLR_CONFIG_FILE if File.exists?(ANSIBLR_CONFIG_FILE)
+      ansible.config_file = ANSIBLR_CONFIG_FILE if File.exist?(ANSIBLR_CONFIG_FILE)
       ansible.compatibility_mode = "2.0"
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
       ansible.extra_vars = ansible_extra_vars if ansible_extra_vars.length > 0
