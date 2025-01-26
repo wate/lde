@@ -103,13 +103,21 @@ if [ -f package.json ]; then
   ni
 fi
 
-pipx install mkdocs --include-deps
-pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
-pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown
-pipx install mycli --include-deps
-pipx install pre-commit --include-deps
-pipx install ansible --include-deps
-pipx inject ansible ansible-lint --include-apps
+if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
+  pipx install mkdocs --include-deps
+  pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+  pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown
+fi
+if [ ! -e ~/.local/pipx/venvs/mycli ]; then
+  pipx install mycli --include-deps
+fi
+if [ ! -e ~/.local/pipx/venvs/pre-commit ]; then
+  pipx install pre-commit --include-deps
+fi
+if [ ! -e ~/.local/pipx/venvs/ansible ]; then
+  pipx install ansible --include-deps
+  pipx inject ansible ansible-lint --include-apps
+fi
 
 if [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
