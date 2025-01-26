@@ -22,4 +22,8 @@ if [ -z "${__GIT_PROMPT_SHOW_CHANGED_FILES_COUNT}" ]; then
   source "${HOME}/.bashrc"
 fi
 
+if [ -f .pre-commit-config.yaml ] && [ -e ~/.local/pipx/venvs/pre-commit ] && [ ! -f .git/hooks/pre-commit ]; then
+  pre-commit install
+fi
+
 apache2ctl start
