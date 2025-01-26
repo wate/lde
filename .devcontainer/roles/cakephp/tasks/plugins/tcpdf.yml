@@ -6,21 +6,21 @@
 - name: Setup plugin
   when: package_result.stat.exists
   block:
-    - name: Create fonts directory
+    - name: TCPDFのフォントファイル格納ディレクトリを作成
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}/resources/fonts"
         state: directory
         mode: "0755"
       register: resource_font_dir_result
-    - name: Generate font files
+    - name: TCPDF用フォントファイルの生成
       when: resource_font_dir_result is changed
       block:
-        - name: Synchronize tcpdf original font files
+        - name: TCPDFのオリジナルのフォントファイルをコピー
           ansible.posix.synchronize:
             src: "{{ php_project_tmp_dir }}/vendor/tecnickcom/tcpdf/fonts/"
             dest: "{{ php_project_tmp_dir }}/resources/fonts"
           delegate_to: "{{ inventory_hostname }}"
-        - name: Find all ttf files
+        - name: 追加で生成するフォントファイルを抽出
           ansible.builtin.find:
             paths:
               - /usr/share/fonts/opentype/ipaexfont-gothic
@@ -34,14 +34,14 @@
             patterns:
               - '*.ttf'
           register: find_result
-        - name: Generate tcpdf font file
+        - name: TCPDF用フォントファイルを生成
           ansible.builtin.command:
             cmd: php vendor/tecnickcom/tcpdf/tools/tcpdf_addfont.php --outpath {{ php_project_tmp_dir }}/resources/fonts --fonts "{{ item }}"
             chdir: "{{ php_project_tmp_dir }}"
           loop: "{{ find_result.files | map(attribute='path') | list }}"
           tags:
             - skip_ansible_lint
-        - name: Add TCPDF setting
+        - name: TCPDFの設定ファイルにフォントファイル格納ディレクトリを示す定数を追記
           ansible.builtin.blockinfile:
             path: "{{ php_project_tmp_dir }}/config/paths.php"
             marker: "// {mark} ANSIBLE MANAGED BLOCK"

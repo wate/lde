@@ -1,12 +1,12 @@
 ---
-- name: Check exists dotenv
+- name: dotenvの存在確認
   ansible.builtin.stat:
     path: "{{ php_project_tmp_dir }}/vendor/josegonzalez/dotenv"
   register: package_result
 - name: Setup plugin
   when: package_result.stat.exists
   block:
-    - name: Apply patch .env file parse statement
+    - name: .envファイルのパース処理を有効化するパッチを適用
       ansible.posix.patch:
         src: files/dotenv/bootstrap.php.patch
         dest: "{{ php_project_tmp_dir }}/config/bootstrap.php"

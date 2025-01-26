@@ -1,19 +1,16 @@
 ---
-- name: Check exists localized plugin
+- name: localizedプラグインの存在確認
   ansible.builtin.stat:
     path: "{{ php_project_tmp_dir }}/vendor/cakephp/localized"
   register: package_result
-- name: Setup plugin
+- name: localizedプラグインのセットアップ
   when: package_result.stat.exists
   block:
-    - name: Add addPlugin statement
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/Application.php"
-        regexp: "this->addPlugin\\('Cake/Localized'\\)"
-        line: "        $this->addPlugin('Cake/Localized');"
-        insertafter: "// Load more plugins here"
-        firstmatch: true
-    - name: Add default provider
+    - name: プラグインのプラグインのロード処理を追記
+      ansible.builtin.command:
+        cmd: bin/cake plugin load Cake/Localized
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: Validatorのデフォルトプロバイダーとして登録
       block:
         - name: Add use Validator statement
           ansible.builtin.lineinfile:
@@ -29,18 +26,18 @@
           ansible.builtin.lineinfile:
             path: "{{ php_project_tmp_dir }}/config/bootstrap.php"
             line: "Validator::addDefaultProvider('jp', JpValidation::class);"
-    - name: Create plugin resource directory
+    - name: プラグインのリソースディレクトリ(ベース)を作成
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}/resources/locales"
         state: directory
         mode: "0755"
-    - name: Create plugin resource directory
+    - name: プラグインのリソースディレクトリ(各言語)を作成
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}/resources/locales/{{ item }}"
         state: directory
         mode: "0755"
       loop: "{{ cakephp_localized_locales }}"
-    - name: Copy po files
+    - name: プラグインに同梱されているpoファイルをリソースディレクトリにコピー
       ansible.builtin.copy:
         src: "{{ php_project_tmp_dir }}/vendor/cakephp/localized/resources/locales/{{ item }}/cake.po"
         dest: "{{ php_project_tmp_dir }}/resources/locales/{{ item }}/cake.po"

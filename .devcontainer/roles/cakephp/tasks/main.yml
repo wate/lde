@@ -35,7 +35,7 @@
     - name: CakePHPプロジェクトの作成
       when: not cakephp_composer_json_result.stat.exists
       block:
-        - name: 作業用一時ディレクトリにCakePHのPプロジェクトスケルトンを作成
+        - name: 作業用一時ディレクトリにCakePHPのプロジェクトスケルトンを作成
           community.general.composer:
             command: create-project
             arguments: '"cakephp/app:^{{ cakephp_major_version | default(4) | string }}" {{ php_project_tmp_dir }}'
