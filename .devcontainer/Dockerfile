@@ -13,6 +13,7 @@ RUN . /etc/os-release \
   && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
+## Install php module
 RUN docker-php-ext-install mysqli pdo pdo_mysql intl zip \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd
@@ -27,6 +28,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x -o nodesource_setup.sh \
 
 ## Install tbls
 COPY --from=tbls /usr/bin/tbls /usr/local/bin/tbls
+
+## Enable apache rewrite module
+RUN a2enmod rewrite
 
 ## Install eza
 RUN mkdir -p /etc/apt/keyrings \
