@@ -145,8 +145,6 @@
           /tmp/
           /vendor/
           /.phpstorm.meta.php/
-          ### direnv ###
-          .envrc
         cakephp_dot_envrc_value: |
           PATH_add bin
           layout php
