@@ -1,6 +1,6 @@
 ARG VARIANT="8"
 FROM k1low/tbls:latest AS tbls
-FROM mcr.microsoft.com/vscode/devcontainers/php:0-${VARIANT}
+FROM mcr.microsoft.com/devcontainers/php:1-${VARIANT}
 
 RUN . /etc/os-release \
   && echo "deb http://deb.debian.org/debian ${VERSION_CODENAME}-backports main" > /etc/apt/sources.list.d/backports.list \
