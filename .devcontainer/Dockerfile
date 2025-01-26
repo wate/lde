@@ -4,13 +4,14 @@ FROM mcr.microsoft.com/devcontainers/php:1-${VARIANT}
 
 RUN . /etc/os-release \
   && echo "deb http://deb.debian.org/debian ${VERSION_CODENAME}-backports main" > /etc/apt/sources.list.d/backports.list \
+  && rm -f /etc/apt/sources.list.d/yarn.list \
   && apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install -y --no-install-recommends mariadb-client libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libzip-dev \
   && apt-get install -y --no-install-recommends bash-completion build-essential gpg vim \
   && apt-get install -y --no-install-recommends imagemagick \
   && apt-get install -y --no-install-recommends fonts-ipaexfont fnt \
   && apt-get install -y --no-install-recommends pipx \
-  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz \
+  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 ## Install php module
