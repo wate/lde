@@ -2,10 +2,10 @@
 ## ---------
 ## インストールするPHPのバージョン
 ##
-## 対応バージョン：5.6 / 7.0 / 7.1 / 7.2 / 7.3 / 7.4 / 8.0 / 8.2 / **8.2**
-## 初期値：8.2
+## 対応バージョン：7.4 / 8.0 / 8.1 / 8.2 / **8.3**
+## 初期値：8.3
 ## ---------
-php_version: "8.2"
+php_version: "8.3"
 
 ## --------------
 ## 利用するCakePHPのメジャーバージョン
@@ -16,17 +16,18 @@ cakephp_major_version: "5"
 ## インストールする追加パッケージ
 ## --------------
 cakephp_project_additional_packages: []
+#   ## @see https://github.com/josegonzalez/php-dotenv
 #   - name: "josegonzalez/dotenv:^4.0"
-#   ## @see https://book.cakephp.org/authentication/2/en/index.html
+#   ## @see https://book.cakephp.org/authentication/3/en/index.html
 #   - name: "cakephp/authentication:^3.0"
-#   ## @see https://book.cakephp.org/authorization/2/en/index.html
+#   ## @see https://book.cakephp.org/authorization/3/en/index.html
 #   - name: "cakephp/authorization:^3.0"
 #   ## @see https://symfony.com/doc/current/components/yaml.html
 #   - name: symfony/yaml
 #   ## @see https://github.com/cakephp/localized
 #   - name: "cakephp/localized:^5.0"
 #   ## @see https://github.com/robotusers/cakephp-table-inheritance
-#   - name: robotusers/cakephp-table-inheritance
+#   # - name: robotusers/cakephp-table-inheritance
 #   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
 #   - name: phpoffice/phpspreadsheet
 #   ## @see https://github.com/tecnickcom/TCPDF
@@ -34,11 +35,9 @@ cakephp_project_additional_packages: []
 #   ## @see https://github.com/arodu/cakelte
 #   - name: "arodu/cakelte:^2.0"
 #   ## @see https://csv.thephpleague.com/
-#   - name: league/csv:^9.0
+#   - name: league/csv
 #   ## @see https://commonmark.thephpleague.com/
 #   - name: league/commonmark
-#   ## @see https://book.cakephp.org/queue/1/en/index.html
-#   - name: cakephp/queue
 #   ## @see https://github.com/squizlabs/PHP_CodeSniffer
 #   - name: squizlabs/php_codesniffer
 #     dev: true

@@ -3,104 +3,61 @@
   ansible.builtin.stat:
     path: "{{ php_project_tmp_dir }}/vendor/arodu/cakelte"
   register: package_result
-- name: Setup plugin
+- name: プラグインのセットアップ
   when: package_result.stat.exists
   block:
-    - name: Add addPlugin statement
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/Application.php"
-        regexp: "this->addPlugin\\('CakeLte'\\)"
-        line: "        $this->addPlugin('CakeLte');"
-        insertafter: "// Load more plugins here"
-        firstmatch: true
-    - name: Load CakeLteTrait(1)
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
-        line: 'use CakeLte\View\CakeLteTrait;'
-        insertafter: '^use Cake\\View\\View;'
-    - name: Load CakeLteTrait(2)
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
-        line: "    use CakeLteTrait;"
-        insertafter: "^\\{"
-    - name: Change default layout
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
-        line: "    public $layout = 'CakeLte.default';"
-        insertafter: "^\\s+use CakeLteTrait;"
-    - name: Add parent::initialize() statement
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
-        line: "        parent::initialize();"
-        insertafter: "^\\s+{"
-    - name: Add CakeLte::initializeCakeLte() statement
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
-        line: "        $this->initializeCakeLte();"
-        insertafter: "^\\s+parent::initialize\\(\\);"
-    - name: Check exists plugin config file
+    - name: プラグインのプラグインのロード処理を追記
+      ansible.builtin.command:
+        cmd: bin/cake plugin load CakeLte
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: プラグインのアセットファイルのシンボリックリンクを作成
+      ansible.builtin.command:
+        cmd: bin/cake cakelte install
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: プラグインアセットのシンボリックリンクを作成
+      ansible.builtin.file:
+        path: "{{ php_project_tmp_dir }}/webroot/adminlte"
+        src: ../vendor/almasaeed2010/adminlte
+        state: link
+    - name: プラグインのテンプレートファイルをコピー
+      ansible.builtin.command:
+        cmd: bin/cake cakelte copy_files --all --quiet
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: プラグインの設定ファイルが存在するか確認
       ansible.builtin.stat:
         path: "{{ php_project_tmp_dir }}/config/cakelte.php"
       register: plugin_config_file_result
-    - name: Copy plugin config file
+    - name: プラグインの設定ファイルをコピー
       ansible.builtin.copy:
         src: "{{ php_project_tmp_dir }}/vendor/arodu/cakelte/config/cakelte.php"
         dest: "{{ php_project_tmp_dir }}/config/cakelte.php"
         mode: "0644"
         remote_src: true
       when: not plugin_config_file_result.stat.exists
-    - name: Find CakeLte plugin element files
-      ansible.builtin.find:
-        paths:
-          - "{{ php_project_tmp_dir }}/vendor/arodu/cakelte/templates/element"
-        patterns:
-          - '*.php'
-        recurse: true
-      register: element_files_result
-    - name: Create element file directory
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: directory
-        mode: "0755"
-      loop: "{{ element_files_result.files | map(attribute='path') | map('dirname') | unique | replace('vendor/arodu/cakelte/', '') }}"
-    - name: Copy CakeLte template files
-      ansible.builtin.include_tasks:
-        file: cakelte/copy_file.yml
-      vars:
-        copy_src: "{{ item }}"
-        copy_dest: "{{ item | replace('vendor/arodu/cakelte/', '') }}"
-      loop: "{{ element_files_result.files | map(attribute='path') }}"
-    - name: Create CakeLte plugin templates override directory
-      ansible.builtin.file:
-        path: "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
-        state: directory
-        mode: "0755"
-    - name: Find CakeLte plugin element files
-      ansible.builtin.find:
-        paths:
-          - "{{ php_project_tmp_dir }}/vendor/arodu/cakelte/templates/layout"
-        patterns:
-          - '*.php'
-      register: cakelte_layout_files_result
-    - name: Copy CakeLte template files
-      ansible.builtin.include_tasks:
-        file: cakelte/copy_file.yml
-      vars:
-        copy_src: "{{ item }}"
-        copy_dest: "{{ item | replace('vendor/arodu/cakelte/templates/layout/', 'templates/plugin/CakeLte/layout/') }}"
-      loop: "{{ cakelte_layout_files_result.files | map(attribute='path') }}"
-    - name: Find CakeLte plugin layout files
-      ansible.builtin.find:
-        paths:
-          - "{{ php_project_tmp_dir }}/templates/plugin/CakeLte/layout"
-        patterns:
-          - '*.php'
-      register: layout_files_result
-    - name: Remove annotation
-      ansible.builtin.lineinfile:
-        path: "{{ item.path }}"
-        regexp: '^ \* @var .+ \$this->CakeLte'
-        state: absent
-      loop: "{{ layout_files_result.files }}"
-      loop_control:
-        label: "{{ item.path | basename }}"
+    - name: ビューのデフォルトレイアウトの設定などをCakeLTEを利用するように書き換え
+      block:
+        - name: Load CakeLteTrait(1)
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
+            line: 'use CakeLte\View\CakeLteTrait;'
+            insertafter: '^use Cake\\View\\View;'
+        - name: Load CakeLteTrait(2)
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
+            line: "    use CakeLteTrait;"
+            insertafter: "^\\{"
+        - name: Change default layout
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
+            line: "    public string $layout = 'CakeLte.default';"
+            insertafter: "^\\s+use CakeLteTrait;"
+        - name: Add parent::initialize() statement
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
+            line: "        parent::initialize();"
+            insertafter: "^\\s+{"
+        - name: Add CakeLte::initializeCakeLte() statement
+          ansible.builtin.lineinfile:
+            path: "{{ php_project_tmp_dir }}/src/View/AppView.php"
+            line: "        $this->initializeCakeLte();"
+            insertafter: "^\\s+parent::initialize\\(\\);"

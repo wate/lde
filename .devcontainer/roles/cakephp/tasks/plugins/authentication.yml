@@ -1,19 +1,16 @@
 ---
-- name: Check exists Authentication plugin
+- name: Authenticationプラグインの存在確認
   ansible.builtin.stat:
     path: "{{ php_project_tmp_dir }}/vendor/cakephp/authentication"
   register: package_result
 - name: Setup plugin
   when: package_result.stat.exists
   block:
-    - name: Add addPlugin statement
-      ansible.builtin.lineinfile:
-        path: "{{ php_project_tmp_dir }}/src/Application.php"
-        regexp: "this->addPlugin\\('Authentication'\\)"
-        line: "        $this->addPlugin('Authentication');"
-        insertafter: "// Load more plugins here"
-        firstmatch: true
-    - name: Add use statement
+    - name: プラグインのプラグインのロード処理を追記
+      ansible.builtin.command:
+        cmd: bin/cake plugin load Authentication
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: use文を追記
       ansible.builtin.lineinfile:
         path: "{{ php_project_tmp_dir }}/src/Application.php"
         line: "use {{ item }};"
@@ -22,12 +19,12 @@
         - Authentication\AuthenticationService
         - Authentication\AuthenticationServiceInterface
         - Authentication\AuthenticationServiceProviderInterface
-        - Authentication\Identifier\IdentifierInterface
+        - Authentication\Identifier\AbstractIdentifier
         - Authentication\Middleware\AuthenticationMiddleware
         - Cake\Http\MiddlewareQueue
         - Cake\Routing\Router
         - Psr\Http\Message\ServerRequestInterface
-    - name: Add middleware statement
+    - name: ミドルウェアに認証処理を追記
       ansible.builtin.lineinfile:
         path: "{{ php_project_tmp_dir }}/src/Application.php"
         regexp: ">add\\(new AuthenticationMiddleware\\(\\$this\\)\\)"

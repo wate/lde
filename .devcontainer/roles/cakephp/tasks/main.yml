@@ -1,22 +1,20 @@
 ---
-- name: Setup PHP project
+- name: CakePHP用テンポラリティレクを作成
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0777"
+  loop:
+    - /var/cakephp
+    - /var/cakephp/tmp/cache
+    - /var/cakephp/tmp/session
+    - /var/cakephp/tmp/tests
+    - /var/cakephp/logs
   become: true
-  block:
-    - name: Create CakePHP tomprary directory
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: directory
-        mode: "0777"
-      loop:
-        - /var/cakephp
-        - /var/cakephp/tmp/cache
-        - /var/cakephp/tmp/session
-        - /var/cakephp/tmp/tests
-        - /var/cakephp/logs
-- name: Setup PHP project
+- name: CakePHPプロジェクトのセットアップ
   become: false
   block:
-    - name: Create symlink
+    - name: シンボリックリンクの作成
       ansible.builtin.file:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
@@ -26,64 +24,64 @@
           dest: ~/logs
         - src: /vagrant
           dest: ~/src
-    - name: Check exists composer.json
+    - name: composer.jsonの存在確認
       ansible.builtin.stat:
         path: "{{ php_project_source_dir }}/composer.json"
       register: cakephp_composer_json_result
-    - name: Remove temporary project directory
+    - name: 作業用一時ディレクトリを削除(古いファイルが残っていた場合、不整合が発生してしまうため)
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}"
         state: absent
-    - name: Create PHP project
+    - name: CakePHPプロジェクトの作成
       when: not cakephp_composer_json_result.stat.exists
       block:
-        - name: Create PHP project
+        - name: 作業用一時ディレクトリにCakePHPのプロジェクトスケルトンを作成
           community.general.composer:
             command: create-project
             arguments: '"cakephp/app:^{{ cakephp_major_version | default(4) | string }}" {{ php_project_tmp_dir }}'
             no_dev: false
             prefer_dist: true
             working_dir: "{{ php_project_tmp_dir | dirname }}"
-    - name: Setup PHP project
+    - name: CakePHPプロジェクトのセットアップ
       when: cakephp_composer_json_result.stat.exists
       block:
-        - name: Create temporary project directory
+        - name: 作業用一時ディレクトリを作成
           ansible.builtin.file:
             path: "{{ php_project_tmp_dir }}"
             state: directory
             mode: "0755"
-        - name: Synchronize project files(VirtualBox shard directory => temporary directory)
+        - name: VirtualBoxの共有ディレクトリ内のファイルを一時ディレクトリにコピー
           ansible.posix.synchronize:
             src: "{{ php_project_source_dir }}/"
             dest: "{{ php_project_tmp_dir }}"
             rsync_opts: "{{ cakephp_project_exclude_synchronize_params | map('regex_replace', '(.+)', '--exclude=\\1') }}"
           delegate_to: "{{ inventory_hostname }}"
-        - name: Install php dependency packages
+        - name: 依存パッケージをイントール
           community.general.composer:
             command: install
             no_dev: false
             working_dir: "{{ php_project_tmp_dir }}"
-    - name: Check exists cake command completion file
+    - name: cakeコマンドのコマンド補完ファイルが存在するか確認
       ansible.builtin.stat:
         path: "{{ php_project_tmp_dir }}/bin/bash_completion.sh"
       register: cakephp_command_completion_file_result
-    - name: Create cake completion file
+    - name: cakeコマンドのコマンド補完が効くように設定
       ansible.builtin.copy:
         src: "{{ php_project_tmp_dir }}/bin/bash_completion.sh"
         dest: ~/.local/share/bash-completion/completions/cake
         mode: "0644"
         remote_src: true
       when: cakephp_command_completion_file_result.stat.exists
-    - name: Set additional package names variable
+    - name: 追加インストールパッケージ用変数を設定
       ansible.builtin.set_fact:
         cakephp_additional_package_names: "{{ cakephp_project_additional_packages | map(attribute='name') | map('regex_replace', ':.+', '') }}"
-    - name: Add allow-plugins setting on composer.json
+    - name: composer.jsonにallow-pluginsの設定を追記
       ansible.builtin.command:
         cmd: composer config --no-plugins allow-plugins.phpstan/extension-installer true
         chdir: "{{ php_project_tmp_dir }}"
       changed_when: true
       when: "'phpstan/extension-installer' in cakephp_additional_package_names"
-    - name: Add php project dependency packages
+    - name: 追加インストールパッケージを追加
       community.general.composer:
         command: require
         arguments: '"{{ item.name }}" {{ item.dev | default(false) | ternary("--dev", "") }}'
@@ -91,50 +89,52 @@
       loop: "{{ cakephp_project_additional_packages | default([]) }}"
       loop_control:
         label: "{{ item.name }}"
-    - name: Setup dotenv setting
-      ansible.builtin.include_tasks:
-        file: plugins/dotenv.yml
-    - name: Setup authentication plugin setting
-      ansible.builtin.include_tasks:
-        file: plugins/authentication.yml
-    - name: Setup authorization plugin setting
-      ansible.builtin.include_tasks:
-        file: plugins/authorization.yml
-    - name: Setup localized plugin setting
-      ansible.builtin.include_tasks:
-        file: plugins/localized.yml
-    - name: Setup Cakelte plugin setting
-      ansible.builtin.include_tasks:
-        file: plugins/cakelte.yml
-    - name: Setup IdeHelper plugin setting
-      ansible.builtin.include_tasks:
-        file: plugins/cakephp-ide-helper.yml
-    - name: Setup tcpdf font files
-      ansible.builtin.import_tasks:
-        file: plugins/tcpdf.yml
-    - name: Synchronize project files(temporary directory => VirtualBox shard directory)
+    - name: 各種プラグインのセットアップ
+      block:
+        - name: dotenvのセットアップ
+          ansible.builtin.include_tasks:
+            file: plugins/dotenv.yml
+        - name: authenticationプラグインのセットアップ
+          ansible.builtin.include_tasks:
+            file: plugins/authentication.yml
+        - name: authorizationプラグインのセットアップ
+          ansible.builtin.include_tasks:
+            file: plugins/authorization.yml
+        - name: localizedプラグインのセットアップ
+          ansible.builtin.include_tasks:
+            file: plugins/localized.yml
+        - name: Cakelteプラグインのセットアップ
+          ansible.builtin.include_tasks:
+            file: plugins/cakelte.yml
+        - name: IdeHelperプラグインのセットアップ
+          ansible.builtin.include_tasks:
+            file: plugins/cakephp-ide-helper.yml
+        - name: tcpdfのフォントファイルを生成
+          ansible.builtin.import_tasks:
+            file: plugins/tcpdf.yml
+    - name: 一時ディレクトリのファイルを共有ディレクトリにコピー
       ansible.posix.synchronize:
         src: "{{ php_project_tmp_dir }}/"
         dest: "{{ php_project_source_dir }}"
         rsync_opts: "{{ cakephp_project_exclude_synchronize_params | map('regex_replace', '(.+)', '--exclude=\\1') }}"
       delegate_to: "{{ inventory_hostname }}"
-    - name: Remove temporary project directory
+    - name: 作業用一時ディレクトリを削除
       ansible.builtin.file:
         path: "{{ php_project_tmp_dir }}"
         state: absent
-    - name: Create document files
+    - name: ドキュメントファイルの生成
       block:
-        - name: Create document directory
+        - name: ドキュメントディレクトリを作成
           ansible.builtin.file:
             path: "{{ php_project_source_dir }}/docs"
             state: directory
             mode: "0755"
-        - name: Create cheatsheet file
+        - name: チートシートファイルを生成
           ansible.builtin.template:
             src: cheatsheet.md.j2
             dest: "{{ php_project_source_dir }}/docs/cheatsheet.md"
             mode: "0644"
-    - name: Set variables
+    - name: Ansibleの各種変数を設定
       ansible.builtin.set_fact:
         cakephp_gitignore_value: |
           ### CakePHP ####
@@ -145,8 +145,6 @@
           /tmp/
           /vendor/
           /.phpstorm.meta.php/
-          ### direnv ###
-          .envrc
         cakephp_dot_envrc_value: |
           PATH_add bin
           layout php
@@ -163,26 +161,25 @@
           # export LOG_DEBUG_URL=file:///var/cakephp/logs/
           # export LOG_ERROR_URL=file:///var/cakephp/logs/
           # export LOG_QUERIES_URL=file:///var/cakephp/logs/
-          {% if lookup('env', 'EMAIL_TRANSPORT_DEFAULT_URL') %}
-          export EMAIL_TRANSPORT_DEFAULT_URL={{ lookup('env', 'EMAIL_TRANSPORT_DEFAULT_URL') }}
-          {% endif %}
+          ### メールトランスポートの設定
+          # export EMAIL_TRANSPORT_DEFAULT_URL="smtp://my@gmail.com:secret@smtp.gmail.com:587?tls=true"
           {% if redis_port is defined %}
           export CACHE_DEFAULT_URL=redis://localhost:{{ redis_port }}
           export CACHE_CAKECORE_URL=redis://localhost:{{ redis_port }}
           export CACHE_CAKEMODEL_URL=redis://localhost:{{ redis_port }}
           export CACHE_CAKEROUTES_URL=redis://localhost:{{ redis_port }}
           {% endif %}
-    - name: Create direnv setting
+    - name: direnvの設定ファイルを生成/更新
       ansible.builtin.blockinfile:
         path: "{{ php_project_source_dir }}/.envrc"
         mode: "0644"
         create: true
         block: "{{ cakephp_dot_envrc_value }}"
-    - name: Update .gitignore setting
+    - name: .gitignoreを更新
       ansible.builtin.blockinfile:
         path: "{{ php_project_source_dir }}/.gitignore"
         block: "{{ cakephp_gitignore_value }}"
-    - name: Generate meta file
+    - name: メタファイル(IDE用のメソッド名の補完用ファイル)を生成
       ansible.builtin.command:
         cmd: bin/cake {{ item }} generate
         chdir: "{{ php_project_source_dir }}"
@@ -190,20 +187,20 @@
       loop:
         - code_completion
         - phpstorm
-    - name: Display direnv setting
+    - name: direnvの設定ファイルの内容を表示
       ansible.builtin.debug:
         msg: |
           自動生成したdirenvの設定(.envrc)は以下の通りです
           ```
           {{ cakephp_dot_envrc_value -}}
           ```
-    - name: Create CakePHP setting
+    - name: CakePHPの設定ファイルを生成/更新
       ansible.builtin.blockinfile:
         path: "{{ php_project_source_dir }}/config/.env"
         mode: "0644"
         create: true
         block: "{{ cakephp_dot_env_value }}"
-    - name: Display direnv setting
+    - name: CakePHPの設定ファイルの内容を表示
       ansible.builtin.debug:
         msg: |
           自動生成したCakePHPの設定(config/.env)は以下の通りです

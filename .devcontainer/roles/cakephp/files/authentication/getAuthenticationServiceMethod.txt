@@ -18,8 +18,8 @@
         ]);
 
         $fields = [
-            IdentifierInterface::CREDENTIAL_USERNAME => 'username',
-            IdentifierInterface::CREDENTIAL_PASSWORD => 'password'
+            AbstractIdentifier::CREDENTIAL_USERNAME => 'username',
+            AbstractIdentifier::CREDENTIAL_PASSWORD => 'password'
         ];
         $service->loadAuthenticator('Authentication.Session');
         //$service->loadAuthenticator('Authentication.Cookie');

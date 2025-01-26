@@ -1,38 +1,40 @@
 ---
-- name: Check exists IdeHelper plugin
+- name: IdeHelperプラグインの存在確認
   ansible.builtin.stat:
     path: "{{ php_project_tmp_dir }}/vendor/dereuromark/cakephp-ide-helper"
   register: package_result
-- name: Setup plugin
+- name: IdeHelperプラグインのセットアップ
   when: package_result.stat.exists
   block:
-    - name: Find addPlugin statement
+    - name: プラグインのプラグインのロード処理を追記
       ansible.builtin.command:
-        cmd: grep "this->addPlugin('IdeHelper')" src/Application.php
+        cmd: bin/cake plugin load IdeHelper --only-debug --only-cli
         chdir: "{{ php_project_tmp_dir }}"
-      register: statement_result
-      changed_when: false
-      failed_when: statement_result.rc > 1
-    - name: Add addPlugin statement
-      ansible.builtin.blockinfile:
-        path: "{{ php_project_tmp_dir }}/src/Application.php"
-        marker: "// {mark} dereuromark/cakephp-ide-helper ANSIBLE MANAGED BLOCK"
-        block: "{{ lookup('ansible.builtin.file', 'files/cakephp-ide-helper/addPlugin.txt') }}"
-        insertafter: "// Load more plugins here"
-      when: statement_result.rc == 1
-    - name: Check exists dotenv
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: コード補完用のメタファイルを生成
+      ansible.builtin.command:
+        cmd: bin/cake generate code_completion
+        creates: "{{ php_project_tmp_dir }}/.phpstorm.meta.php"
+        chdir: "{{ php_project_tmp_dir }}"
+    - name: dotenvパッケージがインストール済みか確認
       ansible.builtin.stat:
         path: "{{ php_project_tmp_dir }}/vendor/josegonzalez/dotenv"
       register: dotenv_package_result
-    - name: Execute IDE helper commands
-      when: dotenv_package_result.stat.exists
+    - name: .envファイルが存在するか確認
+      ansible.builtin.stat:
+        path: "{{ php_project_tmp_dir }}/config/.env"
+      register: cakephp_config_dotenv_result
+    - name: PHPStorm用のコード補完ファイルを生成
+      when:
+        - dotenv_package_result.stat.exists
+        - cakephp_config_dotenv_result.stat.exists
       block:
-        - name: Generate phpstorm meta file
+        - name: PHPStorm用のメタファイルを生成
           ansible.builtin.command:
-            cmd: bin/cake phpstorm generate
+            cmd: bin/cake generate phpstorm
             creates: "{{ php_project_tmp_dir }}/.phpstorm.meta.php"
             chdir: "{{ php_project_tmp_dir }}"
-        - name: Add annotation
+        - name: アノテーションを追記
           ansible.builtin.command:
             cmd: bin/cake annotate {{ item }}
             chdir: "{{ php_project_tmp_dir }}"

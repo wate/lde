@@ -1,3 +1,0 @@
-        if (file_exists(ROOT . DS . 'vendor' . DS . 'dereuromark' . DS . 'cakephp-ide-helper')) {
-            $this->addPlugin('IdeHelper');
-        }

@@ -14,20 +14,20 @@ repos:
       - id: mixed-line-ending
       - id: check-case-conflict
       - id: end-of-file-fixer
-      # - id: check-added-large-files
-      #   args:
-      #     - "--maxkb=500"
+      - id: check-added-large-files
+        args:
+          - "--maxkb=1000"
       - id: trailing-whitespace
         args:
           - --markdown-linebreak-ext=md
       - id: no-commit-to-branch
         args: [--branch, master, --branch, main, --branch, staging]
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
+    rev: v8.23.2
     hooks:
       - id: gitleaks
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.43.0
+    rev: v0.44.0
     hooks:
       - id: markdownlint-fix
         exclude: ^docs/schema/.*$
