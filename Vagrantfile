@@ -202,7 +202,7 @@ Vagrant.configure("2") do |config|
     config.trigger.after :provision do |trigger|
       trigger.info = "Restore Database(app_dev) Data"
       trigger.run_remote = {
-        path: ".devcontainer/scripts/vagrant_after_provision.sh"
+        path: ".devcontainer/provision/vagrant_after_provision.sh"
       }
     end
   end
@@ -211,7 +211,7 @@ Vagrant.configure("2") do |config|
       trigger.info = "Backup Database(app_dev) Data"
       trigger.on_error = :continue
       trigger.run_remote = {
-        path: ".devcontainer/scripts/vagrant_befor_destroy.sh"
+        path: ".devcontainer/provision/vagrant_befor_destroy.sh"
       }
     end
   end
