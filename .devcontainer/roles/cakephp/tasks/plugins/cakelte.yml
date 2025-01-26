@@ -14,6 +14,11 @@
       ansible.builtin.command:
         cmd: bin/cake cakelte install
         chdir: "{{ php_project_tmp_dir }}"
+    - name: プラグインアセットのシンボリックリンクを作成
+      ansible.builtin.file:
+        path: "{{ php_project_tmp_dir }}/webroot/adminlte"
+        src: ../vendor/almasaeed2010/adminlte
+        state: link
     - name: プラグインのテンプレートファイルをコピー
       ansible.builtin.command:
         cmd: bin/cake cakelte copy_files --all --quiet
