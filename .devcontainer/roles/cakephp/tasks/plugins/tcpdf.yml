@@ -25,12 +25,10 @@
             paths:
               - /usr/share/fonts/opentype/ipaexfont-gothic
               - /usr/share/fonts/opentype/ipaexfont-gothic
-              - /usr/share/fonts/opentype/ipafont-gothic
-              - /usr/share/fonts/opentype/ipafont-mincho
+              # - /usr/share/fonts/opentype/ipafont-gothic
+              # - /usr/share/fonts/opentype/ipafont-mincho
               - /usr/share/fonts/truetype/bizud-mincho
               - /usr/share/fonts/truetype/bizud-gothic
-              - /usr/local/share/fonts/morisawa-biz-ud-gothic
-              - /usr/local/share/fonts/morisawa-biz-ud-mincho
             patterns:
               - '*.ttf'
           register: find_result
