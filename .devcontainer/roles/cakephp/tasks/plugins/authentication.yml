@@ -19,7 +19,7 @@
         - Authentication\AuthenticationService
         - Authentication\AuthenticationServiceInterface
         - Authentication\AuthenticationServiceProviderInterface
-        - Authentication\Identifier\IdentifierInterface
+        - Authentication\Identifier\AbstractIdentifier
         - Authentication\Middleware\AuthenticationMiddleware
         - Cake\Http\MiddlewareQueue
         - Cake\Routing\Router
