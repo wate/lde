@@ -10,7 +10,6 @@
     <api>
       <source dsn=".">
         <path>src</path>
-        <path>app</path>
       </source>
       <!--Optional:-->
       <visibility>private</visibility>
