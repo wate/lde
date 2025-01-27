@@ -8,7 +8,7 @@
   <!-- inherit rules from: -->
   <rule ref="PSR12">
     <!--
-  ※CakePHPを利用する場合は以下の除外設定を有効化すること
+    ※CakePHPを利用する場合は以下の除外設定を有効化すること
     <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
     <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
     <exclude name="PSR12.Files.FileHeader.IncorrectOrder"/>
@@ -24,6 +24,10 @@
       <property name="lineLimit" value="160"/>
       <property name="absoluteLineLimit" value="200"/>
     </properties>
+    <!--
+    ※CakePHPを利用する場合は以下の除外設定を有効化すること
+    <exclude-pattern>*/templates/*</exclude-pattern>
+    -->
   </rule>
   <!--
   ※CakePHPを利用する場合は以下の除外設定を有効化すること
