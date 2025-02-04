@@ -23,6 +23,7 @@
       -->
       <property name="lineLimit" value="160"/>
       <property name="absoluteLineLimit" value="200"/>
+      <property name="ignoreComments" value="true" />
     </properties>
     <!--
     ※CakePHPを利用する場合は以下の除外設定を有効化すること
