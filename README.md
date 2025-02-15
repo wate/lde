@@ -174,15 +174,15 @@ export VAGRANT_FORWARD_PORT_XDEBUG="9003"
 
 # ※デフォルトではホストマシンの「.(カレントディレクトリ)」がゲストマシンの「/vagrant」にマッピングされています。
 # 「VAGRANT_SYNC_FOLDER_」で始まる環境変数が設定として認識されます
-export VAGRANT_SYNC_FOLDER_DB_SCHMA_DOC="path/to/scheme => /vagrant/docs/schema"
+export VAGRANT_SYNC_FOLDER_DB_SCHEMA_DOC="path/to/scheme => /vagrant/docs/schema"
 
 ## ------------
 ## プロビジョニング(Ansible)の設定
 ## ------------
 
 # プロビジョニング実行時にAnsibleの追加パラメーター
-# 「VAGRANT_ANSIBLE_RAW_ARGMENT_」で始まる環境変数が設定として認識されます
-export VAGRANT_ANSIBLE_RAW_ARGMENT_DIFF="--diff"
+# 「VAGRANT_ANSIBLE_RAW_ARGUMENT_」で始まる環境変数が設定として認識されます
+export VAGRANT_ANSIBLE_RAW_ARGUMENT_DIFF="--diff"
 ```
 
 ### 設定ファイルを利用したVagrantのプロビジョニングの制御

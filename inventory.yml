@@ -15,7 +15,7 @@ all:
       - .devcontainer
       - .vagrant
 develop:
-  host:
+  hosts:
     dev.example.com:
       # ansible_host: 123.123.123.123
       # ansible_port: 1234
@@ -26,7 +26,7 @@ develop:
     app_repo_branch: develop
     app_env: development
 staging:
-  host:
+  hosts:
     stg.example.com:
       # ansible_host: 123.123.123.123
       # ansible_port: 1234
@@ -37,7 +37,7 @@ staging:
     app_repo_branch: staging
     app_env: staging
 production:
-  host:
+  hosts:
     example.com:
       # ansible_host: 123.123.123.123
       # ansible_port: 1234

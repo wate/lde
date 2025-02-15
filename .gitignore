@@ -32,6 +32,9 @@ __pycache__/
 ## bundler(Ruby)
 .bundle/
 
+### Ansible ###
+.ansible
+
 ### Composer ###
 composer.phar
 /vendor/
@@ -52,6 +55,9 @@ composer.phar
 ### phpDocumenter output directory ###
 docs/api/
 
+### dev container ###
+.devcontainer/log/*
+
 ### other ###
 .devcontainer/host_vars/default.yml
 provision_config.yml
@@ -59,7 +65,6 @@ wiki/
 issues/
 
 ### CakePHP ####
-
 /config/app_local.php
 /config/.env
 /config/Migrations/schema-dump-default.lock

@@ -3,34 +3,34 @@ set -eo pipefail
 
 echo "$(whoami):$(whoami)" | sudo chpasswd
 
-if type "direnv" >/dev/null 2>&1; then
-  echo 'eval "$(direnv hook bash)"' >>~/.bashrc
-fi
+# if type "direnv" >/dev/null 2>&1; then
+#   echo 'eval "$(direnv hook bash)"' >>~/.bashrc
+# fi
 
-if type "eza" >/dev/null 2>&1; then
-  echo 'alias ls="eza --git --header"' >>~/.bashrc
-fi
+# if type "eza" >/dev/null 2>&1; then
+#   echo 'alias ls="eza --git --header"' >>~/.bashrc
+# fi
 
-if type "composer" >/dev/null 2>&1; then
-  echo 'eval "$(composer completion)"' >>~/.bashrc
-fi
+# if type "composer" >/dev/null 2>&1; then
+#   echo 'eval "$(composer completion)"' >>~/.bashrc
+# fi
 
-if type "npm" >/dev/null 2>&1; then
-  echo 'eval "$(npm completion)"' >>~/.bashrc
-fi
+# if type "npm" >/dev/null 2>&1; then
+#   echo 'eval "$(npm completion)"' >>~/.bashrc
+# fi
 
-if type "yarn" >/dev/null 2>&1; then
-  mkdir -p "${HOME}/.local/share/bash-completion/completions/"
-  curl -s -o "${HOME}/.local/share/bash-completion/completions/yarn" \
-  https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
-fi
+# if type "yarn" >/dev/null 2>&1; then
+#   mkdir -p "${HOME}/.local/share/bash-completion/completions/"
+#   curl -s -o "${HOME}/.local/share/bash-completion/completions/yarn" \
+#   https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
+# fi
 
-if type "tbls" >/dev/null 2>&1; then
-  echo "# BEGIN environment variable ANSIBLE MANAGED BLOCK" >>~/.bashrc
-  echo 'export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"' >>~/.bashrc
-  echo 'export TBLS_DOC_PATH="docs/schema"' >>~/.bashrc
-  echo "# END environment variable ANSIBLE MANAGED BLOCK" >>~/.bashrc
-fi
+# if type "tbls" >/dev/null 2>&1; then
+#   echo "# BEGIN environment variable ANSIBLE MANAGED BLOCK" >>~/.bashrc
+#   echo 'export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"' >>~/.bashrc
+#   echo 'export TBLS_DOC_PATH="docs/schema"' >>~/.bashrc
+#   echo "# END environment variable ANSIBLE MANAGED BLOCK" >>~/.bashrc
+# fi
 
 if [ ! -e ~/.bash-git-prompt ]; then
   git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
@@ -80,6 +80,11 @@ smart_completion = True
 # If this is set to False then sql statements can't be split into multiple
 # lines. End of line (return) is considered as the end of the statement.
 multi_line = False
+
+# Destructive warning mode will alert you before executing a sql statement
+# that may cause harm to the database such as "drop table", "drop database"
+# or "shutdown".
+destructive_warning = False
 
 # Enable the pager on startup.
 enable_pager = False

@@ -1,6 +1,5 @@
 ---
 # code: language=ansible
-# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json
 - name: Setup local development environment
   hosts: all
   become: true
@@ -112,7 +111,7 @@
         state: restarted
       loop:
         - mariadb
-        - php{{ php_version | default('8.2') }}-fpm
+        - php{{ php_version | default('8.3') }}-fpm
         - nginx
         # - postgresql
         # - apache2
