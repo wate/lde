@@ -502,6 +502,8 @@ install_tools:
   - duckdb
   ## https://github.com/charmbracelet/glow
   - glow
+  ## https://lnav.org/
+  - lnav
   ## https://github.com/jgm/pandoc
   - pandoc
   ## https://graphviz.org/
@@ -548,4 +550,3 @@ backup_settings:
 ## ログインバナー
 ## ---------
 banner_text: "{{ domain }}"
-

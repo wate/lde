@@ -31,7 +31,9 @@
         "oderwat.indent-rainbow",
         "hediet.vscode-drawio",
         "redhat.vscode-yaml",
-        "redhat.ansible"
+        "redhat.ansible",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-mysql"
       ]
     }
   },
