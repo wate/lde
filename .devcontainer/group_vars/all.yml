@@ -471,9 +471,6 @@ logio_file_input_cfg:
 ## --------------------------
 ## インストールする各種ツール
 ## --------------------------
-## --------------------------
-## インストールするツール
-## --------------------------
 install_tools:
   ## https://github.com/eza-community/eza
   - eza
@@ -510,7 +507,7 @@ install_tools:
   ## https://graphviz.org/
   - graphviz
   ## https://plantuml.com/ja/
-  # - plantuml
+  - plantuml
   ## https://github.com/terrastruct/d2
   - d2
   ## https://github.com/k1LoW/tbls
