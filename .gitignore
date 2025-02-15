@@ -32,7 +32,7 @@ __pycache__/
 ## bundler(Ruby)
 .bundle/
 
-### ansible ###
+### Ansible ###
 .ansible
 
 ### Composer ###
@@ -54,6 +54,9 @@ composer.phar
 
 ### phpDocumenter output directory ###
 docs/api/
+
+### dev container ###
+.devcontainer/log/*
 
 ### other ###
 .devcontainer/host_vars/default.yml
