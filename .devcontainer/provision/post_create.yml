@@ -1,48 +1,80 @@
 ---
 # code: language=ansible
-# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json
 - name: Setup post create task
   hosts: all
   connection: local
-  become: true
+  become: false
   tasks:
-    - name: Get osv-scanner latest version
-      ansible.builtin.uri:
-        url: https://api.github.com/repos/google/osv-scanner/releases/latest
-        headers:
-          Accept: application/vnd.github+json
-      register: latest_releases
-    - name: Set os-scanner version
-      ansible.builtin.set_fact:
-        osv_scanner_version: "{{ latest_releases.json.tag_name }}"
-    - name: Set variable
-      ansible.builtin.set_fact:
-        osv_scanner_download_file: osv-scanner_{{ ansible_facts['system'] | lower }}_{{ arch_type_maps[ansible_facts['architecture']] }}
-      vars:
-        arch_type_maps:
-          x86_64: amd64
-          aarch64: arm64
-    - name: Install osv-scanner
-      ansible.builtin.get_url:
-        url: https://github.com/google/osv-scanner/releases/download/{{ osv_scanner_version }}/{{ osv_scanner_download_file }}
-        dest: /usr/local/bin/osv-scanner
-        mode: "0755"
-    - name: Get git-delta latest version
-      ansible.builtin.uri:
-        url: https://api.github.com/repos/dandavison/delta/releases/latest
-        headers:
-          Accept: application/vnd.github+json
-      register: latest_releases
-    - name: Set git-delta version
-      ansible.builtin.set_fact:
-        delta_version: "{{ latest_releases.json.tag_name }}"
-    - name: Set variable
-      ansible.builtin.set_fact:
-        delta_package_file: git-delta_{{ delta_version }}_{{ arch_type_maps[ansible_facts['architecture']] }}.deb
-      vars:
-        arch_type_maps:
-          x86_64: amd64
-          aarch64: arm64
-    - name: Install git-delta
-      ansible.builtin.apt:
-        deb: https://github.com/dandavison/delta/releases/download/{{ delta_version }}/{{ delta_package_file }}
+    - name: Install npm packages
+      become: true
+      block:
+        - name: Install/Update zx
+          community.general.npm:
+            name: zx
+            global: true
+            state: latest
+        - name: Install/Update ni
+          community.general.npm:
+            name: "@antfu/ni"
+            global: true
+            state: latest
+    - name: Set user setting
+      block:
+        - name: Add direnv setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} direnv ANSIBLE MANAGED BLOCK"
+            block: eval "$(direnv hook bash)"
+        - name: Add eza setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} eza ANSIBLE MANAGED BLOCK"
+            block: alias ls="eza --git --header"
+    - name: Add bash-completion files
+      block:
+        - name: Create bash-completion setting directory
+          ansible.builtin.file:
+            path: ~/.local/share/bash-completion/completions
+            state: directory
+            mode: "0755"
+        - name: Add bash-git-prompt setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
+            block: |
+              if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+                  GIT_PROMPT_ONLY_IN_REPO=1
+                  source $HOME/.bash-git-prompt/gitprompt.sh
+              fi
+        - name: Add eza setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} eza ANSIBLE MANAGED BLOCK"
+            block: alias ls="eza --git --header"
+        - name: Add direnv setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} direnv ANSIBLE MANAGED BLOCK"
+            block: eval "$(direnv hook bash)"
+        - name: Add composer command completion setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} composer ANSIBLE MANAGED BLOCK"
+            block: eval "$(composer completion)"
+        - name: Add npm command completion setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} npm ANSIBLE MANAGED BLOCK"
+            block: eval "$(npm completion)"
+        - name: Add yarn command completion setting
+          ansible.builtin.get_url:
+            url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
+            dest: ~/.local/share/bash-completion/completions/yarn
+            mode: "0755"
+        - name: Add tbls setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} tbls ANSIBLE MANAGED BLOCK"
+            block: |
+              export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"
+              export TBLS_DOC_PATH="docs/schema"

@@ -3,48 +3,6 @@ set -eo pipefail
 
 echo "$(whoami):$(whoami)" | sudo chpasswd
 
-# if type "direnv" >/dev/null 2>&1; then
-#   echo 'eval "$(direnv hook bash)"' >>~/.bashrc
-# fi
-
-# if type "eza" >/dev/null 2>&1; then
-#   echo 'alias ls="eza --git --header"' >>~/.bashrc
-# fi
-
-# if type "composer" >/dev/null 2>&1; then
-#   echo 'eval "$(composer completion)"' >>~/.bashrc
-# fi
-
-# if type "npm" >/dev/null 2>&1; then
-#   echo 'eval "$(npm completion)"' >>~/.bashrc
-# fi
-
-# if type "yarn" >/dev/null 2>&1; then
-#   mkdir -p "${HOME}/.local/share/bash-completion/completions/"
-#   curl -s -o "${HOME}/.local/share/bash-completion/completions/yarn" \
-#   https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
-# fi
-
-# if type "tbls" >/dev/null 2>&1; then
-#   echo "# BEGIN environment variable ANSIBLE MANAGED BLOCK" >>~/.bashrc
-#   echo 'export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"' >>~/.bashrc
-#   echo 'export TBLS_DOC_PATH="docs/schema"' >>~/.bashrc
-#   echo "# END environment variable ANSIBLE MANAGED BLOCK" >>~/.bashrc
-# fi
-
-if [ ! -e ~/.bash-git-prompt ]; then
-  git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
-  cat << EOT >>~/.bashrc
-# BEGIN bash-git-prompt setting ANSIBLE MANAGED BLOCK
-if [ -f "\$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-    GIT_PROMPT_ONLY_IN_REPO=1
-    source \$HOME/.bash-git-prompt/gitprompt.sh
-fi
-# END bash-git-prompt setting ANSIBLE MANAGED BLOCK
-EOT
-
-fi
-
 sudo chmod a+x "$(pwd)"
 sudo rm -rf /var/www/html
 DOC_ROOT=$(pwd)
@@ -127,6 +85,9 @@ fi
 if [ -f "$(dirname $0)/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
 fi
-if [ -f "${PWD}/.devcontainer/custom.yml" ]; then
-  ansible-playbook -i 127.0.0.1, -c local --diff "${PWD}/.devcontainer/custom.yml"
+if [ -f "$(dirname $0)/verify.yml" ]; then
+  ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/verify.yml"
+fi
+if [ -f "$(dirname $0)/custom.yml" ]; then
+  ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/custom.yml"
 fi
