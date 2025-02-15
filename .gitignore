@@ -32,6 +32,9 @@ __pycache__/
 ## bundler(Ruby)
 .bundle/
 
+### ansible ###
+.ansible
+
 ### Composer ###
 composer.phar
 /vendor/
@@ -59,7 +62,6 @@ wiki/
 issues/
 
 ### CakePHP ####
-
 /config/app_local.php
 /config/.env
 /config/Migrations/schema-dump-default.lock
