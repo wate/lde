@@ -34,6 +34,8 @@
               - ansible_facts.packages['redis'] is defined
               - ansible_facts.packages['restic'] is defined
               - ansible_facts.packages['rclone'] is defined
+              - ansible_facts.packages['eza'] is defined
+              - ansible_facts.packages['lnav'] is defined
             quiet: true
         - name: シンボリックリンクの確認
           become: false
