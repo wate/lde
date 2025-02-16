@@ -1,0 +1,88 @@
+{
+  "/title[markdown]": {
+    "prefix": [
+      "/title",
+      "/h1"
+    ],
+    "body": "${1:大見出し}\n=========================\n",
+    "scope": "markdown"
+  },
+  "/heading[markdown]": {
+    "prefix": [
+      "/heading",
+      "/h2"
+    ],
+    "body": "${1:中見出し}\n-------------------------\n",
+    "scope": "markdown"
+  },
+  "/subheading[markdown]": {
+    "prefix": [
+      "/subheading",
+      "/h3"
+    ],
+    "body": "### ${1:小見出し}\n",
+    "scope": "markdown"
+  },
+  "/code[markdown]": {
+    "prefix": [
+      "/code",
+      "/monostyled"
+    ],
+    "body": "```${1:lang}\n${2:code}\n```",
+    "scope": "markdown"
+  },
+  "/unorderlist[markdown]": {
+    "prefix": [
+      "/unorderlist",
+      "/ul"
+    ],
+    "body": "* ${1:項目}",
+    "scope": "markdown"
+  },
+  "/orderlist[markdown]": {
+    "prefix": [
+      "/orderlist",
+      "/ol"
+    ],
+    "body": "1. ${1:項目}",
+    "scope": "markdown"
+  },
+  "/link[markdown]": {
+    "prefix": [
+      "/link",
+      "/a"
+    ],
+    "body": "[${1:リンク文字列}](${2:リンク先URL})",
+    "scope": "markdown"
+  },
+  "/image[markdown]": {
+    "prefix": [
+      "/image",
+      "/img"
+    ],
+    "body": "![${1:代替えテキスト}](${2:画像URL})",
+    "scope": "markdown"
+  },
+  "/quote[markdown]": {
+    "prefix": [
+      "/quote",
+      "/blockquote"
+    ],
+    "body": "> ${1:引用文}",
+    "scope": "markdown"
+  },
+  "/table[markdown]": {
+    "prefix": [
+      "/table"
+    ],
+    "body": "| ${1:項目1}      | ${2:項目2}      |\n| ---------- | ---------- |\n|            |            |",
+    "scope": "markdown"
+  },
+  "/checklist[markdown]": {
+    "prefix": [
+      "/checklist"
+    ],
+    "body": "- [ ] ${1:チェックリスト項目}",
+    "scope": "markdown"
+  }
+}

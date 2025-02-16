@@ -33,7 +33,8 @@
         "redhat.vscode-yaml",
         "redhat.ansible",
         "mtxr.sqltools",
-        "mtxr.sqltools-driver-mysql"
+        "mtxr.sqltools-driver-mysql",
+        "streetsidesoftware.code-spell-checker"
       ]
     }
   },

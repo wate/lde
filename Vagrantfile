@@ -14,11 +14,11 @@ Vagrant.configure("2") do |config|
   # --------
   config.ssh.forward_agent = true
 
-  vagrantfile_dir = Dir.pwd
-  until File.exist?(File.join(vagrantfile_dir, "Vagrantfile")) do
-    vagrantfile_dir = File.dirname(vagrantfile_dir)
+  base_dir = Dir.pwd
+  until File.exist?(File.join(base_dir, "Vagrantfile")) do
+    base_dir = File.dirname(base_dir)
   end
-  PROJECT_DIR = vagrantfile_dir
+  PROJECT_DIR = base_dir
   # --------
   # Networking
   # --------

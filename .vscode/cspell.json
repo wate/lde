@@ -1,0 +1,29 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "node_modules",
+    "vendor"
+  ],
+  "words": [],
+  "dictionaries": [
+    "php",
+    "business",
+    "name",
+    "other"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "business",
+      "path": "./dictionaries/business.txt"
+    },
+    {
+      "name": "name",
+      "path": "./dictionaries/name.txt"
+    },
+    {
+      "name": "other",
+      "path": "./dictionaries/other.txt"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+dmode
+fmode
+fukushi
+halfwidth
+hojodoushi
+hostmanager
+hostsupdater
+keishikimeishi
+modifyvm
+nakaguro
+superfences
