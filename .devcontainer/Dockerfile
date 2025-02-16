@@ -11,7 +11,7 @@ RUN . /etc/os-release \
   && apt-get install -y --no-install-recommends imagemagick \
   && apt-get install -y --no-install-recommends fonts-ipaexfont fnt \
   && apt-get install -y --no-install-recommends pipx \
-  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav \
+  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav sshpass \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 ## Install php module
