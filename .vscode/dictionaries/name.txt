@@ -1,0 +1,14 @@
+ansible
+gitleaks
+mailpit
+mariadb
+mkdocs
+phpdocumentor
+phpstorm
+postgres
+pymdownx
+redmine
+tbls
+textlint
+virtualbox
+setext
