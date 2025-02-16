@@ -28,7 +28,7 @@ __pycache__/
 !.vscode/dictionaries/*.txt
 
 ### VisualStudioCode SQLTools ###
-devcontainer.session.sql
+lde.session.sql
 
 ### PhpStorm / WebStorm ###
 .idea/

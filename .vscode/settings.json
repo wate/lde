@@ -9,7 +9,7 @@
       "server": "db",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "devcontainer",
+      "name": "lde",
       "database": "app_dev",
       "username": "app_dev",
       "password": "app_dev_password"

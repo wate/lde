@@ -32,9 +32,10 @@
         "hediet.vscode-drawio",
         "redhat.vscode-yaml",
         "redhat.ansible",
+        "streetsidesoftware.code-spell-checker",
         "mtxr.sqltools",
         "mtxr.sqltools-driver-mysql",
-        "streetsidesoftware.code-spell-checker"
+        "mtxr.sqltools-driver-sqlite"
       ]
     }
   },
