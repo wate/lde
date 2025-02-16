@@ -1,6 +1,8 @@
+blockinfile
 dmode
 fmode
 fukushi
+gitprompt
 halfwidth
 hojodoushi
 hostmanager

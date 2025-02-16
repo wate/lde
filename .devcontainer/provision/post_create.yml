@@ -160,13 +160,6 @@
             path: ~/.bashrc
             marker: "# {mark} eza ANSIBLE MANAGED BLOCK"
             block: alias ls="eza --git --header"
-    - name: Add bash-completion files
-      block:
-        - name: Create bash-completion setting directory
-          ansible.builtin.file:
-            path: ~/.local/share/bash-completion/completions
-            state: directory
-            mode: "0755"
         - name: Add bash-git-prompt setting
           ansible.builtin.blockinfile:
             path: ~/.bashrc
@@ -176,16 +169,25 @@
                   GIT_PROMPT_ONLY_IN_REPO=1
                   source $HOME/.bash-git-prompt/gitprompt.sh
               fi
-        - name: Add eza setting
+        - name: Add tbls setting
           ansible.builtin.blockinfile:
             path: ~/.bashrc
-            marker: "# {mark} eza ANSIBLE MANAGED BLOCK"
-            block: alias ls="eza --git --header"
-        - name: Add direnv setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} direnv ANSIBLE MANAGED BLOCK"
-            block: eval "$(direnv hook bash)"
+            marker: "# {mark} tbls ANSIBLE MANAGED BLOCK"
+            block: |
+              export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"
+              export TBLS_DOC_PATH="docs/schema"
+        - name: Set git safe.directory setting
+          community.general.git_config:
+            name: safe.directory
+            scope: global
+            value: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+    - name: Add bash-completion files
+      block:
+        - name: Create bash-completion setting directory
+          ansible.builtin.file:
+            path: ~/.local/share/bash-completion/completions
+            state: directory
+            mode: "0755"
         - name: Add composer command completion setting
           ansible.builtin.blockinfile:
             path: ~/.bashrc
@@ -201,10 +203,3 @@
             url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
             dest: ~/.local/share/bash-completion/completions/yarn
             mode: "0755"
-        - name: Add tbls setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} tbls ANSIBLE MANAGED BLOCK"
-            block: |
-              export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"
-              export TBLS_DOC_PATH="docs/schema"
