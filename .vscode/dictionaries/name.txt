@@ -1,7 +1,9 @@
 ansible
 cakephp
 direnv
+github
 gitleaks
+linux
 mailpit
 mariadb
 mkdocs
