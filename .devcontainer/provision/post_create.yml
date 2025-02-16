@@ -208,3 +208,9 @@
             block: |
               export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"
               export TBLS_DOC_PATH="docs/schema"
+    - name: Set git safe.directory setting
+      community.general.git_config:
+        name: safe.directory
+        scope: global
+        value: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+      become: false
