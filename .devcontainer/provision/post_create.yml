@@ -160,15 +160,23 @@
             path: ~/.bashrc
             marker: "# {mark} eza ANSIBLE MANAGED BLOCK"
             block: alias ls="eza --git --header"
-        - name: Add bash-git-prompt setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
-            block: |
-              if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-                  GIT_PROMPT_ONLY_IN_REPO=1
-                  source $HOME/.bash-git-prompt/gitprompt.sh
-              fi
+        - name: Setup bash-git-prompt
+          block:
+            - name: Checkout bash-git-prompt
+              ansible.builtin.git:
+                repo: https://github.com/magicmonty/bash-git-prompt.git
+                dest: ~/.bash-git-prompt
+                version: master
+                depth: 1
+            - name: Add bash-git-prompt setting
+              ansible.builtin.blockinfile:
+                path: ~/.bashrc
+                marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
+                block: |
+                  if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+                      GIT_PROMPT_ONLY_IN_REPO=1
+                      source $HOME/.bash-git-prompt/gitprompt.sh
+                  fi
         - name: Add tbls setting
           ansible.builtin.blockinfile:
             path: ~/.bashrc
