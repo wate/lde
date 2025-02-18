@@ -16,7 +16,12 @@
         },
         "[markdown]": {
           "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-        }
+        },
+        "[sql]": {
+          "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+        },
+        "sql-formatter.dialect": "sql",
+        "sql-formatter.uppercase": true
       },
       "extensions": [
         "mikestead.dotenv",
@@ -33,6 +38,7 @@
         "redhat.vscode-yaml",
         "redhat.ansible",
         "streetsidesoftware.code-spell-checker",
+        "adpyke.vscode-sql-formatter",
         "mtxr.sqltools",
         "mtxr.sqltools-driver-mysql",
         "mtxr.sqltools-driver-sqlite"
