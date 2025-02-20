@@ -1,4 +1,7 @@
 {
+  "[php]": {
+    "editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?"
+  },
   "sqltools.connections": [
     {
       "mysqlOptions": {
