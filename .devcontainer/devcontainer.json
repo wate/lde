@@ -39,9 +39,7 @@
         "redhat.ansible",
         "streetsidesoftware.code-spell-checker",
         "adpyke.vscode-sql-formatter",
-        "mtxr.sqltools",
-        "mtxr.sqltools-driver-mysql",
-        "mtxr.sqltools-driver-sqlite"
+        "mtxr.sqltools"
       ]
     }
   },
