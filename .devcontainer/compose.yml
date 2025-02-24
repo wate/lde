@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         VARIANT: "8"
+        NODE_VERSION: "22.x"
     environment:
       TZ: Asia/Tokyo
     volumes:
