@@ -11,6 +11,7 @@
     ※CakePHPを利用する場合は以下の除外設定を有効化すること
     <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
     <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+    <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
     <exclude name="PSR12.Files.FileHeader.IncorrectOrder"/>
     -->
   </rule>

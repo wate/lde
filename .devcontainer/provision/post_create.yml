@@ -137,6 +137,7 @@
             src: /usr/local/src/pict/pict
             state: link
     - name: Install npm packages
+      become: true
       block:
         - name: Install/Update zx
           community.general.npm:
