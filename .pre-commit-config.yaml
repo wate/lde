@@ -7,6 +7,7 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-json
+        exclude: ^.(vscode|devcontainer)
       - id: check-yaml
         exclude: mkdocs.yml$
       - id: check-merge-conflict
@@ -23,7 +24,7 @@ repos:
       - id: no-commit-to-branch
         args: [--branch, master, --branch, main, --branch, staging]
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.23.3
+    rev: v8.24.0
     hooks:
       - id: gitleaks
   - repo: https://github.com/igorshubovych/markdownlint-cli

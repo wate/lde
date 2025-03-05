@@ -137,6 +137,7 @@
             src: /usr/local/src/pict/pict
             state: link
     - name: Install npm packages
+      become: true
       block:
         - name: Install/Update zx
           community.general.npm:
@@ -150,6 +151,13 @@
             state: latest
     - name: Set user setting
       block:
+        - name: Set completion ignore-case
+          ansible.builtin.lineinfile:
+            path: ~/.inputrc
+            regex: ^set completion-ignore-case
+            line: set completion-ignore-case On
+            create: true
+            mode: "0644"
         - name: Add direnv setting
           ansible.builtin.blockinfile:
             path: ~/.bashrc
