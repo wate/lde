@@ -1,6 +1,13 @@
 {
+  // "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
   "[php]": {
     "editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?"
+  },
+  "[css]": {
+    "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"
+  },
+  "files.associations": {
+    "*.pict": "powershell",
   },
   "sqltools.connections": [
     {
