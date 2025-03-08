@@ -4,6 +4,8 @@ all:
   vars:
     ## リポジトリ
     app_repo: https://github.com/wate/lde.git
+    ## ブランチ名
+    app_repo_branch: master
     ## デプロイ先のパス
     app_deploy_path: ~/app
     ## rsyncの--excludeパラメーター
@@ -14,6 +16,11 @@ all:
       - .github
       - .devcontainer
       - .vagrant
+developer:
+  hosts:
+    wate.example.com:
+  vars:
+    app_repo_branch: "{{ lookup('pipe', 'git rev-parse --abbrev-ref HEAD')}}"
 develop:
   hosts:
     dev.example.com:

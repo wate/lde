@@ -144,14 +144,14 @@ Vagrant.configure("2") do |config|
     end
   end
   if provision_config
+    if provision_config.key?('role_update') && !provision_config['role_update'].nil?
+      provision_role_update = provision_config['role_update']
+    end
     if provision_config.key?('tags') && !provision_config['tags'].nil?
       ansible_provision_tags = provision_config['tags']
     end
     if provision_config.key?('skip_tags') && !provision_config['skip_tags'].nil?
       ansible_provision_skip_tags = provision_config['skip_tags']
-    end
-    if provision_config.key?('role_update') && !provision_config['role_update'].nil?
-      provision_role_update = provision_config['role_update']
     end
     if provision_config.key?('extra_var') && !provision_config['extra_var'].nil?
       ansible_extra_vars.merge!(provision_config['extra_var'])
