@@ -3,6 +3,9 @@
   "dockerComposeFile": "compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
   "customizations": {
     "vscode": {
       "settings": {
@@ -44,6 +47,7 @@
     }
   },
   "forwardPorts": [
+    2222,
     8080,
     8025,
     1025,

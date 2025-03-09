@@ -137,6 +137,8 @@ plugins:
       # nav_file: SUMMARY.md
   ## https://github.com/landmaj/mkdocs-d2-plugin
   - d2
+  ## https://github.com/tuunit/mkdocs-drawio
+  - drawio
   ## https://squidfunk.github.io/mkdocs-material/plugins/blog/
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/

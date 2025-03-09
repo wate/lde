@@ -1,5 +1,7 @@
 blockinfile
+devcontainers
 dmode
+envrc
 fmode
 fukushi
 gitprompt
@@ -7,7 +9,9 @@ halfwidth
 hojodoushi
 hostmanager
 hostsupdater
-keishikimeishi
+keishikimeishis
 modifyvm
+myclirc
 nakaguro
 superfences
+webroot

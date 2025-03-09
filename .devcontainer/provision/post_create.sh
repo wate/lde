@@ -1,15 +1,30 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-echo "$(whoami):$(whoami)" | sudo chpasswd
+echo "${USER}:${USER}" | sudo chpasswd
 
-sudo chmod a+x "$(pwd)"
+## -------------------
+## 以下、Windowsでdev containerを利用している人(Docker + WSL)向け対策
+## @see https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+##
+## > ### Docker Desktop for Windows
+## > Inside the container, any mounted files/folders will appear as if they are owned by `root`
+## > but the user you specify will still be able to read/write them and all files will be executable.
+## > Locally, all filesystem operations will use the permissions of your local user instead.
+## > This is because there is fundamentally no way to directly map Windows-style file permissions to Linux.
+## -------------------
+DEV_CONTAINER_FILE_OWNER=$(stat --format=%U "${PWD}/.devcontainer/devcontainer.json")
+if [ "${DEV_CONTAINER_FILE_OWNER}" != "${USER}" ]; then
+  echo "Change owner container files"
+  sudo chown -R "${USER}:${USER}" "${PWD}"
+fi
+
 sudo rm -rf /var/www/html
-DOC_ROOT=$(pwd)
+DOC_ROOT="${PWD}"
 if [ -d public ]; then
-  DOC_ROOT="$(pwd)/public"
+  DOC_ROOT="${PWD}/public"
 elif [ -d webroot ]; then
-  DOC_ROOT="$(pwd)/webroot"
+  DOC_ROOT="${PWD}/webroot"
 fi
 sudo ln -s "${DOC_ROOT}" /var/www/html
 
@@ -69,7 +84,8 @@ fi
 if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
   pipx install mkdocs --include-deps
   pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
-  pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown
+  ## 作図関連プラグイン
+  pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown mkdocs-drawio
 fi
 if [ ! -e ~/.local/pipx/venvs/mycli ]; then
   pipx install mycli --include-deps
@@ -82,12 +98,13 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
   pipx inject ansible ansible-lint --include-apps
 fi
 
-if [ -f "$(dirname $0)/post_create.yml" ]; then
-  ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/post_create.yml"
+PROVISION_DIR=$(dirname $0)
+if [ -f "${PROVISION_DIR}/post_create.yml" ]; then
+  ansible-playbook -i 127.0.0.1, -c local --diff "${PROVISION_DIR}/post_create.yml"
 fi
-if [ -f "$(dirname $0)/verify.yml" ]; then
-  ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/verify.yml"
+if [ -f "${PROVISION_DIR}/verify.yml" ]; then
+  ansible-playbook -i 127.0.0.1, -c local --diff "${PROVISION_DIR}/verify.yml"
 fi
-if [ -f "$(dirname $0)/custom.yml" ]; then
-  ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/custom.yml"
+if [ -f "${PROVISION_DIR}/custom.yml" ]; then
+  ansible-playbook -i 127.0.0.1, -c local --diff "${PROVISION_DIR}/custom.yml"
 fi
