@@ -5,13 +5,14 @@ echo "${USER}:${USER}" | sudo chpasswd
 
 ## -------------------
 ## 以下、Windowsでdev containerを利用している人(Docker + WSL)向け対策
-## @see https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
 ##
 ## > ### Docker Desktop for Windows
 ## > Inside the container, any mounted files/folders will appear as if they are owned by `root`
 ## > but the user you specify will still be able to read/write them and all files will be executable.
 ## > Locally, all filesystem operations will use the permissions of your local user instead.
 ## > This is because there is fundamentally no way to directly map Windows-style file permissions to Linux.
+##
+## @see https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
 ## -------------------
 DEV_CONTAINER_FILE_OWNER=$(stat --format=%U "${PWD}/.devcontainer/devcontainer.json")
 if [ "${DEV_CONTAINER_FILE_OWNER}" != "${USER}" ]; then
