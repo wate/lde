@@ -8,6 +8,7 @@ linux
 mailpit
 mariadb
 mkdocs
+mycli
 phpdocumentor
 phpstorm
 pict
@@ -19,4 +20,5 @@ redmine
 setext
 tbls
 textlint
+venvs
 virtualbox

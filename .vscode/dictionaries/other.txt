@@ -1,6 +1,7 @@
 blockinfile
 devcontainers
 dmode
+envrc
 fmode
 fukushi
 gitprompt
@@ -10,5 +11,7 @@ hostmanager
 hostsupdater
 keishikimeishis
 modifyvm
+myclirc
 nakaguro
 superfences
+webroot
