@@ -151,6 +151,11 @@
             state: latest
     - name: Set user setting
       block:
+        - name: Set git safe.directory setting
+          community.general.git_config:
+            name: safe.directory
+            scope: global
+            value: "{{ ansible_facts.env.PWD | dirname | dirname }}"
         - name: Set completion ignore-case
           ansible.builtin.lineinfile:
             path: ~/.inputrc

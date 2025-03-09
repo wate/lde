@@ -4,9 +4,4 @@
   hosts: all
   connection: local
   become: false
-  tasks:
-    - name: Set git safe.directory setting
-      community.general.git_config:
-        name: safe.directory
-        scope: global
-        value: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+  tasks: []

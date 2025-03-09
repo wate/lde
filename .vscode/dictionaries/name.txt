@@ -20,5 +20,4 @@ redmine
 setext
 tbls
 textlint
-venvs
 virtualbox
