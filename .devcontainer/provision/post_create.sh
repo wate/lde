@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-echo "$(whoami):$(whoami)" | sudo chpasswd
+echo "${USER}:${USER}" | sudo chpasswd
 
-sudo chmod a+x "$(pwd)"
 sudo rm -rf /var/www/html
-DOC_ROOT=$(pwd)
+DOC_ROOT="${PWD}"
 if [ -d public ]; then
-  DOC_ROOT="$(pwd)/public"
+  DOC_ROOT="${PWD}/public"
 elif [ -d webroot ]; then
-  DOC_ROOT="$(pwd)/webroot"
+  DOC_ROOT="${PWD}/webroot"
 fi
 sudo ln -s "${DOC_ROOT}" /var/www/html
 
@@ -91,4 +90,13 @@ if [ -f "$(dirname $0)/verify.yml" ]; then
 fi
 if [ -f "$(dirname $0)/custom.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "$(dirname $0)/custom.yml"
+fi
+
+## -------------------
+## 以下、Windowsでdev containerを利用している人(Docker + WSL)向け対策
+## -------------------
+DEV_CONTAINER_FILE_OWNER=$(stat --format=%U "${PWD}/.devcontainer/devcontainer.json")
+if [ "${DEV_CONTAINER_FILE_OWNER}" != "${USER}" ]; then
+  echo "Change owner container files"
+  sudo chown -R "${USER}:${USER}" "${PWD}"
 fi
