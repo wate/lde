@@ -21,9 +21,9 @@ fi
 
 sudo rm -rf /var/www/html
 DOC_ROOT="${PWD}"
-if [ -d public ]; then
+if [ -d "${PWD}/public" ]; then
   DOC_ROOT="${PWD}/public"
-elif [ -d webroot ]; then
+elif [ -d "${PWD}/webroot" ]; then
   DOC_ROOT="${PWD}/webroot"
 fi
 sudo ln -s "${DOC_ROOT}" /var/www/html
