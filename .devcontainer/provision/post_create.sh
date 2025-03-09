@@ -4,7 +4,7 @@ set -eo pipefail
 echo "${USER}:${USER}" | sudo chpasswd
 
 ## -------------------
-## 以下、Windowsでdev containerを利用している人(Docker + WSL)向け対策
+## Windowsでdev containerを利用している人(Docker + WSL)向け対策
 ##
 ## > ### Docker Desktop for Windows
 ## > Inside the container, any mounted files/folders will appear as if they are owned by `root`
