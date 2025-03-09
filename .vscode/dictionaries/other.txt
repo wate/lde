@@ -7,7 +7,7 @@ halfwidth
 hojodoushi
 hostmanager
 hostsupdater
-keishikimeishi
+keishikimeishis
 modifyvm
 nakaguro
 superfences

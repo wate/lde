@@ -9,16 +9,28 @@ lde_env_vars:
 ## -----------------
 ## pipxでインストールするパッケージ
 ## -----------------
-lde_pipx_packages: []
-#   - name: mkdocs-material
-#     inject_packages:
-#       - mkdocs-git-revision-date-localized-plugin
-#       - mkdocs-tooltips
-#       - mkdocs-section-index
-#       - mkdocs-literate-nav
-#       - mkdocs-glightbox
-#   - name: ansible
-#   - name: ansible-lint
+lde_pipx_packages:
+  - name: mkdocs
+    inject_packages:
+      ## https://squidfunk.github.io/mkdocs-material/
+      - mkdocs-material
+      ## https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
+      - mkdocs-git-revision-date-localized-plugin
+      ## https://oprypin.github.io/mkdocs-section-index/
+      - mkdocs-section-index
+      ## https://oprypin.github.io/mkdocs-literate-nav/
+      - mkdocs-literate-nav
+      ## https://blueswen.github.io/mkdocs-glightbox/
+      - mkdocs-glightbox
+      ### 作図関連
+      ## https://github.com/landmaj/mkdocs-d2-plugin
+      - mkdocs-d2-plugin
+      ## https://github.com/mikitex70/plantuml-markdown
+      - plantuml-markdown
+      ## https://github.com/tuunit/mkdocs-drawio
+      - mkdocs-drawio
+  - name: ansible
+  - name: ansible-lint
 
 ## --------------
 ## 開発用に解放するポートの設定

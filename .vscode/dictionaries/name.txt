@@ -3,6 +3,7 @@ cakephp
 direnv
 github
 gitleaks
+glightbox
 linux
 mailpit
 mariadb
@@ -10,6 +11,8 @@ mkdocs
 phpdocumentor
 phpstorm
 pict
+pipx
+plantuml
 postgres
 pymdownx
 redmine
