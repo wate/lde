@@ -3,6 +3,8 @@ set -eo pipefail
 
 echo "${USER}:${USER}" | sudo chpasswd
 
+DEVCONTAINER_DIR="${PWD}/.devcontainer"
+
 ## -------------------
 ## Windowsでdev containerを利用している人(Docker + WSL)向け対策
 ##
@@ -14,7 +16,7 @@ echo "${USER}:${USER}" | sudo chpasswd
 ##
 ## @see https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
 ## -------------------
-DEV_CONTAINER_FILE_OWNER=$(stat --format=%U "${PWD}/.devcontainer/devcontainer.json")
+DEV_CONTAINER_FILE_OWNER=$(stat --format=%U "${DEVCONTAINER_DIR}/devcontainer.json")
 if [ "${DEV_CONTAINER_FILE_OWNER}" != "${USER}" ]; then
   echo "Change owner container files"
   sudo chown -R "${USER}:${USER}" "${PWD}"
@@ -100,6 +102,10 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
 fi
 
 PROVISION_DIR=$(dirname $0)
+ROLE_DIR="${PROVISION_DIR}/roles"
+if [ -f "${PROVISION_DIR}/requirements.yml" ]; then
+  ansible-galaxy install -r "${PROVISION_DIR}/requirements.yml" -p "${ROLE_DIR}" --force
+fi
 if [ -f "${PROVISION_DIR}/post_create.yml" ]; then
   ansible-playbook -i 127.0.0.1, -c local --diff "${PROVISION_DIR}/post_create.yml"
 fi
