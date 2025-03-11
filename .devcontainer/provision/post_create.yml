@@ -4,138 +4,21 @@
   hosts: all
   connection: local
   become: false
+  vars:
+    install_tools:
+      - osv-scanner
+      - delta
+      - task
+      - d2
+      - pict
+  roles:
+    - role: tools
+      become: true
   tasks:
-    - name: Install/update osv-scanner
+    - name: Install bash-completion
+      ansible.builtin.apt:
+        name: bash-completion
       become: true
-      block:
-        - name: Check osv-scanner latest version
-          ansible.builtin.uri:
-            url: https://api.github.com/repos/google/osv-scanner/releases/latest
-            headers:
-              Accept: application/vnd.github+json
-          register: latest_releases
-        - name: Set os-scanner version variable
-          ansible.builtin.set_fact:
-            osv_scanner_version: "{{ latest_releases.json.tag_name }}"
-        - name: Set asset file variable
-          ansible.builtin.set_fact:
-            osv_scanner_download_file: osv-scanner_{{ ansible_facts['system'] | lower }}_{{ arch_type_maps[ansible_facts['architecture']] }}
-          vars:
-            arch_type_maps:
-              x86_64: amd64
-              aarch64: arm64
-        - name: Install/update osv-scanner
-          ansible.builtin.get_url:
-            url: https://github.com/google/osv-scanner/releases/download/{{ osv_scanner_version }}/{{ osv_scanner_download_file }}
-            dest: /usr/local/bin/osv-scanner
-            mode: "0755"
-    - name: Install/Update git-delta
-      become: true
-      block:
-        - name: Check git-delta latest version
-          ansible.builtin.uri:
-            url: https://api.github.com/repos/dandavison/delta/releases/latest
-            headers:
-              Accept: application/vnd.github+json
-          register: latest_releases
-        - name: Set git-delta version variable
-          ansible.builtin.set_fact:
-            delta_version: "{{ latest_releases.json.tag_name }}"
-        - name: Set asset file variable
-          ansible.builtin.set_fact:
-            delta_package_file: git-delta_{{ delta_version }}_{{ arch_type_maps[ansible_facts['architecture']] }}.deb
-          vars:
-            arch_type_maps:
-              x86_64: amd64
-              aarch64: arm64
-        - name: Install/update git-delta
-          ansible.builtin.apt:
-            deb: https://github.com/dandavison/delta/releases/download/{{ delta_version }}/{{ delta_package_file }}
-        - name: Set variable
-          ansible.builtin.set_fact:
-            delta_package_file: git-delta_{{ delta_version }}_{{ arch_type_maps[ansible_facts['architecture']] }}.deb
-          vars:
-            arch_type_maps:
-              x86_64: amd64
-              aarch64: arm64
-    - name: Install/Update task
-      become: true
-      block:
-        - name: Check task latest version
-          ansible.builtin.uri:
-            url: https://api.github.com/repos/go-task/task/releases/latest
-            headers:
-              Accept: application/vnd.github+json
-          register: latest_releases
-        - name: Set version variable
-          ansible.builtin.set_fact:
-            task_version: "{{ latest_releases.json.tag_name }}"
-        - name: Set asset file variable
-          ansible.builtin.set_fact:
-            task_package_file: task_linux_{{ arch_type_maps[ansible_facts['architecture']] }}.deb
-          vars:
-            arch_type_maps:
-              x86_64: amd64
-              aarch64: arm64
-        - name: Install/update task
-          ansible.builtin.apt:
-            deb: https://github.com/go-task/task/releases/download/{{ task_version }}/{{ task_package_file }}
-    - name: Install/Update d2
-      become: true
-      block:
-        - name: Check d2 latest version
-          ansible.builtin.uri:
-            url: https://api.github.com/repos/terrastruct/d2/releases/latest
-            headers:
-              Accept: application/vnd.github+json
-          register: latest_releases
-        - name: Set d2 version variable
-          ansible.builtin.set_fact:
-            d2_version: "{{ latest_releases.json.tag_name }}"
-        - name: Set asset file variable
-          ansible.builtin.set_fact:
-            d2_asset_file: d2-{{ d2_version }}-{{ ansible_facts['system'] | lower }}-{{ arch_type_maps[ansible_facts['architecture']] }}.tar.gz
-          vars:
-            arch_type_maps:
-              x86_64: amd64
-              aarch64: arm64
-        - name: Create download directory
-          ansible.builtin.file:
-            path: /usr/local/src/d2
-            state: directory
-            mode: "0755"
-        - name: Download d2 asset file
-          ansible.builtin.unarchive:
-            src: https://github.com/terrastruct/d2/releases/download/{{ d2_version }}/{{ d2_asset_file }}
-            dest: /usr/local/src/d2
-            extra_opts:
-              - --strip-components=1
-            remote_src: true
-          register: unarchived_d2_result
-        - name: Install/update d2
-          ansible.builtin.command:
-            cmd: /usr/local/src/d2/scripts/install.sh
-            chdir: /usr/local/src/d2
-          when: unarchived_d2_result is changed
-    - name: Install/Update pict
-      become: true
-      block:
-        - name: Checkout pict source
-          ansible.builtin.git:
-            repo: https://github.com/microsoft/pict.git
-            dest: /usr/local/src/pict
-            version: main
-          register: checkout_pict_result
-        - name: Build pict
-          ansible.builtin.command:
-            cmd: make
-            chdir: /usr/local/src/pict
-          when: checkout_pict_result is changed
-        - name: Create symlink
-          ansible.builtin.file:
-            path: /usr/local/bin/pict
-            src: /usr/local/src/pict/pict
-            state: link
     - name: Install npm packages
       become: true
       block:
@@ -164,10 +47,9 @@
             create: true
             mode: "0644"
         - name: Add direnv setting
-          ansible.builtin.blockinfile:
+          ansible.builtin.lineinfile:
             path: ~/.bashrc
-            marker: "# {mark} direnv ANSIBLE MANAGED BLOCK"
-            block: eval "$(direnv hook bash)"
+            line: eval "$(direnv hook bash)"
         - name: Add eza setting
           ansible.builtin.blockinfile:
             path: ~/.bashrc

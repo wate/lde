@@ -33,6 +33,9 @@
   loop_control:
     label: "{{ item.name }}"
   loop:
+    ## ファイル名などに日本語を含んでいた場合の文字化け対策
+    - name: core.quotepath
+      value: "false"
     ## fetch / pull / push
     - name: fetch.prune
       value: "true"
