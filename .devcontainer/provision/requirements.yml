@@ -1,0 +1,4 @@
+roles:
+  - name: tools
+    src: https://github.com/wate/ansible-role-tools.git
+    version: develop
