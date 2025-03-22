@@ -147,6 +147,9 @@ Vagrant.configure("2") do |config|
     if provision_config.key?("role_update") && !provision_config["role_update"].nil?
       provision_role_update = provision_config["role_update"]
     end
+    if provision_config.key?("raw_arguments") && !provision_config["raw_arguments"].nil?
+      ansible_raw_arguments.concat(provision_config["raw_arguments"]).uniq!
+    end
     if provision_config.key?("tags") && !provision_config["tags"].nil?
       ansible_provision_tags = provision_config["tags"]
     end
