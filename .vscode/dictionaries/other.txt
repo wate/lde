@@ -2,6 +2,7 @@ blockinfile
 devcontainers
 dmode
 envrc
+fileglob
 fmode
 fukushi
 gitprompt
@@ -16,4 +17,5 @@ nakaguro
 quotepath
 superfences
 venvs
+wantlist
 webroot

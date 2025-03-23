@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
   # --------
   # Synced Folders
   # --------
-  config.vm.synced_folder ".", "/vagrant", :mount_options => ['dmode=777', 'fmode=777']
+  config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777", "fmode=777"]
   sync_folders = ENV.select { |k,v| k.match?(/^VAGRANT_SYNC_FOLDER_/) }
   unless sync_folders.empty?
     sync_folders.each_value do |sync_folder|
@@ -83,7 +83,7 @@ Vagrant.configure("2") do |config|
       if host_folder && guest_folder
         host_folder.strip!
         guest_folder.strip!
-        config.vm.synced_folder host_folder, guest_folder, :mount_options => ['dmode=777', 'fmode=777']
+        config.vm.synced_folder host_folder, guest_folder, :mount_options => ["dmode=777", "fmode=777"]
       end
     end
   end
@@ -115,7 +115,7 @@ Vagrant.configure("2") do |config|
   ## Ansible galaxy role file
   ANSIBLE_GALAXY_ROLE_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, "requirements.yml"))
   ## Ansible roles path
-  ANSIBLE_GALAXY_ROLES_PATH = File.join('.vagrant', 'provisioners', 'ansible', 'roles')
+  ANSIBLE_GALAXY_ROLES_PATH = File.join(".vagrant", "provisioners", "ansible", "roles")
   ansible_groups = {
     "vagrant" => ["default"],
   }
@@ -135,26 +135,29 @@ Vagrant.configure("2") do |config|
   ansible_provision_tags = []
   ansible_provision_skip_tags = []
   provision_config = nil
-  provision_config_file_dirs = ['.', LDE_CONFIG_DIR]
+  provision_config_file_dirs = [".", LDE_CONFIG_DIR]
   provision_config_file_dirs.each do |target_dir|
-    provision_config_file = File.expand_path(File.join(target_dir.to_s, 'provision_config.yml'))
+    provision_config_file = File.expand_path(File.join(target_dir.to_s, "provision_config.yml"))
     if File.exist?(File.expand_path(provision_config_file))
       provision_config = YAML.load_file(provision_config_file)
       break
     end
   end
   if provision_config
-    if provision_config.key?('role_update') && !provision_config['role_update'].nil?
-      provision_role_update = provision_config['role_update']
+    if provision_config.key?("role_update") && !provision_config["role_update"].nil?
+      provision_role_update = provision_config["role_update"]
     end
-    if provision_config.key?('tags') && !provision_config['tags'].nil?
-      ansible_provision_tags = provision_config['tags']
+    if provision_config.key?("raw_arguments") && !provision_config["raw_arguments"].nil?
+      ansible_raw_arguments.concat(provision_config["raw_arguments"]).uniq!
     end
-    if provision_config.key?('skip_tags') && !provision_config['skip_tags'].nil?
-      ansible_provision_skip_tags = provision_config['skip_tags']
+    if provision_config.key?("tags") && !provision_config["tags"].nil?
+      ansible_provision_tags = provision_config["tags"]
     end
-    if provision_config.key?('extra_var') && !provision_config['extra_var'].nil?
-      ansible_extra_vars.merge!(provision_config['extra_var'])
+    if provision_config.key?("skip_tags") && !provision_config["skip_tags"].nil?
+      ansible_provision_skip_tags = provision_config["skip_tags"]
+    end
+    if provision_config.key?("extra_var") && !provision_config["extra_var"].nil?
+      ansible_extra_vars.merge!(provision_config["extra_var"])
     end
   end
 
