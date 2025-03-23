@@ -36,7 +36,7 @@
   loop:
     - bin
     - .local/bin
-- name: Inclde setting tasks
+- name: Include setting tasks
   ansible.builtin.include_tasks:
     file: tasks/setting/{{ setting_task | basename }}
   loop: "{{ lookup('fileglob', 'tasks/setting/*.yml', wantlist=True) }}"

@@ -11,6 +11,11 @@
       - task
       - d2
       - pict
+      - drawio
+      - gitleaks
+      - fnt
+      - zx
+      - ni
   roles:
     - role: tools
       become: true
@@ -19,19 +24,6 @@
       ansible.builtin.apt:
         name: bash-completion
       become: true
-    - name: Install npm packages
-      become: true
-      block:
-        - name: Install/Update zx
-          community.general.npm:
-            name: zx
-            global: true
-            state: latest
-        - name: Install/Update ni
-          community.general.npm:
-            name: "@antfu/ni"
-            global: true
-            state: latest
     - name: Set user setting
       block:
         - name: Set git safe.directory setting

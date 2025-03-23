@@ -480,10 +480,16 @@ install_tools:
   - bat
   ## https://jonas.github.io/tig/
   - tig
+  ## https://lnav.org/
+  - lnav
+  ## https://github.com/ggreer/the_silver_searcher
+  - the_silver_searcher
+  ## https://github.com/jesseduffield/lazygit
+  - lazygit
   ## https://github.com/dandavison/delta
   - delta
   ## https://goaccess.io/
-  - goaccess
+  # - goaccess
   ## https://github.com/google/osv-scanner
   - osv-scanner
   # https://direnv.net/
@@ -494,16 +500,20 @@ install_tools:
   - restic
   ## https://rclone.org/
   - rclone
+  ## https://github.com/tldr-pages/tlrc
+  - tldr
+  ## https://github.com/znscli/zns
+  # - zns
   ## https://github.com/kellyjonbrazil/jc
   - jc
   ## https://httpie.io/
   - httpie
   ## https://duckdb.org/
   - duckdb
+  ## https://github.com/moul/assh
+  - assh
   ## https://github.com/charmbracelet/glow
   - glow
-  ## https://lnav.org/
-  - lnav
   ## https://github.com/jgm/pandoc
   - pandoc
   ## https://graphviz.org/
@@ -512,18 +522,24 @@ install_tools:
   - plantuml
   ## https://github.com/terrastruct/d2
   - d2
+  ## https://github.com/petervanderdoes/gitflow-avh
+  - git-flow
   ## https://github.com/k1LoW/tbls
   - tbls
   ## https://github.com/k1LoW/runn
   - runn
+  ## https://github.com/gitleaks/gitleaks
+  - gitleaks
   ## https://github.com/microsoft/pict
   - pict
   ## https://google.github.io/zx/
   - zx
-  ## https://wp-cli.org/ja/
-  - wp-cli
-  # https://github.com/alexmyczko/fnt
+  ## https://github.com/antfu-collective/ni
+  - ni
+  ## https://github.com/alexmyczko/fnt
   - fnt
+  ## https://github.com/jgraph/drawio-desktop
+  - drawio
 
 ## --------------
 ## バックアップ設定
