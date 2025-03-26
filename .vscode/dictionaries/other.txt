@@ -14,8 +14,10 @@ keishikimeishis
 modifyvm
 myclirc
 nakaguro
+pipefail
 quotepath
 superfences
+vcfz
 venvs
 wantlist
 webroot
