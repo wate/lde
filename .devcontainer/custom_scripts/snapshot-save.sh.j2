@@ -32,7 +32,7 @@ if [ -n "${DB_NAME}" ]; then
   if [ -n "${DB_HOST}" ]; then
     DB_PARAMS+=(-h "${DB_HOST}")
   fi
-  echo "## Backup datbase"
+  echo "## Backup database"
   mariadb-dump "${DB_PARAMS[@]}" ${DB_NAME} | sed -e '/^\/\*\!50013 DEFINER=/d' >${BACKUP_TARGET}/dump.sql
 fi
 
