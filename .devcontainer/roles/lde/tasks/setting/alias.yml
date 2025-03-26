@@ -1,13 +1,14 @@
 ---
 # code: language=ansible
-- name: Set draw.io alias
-  ansible.builtin.lineinfile:
-    path: ~/.bash_aliases
-    line: alias drawio='xvfb-run drawio'
-    mode: "0644"
-    create: true
 - name: Set ls alias
   ansible.builtin.lineinfile:
     path: ~/.bash_aliases
     line: alias ls='eza --git --header'
     mode: "0644"
+    create: true
+- name: Set draw.io alias
+  ansible.builtin.lineinfile:
+    path: ~/.bash_aliases
+    line: alias drawio='xvfb-run drawio'
+    mode: "0644"
+  when: "'drawio' in install_tools | default([])"
