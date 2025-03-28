@@ -22,6 +22,10 @@
       "path": "./dictionaries/name.txt"
     },
     {
+      "name": "ansible",
+      "path": "./dictionaries/ansible.txt"
+    },
+    {
       "name": "other",
       "path": "./dictionaries/other.txt"
     }
