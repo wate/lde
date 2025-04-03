@@ -68,7 +68,7 @@
     - name: Setup custom script
       tags: custom_script
       block:
-        - name: Find custom sctipts
+        - name: Find custom scripts
           ansible.builtin.set_fact:
             custom_scripts: "{{ lookup('fileglob', 'custom_scripts/*.sh', wantlist=True) }}"
             custom_script_templates: "{{ lookup('fileglob', 'custom_scripts/*.sh.j2', wantlist=True) }}"
@@ -105,7 +105,7 @@
         cmd: ~/.local/bin/pre-commit autoupdate
         chdir: /vagrant
         removes: /vagrant/.pre-commit-config.yaml
-    - name: Restart Searvices
+    - name: Restart services
       ansible.builtin.systemd:
         name: "{{ item }}"
         state: restarted
