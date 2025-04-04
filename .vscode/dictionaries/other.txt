@@ -31,5 +31,6 @@ phpredisadmin
 Repolib
 shopt
 silversearcher
+venvs
 webroot
 yarnpkg

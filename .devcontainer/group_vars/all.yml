@@ -446,6 +446,7 @@ lde_pipx_packages:
       - mkdocs-glightbox
       - mkdocs-d2-plugin
       - plantuml-markdown
+      - mkdocs-drawio
   - name: mycli
   - name: pre-commit
 
