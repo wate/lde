@@ -23,10 +23,11 @@
     inject_packages: "{{ item.inject_packages }}"
   loop: "{{ lde_pipx_packages | selectattr('inject_packages', 'defined') | list }}"
   loop_control:
-    label: "{{ item.name + ':' + item.inject_packages | join('/') }}"
+    label: "{{ item.name + ':' + item.inject_packages | join(' / ') }}"
 - name: Install dependency packages
   ansible.builtin.apt:
     name: "{{ item.dependency_packages }}"
   loop: "{{ lde_pipx_packages | selectattr('dependency_packages', 'defined') | list }}"
   loop_control:
-    label: "{{ item.name + ':' + item.dependency_packages | join('/') }}"
+    label: "{{ item.name + ':' + item.dependency_packages | join(' / ') }}"
+  become: true

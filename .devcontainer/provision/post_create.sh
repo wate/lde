@@ -88,7 +88,7 @@ if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
   pipx install mkdocs --include-deps
   pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
   ## ナビゲーション関連
-  pipx inject mkdocs mkdocs-section-index mkdocs-literate-nav
+  pipx inject mkdocs mkdocs-literate-nav mkdocs-section-index
   ## 作図関連プラグイン
   pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown mkdocs-drawio
   ## PDF生成関連
