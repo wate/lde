@@ -22,6 +22,8 @@ josegonzalez
 libfreetype
 libicu
 libjpeg
+libpango
+libpangoft
 libzip
 logio
 nodesource

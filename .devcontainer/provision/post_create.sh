@@ -92,6 +92,7 @@ if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
   ## 作図関連プラグイン
   pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown mkdocs-drawio
   ## PDF生成関連
+  sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
   pipx inject mkdocs mkdocs-with-pdf
 fi
 if [ ! -e ~/.local/pipx/venvs/mycli ]; then

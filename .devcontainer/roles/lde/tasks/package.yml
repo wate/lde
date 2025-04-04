@@ -8,7 +8,7 @@
         url: https://phpdoc.org/phpDocumentor.phar
         dest: /usr/local/bin/phpdoc
         mode: "0755"
-- name: Install cmmandline tools
+- name: Install command line tools
   community.general.pipx:
     name: "{{ item.name }}"
     state: install
@@ -24,3 +24,9 @@
   loop: "{{ lde_pipx_packages | selectattr('inject_packages', 'defined') | list }}"
   loop_control:
     label: "{{ item.name + ':' + item.inject_packages | join('/') }}"
+- name: Install dependency packages
+  ansible.builtin.apt:
+    name: "{{ item.dependency_packages }}"
+  loop: "{{ lde_pipx_packages | selectattr('dependency_packages', 'defined') | list }}"
+  loop_control:
+    label: "{{ item.name + ':' + item.dependency_packages | join('/') }}"
