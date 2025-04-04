@@ -11,5 +11,5 @@
 - [Gitの運用方法](git_operation.md)
 - [デプロイ方法](deploy.md)
 - [テーブル定義](schema/)
-- [チートシート](cheat_sheet.md)
+- [チートシート](cheatsheet.md)
 - [用語集](glossary.md)
