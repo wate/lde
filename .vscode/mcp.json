@@ -1,0 +1,55 @@
+{
+  "servers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    // "brave-search": {
+    //   "command": "npx",
+    //   "args": [
+    //     "@modelcontextprotocol/server-brave-search"
+    //   ],
+    //   "env": {
+    //     // @see https://brave.com/search/api/
+    //     "BRAVE_API_KEY": "YOUR_API_KEY_HERE"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // },
+    // "perplexity": {
+    //   "command": "npx",
+    //   "args": ["server-perplexity-ask"],
+    //   "env": {
+    //     // @see https://github.com/ppl-ai/modelcontextprotocol?tab=readme-ov-file#step-2-get-a-sonar-api-key
+    //     "PERPLEXITY_API_KEY": "YOUR_API_KEY_HERE"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // },
+    // "slack": {
+    //   "command": "npx",
+    //   "args": [
+    //     "@modelcontextprotocol/server-slack"
+    //   ],
+    //   "env": {
+    //     // @see https://github.com/modelcontextprotocol/servers/blob/main/src/slack/README.md#setup
+    //     "SLACK_BOT_TOKEN": "xoxb-your-bot-token",
+    //     "SLACK_TEAM_ID": "T01234567"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // },
+    // "meilisearch": {
+    //   "command": "uvx",
+    //   "args": [
+    //     "--no-cache",
+    //     "meilisearch-mcp"
+    //   ],
+    //   "env": {
+    //     "MEILI_HTTP_ADDR": "http://localhost:7700",
+    //     "MEILI_MASTER_KEY": "your_master_key"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // }
+  }
+}
