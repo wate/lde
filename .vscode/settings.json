@@ -23,6 +23,12 @@
       "database": "app_dev",
       "username": "app_dev",
       "password": "app_dev_password"
+    },
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "sqlite",
+      "database": "./.cache/sqlite_mcp_server.db"
     }
   ]
 }

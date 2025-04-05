@@ -29,7 +29,7 @@ __pycache__/
 !.vscode/dictionaries/*.txt
 
 ### VisualStudioCode SQLTools ###
-lde.session.sql
+*.session.sql
 
 ### PhpStorm / WebStorm ###
 .idea/
