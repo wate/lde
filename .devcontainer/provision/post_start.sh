@@ -27,4 +27,4 @@ if [ -f .pre-commit-config.yaml ] && [ -e ~/.local/pipx/venvs/pre-commit ] && [ 
   pre-commit install
 fi
 
-apache2ctl start
+# apache2ctl start
