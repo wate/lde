@@ -1,6 +1,7 @@
 ARG VARIANT="8"
 FROM k1low/tbls:latest AS tbls
-FROM mcr.microsoft.com/devcontainers/php:1-${VARIANT}
+## https://mcr.microsoft.com/en-us/artifact/mar/devcontainers/php/about
+FROM mcr.microsoft.com/devcontainers/php:${VARIANT}
 
 RUN . /etc/os-release \
   && echo "X-Repolib-Name: backports" >>/etc/apt/sources.list.d/backports.sources \

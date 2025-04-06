@@ -38,7 +38,7 @@ if [ -n "${DB_NAME}" ] && [ -f "${BACKUP_TARGET}/dump.sql" ]; then
   if [ -n "${DB_HOST}" ]; then
     DB_PARAMS+=(-h "${DB_HOST}")
   fi
-  echo "## Resore datbase"
+  echo "## Restore database"
   mysql "${DB_PARAMS[@]}" ${DB_NAME} <${BACKUP_TARGET}/dump.sql
 fi
 
@@ -47,4 +47,3 @@ if [ -n "${FILES_DIR}" ] && [ -f "${BACKUP_TARGET}/files.tar.gz" ]; then
   cd "${FILES_DIR}" || exit 1;
   tar vxfz ${BACKUP_TARGET}/files.tar.gz
 fi
-

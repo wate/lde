@@ -21,6 +21,7 @@ __pycache__/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/mcp.json
 !.vscode/*.code-snippets
 
 ### VisualStudioCode Code Spell Checker ###
@@ -28,7 +29,7 @@ __pycache__/
 !.vscode/dictionaries/*.txt
 
 ### VisualStudioCode SQLTools ###
-lde.session.sql
+*.session.sql
 
 ### PhpStorm / WebStorm ###
 .idea/

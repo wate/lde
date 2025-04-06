@@ -102,10 +102,14 @@ Vagrant利用時は以下のツールがインストールされています。
 * [d2](https://d2lang.com/)
     * [VSCode extension for D2 files](https://marketplace.visualstudio.com/items?itemName=terrastruct.d2)
 * [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
-    * [mkdocs-glightbox](https://blueswen.github.io/mkdocs-glightbox/)
     * [mkdocs-git-revision-date-localized-plugin](https://timvink.github.io/mkdocs-git-revision-date-localized-plugin/)
-    * [mkdocs-section-index](https://oprypin.github.io/mkdocs-section-index/)
+    * [mkdocs-glightbox](https://blueswen.github.io/mkdocs-glightbox/)
     * [mkdocs-literate-nav](https://oprypin.github.io/mkdocs-literate-nav/)
+    * [mkdocs-section-index](https://oprypin.github.io/mkdocs-section-index/)
+    * [mkdocs-drawio](https://github.com/tuunit/mkdocs-drawio)
+    * [mkdocs-d2-plugin](https://github.com/landmaj/mkdocs-d2-plugin)
+    * [plantuml-markdown](https://github.com/mikitex70/plantuml-markdown)
+    * [mkdocs-with-pdf](https://github.com/orzih/mkdocs-with-pdf/)
 * [mycli](https://www.mycli.net/)
 * [osv-scanner](https://github.com/google/osv-scanner)
 * [Task](https://taskfile.dev/)
@@ -188,7 +192,7 @@ export VAGRANT_ANSIBLE_RAW_ARGUMENT_DIFF="--diff"
 ### 設定ファイルを利用したVagrantのプロビジョニングの制御
 
 ディレクトリ直下に`provision_config.yml`というファイルを作成し、以下のように設定を記述することで、
-Vagrantのプロビジョニング時の設定を制御することができます。
+Vagrantのプロビジョニング時の設定を制御できます。
 
 各設定項目の詳細は以下のとおりです。
 

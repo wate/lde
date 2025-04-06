@@ -441,11 +441,16 @@ lde_pipx_packages:
     inject_packages:
       - mkdocs-material
       - mkdocs-git-revision-date-localized-plugin
-      - mkdocs-section-index
-      - mkdocs-literate-nav
       - mkdocs-glightbox
+      - mkdocs-literate-nav
+      - mkdocs-section-index
       - mkdocs-d2-plugin
       - plantuml-markdown
+      - mkdocs-drawio
+      - mkdocs-with-pdf
+    dependency_packages:
+      - libpango-1.0-0
+      - libpangoft2-1.0-0
   - name: mycli
   - name: pre-commit
 
@@ -466,7 +471,6 @@ logio_file_input_cfg:
       stream: mail
       config:
         path: /var/log/mail.log
-
 
 ## --------------------------
 ## インストールする各種ツール

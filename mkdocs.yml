@@ -131,7 +131,7 @@ plugins:
       timezone: Asia/Tokyo
       locale: ja
   ## https://oprypin.github.io/mkdocs-section-index/
-  - section-index
+  # - section-index
   ## https://oprypin.github.io/mkdocs-literate-nav/
   - literate-nav:
       # nav_file: SUMMARY.md
@@ -143,3 +143,5 @@ plugins:
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
   # - offline
+  ## https://github.com/orzih/mkdocs-with-pdf/
+  - with-pdf

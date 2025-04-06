@@ -11,10 +11,10 @@ services:
     volumes:
       - ..:/workspace:cached
       - ./php/z-custom.ini:/usr/local/etc/php/conf.d/z-custom.ini
-    command: sleep infinity
+    # command: sleep infinity
+    command: /usr/local/bin/apache2-foreground
     depends_on:
       - db
-      - mailpit
   db:
     image: mariadb:10.11
     restart: unless-stopped

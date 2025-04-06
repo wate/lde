@@ -1,0 +1,63 @@
+{
+  "servers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    // "brave-search": {
+    //   "command": "npx",
+    //   "args": [
+    //     "@modelcontextprotocol/server-brave-search"
+    //   ],
+    //   "env": {
+    //     // @see https://brave.com/search/api/
+    //     "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // },
+    // "perplexity": {
+    //   "command": "npx",
+    //   "args": ["server-perplexity-ask"],
+    //   "env": {
+    //     // @see https://github.com/ppl-ai/modelcontextprotocol?tab=readme-ov-file#step-2-get-a-sonar-api-key
+    //     "PERPLEXITY_API_KEY": "${env:PERPLEXITY_API_KEY}"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // },
+    // "sqlite": {
+    //   "command": "uvx",
+    //   "args": [
+    //     "--no-cache",
+    //     "mcp-server-sqlite",
+    //     "--db-path",
+    //     "${workspaceFolder}/.cache/sqlite_mcp_server.db"
+    //   ],
+    // }
+    // "slack": {
+    //   "command": "npx",
+    //   "args": [
+    //     "@modelcontextprotocol/server-slack"
+    //   ],
+    //   "env": {
+    //     // @see https://github.com/modelcontextprotocol/servers/blob/main/src/slack/README.md#setup
+    //     "SLACK_BOT_TOKEN": "${env:SLACK_BOT_TOKEN}",
+    //     "SLACK_TEAM_ID": "${env:SLACK_TEAM_ID}"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // },
+    // "meilisearch": {
+    //   "command": "uvx",
+    //   "args": [
+    //     "--no-cache",
+    //     "meilisearch-mcp"
+    //   ],
+    //   "env": {
+    //     "MEILI_HTTP_ADDR": "${env:MEILI_HTTP_ADDR}",
+    //     "MEILI_MASTER_KEY": "${env:MEILI_MASTER_KEY}"
+    //   },
+    //   // "envFile": "${workspaceFolder}/.env",
+    // }
+  }
+}
