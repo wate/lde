@@ -56,7 +56,6 @@
     // "meilisearch": {
     //   "command": "uvx",
     //   "args": [
-    //     "--no-cache",
     //     "meilisearch-mcp"
     //   ],
     //   "env": {
