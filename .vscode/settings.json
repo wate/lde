@@ -8,27 +8,5 @@
   },
   "files.associations": {
     "*.pict": "powershell",
-  },
-  "sqltools.connections": [
-    {
-      "mysqlOptions": {
-        "authProtocol": "default",
-        "enableSsl": "Disabled"
-      },
-      "previewLimit": 50,
-      "server": "db",
-      "port": 3306,
-      "driver": "MariaDB",
-      "name": "lde",
-      "database": "app_dev",
-      "username": "app_dev",
-      "password": "app_dev_password"
-    },
-    {
-      "previewLimit": 50,
-      "driver": "SQLite",
-      "name": "sqlite",
-      "database": "./.cache/sqlite_mcp_server.db"
-    }
-  ]
+  }
 }
