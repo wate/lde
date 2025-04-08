@@ -1,5 +1,12 @@
 {
   "servers": {
+    "time": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-time",
+        "--local-timezone=Asia/Tokyo"
+      ]
+    },
     "playwright": {
       "command": "npx",
       "args": [
@@ -29,7 +36,6 @@
     // "sqlite": {
     //   "command": "uvx",
     //   "args": [
-    //     "--no-cache",
     //     "mcp-server-sqlite",
     //     "--db-path",
     //     "${workspaceFolder}/.cache/sqlite_mcp_server.db"
