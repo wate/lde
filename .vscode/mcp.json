@@ -13,7 +13,7 @@
       "args": [
         "mcp-server-sqlite",
         "--db-path",
-        "${workspaceFolder}/.cache/mcp_server.db"
+        "${workspaceFolder}/.cache/mcp.db"
       ],
     },
     "playwright": {
