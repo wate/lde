@@ -25,5 +25,4 @@
   </version>
   <!--Optional:-->
   <setting name="graphs.enabled" value="true" />
-  <setting name="guides.enabled" value="true" />
 </phpdocumentor>

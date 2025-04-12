@@ -72,6 +72,12 @@
             block: |
               export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"
               export TBLS_DOC_PATH="docs/schema"
+        - name: Add phpDocumentor Generate diagram setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} Generate diagrams ANSIBLE MANAGED BLOCK"
+            block: |
+              export PHPDOC_PLANTUML_BIN=/usr/bin/plantuml
         - name: Set git safe.directory setting
           community.general.git_config:
             name: safe.directory
@@ -85,22 +91,19 @@
             state: directory
             mode: "0755"
         - name: Add composer command completion setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} composer ANSIBLE MANAGED BLOCK"
-            block: eval "$(composer completion)"
+          ansible.builtin.shell:
+            cmd: composer completion >~/.local/share/bash-completion/completions/composer
+            creates: ~/.local/share/bash-completion/completions/composer
         - name: Add npm command completion setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} npm ANSIBLE MANAGED BLOCK"
-            block: eval "$(npm completion)"
+          ansible.builtin.shell:
+            cmd: npm completion >~/.local/share/bash-completion/completions/npm
+            creates: ~/.local/share/bash-completion/completions/npm
         - name: Add yarn command completion setting
           ansible.builtin.get_url:
             url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
             dest: ~/.local/share/bash-completion/completions/yarn
             mode: "0755"
         - name: Add phpDocumentor command completion setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} phpDocumentor ANSIBLE MANAGED BLOCK"
-            block: eval "$(phpdoc completion)"
+          ansible.builtin.shell:
+            cmd: phpdoc completion >~/.local/share/bash-completion/completions/phpdoc
+            creates: ~/.local/share/bash-completion/completions/phpdoc

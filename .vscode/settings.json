@@ -11,10 +11,25 @@
   },
   "github.copilot.chat.codeGeneration.instructions": [
     {
-      "file": "${workspaceFolder}/phpcs.xml"
+      "file": ".editorconfig"
     },
     {
-      "file": "${workspaceFolder}/phpstan.neon"
+      "file": "phpcs.xml"
+    },
+    {
+      "file": "phpstan.neon"
+    },
+    {
+      "file": ".prettierrc.yml"
+    },
+    {
+      "file": ".yamllint"
+    },
+    {
+      "file": ".markdownlint.yml"
+    },
+    {
+      "file": ".textlintrc.yml"
     }
   ]
 }
