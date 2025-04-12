@@ -105,8 +105,11 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
   pipx install ansible --include-deps
   pipx inject ansible ansible-lint --include-apps
 fi
+if [ ! -e ~/.local/pipx/venvs/uv ]; then
+  pipx install uv
+fi
 if [ ! -e ~/.local/pipx/venvs/gitingest ]; then
-  pipx install gitingest --include-deps
+  pipx install gitingest
 fi
 
 PROVISION_DIR=$(dirname $0)
