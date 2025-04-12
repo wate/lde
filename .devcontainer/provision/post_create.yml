@@ -14,6 +14,9 @@
       - pict
       - gitleaks
       - fnt
+      - graphviz
+      - plantuml
+      - mermaid-cli
       - zx
       - ni
       - phpDocumentor
@@ -44,10 +47,9 @@
             path: ~/.bashrc
             line: eval "$(direnv hook bash)"
         - name: Add eza setting
-          ansible.builtin.blockinfile:
+          ansible.builtin.lineinfile:
             path: ~/.bashrc
-            marker: "# {mark} eza ANSIBLE MANAGED BLOCK"
-            block: alias ls="eza --git --header"
+            line: alias ls="eza --git --header"
         - name: Setup bash-git-prompt
           block:
             - name: Checkout bash-git-prompt
