@@ -8,5 +8,13 @@
   },
   "files.associations": {
     "*.pict": "powershell",
-  }
+  },
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "file": "${workspaceFolder}/phpcs.xml"
+    },
+    {
+      "file": "${workspaceFolder}/phpstan.neon"
+    }
+  ]
 }
