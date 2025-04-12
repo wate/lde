@@ -16,6 +16,7 @@
       - fnt
       - zx
       - ni
+      - phpDocumentor
   roles:
     - role: tools
       become: true
@@ -98,3 +99,8 @@
             url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
             dest: ~/.local/share/bash-completion/completions/yarn
             mode: "0755"
+        - name: Add phpDocumentor command completion setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} phpDocumentor ANSIBLE MANAGED BLOCK"
+            block: eval "$(phpdoc completion)"
