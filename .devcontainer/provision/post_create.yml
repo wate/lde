@@ -4,9 +4,6 @@
   hosts: all
   connection: local
   become: false
-  module_defaults:
-    ansible.builtin.shell:
-      executable: /usr/bin/bash
   vars:
     base_dir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
     install_tools:
@@ -95,20 +92,20 @@
             path: ~/.local/share/bash-completion/completions
             state: directory
             mode: "0755"
-        - name: Add composer command completion setting
-          ansible.builtin.shell:
-            cmd: composer completion >~/.local/share/bash-completion/completions/composer
-            creates: ~/.local/share/bash-completion/completions/composer
         - name: Add npm command completion setting
-          ansible.builtin.shell:
-            cmd: npm completion >~/.local/share/bash-completion/completions/npm
-            creates: ~/.local/share/bash-completion/completions/npm
+          ansible.builtin.lineinfile:
+            path: ~/.bashrc
+            line: eval "$(npm completion)"
         - name: Add yarn command completion setting
           ansible.builtin.get_url:
             url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
             dest: ~/.local/share/bash-completion/completions/yarn
             mode: "0755"
+        - name: Add composer command completion setting
+          ansible.builtin.lineinfile:
+            path: ~/.bashrc
+            line: eval "$(composer completion)"
         - name: Add phpDocumentor command completion setting
-          ansible.builtin.shell:
-            cmd: phpdoc completion >~/.local/share/bash-completion/completions/phpdoc
-            creates: ~/.local/share/bash-completion/completions/phpdoc
+          ansible.builtin.lineinfile:
+            path: ~/.bashrc
+            line: eval "$(phpdoc completion)"
