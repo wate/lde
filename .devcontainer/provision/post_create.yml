@@ -5,6 +5,7 @@
   connection: local
   become: false
   vars:
+    base_dir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
     install_tools:
       - osv-scanner
       - delta

@@ -4,4 +4,16 @@
   hosts: all
   connection: local
   become: false
-  tasks: []
+  vars:
+    base_dir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+  tasks:
+    - name: Init mkdocs
+      ansible.builtin.command:
+        cmd: mkdocs new {{ base_dir }}
+        creates: "{{ base_dir }}/mkdocs.yml"
+        chdir: "{{ base_dir }}"
+    - name: Init task
+      ansible.builtin.command:
+        cmd: task --init
+        creates: "{{ base_dir }}/Taskfile.yml"
+        chdir: "{{ base_dir }}"
