@@ -40,6 +40,7 @@ repos:
       - id: textlint-fix
         exclude: ^docs/schema/.*$
         additional_dependencies:
+          - textlint
           - textlint-filter-rule-comments
           - textlint-rule-preset-ja-technical-writing
           - textlint-rule-preset-ja-spacing
@@ -52,6 +53,7 @@ repos:
       - id: textlint
         exclude: ^docs/schema/.*$
         additional_dependencies:
+          - textlint
           - textlint-filter-rule-comments
           - textlint-rule-preset-ja-technical-writing
           - textlint-rule-preset-ja-spacing
