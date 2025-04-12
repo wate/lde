@@ -4,6 +4,9 @@
   hosts: all
   connection: local
   become: false
+  module_defaults:
+    ansible.builtin.shell:
+      executable: /usr/bin/bash
   vars:
     base_dir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
     install_tools:
