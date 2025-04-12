@@ -105,6 +105,9 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
   pipx install ansible --include-deps
   pipx inject ansible ansible-lint --include-apps
 fi
+if [ ! -e ~/.local/pipx/venvs/gitingest ]; then
+  pipx install gitingest --include-deps
+fi
 
 PROVISION_DIR=$(dirname $0)
 ROLE_DIR="${PROVISION_DIR}/roles"
