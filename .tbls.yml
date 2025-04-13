@@ -3,7 +3,7 @@
 # tbls config file
 # --------------
 ### Name
-name: Database Schema
+name: テーブル定義書
 ### Description
 # desc: This is My Database
 ### Document path
