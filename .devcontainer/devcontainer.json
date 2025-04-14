@@ -42,7 +42,7 @@
         "redhat.ansible",
         "streetsidesoftware.code-spell-checker",
         "adpyke.vscode-sql-formatter",
-        "mtxr.sqltools"
+        "dbcode.dbcode"
       ]
     }
   },

@@ -5,16 +5,22 @@
   connection: local
   become: false
   vars:
+    base_dir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
     install_tools:
       - osv-scanner
       - delta
       - task
       - d2
       - pict
+      - duckdb
       - gitleaks
       - fnt
+      # - graphviz
+      # - plantuml
+      - mermaid-cli
       - zx
       - ni
+      - phpDocumentor
   roles:
     - role: tools
       become: true
@@ -42,10 +48,9 @@
             path: ~/.bashrc
             line: eval "$(direnv hook bash)"
         - name: Add eza setting
-          ansible.builtin.blockinfile:
+          ansible.builtin.lineinfile:
             path: ~/.bashrc
-            marker: "# {mark} eza ANSIBLE MANAGED BLOCK"
-            block: alias ls="eza --git --header"
+            line: alias ls="eza --git --header"
         - name: Setup bash-git-prompt
           block:
             - name: Checkout bash-git-prompt
@@ -70,6 +75,12 @@
             block: |
               export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"
               export TBLS_DOC_PATH="docs/schema"
+        - name: Add phpDocumentor Generate diagram setting
+          ansible.builtin.blockinfile:
+            path: ~/.bashrc
+            marker: "# {mark} Generate diagrams ANSIBLE MANAGED BLOCK"
+            block: |
+              export PHPDOC_PLANTUML_BIN=/usr/bin/plantuml
         - name: Set git safe.directory setting
           community.general.git_config:
             name: safe.directory
@@ -82,18 +93,16 @@
             path: ~/.local/share/bash-completion/completions
             state: directory
             mode: "0755"
-        - name: Add composer command completion setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} composer ANSIBLE MANAGED BLOCK"
-            block: eval "$(composer completion)"
         - name: Add npm command completion setting
-          ansible.builtin.blockinfile:
+          ansible.builtin.lineinfile:
             path: ~/.bashrc
-            marker: "# {mark} npm ANSIBLE MANAGED BLOCK"
-            block: eval "$(npm completion)"
+            line: eval "$(npm completion)"
         - name: Add yarn command completion setting
           ansible.builtin.get_url:
             url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
             dest: ~/.local/share/bash-completion/completions/yarn
             mode: "0755"
+        - name: Add composer command completion setting
+          ansible.builtin.lineinfile:
+            path: ~/.bashrc
+            line: eval "$(composer completion)"

@@ -4,6 +4,7 @@ cakephp
 direnv
 duckdb
 github
+gitingest
 gitleaks
 glightbox
 goaccess

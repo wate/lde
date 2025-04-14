@@ -1,7 +1,8 @@
 lde(Local Development Environment)
 =========
 
-ローカル開発環境を構築するためのスケルトンリポジトリです。  
+ローカル開発環境を構築するためのスケルトンリポジトリです。
+
 既存プロジェクトにこのリポジトリの内容ダウンロードし利用することを想定しています。
 
 利用環境
@@ -11,13 +12,13 @@ Vagrant + Ansibleの利用を想定しているおり、主にmacOSでの利用�
 ※VirtualBoxを利用する関係上、M1/M2 Macの環境は想定していません。
 
 ※VSCode + Dockerを前提とした[Dev containers](https://code.visualstudio.com/docs/devcontainers/containers)にも対応させていますが、  
-Vagarnt利用時ほど開発環境としての完成度は見込んでいません。  
+Vagrant利用時ほど開発環境としての完成度は見込んでいません。  
 (非エンジニア向けの動作確認環境としても利用可能という程度の想定です)
 
 必要なもの
 ------------
 
-以下のいずれかが必要になります
+以下のいずれかが必要になります。
 
 ### Vagrantを利用する場合
 
@@ -32,7 +33,7 @@ Vagarnt利用時ほど開発環境としての完成度は見込んでいませ�
     * 拡張機能：[Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
     * M1/M2 Macを利用している場合は`Apple Chip`版をインストールしてください。
-    * Windowsを利用している場合は別途`WSL`が必要になります。
+    * Windowsを利用している場合は別途`WSL`をインストールしてください。
 
 ※Remote Developmentの詳細については、以下の公式サイトを参照してください。  
 [Visual Studio Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview)
@@ -196,10 +197,10 @@ Vagrantのプロビジョニング時の設定を制御できます。
 
 各設定項目の詳細は以下のとおりです。
 
-* `tags`: `ansible-playbook`コマンドの`--tags`パラメーターに設定するタグを指定します。
-* `skip_tags`: `ansible-playbook`コマンドの`--skip-tags`パラメーターに設定するタグを指定します。
-* `role_update`: `ansible-galaxy`コマンドでインストールしたロールを更新するかどうかを指定します。
-* `extra_var`: `ansible-playbook`コマンドの`--extra-vars`パラメーターに設定する変数を指定します。
+* `tags`: `ansible-playbook`コマンドの`--tags`パラメーターに設定するタグを指定する。
+* `skip_tags`: `ansible-playbook`コマンドの`--skip-tags`パラメーターに設定するタグを指定する。
+* `role_update`: `ansible-galaxy`コマンドでインストールしたロールを更新するかどうかを指定する。
+* `extra_var`: `ansible-playbook`コマンドの`--extra-vars`パラメーターに設定する変数を指定する。
 
 ```yml
 ---

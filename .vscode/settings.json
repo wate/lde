@@ -9,26 +9,30 @@
   "files.associations": {
     "*.pict": "powershell",
   },
-  "sqltools.connections": [
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.codeGeneration.instructions": [
     {
-      "mysqlOptions": {
-        "authProtocol": "default",
-        "enableSsl": "Disabled"
-      },
-      "previewLimit": 50,
-      "server": "db",
-      "port": 3306,
-      "driver": "MariaDB",
-      "name": "lde",
-      "database": "app_dev",
-      "username": "app_dev",
-      "password": "app_dev_password"
+      "file": ".editorconfig"
     },
     {
-      "previewLimit": 50,
-      "driver": "SQLite",
-      "name": "sqlite",
-      "database": "./.cache/sqlite_mcp_server.db"
+      "file": "phpcs.xml"
+    },
+    {
+      "file": "phpstan.neon"
+    },
+    {
+      "file": ".prettierrc.yml"
+    },
+    {
+      "file": ".yamllint"
+    },
+    {
+      "file": ".markdownlint.yml"
+    },
+    {
+      "file": ".textlintrc.yml"
     }
-  ]
+  ],
+  // "github.copilot.chat.reviewSelection.instructions": [],
+  // "github.copilot.chat.commitMessageGeneration.instructions": [],
 }

@@ -1,14 +1,45 @@
 {
   "servers": {
+    "git": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "${workspaceFolder}"
+      ]
+    },
+    "sqlite": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-sqlite",
+        "--db-path",
+        "${workspaceFolder}/.cache/mcp.db"
+      ],
+    },
     "playwright": {
       "command": "npx",
       "args": [
+        "-y",
         "@playwright/mcp@latest"
       ]
     },
+    "time": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-time",
+        "--local-timezone=Asia/Tokyo"
+      ]
+    },
+    // "markitdown": {
+    //   "command": "uvx",
+    //   "args": [
+    //     "markitdown-mcp"
+    //   ]
+    // },
     // "brave-search": {
     //   "command": "npx",
     //   "args": [
+    //     "-y",
     //     "@modelcontextprotocol/server-brave-search"
     //   ],
     //   "env": {
@@ -19,25 +50,20 @@
     // },
     // "perplexity": {
     //   "command": "npx",
-    //   "args": ["server-perplexity-ask"],
+    //   "args": [
+    //     "-y",
+    //     "server-perplexity-ask"
+    //   ],
     //   "env": {
     //     // @see https://github.com/ppl-ai/modelcontextprotocol?tab=readme-ov-file#step-2-get-a-sonar-api-key
     //     "PERPLEXITY_API_KEY": "${env:PERPLEXITY_API_KEY}"
     //   },
     //   // "envFile": "${workspaceFolder}/.env",
     // },
-    // "sqlite": {
-    //   "command": "uvx",
-    //   "args": [
-    //     "--no-cache",
-    //     "mcp-server-sqlite",
-    //     "--db-path",
-    //     "${workspaceFolder}/.cache/sqlite_mcp_server.db"
-    //   ],
-    // }
     // "slack": {
     //   "command": "npx",
     //   "args": [
+    //     "-y",
     //     "@modelcontextprotocol/server-slack"
     //   ],
     //   "env": {
@@ -50,7 +76,6 @@
     // "meilisearch": {
     //   "command": "uvx",
     //   "args": [
-    //     "--no-cache",
     //     "meilisearch-mcp"
     //   ],
     //   "env": {
