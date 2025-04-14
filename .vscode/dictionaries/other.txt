@@ -33,6 +33,7 @@ phpredisadmin
 Repolib
 shopt
 silversearcher
+stan
 Taskfile
 venvs
 webroot
