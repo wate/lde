@@ -232,11 +232,12 @@ Vagrant.configure("2") do |config|
   end
   trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "halt_before.sh")
   if File.exist?(trigger_script_path)
-      config.trigger.before :halt do |trigger|
-        trigger.info = "Run before halt task"
-        trigger.run_remote = {
-          path: trigger_script_path
-        }
+    config.trigger.before :halt do |trigger|
+      trigger.info = "Run before halt task"
+      trigger.run_remote = {
+        path: trigger_script_path
+      }
+      trigger.on_error = :continue
     end
   end
   trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "destroy_before.sh")

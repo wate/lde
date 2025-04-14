@@ -29,6 +29,7 @@ logio
 nodesource
 nodistro
 noninteractive
+papp
 phpredisadmin
 Repolib
 shopt
