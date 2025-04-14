@@ -41,6 +41,8 @@ repos:
     hooks:
       - id: textlint-fix
         exclude: ^docs/schema/.*$
+        args:
+          - --fix
         additional_dependencies:
           - textlint
           - textlint-filter-rule-comments
