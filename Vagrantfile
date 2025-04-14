@@ -201,21 +201,52 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  unless ENV.has_key?("VAGRANT_TRIGGER_DISABLE") || ENV.has_key?("VAGRANT_TRIGGER_DISABLE_PROVISION")
+
+  TRIGGER_SCRIPT_DIR = ".devcontainer/vagrant_trigger"
+  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "up_after.sh")
+  if File.exist?(trigger_script_path)
+    config.trigger.after :up do |trigger|
+        trigger.info = "Run after up task"
+        trigger.run_remote = {
+          path: trigger_script_path
+        }
+    end
+  end
+  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "provision_before.sh")
+  if File.exist?(trigger_script_path)
+    config.trigger.before :provision do |trigger|
+        trigger.info = "Run before provision task"
+        trigger.run_remote = {
+          path: trigger_script_path
+        }
+    end
+  end
+  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "provision_after.sh")
+  if File.exist?(trigger_script_path)
     config.trigger.after :provision do |trigger|
-      trigger.info = "Restore Database(app_dev) Data"
+      trigger.info = "Run after provision task"
       trigger.run_remote = {
-        path: ".devcontainer/provision/vagrant_after_provision.sh"
+        path: trigger_script_path
       }
     end
   end
-  unless ENV.has_key?("VAGRANT_TRIGGER_DISABLE") && ENV.has_key?("VAGRANT_TRIGGER_DISABLE_DESTROY")
+  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "halt_before.sh")
+  if File.exist?(trigger_script_path)
+      config.trigger.before :halt do |trigger|
+        trigger.info = "Run before halt task"
+        trigger.run_remote = {
+          path: trigger_script_path
+        }
+    end
+  end
+  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "destroy_before.sh")
+  if File.exist?(trigger_script_path)
     config.trigger.before :destroy do |trigger|
-      trigger.info = "Backup Database(app_dev) Data"
-      trigger.on_error = :continue
+      trigger.info = "Run before destroy task"
       trigger.run_remote = {
-        path: ".devcontainer/provision/vagrant_before_destroy.sh"
+        path: trigger_script_path
       }
+      trigger.on_error = :continue
     end
   end
 end
