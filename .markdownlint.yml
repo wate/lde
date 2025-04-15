@@ -10,6 +10,8 @@ extends:
 # first-header-h1:
 #   level: 1
 ## MD003 - Heading style
+## ※h1とh2はsetext記法で、h3以降はatx記法で見出しを記述する
+## ※setext記法で記述する場合=または-の数は25個で固定する
 heading-style:
   style: setext_with_atx
 ## MD004 - Unordered list style
@@ -22,6 +24,7 @@ heading-style:
 ## MD007 - Unordered list indentation
 ul-indent:
   # Spaces for indent
+  # ※リスト形式のインデントは4スペースにする
   indent: 4
 #   # Whether to indent the first level of the list
 #   start_indented: false
@@ -86,8 +89,10 @@ line-length:
 # MD023 - Headings must start at the beginning of the line
 # header-start-left: true
 # MD024 - Multiple headings with the same content
+## 見出しの重複チェック
 no-duplicate-heading:
   # Only check sibling headings
+  ## ※同一セグメント内の同じレベルでの見出しのみ重複を禁止する
   siblings_only: true
 ## MD025 - Multiple top-level headings in the same document
 # single-title:
