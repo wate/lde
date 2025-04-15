@@ -355,6 +355,17 @@ mariadb_databases:
   - "{{ db_prod | combine({'encoding': 'utf8mb4', 'hosts': mariadb_conn_hosts}) }}"
 
 ## --------------
+## MariaDBの設定
+## --------------
+mariadb_mysqld_cfg:
+  bind_address: 0.0.0.0
+
+## --------------
+## データベースへの接続を許可するホスト(ufw)
+## --------------
+mariadb_allow_connect_other_host: any
+
+## --------------
 ## 接続を許可するホストの設定(PostgreSQL)
 ## --------------
 postgresql_pg_hba_cfg: |

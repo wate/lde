@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
   if forward_ports.empty?
     forward_ports = {
       "VAGRANT_FORWARD_PORT_HTTP" => "80 -> 8080",
+      "VAGRANT_FORWARD_PORT_DB" => "3306 -> 3306",
     }
   end
   forward_ports.each_value do |forward_port|
