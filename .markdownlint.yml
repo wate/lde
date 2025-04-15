@@ -81,11 +81,13 @@ line-length:
 ## MD021 - Multiple spaces inside hashes on closed atx style heading
 # no-multiple-space-closed-atx: true
 ## MD022 - Headings should be surrounded by blank lines
-# blanks-around-headers:
-#   # Blank lines above heading
-#   lines_above: 1
-#   # Blank lines below heading
-#   lines_below: 1
+blanks-around-headers:
+  # Blank lines above heading
+  ## ※見出しの上に空白行を1行入れる
+  lines_above: 1
+  # Blank lines below heading
+  ## ※見出しの下に空白行を1行入れる
+  lines_below: 1
 # MD023 - Headings must start at the beginning of the line
 # header-start-left: true
 # MD024 - Multiple headings with the same content
