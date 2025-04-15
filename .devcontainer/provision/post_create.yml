@@ -25,10 +25,6 @@
     - role: tools
       become: true
   tasks:
-    - name: Install bash-completion
-      ansible.builtin.apt:
-        name: bash-completion
-      become: true
     - name: Set user setting
       block:
         - name: Set git safe.directory setting

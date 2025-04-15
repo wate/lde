@@ -17,13 +17,13 @@ RUN . /etc/os-release \
   && apt-get install -y --no-install-recommends imagemagick \
   && apt-get install -y --no-install-recommends fonts-ipaexfont fnt \
   && apt-get install -y --no-install-recommends pipx \
-  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav sshpass \
+  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav xvfb sshpass \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 ## Install php module
 RUN docker-php-ext-install mysqli pdo pdo_mysql intl zip \
-	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
-	&& docker-php-ext-install -j$(nproc) gd
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install -j$(nproc) gd
 
 ## Install node.js and package manager
 ARG NODE_VERSION="22.x"
