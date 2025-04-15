@@ -6,9 +6,6 @@ extends:
 ### ------------------
 ## MD001 - Heading levels should only increment by one level at a time
 # heading-increment: true
-## MD002 - First heading should be a top-level heading
-# first-header-h1:
-#   level: 1
 ## MD003 - Heading style
 ## ※h1とh2はsetext記法で、h3以降はatx記法で見出しを記述する
 ## ※setext記法で記述する場合=または-の数は25個で固定する
@@ -24,7 +21,7 @@ heading-style:
 ## MD007 - Unordered list indentation
 ul-indent:
   # Spaces for indent
-  # ※リスト形式のインデントは4スペースにする
+  # ※リストをネストする場合のインデントは4スペースにする
   indent: 4
 #   # Whether to indent the first level of the list
 #   start_indented: false
