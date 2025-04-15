@@ -6,6 +6,7 @@
   "[css]": {
     "editor.wordSeparators": "`~!$%^&*()=+[{]}\\|;:'\",.<>/?"
   },
+  "files.defaultLanguage": "markdown",
   "files.associations": {
     "*.pict": "powershell",
   },
