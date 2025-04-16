@@ -12,3 +12,9 @@
     line: alias drawio='xvfb-run drawio'
     mode: "0644"
   when: "'drawio' in install_tools | default([])"
+- name: Set lazygit alias
+  ansible.builtin.lineinfile:
+    path: ~/.bash_aliases
+    line: alias lg='lazygit'
+    mode: "0644"
+  when: "'lazygit' in install_tools | default([])"
