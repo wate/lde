@@ -51,18 +51,6 @@
     //   // },
     //   // "envFile": "${workspaceFolder}/.env",
     // },
-    // "brave-search": {
-    //   "command": "npx",
-    //   "args": [
-    //     "-y",
-    //     "@modelcontextprotocol/server-brave-search"
-    //   ],
-    //   // "env": {
-    //   //   // @see https://brave.com/search/api/
-    //   //   "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
-    //   // },
-    //   // "envFile": "${workspaceFolder}/.env",
-    // },
     // "markitdown": {
     //   "command": "uvx",
     //   "args": [
