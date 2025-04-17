@@ -91,9 +91,6 @@ if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
   pipx inject mkdocs mkdocs-literate-nav mkdocs-section-index
   ## 作図関連プラグイン
   pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown mkdocs-drawio
-  ## PDF生成関連
-  sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
-  pipx inject mkdocs mkdocs-with-pdf
 fi
 if [ ! -e ~/.local/pipx/venvs/mycli ]; then
   pipx install mycli --include-deps
@@ -107,9 +104,6 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
 fi
 if [ ! -e ~/.local/pipx/venvs/uv ]; then
   pipx install uv
-fi
-if [ ! -e ~/.local/pipx/venvs/gitingest ]; then
-  pipx install gitingest
 fi
 
 PROVISION_DIR=$(dirname $0)

@@ -110,7 +110,6 @@ Vagrant利用時は以下のツールがインストールされています。
     * [mkdocs-drawio](https://github.com/tuunit/mkdocs-drawio)
     * [mkdocs-d2-plugin](https://github.com/landmaj/mkdocs-d2-plugin)
     * [plantuml-markdown](https://github.com/mikitex70/plantuml-markdown)
-    * [mkdocs-with-pdf](https://github.com/orzih/mkdocs-with-pdf/)
 * [mycli](https://www.mycli.net/)
 * [osv-scanner](https://github.com/google/osv-scanner)
 * [Task](https://taskfile.dev/)

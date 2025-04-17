@@ -143,5 +143,3 @@ plugins:
   # - blog
   ## https://squidfunk.github.io/mkdocs-material/plugins/offline/
   # - offline
-  ## https://github.com/orzih/mkdocs-with-pdf/
-  # - with-pdf

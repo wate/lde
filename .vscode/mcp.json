@@ -39,11 +39,17 @@
         "${workspaceFolder}/.cache/mcp.db"
       ],
     },
-    // "markitdown": {
-    //   "command": "uvx",
+    // "perplexity": {
+    //   "command": "npx",
     //   "args": [
-    //     "markitdown-mcp"
-    //   ]
+    //     "-y",
+    //     "server-perplexity-ask"
+    //   ],
+    //   // "env": {
+    //   //   // @see https://github.com/ppl-ai/modelcontextprotocol?tab=readme-ov-file#step-2-get-a-sonar-api-key
+    //   //   "PERPLEXITY_API_KEY": "${env:PERPLEXITY_API_KEY}"
+    //   // },
+    //   // "envFile": "${workspaceFolder}/.env",
     // },
     // "brave-search": {
     //   "command": "npx",
@@ -51,23 +57,17 @@
     //     "-y",
     //     "@modelcontextprotocol/server-brave-search"
     //   ],
-    //   "env": {
-    //     // @see https://brave.com/search/api/
-    //     "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
-    //   },
+    //   // "env": {
+    //   //   // @see https://brave.com/search/api/
+    //   //   "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+    //   // },
     //   // "envFile": "${workspaceFolder}/.env",
     // },
-    // "perplexity": {
-    //   "command": "npx",
+    // "markitdown": {
+    //   "command": "uvx",
     //   "args": [
-    //     "-y",
-    //     "server-perplexity-ask"
-    //   ],
-    //   "env": {
-    //     // @see https://github.com/ppl-ai/modelcontextprotocol?tab=readme-ov-file#step-2-get-a-sonar-api-key
-    //     "PERPLEXITY_API_KEY": "${env:PERPLEXITY_API_KEY}"
-    //   },
-    //   // "envFile": "${workspaceFolder}/.env",
+    //     "markitdown-mcp"
+    //   ]
     // },
     // "slack": {
     //   "command": "npx",
