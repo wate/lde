@@ -1,8 +1,10 @@
 ansible
 assh
 cakephp
+DBML
 direnv
 duckdb
+Gitflow
 github
 gitingest
 gitleaks

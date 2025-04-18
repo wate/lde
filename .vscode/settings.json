@@ -13,23 +13,8 @@
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
   "github.copilot.chat.codeGeneration.instructions": [
     {
-      "file": ".editorconfig"
+      "file": "docs/coding_style.md"
     },
-    {
-      "file": "phpcs.xml"
-    },
-    {
-      "file": "phpstan.neon"
-    },
-    {
-      "file": ".prettierrc.yml"
-    },
-    {
-      "file": ".markdownlint.yml"
-    },
-    {
-      "file": ".textlintrc.yml"
-    }
   ],
   // "github.copilot.chat.reviewSelection.instructions": [],
   // "github.copilot.chat.commitMessageGeneration.instructions": [],
