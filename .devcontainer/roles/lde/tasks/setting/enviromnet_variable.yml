@@ -1,6 +1,6 @@
 ---
 # code: language=ansible
-- name: Set user enviromnet variable
+- name: Set user environment variable
   ansible.builtin.blockinfile:
     path: ~/.bashrc
     marker: "# {mark} environment variable ANSIBLE MANAGED BLOCK"

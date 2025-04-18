@@ -7,7 +7,7 @@
     mode: "0755"
   loop:
     - .local/share/bash-completion/completions
-- name: Inclde bash completion setting tasks
+- name: Include bash completion setting tasks
   ansible.builtin.include_tasks:
     file: tasks/setting/bash_completion/{{ bash_completion_task | basename }}
   loop: "{{ lookup('fileglob', 'tasks/setting/bash_completion/*.yml', wantlist=True) }}"

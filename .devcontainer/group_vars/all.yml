@@ -2,10 +2,15 @@
 ## ---------
 ## インストールするPHPのバージョン
 ##
-## 対応バージョン：7.4 / 8.0 / 8.1 / 8.2 / **8.3**
-## 初期値：8.3
+## 対応バージョン：7.4 / 8.0 / 8.1 / 8.2 / 8.3 / **8.4**
+## 初期値：8.4
 ## ---------
-php_version: "8.3"
+php_version: "8.4"
+
+## --------------
+## ドキュメントルートのディレクトリ名
+## --------------
+# php_project_webroot: wwwroot
 
 ## --------------
 ## 利用するCakePHPのメジャーバージョン
@@ -17,23 +22,21 @@ cakephp_major_version: "5"
 ## --------------
 cakephp_project_additional_packages: []
 #   ## @see https://github.com/josegonzalez/php-dotenv
-#   - name: "josegonzalez/dotenv:^4.0"
+#   - name: "josegonzalez/dotenv"
 #   ## @see https://book.cakephp.org/authentication/3/en/index.html
-#   - name: "cakephp/authentication:^3.0"
-#   ## @see https://book.cakephp.org/authorization/3/en/index.html
-#   - name: "cakephp/authorization:^3.0"
+#   - name: "cakephp/authentication"
 #   ## @see https://symfony.com/doc/current/components/yaml.html
 #   - name: symfony/yaml
 #   ## @see https://github.com/cakephp/localized
-#   - name: "cakephp/localized:^5.0"
+#   - name: "cakephp/localized"
 #   ## @see https://github.com/robotusers/cakephp-table-inheritance
-#   # - name: robotusers/cakephp-table-inheritance
+#   - name: robotusers/cakephp-table-inheritance
 #   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
 #   - name: phpoffice/phpspreadsheet
 #   ## @see https://github.com/tecnickcom/TCPDF
 #   - name: tecnickcom/tcpdf
 #   ## @see https://github.com/arodu/cakelte
-#   - name: "arodu/cakelte:^2.0"
+#   - name: "arodu/cakelte"
 #   ## @see https://csv.thephpleague.com/
 #   - name: league/csv
 #   ## @see https://commonmark.thephpleague.com/
@@ -53,7 +56,7 @@ cakephp_project_additional_packages: []
 #   - name: fakerphp/faker
 #     dev: true
 #   ## https://github.com/dereuromark/cakephp-ide-helper
-#   - name: "dereuromark/cakephp-ide-helper:^2.0"
+#   - name: "dereuromark/cakephp-ide-helper"
 #     dev: true
 
 ## --------------
@@ -65,7 +68,7 @@ nginx_vhosts:
     server_name: "{{ domain }}"
     redirect_hosts:
       - "www.{{ domain }}"
-    document_root: /var/www/html{{ (php_project_web_dir | default('') | length > 1) | ternary('/' + php_project_web_dir | default(''), '') }}
+    document_root: /var/www/html{{ (php_project_webroot | default('') | length > 1) | ternary('/' + php_project_webroot | default(''), '') }}
     index:
       - index.html
       - index.php
@@ -79,7 +82,7 @@ nginx_vhosts:
       - pattern: "\\.php"
         match_type: "~"
         content: |
-          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.2') }}-fpm.sock;
+          fastcgi_pass unix:/var/run/php/php{{ php_version | default('8.4') }}-fpm.sock;
           include snippets/fastcgi-php.conf;
       - pattern: "/\\.ht"
         match_type: "~"
@@ -173,7 +176,7 @@ apache_vhosts:
   000-default:
     default_server: true
     server_name: "{{ domain }}"
-    document_root: /var/www/html{{ (php_project_web_dir | default('') | length > 1) | ternary('/' + php_project_web_dir | default(''), '') }}
+    document_root: /var/www/html{{ (php_project_webroot | default('') | length > 1) | ternary('/' + php_project_webroot | default(''), '') }}
     directory_index:
       - index.html
       - index.php
