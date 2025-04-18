@@ -18,6 +18,7 @@
   ],
   "chat.promptFiles": true,
   "chat.agent.enabled": true,
+  "ansible.python.interpreterPath": "/Users/wate/.pyenv/versions/3.12.3/bin/python",
   // "github.copilot.chat.reviewSelection.instructions": [],
   // "github.copilot.chat.commitMessageGeneration.instructions": [],
 }

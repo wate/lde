@@ -11,6 +11,7 @@ dotglob
 enmod
 envrc
 freetype
+fullwidth
 getmeili
 gierens
 gitprompt
