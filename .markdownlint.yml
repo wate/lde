@@ -68,7 +68,7 @@ line-length:
 #   # Stern length checking
 #   stern: false
 ## MD014 - Dollar signs used before commands without showing output
-# commands-show-output: true
+commands-show-output: true
 ## MD018 - No space after hash on atx style heading
 # no-missing-space-atx: true
 ## MD019 - Multiple spaces after hash on atx style heading
@@ -94,11 +94,11 @@ no-duplicate-heading:
   ## ※同一セグメント内の同じレベルでの見出しのみ重複を禁止する
   siblings_only: true
 ## MD025 - Multiple top-level headings in the same document
-# single-title:
-#   # Heading level
-#   level: 1
-#   # RegExp for matching title in front matter
-#   front_matter_title: "^\\s*title\\s*[:=]"
+single-title:
+  # Heading level
+  level: 1
+  # RegExp for matching title in front matter
+  front_matter_title: "^\\s*title\\s*[:=]"
 ## MD026 - Trailing punctuation in heading
 # no-trailing-punctuation:
 #   # Punctuation characters
