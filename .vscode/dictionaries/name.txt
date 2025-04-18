@@ -1,6 +1,7 @@
 ansible
 assh
 cakephp
+dbml
 DBML
 direnv
 duckdb

@@ -7,7 +7,7 @@
 - [データ構造](data_structure.md)
 - [利用技術](technology.md)
 - [ディレクトリ構造](directory_structure.md)
-- [コーディング規約](coding_style.md)
+- [コーディング規約](code_style.md)
 - [Gitの運用方法](git_operation.md)
 - [テスト方針](test_policy.md)
 - [デプロイ方法](deploy.md)
