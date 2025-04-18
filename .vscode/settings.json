@@ -16,6 +16,8 @@
       "file": "docs/code_style.md"
     },
   ],
+  "chat.promptFiles": true,
+  "chat.agent.enabled": true,
   // "github.copilot.chat.reviewSelection.instructions": [],
   // "github.copilot.chat.commitMessageGeneration.instructions": [],
 }
