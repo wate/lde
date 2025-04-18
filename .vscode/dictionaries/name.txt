@@ -8,6 +8,7 @@ dbml
 DBML
 direnv
 duckdb
+fastcgi
 Gitflow
 github
 gitingest
