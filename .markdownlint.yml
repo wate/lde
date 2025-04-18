@@ -126,7 +126,7 @@ single-title:
 #   # Include list items
 #   list_items: true
 ## MD032 - Lists should be surrounded by blank lines
-# blanks-around-lists: true
+blanks-around-lists: true
 ## MD033 - Inline HTML
 # no-inline-html:
 #   # Allowed elements
