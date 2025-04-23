@@ -35,14 +35,16 @@
         "shd101wyy.markdown-preview-enhanced",
         "xdebug.php-debug",
         "bmewburn.vscode-intelephense-client",
+        "SanderRonde.phpstan-vscode",
         "vscode-icons-team.vscode-icons",
         "oderwat.indent-rainbow",
+        "mechatroner.rainbow-csv",
         "hediet.vscode-drawio",
         "redhat.vscode-yaml",
         "redhat.ansible",
         "streetsidesoftware.code-spell-checker",
-        "adpyke.vscode-sql-formatter",
-        "dbcode.dbcode"
+        "dbcode.dbcode",
+        "adpyke.vscode-sql-formatter"
       ]
     }
   },

@@ -6,10 +6,9 @@ extends:
 ### ------------------
 ## MD001 - Heading levels should only increment by one level at a time
 # heading-increment: true
-## MD002 - First heading should be a top-level heading
-# first-header-h1:
-#   level: 1
 ## MD003 - Heading style
+## ※h1とh2はsetext記法で、h3以降はatx記法で見出しを記述する
+## ※setext記法で記述する場合=または-の数は25個で固定する
 heading-style:
   style: setext_with_atx
 ## MD004 - Unordered list style
@@ -22,6 +21,7 @@ heading-style:
 ## MD007 - Unordered list indentation
 ul-indent:
   # Spaces for indent
+  # ※リストをネストする場合のインデントは4スペースにする
   indent: 4
 #   # Whether to indent the first level of the list
 #   start_indented: false
@@ -68,7 +68,7 @@ line-length:
 #   # Stern length checking
 #   stern: false
 ## MD014 - Dollar signs used before commands without showing output
-# commands-show-output: true
+commands-show-output: true
 ## MD018 - No space after hash on atx style heading
 # no-missing-space-atx: true
 ## MD019 - Multiple spaces after hash on atx style heading
@@ -78,23 +78,27 @@ line-length:
 ## MD021 - Multiple spaces inside hashes on closed atx style heading
 # no-multiple-space-closed-atx: true
 ## MD022 - Headings should be surrounded by blank lines
-# blanks-around-headers:
-#   # Blank lines above heading
-#   lines_above: 1
-#   # Blank lines below heading
-#   lines_below: 1
+blanks-around-headers:
+  # Blank lines above heading
+  ## ※見出しの上に空白行を1行入れる
+  lines_above: 1
+  # Blank lines below heading
+  ## ※見出しの下に空白行を1行入れる
+  lines_below: 1
 # MD023 - Headings must start at the beginning of the line
 # header-start-left: true
 # MD024 - Multiple headings with the same content
+## 見出しの重複チェック
 no-duplicate-heading:
   # Only check sibling headings
+  ## ※同一セグメント内の同じレベルでの見出しのみ重複を禁止する
   siblings_only: true
 ## MD025 - Multiple top-level headings in the same document
-# single-title:
-#   # Heading level
-#   level: 1
-#   # RegExp for matching title in front matter
-#   front_matter_title: "^\\s*title\\s*[:=]"
+single-title:
+  # Heading level
+  level: 1
+  # RegExp for matching title in front matter
+  front_matter_title: "^\\s*title\\s*[:=]"
 ## MD026 - Trailing punctuation in heading
 # no-trailing-punctuation:
 #   # Punctuation characters
@@ -122,7 +126,7 @@ no-duplicate-heading:
 #   # Include list items
 #   list_items: true
 ## MD032 - Lists should be surrounded by blank lines
-# blanks-around-lists: true
+blanks-around-lists: true
 ## MD033 - Inline HTML
 # no-inline-html:
 #   # Allowed elements

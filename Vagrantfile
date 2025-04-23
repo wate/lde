@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
   if forward_ports.empty?
     forward_ports = {
       "VAGRANT_FORWARD_PORT_HTTP" => "80 -> 8080",
+      "VAGRANT_FORWARD_PORT_DB" => "3306 -> 3306",
     }
   end
   forward_ports.each_value do |forward_port|
@@ -203,51 +204,21 @@ Vagrant.configure("2") do |config|
   end
 
   TRIGGER_SCRIPT_DIR = ".devcontainer/vagrant_trigger"
-  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "up_after.sh")
-  if File.exist?(trigger_script_path)
-    config.trigger.after :up do |trigger|
-        trigger.info = "Run after up task"
-        trigger.run_remote = {
-          path: trigger_script_path
-        }
-    end
-  end
-  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "provision_before.sh")
-  if File.exist?(trigger_script_path)
-    config.trigger.before :provision do |trigger|
-        trigger.info = "Run before provision task"
-        trigger.run_remote = {
-          path: trigger_script_path
-        }
-    end
-  end
-  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "provision_after.sh")
-  if File.exist?(trigger_script_path)
-    config.trigger.after :provision do |trigger|
-      trigger.info = "Run after provision task"
-      trigger.run_remote = {
-        path: trigger_script_path
-      }
-    end
-  end
-  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "halt_before.sh")
-  if File.exist?(trigger_script_path)
-    config.trigger.before :halt do |trigger|
-      trigger.info = "Run before halt task"
-      trigger.run_remote = {
-        path: trigger_script_path
-      }
-      trigger.on_error = :continue
-    end
-  end
-  trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, "destroy_before.sh")
-  if File.exist?(trigger_script_path)
-    config.trigger.before :destroy do |trigger|
-      trigger.info = "Run before destroy task"
-      trigger.run_remote = {
-        path: trigger_script_path
-      }
-      trigger.on_error = :continue
+  trigger_scripts = {
+    "up_after.sh" => { event: :up, timing: :after },
+    "provision_before.sh" => { event: :provision, timing: :before },
+    "provision_after.sh" => { event: :provision, timing: :after },
+    "halt_before.sh" => { event: :halt, timing: :before, on_error: :continue },
+    "destroy_before.sh" => { event: :destroy, timing: :before, on_error: :continue }
+  }
+  trigger_scripts.each do |script, options|
+    trigger_script_path = File.join(TRIGGER_SCRIPT_DIR, script)
+    if File.exist?(trigger_script_path)
+      config.trigger.send(options[:timing], options[:event]) do |trigger|
+        trigger.info = "Run #{options[:timing]} #{options[:event]} task"
+        trigger.run_remote = { path: trigger_script_path }
+        trigger.on_error = options[:on_error] if options[:on_error]
+      end
     end
   end
 end

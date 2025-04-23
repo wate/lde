@@ -8,15 +8,13 @@ cakephp_major_version: "5"
 ## インストールする追加パッケージ
 ## --------------
 cakephp_project_additional_packages: []
-#   - name: "josegonzalez/dotenv:^4.0"
+#   - name: "josegonzalez/dotenv"
 #   ## @see https://book.cakephp.org/authentication/2/en/index.html
-#   - name: "cakephp/authentication:^3.0"
-#   ## @see https://book.cakephp.org/authorization/2/en/index.html
-#   - name: "cakephp/authorization:^3.0"
+#   - name: "cakephp/authentication"
 #   ## @see https://symfony.com/doc/current/components/yaml.html
 #   - name: symfony/yaml
 #   ## @see https://github.com/cakephp/localized
-#   - name: "cakephp/localized:^5.0"
+#   - name: "cakephp/localized"
 #   ## @see https://github.com/robotusers/cakephp-table-inheritance
 #   - name: robotusers/cakephp-table-inheritance
 #   ## @see https://phpspreadsheet.readthedocs.io/en/latest/
@@ -24,7 +22,7 @@ cakephp_project_additional_packages: []
 #   ## @see https://github.com/tecnickcom/TCPDF
 #   - name: tecnickcom/tcpdf
 #   ## @see https://github.com/arodu/cakelte
-#   - name: "arodu/cakelte:^2.0"
+#   - name: "arodu/cakelte"
 #   ## @see https://csv.thephpleague.com/
 #   - name: league/csv:^9.0
 #   ## @see https://commonmark.thephpleague.com/
@@ -46,7 +44,7 @@ cakephp_project_additional_packages: []
 #   - name: fakerphp/faker
 #     dev: true
 #   ## https://github.com/dereuromark/cakephp-ide-helper
-#   - name: "dereuromark/cakephp-ide-helper:^2.0"
+#   - name: "dereuromark/cakephp-ide-helper"
 #     dev: true
 
 ## --------------

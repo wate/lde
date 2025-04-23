@@ -11,6 +11,7 @@
       - delta
       - task
       - d2
+      - lazygit
       - pict
       - duckdb
       - gitleaks
@@ -25,10 +26,6 @@
     - role: tools
       become: true
   tasks:
-    - name: Install bash-completion
-      ansible.builtin.apt:
-        name: bash-completion
-      become: true
     - name: Set user setting
       block:
         - name: Set git safe.directory setting
@@ -43,14 +40,18 @@
             line: set completion-ignore-case On
             create: true
             mode: "0644"
-        - name: Add direnv setting
+        - name: Set direnv setting
           ansible.builtin.lineinfile:
             path: ~/.bashrc
             line: eval "$(direnv hook bash)"
-        - name: Add eza setting
+        - name: Set eza alias
           ansible.builtin.lineinfile:
             path: ~/.bashrc
             line: alias ls="eza --git --header"
+        - name: Set lazygit alias
+          ansible.builtin.lineinfile:
+            path: ~/.bashrc
+            line: alias lg="lazygit"
         - name: Setup bash-git-prompt
           block:
             - name: Checkout bash-git-prompt

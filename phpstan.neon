@@ -1,27 +1,8 @@
-# includes:
-# 	- phpstan.neon.dist
 parameters:
-  # 0：基本的なチェック、未知のクラス、未知の関数、`$this`上で呼び出された未知のメソッド、
-  #    それらのメソッドや関数に渡された引数の数が間違っている、常に未定義の変数をチェック
-  # 1：未定義の変数、`__call`と`__get`を持つクラスの未知のマジックメソッドとプロパティがある可能性がある
-  # 2：(`$this`だけでなく)すべての式で未知のメソッドをチェックしPHPDocsを検証する
-  # 3：戻り値の型、プロパティに割り当てられた型の確認
-  # 4：基本的なデッドコードチェック、`instanceof`やその他の型チェックが常にfalse、到達しない`else`文、
-  #    return後の到達不能コードなど
-  # 5：メソッドや関数に渡される引数の型チェック
-  # 6：タイプヒントの欠落を報告する
-  # 7：部分的に間違っている論理和型の報告 - 論理和型の一部の型にしか存在しないメソッドを呼び出した場合、
-  #    レベル7はそのことを報告し始めます(その他の不正確な状況も)
-  # 8：null可能な型に対するメソッド呼び出しとプロパティへのアクセスを報告する
-  # 9：混合型に厳密であること、この型で唯一許される操作は、この型を別の`mixed`に渡すことである
-  level: 6
-  # checkMissingIterableValueType: false
-  # treatPhpDocTypesAsCertain: false
-  # checkGenericClassInNonGenericObjectType: false
-  # bootstrapFiles:
-  #     - config/paths.php
-  paths:
-    - config
-    - src
-    # - app
-    - tests
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    checkGenericClassInNonGenericObjectType: false
+    # bootstrapFiles:
+    #   - config/bootstrap.php
+    paths:
+      - src/

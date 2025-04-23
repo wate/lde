@@ -6,33 +6,14 @@
   "[css]": {
     "editor.wordSeparators": "`~!$%^&*()=+[{]}\\|;:'\",.<>/?"
   },
+  "files.defaultLanguage": "markdown",
   "files.associations": {
     "*.pict": "powershell",
   },
-  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-  "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "file": ".editorconfig"
-    },
-    {
-      "file": "phpcs.xml"
-    },
-    {
-      "file": "phpstan.neon"
-    },
-    {
-      "file": ".prettierrc.yml"
-    },
-    {
-      "file": ".yamllint"
-    },
-    {
-      "file": ".markdownlint.yml"
-    },
-    {
-      "file": ".textlintrc.yml"
-    }
-  ],
+  "chat.promptFiles": true,
+  "chat.agent.enabled": true,
+  // "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  // "github.copilot.chat.codeGeneration.instructions": [],
   // "github.copilot.chat.reviewSelection.instructions": [],
   // "github.copilot.chat.commitMessageGeneration.instructions": [],
 }

@@ -1,10 +1,18 @@
 ansible
 assh
+bitbucket
+cakelte
 cakephp
+cheatsheet
+dbml
+DBML
 direnv
 duckdb
+fastcgi
+Gitflow
 github
 gitingest
+gitlab
 gitleaks
 glightbox
 goaccess
@@ -21,6 +29,7 @@ mycli
 mysqldump
 nginx
 pandoc
+pgcli
 phpdocumentor
 phpstorm
 pict
@@ -38,6 +47,7 @@ setext
 spamassassin
 sshpass
 tbls
+tcpdf
 textlint
 tldr
 virtualbox

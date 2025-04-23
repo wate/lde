@@ -1,8 +1,0 @@
----
-leantime_owner: vagrant
-leantime_group: vagrant
-
-## --------------
-## インストール先ディレクトリ
-## --------------
-leantime_dest: /var/www/leantime

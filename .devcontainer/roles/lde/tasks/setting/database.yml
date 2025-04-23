@@ -1,6 +1,6 @@
 ---
 # code: language=ansible
-- name: Inclde database conection setting tasks
+- name: Include database connection setting tasks
   ansible.builtin.include_tasks:
     file: tasks/setting/database/{{ database_connection_setting_task | basename }}
   loop: "{{ lookup('fileglob', 'tasks/setting/database/*.yml', wantlist=True) }}"
