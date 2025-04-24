@@ -22,6 +22,8 @@ rules:
       wordBoundary: true
   ### Language
   - expected: PHP
+    options:
+      wordBoundary: true
   - expected: Node.js
   - expected: Node.js
     patterns: node
