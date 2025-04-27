@@ -4,7 +4,9 @@ filters:
   comments: true
 rules:
   ## https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing
-  preset-ja-technical-writing: true
+  preset-ja-technical-writing:
+    no-mix-dearu-desumasu:
+      preferInList: "ですます"
   ## https://github.com/textlint-ja/textlint-rule-preset-ja-spacing
   preset-ja-spacing:
     ja-nakaguro-or-halfwidth-space-between-katakana: true
