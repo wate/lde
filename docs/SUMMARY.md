@@ -2,7 +2,7 @@
 =========================
 
 - [ホーム](index.md)
-- [機能](features/)
+- [機能](feature/)
 - [システム構成](architecture.md)
 - [データ構造](data_structure.md)
 - [利用技術](technology.md)
