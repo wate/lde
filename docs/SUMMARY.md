@@ -5,7 +5,7 @@
 - [機能](feature/)
 - [システム構成](architecture.md)
 - [データ構造](data_structure.md)
-- [利用技術](technology.md)
+- [技術スタック](technology.md)
 - [ディレクトリ構造](directory_structure.md)
 - [コーディング規約](code_style.md)
 - [Gitの運用方法](git_operation.md)
