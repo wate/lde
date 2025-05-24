@@ -3,6 +3,7 @@ autoremove
 autoupdate
 axllent
 behaviour
+bizud
 CAKECORE
 CAKEMODEL
 dearmor
@@ -15,6 +16,7 @@ fullwidth
 getmeili
 gierens
 gitprompt
+imagick
 initdb
 inputrc
 ipaexfont
@@ -23,10 +25,13 @@ josegonzalez
 libfreetype
 libicu
 libjpeg
+libmagickwand
 libpango
 libpangoft
 libzip
 logio
+mincho
+morisawa
 mysqld
 nodesource
 nodistro

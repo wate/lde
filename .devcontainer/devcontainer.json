@@ -1,5 +1,5 @@
 {
-  "name": "PHP & MariaDB",
+  "name": "php dev container",
   "dockerComposeFile": "compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
@@ -27,7 +27,6 @@
         "sql-formatter.uppercase": true
       },
       "extensions": [
-        "mikestead.dotenv",
         "EditorConfig.EditorConfig",
         "yzhang.markdown-all-in-one",
         "DavidAnson.vscode-markdownlint",
@@ -35,16 +34,18 @@
         "shd101wyy.markdown-preview-enhanced",
         "xdebug.php-debug",
         "bmewburn.vscode-intelephense-client",
-        "SanderRonde.phpstan-vscode",
+        "esbenp.prettier-vscode",
         "vscode-icons-team.vscode-icons",
+        "mikestead.dotenv",
         "oderwat.indent-rainbow",
         "mechatroner.rainbow-csv",
+        "Terrastruct.d2",
         "hediet.vscode-drawio",
         "redhat.vscode-yaml",
         "redhat.ansible",
         "streetsidesoftware.code-spell-checker",
-        "dbcode.dbcode",
-        "adpyke.vscode-sql-formatter"
+        "adpyke.vscode-sql-formatter",
+        "dbcode.dbcode"
       ]
     }
   },
@@ -53,7 +54,8 @@
     8080,
     8025,
     1025,
-    3306
+    3306,
+    7700
   ],
   "postCreateCommand": "if [ -f .devcontainer/provision/post_create.sh ]; then bash .devcontainer/provision/post_create.sh; fi",
   "postStartCommand": "if [ -f .devcontainer/provision/post_start.sh ]; then bash .devcontainer/provision/post_start.sh; fi",

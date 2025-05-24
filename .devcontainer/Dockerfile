@@ -14,8 +14,8 @@ RUN . /etc/os-release \
   && apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install -y --no-install-recommends mariadb-client libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libzip-dev \
   && apt-get install -y --no-install-recommends bash-completion build-essential gpg vim \
-  && apt-get install -y --no-install-recommends imagemagick \
-  && apt-get install -y --no-install-recommends fonts-ipaexfont fnt \
+  && apt-get install -y --no-install-recommends imagemagick libmagickwand-dev \
+  && apt-get install -y --no-install-recommends fonts-ipaexfont fonts-morisawa-bizud-gothic fonts-morisawa-bizud-mincho fnt \
   && apt-get install -y --no-install-recommends pipx \
   && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav xvfb sshpass \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
@@ -23,7 +23,9 @@ RUN . /etc/os-release \
 ## Install php module
 RUN docker-php-ext-install mysqli pdo pdo_mysql intl zip \
   && docker-php-ext-configure gd --with-freetype --with-jpeg \
-  && docker-php-ext-install -j$(nproc) gd
+  && docker-php-ext-install -j$(nproc) gd \
+  && pecl install imagick \
+  && docker-php-ext-enable imagick
 
 ## Install node.js and package manager
 ARG NODE_VERSION="22.x"
