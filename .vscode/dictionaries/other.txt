@@ -38,6 +38,7 @@ nodistro
 noninteractive
 papp
 phpredisadmin
+pymysql
 Repolib
 shopt
 silversearcher
