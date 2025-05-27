@@ -2,6 +2,7 @@ antfu
 autoremove
 autoupdate
 axllent
+bcmath
 behaviour
 bizud
 CAKECORE
