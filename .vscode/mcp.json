@@ -47,7 +47,7 @@
     //   //   // @see https://github.com/ppl-ai/modelcontextprotocol?tab=readme-ov-file#step-2-get-a-sonar-api-key
     //   //   "PERPLEXITY_API_KEY": "${env:PERPLEXITY_API_KEY}"
     //   // },
-    //   // "envFile": "${workspaceFolder}/.env",
+    //   // "envFile": ".env",
     // },
     // "markitdown": {
     //   "command": "uvx",
@@ -66,7 +66,7 @@
     //     "SLACK_BOT_TOKEN": "${env:SLACK_BOT_TOKEN}",
     //     "SLACK_TEAM_ID": "${env:SLACK_TEAM_ID}"
     //   },
-    //   // "envFile": "${workspaceFolder}/.env",
+    //   // "envFile": ".env",
     // },
     // "meilisearch": {
     //   "command": "uvx",
@@ -77,7 +77,7 @@
     //     "MEILI_HTTP_ADDR": "${env:MEILI_HTTP_ADDR}",
     //     "MEILI_MASTER_KEY": "${env:MEILI_MASTER_KEY}"
     //   },
-    //   // "envFile": "${workspaceFolder}/.env",
+    //   // "envFile": ".env",
     // }
   }
 }
