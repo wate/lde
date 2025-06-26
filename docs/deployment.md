@@ -9,9 +9,9 @@ GitHub Actionsで各ブランチごとの対応環境に自動でデプロイさ
 
 以下の2つが必要になります。
 
-* [Ansible](https://www.ansible.com/)がインストールされている
-    * インストール方法は[Installation Guide](https://docs.ansible.com/ansible/latest/installation_guide/index.html)を参照してください
-* 各デプロイ環境にSSH接続ができる
+- [Ansible](https://www.ansible.com/)がインストールされている
+    - インストール方法は[Installation Guide](https://docs.ansible.com/ansible/latest/installation_guide/index.html)を参照してください
+- 各デプロイ環境にSSH接続ができる
 
 手動デプロイ方法
 -------------------------

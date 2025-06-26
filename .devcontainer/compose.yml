@@ -8,11 +8,15 @@ services:
         NODE_VERSION: "22.x"
     environment:
       TZ: Asia/Tokyo
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+      GH_TOKEN: "${GH_TOKEN:-${GITHUB_TOKEN}}"
     volumes:
       - ..:/workspace:cached
       - ./php/z-custom.ini:/usr/local/etc/php/conf.d/z-custom.ini
     # command: sleep infinity
     command: /usr/local/bin/apache2-foreground
+    ports:
+      - "8080:8080"
     depends_on:
       - db
   db:
@@ -36,6 +40,12 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
+    environment:
+      TZ: Asia/Tokyo
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    ports:
+      - "7700:7700"
     environment:
       TZ: Asia/Tokyo
 volumes:
