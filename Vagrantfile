@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
   # --------
   # Vagrant boxes
   # --------
-  config.vm.box = ENV["VAGRANT_VM_IMAGE"] || "wate/debian-12"
+  config.vm.box = ENV["VAGRANT_VM_IMAGE"] || "bento/debian-13"
   # config.vm.box_check_update = false
 
   # --------
