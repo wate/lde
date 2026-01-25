@@ -88,14 +88,14 @@
               ## Nginx / Apache
               - 80 in listen_tcp_posts
             quiet: true
-        - name: SpamAssasinの稼働状態を検証
+        - name: SpamAssassinの稼働状態を検証
           ansible.builtin.assert:
             that:
               - ansible_facts.services['spamd.service'] is defined
               - ansible_facts.services['spamd.service']['state'] == 'running'
               - ansible_facts.services['spamd.service']['status'] == 'enabled'
             quiet: true
-        - name: SpammAssasinの待受ポートを検証
+        - name: SpamAssassinの待受ポートを検証
           ansible.builtin.assert:
             that:
               - 783 in listen_tcp_posts
@@ -157,3 +157,66 @@
             that:
               - 7700 in listen_tcp_posts
             quiet: true
+        - name: Dehydratedのパッケージインストール状況を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.packages['dehydrated'] is defined
+            quiet: true
+        - name: Dehydrated設定ディレクトリの確認
+          ansible.builtin.stat:
+            path: /etc/dehydrated
+          register: dehydrated_config_result
+        - name: Dehydrated設定ディレクトリの検証
+          ansible.builtin.assert:
+            that:
+              - dehydrated_config_result.stat.exists
+              - dehydrated_config_result.stat.isdir
+            quiet: true
+        - name: Logrotateのパッケージインストール状況を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.packages['logrotate'] is defined
+            quiet: true
+        - name: Logrotate設定ディレクトリの確認
+          ansible.builtin.stat:
+            path: /etc/logrotate.d
+          register: logrotate_config_result
+        - name: Logrotate設定ディレクトリの検証
+          ansible.builtin.assert:
+            that:
+              - logrotate_config_result.stat.exists
+              - logrotate_config_result.stat.isdir
+            quiet: true
+        - name: Resticのパッケージインストール状況を検証
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.packages['restic'] is defined
+            quiet: true
+        - name: バックアップベースディレクトリの確認
+          ansible.builtin.stat:
+            path: /backup
+          register: backup_base_result
+        - name: バックアップベースディレクトリの検証
+          ansible.builtin.assert:
+            that:
+              - backup_base_result.stat.exists
+              - backup_base_result.stat.isdir
+            quiet: true
+        - name: バックアップサブディレクトリの確認
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          register: backup_subdir_results
+          loop:
+            - /backup/script
+            - /backup/data
+            - /backup/repo
+            - /backup/password
+        - name: バックアップサブディレクトリの検証
+          ansible.builtin.assert:
+            that:
+              - item.stat.exists
+              - item.stat.isdir
+            quiet: true
+          loop: "{{ backup_subdir_results.results }}"
+          loop_control:
+            label: "{{ item.item }}"

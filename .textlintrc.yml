@@ -7,6 +7,8 @@ rules:
   preset-ja-technical-writing:
     no-mix-dearu-desumasu:
       preferInList: "ですます"
+  ## https://github.com/textlint-ja/textlint-rule-preset-ai-writing
+  textlint-rule-preset-ai-writing: true
   ## https://github.com/textlint-ja/textlint-rule-preset-ja-spacing
   preset-ja-spacing:
     ja-nakaguro-or-halfwidth-space-between-katakana: true
