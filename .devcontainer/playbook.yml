@@ -5,9 +5,30 @@
   become: true
   gather_facts: true
   pre_tasks:
-    - name: Update package cache
-      ansible.builtin.apt:
-        update_cache: true
+    - name: Verify required environment variables are set
+      ansible.builtin.assert:
+        that: lookup('env', var_name) | length > 1
+        quiet: true
+        fail_msg: "Environment variable '{{ var_name }}' is not defined or empty"
+      loop: "{{ assert_environments | default([]) }}"
+      loop_control:
+        loop_var: var_name
+        label: "{{ var_name }}"
+    - name: Modernize apt sources to deb822 format
+      ansible.builtin.command:
+        cmd: apt modernize-sources -y
+        removes: /etc/apt/sources.list
+    - name: Update Debian repository mirror to Japanese server
+      ansible.builtin.replace:
+        path: /etc/apt/sources.list.d/debian.sources
+        regexp: 'http://.*\.debian\.org/debian/'
+        replace: "http://ftp.jp.debian.org/debian/"
+    - name: Lifecycle prepare process
+      block:
+        - name: Update package cache and upgrade packages
+          ansible.builtin.apt:
+            update_cache: "{{ pre_task_update_cache | default(true)  }}"
+            upgrade: "{{ pre_task_update_package | default(true) }}"
   roles:
     - role: common
       tags: role_common
@@ -25,18 +46,19 @@
     #   tags: role_apache
     - role: dehydrated
       tags: role_dehydrated
-    - role: redis
-      tags: role_redis
-    - role: spamassassin
-      tags: role_spamassassin
-    - role: mailpit
-      tags: role_mailpit
     - role: tools
       tags: role_tools
     - role: backup
       tags: role_backup
     - role: logrotate
       tags: role_logrotate
+    ## 開発環境用
+    - role: spamassassin
+      tags: role_spamassassin
+    - role: mailpit
+      tags: role_mailpit
+    - role: redis
+      tags: role_redis
     - role: phpredisadmin
       tags: role_phpredisadmin
     - role: logio
@@ -46,6 +68,7 @@
     - role: lde
       become: false
       tags: role_lde
+    ## その他
     - role: font
       tags:
         - role_font
@@ -55,6 +78,10 @@
       tags:
         - role_webfont
         - doc_font
+    ## 運用保守
+    - role: report
+      tags: role_report
+    ## アプリケーション
     # - role: cakephp
     #   become: false
     #   tags: role_cakephp
@@ -99,6 +126,12 @@
               loop_control:
                 loop_var: custom_script_template
                 label: "{{ (custom_script_template | basename)[:-6] }}"
+  post_tasks:
+    - name: Lifecycle teardown process
+      block:
+        - name: Cleanup packages
+          ansible.builtin.apt:
+            autoremove: true
     - name: Update .pre-commit-config.yaml
       become: false
       ansible.builtin.command:

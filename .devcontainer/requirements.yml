@@ -45,6 +45,9 @@ roles:
   - name: backup
     src: https://github.com/wate/ansible-role-backup
     version: develop
+  - name: report
+    src: https://github.com/wate/ansible-role-report
+    version: main
   - name: meilisearch
     src: https://github.com/wate/ansible-role-meilisearch
     version: develop

@@ -132,7 +132,6 @@ Vagrant.configure("2") do |config|
   end
   ## Ansible roles update
   provision_role_update = !File.exist?(ANSIBLE_GALAXY_ROLES_PATH)
-  ## Ansible provision tags
   ansible_provision_tags = []
   ansible_provision_skip_tags = []
   provision_config = nil
@@ -148,8 +147,17 @@ Vagrant.configure("2") do |config|
     if provision_config.key?("role_update") && !provision_config["role_update"].nil?
       provision_role_update = provision_config["role_update"]
     end
-    if provision_config.key?("raw_arguments") && !provision_config["raw_arguments"].nil?
-      ansible_raw_arguments.concat(provision_config["raw_arguments"]).uniq!
+    if provision_config.key?("extra_var") && !provision_config["extra_var"].nil?
+      ansible_extra_vars.merge!(provision_config["extra_var"])
+    end
+    if provision_config.key?("pre_task") && !provision_config["pre_task"].nil?
+      pre_task_setting = provision_config["pre_task"]
+      if pre_task_setting.key?("update_cache") && !pre_task_setting["update_cache"].nil?
+        ansible_extra_vars["pre_task_update_cache"] = pre_task_setting["update_cache"]
+      end
+      if pre_task_setting.key?("update_package") && !pre_task_setting["update_package"].nil?
+        ansible_extra_vars["pre_task_update_package"] = pre_task_setting["update_package"]
+      end
     end
     if provision_config.key?("tags") && !provision_config["tags"].nil?
       ansible_provision_tags = provision_config["tags"]
@@ -157,8 +165,8 @@ Vagrant.configure("2") do |config|
     if provision_config.key?("skip_tags") && !provision_config["skip_tags"].nil?
       ansible_provision_skip_tags = provision_config["skip_tags"]
     end
-    if provision_config.key?("extra_var") && !provision_config["extra_var"].nil?
-      ansible_extra_vars.merge!(provision_config["extra_var"])
+    if provision_config.key?("raw_arguments") && !provision_config["raw_arguments"].nil?
+      ansible_raw_arguments.concat(provision_config["raw_arguments"]).uniq!
     end
   end
 
