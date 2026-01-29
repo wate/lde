@@ -134,7 +134,6 @@ Vagrant.configure("2") do |config|
   provision_role_update = !File.exist?(ANSIBLE_GALAXY_ROLES_PATH)
   ansible_provision_tags = []
   ansible_provision_skip_tags = []
-  ansible_raw_arguments = []
   provision_config = nil
   provision_config_file_dirs = [".", LDE_CONFIG_DIR]
   provision_config_file_dirs.each do |target_dir|
