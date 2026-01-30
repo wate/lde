@@ -1,0 +1,157 @@
+---
+# code: language=ansible
+# Verify development environment services
+- name: Verify Log.io server is running
+  tags:
+    - verify
+    - verify_development
+    - verify_logio
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['log.io-server.service'] is defined
+      - ansible_facts.services['log.io-server.service']['state'] == 'running'
+      - ansible_facts.services['log.io-server.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Log.io server is not running"
+    success_msg: "Log.io server is running"
+- name: Verify Log.io server listening ports
+  tags:
+    - verify
+    - verify_development
+    - verify_logio
+  ansible.builtin.assert:
+    that:
+      - 6688 in listen_tcp_posts
+      - 6689 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Log.io server is not listening on ports 6688/6689"
+    success_msg: "Log.io server is listening on ports 6688/6689"
+- name: Verify Log.io file input is running
+  tags:
+    - verify
+    - verify_development
+    - verify_logio
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['log.io-file-input.service'] is defined
+      - ansible_facts.services['log.io-file-input.service']['state'] == 'running'
+      - ansible_facts.services['log.io-file-input.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Log.io file input is not running"
+    success_msg: "Log.io file input is running"
+- name: Verify Meilisearch is running
+  tags:
+    - verify
+    - verify_development
+    - verify_meilisearch
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['meilisearch.service'] is defined
+      - ansible_facts.services['meilisearch.service']['state'] == 'running'
+      - ansible_facts.services['meilisearch.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Meilisearch is not running"
+    success_msg: "Meilisearch is running"
+- name: Verify Meilisearch listening port
+  tags:
+    - verify
+    - verify_development
+    - verify_meilisearch
+  ansible.builtin.assert:
+    that:
+      - 7700 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Meilisearch is not listening on port 7700"
+    success_msg: "Meilisearch is listening on port 7700"
+- name: Verify SpamAssassin installation
+  tags:
+    - verify
+    - verify_development
+    - verify_spamassassin
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.packages['spamassassin'] is defined
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "SpamAssassin is not installed"
+    success_msg: "SpamAssassin is installed"
+- name: Verify SpamAssassin is running
+  tags:
+    - verify
+    - verify_development
+    - verify_spamassassin
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['spamd.service'] is defined
+      - ansible_facts.services['spamd.service']['state'] == 'running'
+      - ansible_facts.services['spamd.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "SpamAssassin is not running"
+    success_msg: "SpamAssassin is running"
+- name: Verify SpamAssassin listening port
+  tags:
+    - verify
+    - verify_development
+    - verify_spamassassin
+  ansible.builtin.assert:
+    that:
+      - 783 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "SpamAssassin is not listening on port 783"
+    success_msg: "SpamAssassin is listening on port 783"
+- name: Check SpamAssassin configuration directory
+  ansible.builtin.stat:
+    path: /etc/spamassassin
+  register: spamassassin_config_dir_result
+- name: Verify SpamAssassin configuration directory exists
+  tags:
+    - verify
+    - verify_development
+    - verify_spamassassin
+  ansible.builtin.assert:
+    that:
+      - spamassassin_config_dir_result.stat.exists
+      - spamassassin_config_dir_result.stat.isdir
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "SpamAssassin configuration directory does not exist"
+    success_msg: "SpamAssassin configuration directory exists"
+- name: Verify Mailpit is running
+  tags:
+    - verify
+    - verify_development
+    - verify_mailpit
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['mailpit.service'] is defined
+      - ansible_facts.services['mailpit.service']['state'] == 'running'
+      - ansible_facts.services['mailpit.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Mailpit is not running"
+    success_msg: "Mailpit is running"
+- name: Verify Mailpit listening ports
+  tags:
+    - verify
+    - verify_development
+    - verify_mailpit
+  ansible.builtin.assert:
+    that:
+      - 1025 in listen_tcp_posts
+      - 8025 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Mailpit is not listening on ports 1025/8025"
+    success_msg: "Mailpit is listening on ports 1025/8025"
+- name: Check Mailpit data directory
+  ansible.builtin.stat:
+    path: /var/mailpit
+  register: mailpit_data_dir_result
+- name: Verify Mailpit data directory exists
+  tags:
+    - verify
+    - verify_development
+    - verify_mailpit
+  ansible.builtin.assert:
+    that:
+      - mailpit_data_dir_result.stat.exists
+      - mailpit_data_dir_result.stat.isdir
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Mailpit data directory does not exist"
+    success_msg: "Mailpit data directory exists"

@@ -2,6 +2,9 @@
 # code: language=ansible
 # Verify web server
 - name: Verify web server installation
+  tags:
+    - verify
+    - verify_web
   ansible.builtin.assert:
     that:
       - ansible_facts.packages[web_server] is defined
@@ -9,6 +12,9 @@
     fail_msg: "Web server ({{ web_server }}) is not installed"
     success_msg: "Web server ({{ web_server }}) is installed"
 - name: Verify web server is running
+  tags:
+    - verify
+    - verify_web
   ansible.builtin.assert:
     that:
       - ansible_facts.services[web_server + '.service'] is defined
@@ -18,6 +24,9 @@
     fail_msg: "Web server ({{ web_server }}) is not running"
     success_msg: "Web server ({{ web_server }}) is running"
 - name: Verify web server listening port
+  tags:
+    - verify
+    - verify_web
   ansible.builtin.assert:
     that:
       - 80 in listen_tcp_posts

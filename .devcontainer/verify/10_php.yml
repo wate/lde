@@ -2,6 +2,9 @@
 # code: language=ansible
 # Verify PHP-FPM is running
 - name: Verify PHP-FPM is running
+  tags:
+    - verify
+    - verify_php
   ansible.builtin.assert:
     that:
       - ansible_facts.services[php_fpm_name + '.service'] is defined

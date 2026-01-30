@@ -2,6 +2,10 @@
 # code: language=ansible
 # Verify SSL/TLS configuration
 - name: Verify Dehydrated installation
+  tags:
+    - verify
+    - verify_ssl
+    - verify_dehydrated
   ansible.builtin.assert:
     that:
       - ansible_facts.packages['dehydrated'] is defined
@@ -13,6 +17,10 @@
     path: /etc/dehydrated
   register: dehydrated_config_result
 - name: Verify Dehydrated configuration directory
+  tags:
+    - verify
+    - verify_ssl
+    - verify_dehydrated
   ansible.builtin.assert:
     that:
       - dehydrated_config_result.stat.exists

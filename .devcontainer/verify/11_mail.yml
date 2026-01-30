@@ -1,36 +1,49 @@
 ---
 # code: language=ansible
 # Verify mail services
-- name: Verify SpamAssassin is running
+- name: Verify Postfix installation
+  tags:
+    - verify
+    - verify_postfix
   ansible.builtin.assert:
     that:
-      - ansible_facts.services['spamd.service'] is defined
-      - ansible_facts.services['spamd.service']['state'] == 'running'
-      - ansible_facts.services['spamd.service']['status'] == 'enabled'
+      - ansible_facts.packages['postfix'] is defined
     quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "SpamAssassin is not running"
-    success_msg: "SpamAssassin is running"
-- name: Verify SpamAssassin listening port
+    fail_msg: "Postfix is not installed"
+    success_msg: "Postfix is installed"
+- name: Verify Postfix is running
+  tags:
+    - verify
+    - verify_postfix
   ansible.builtin.assert:
     that:
-      - 783 in listen_tcp_posts
+      - ansible_facts.services['postfix.service'] is defined
+      - ansible_facts.services['postfix.service']['state'] == 'running'
+      - ansible_facts.services['postfix.service']['status'] == 'enabled'
     quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "SpamAssassin is not listening on port 783"
-    success_msg: "SpamAssassin is listening on port 783"
-- name: Verify Mailpit is running
+    fail_msg: "Postfix is not running"
+    success_msg: "Postfix is running"
+- name: Check Postfix configuration
+  ansible.builtin.stat:
+    path: /etc/postfix/main.cf
+  register: postfix_config_result
+- name: Verify Postfix configuration exists
+  tags:
+    - verify
+    - verify_postfix
   ansible.builtin.assert:
     that:
-      - ansible_facts.services['mailpit.service'] is defined
-      - ansible_facts.services['mailpit.service']['state'] == 'running'
-      - ansible_facts.services['mailpit.service']['status'] == 'enabled'
+      - postfix_config_result.stat.exists
     quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "Mailpit is not running"
-    success_msg: "Mailpit is running"
-- name: Verify Mailpit listening ports
+    fail_msg: "Postfix configuration file does not exist"
+    success_msg: "Postfix configuration file exists"
+- name: Verify Postfix listening port
+  tags:
+    - verify
+    - verify_postfix
   ansible.builtin.assert:
     that:
-      - 1025 in listen_tcp_posts
-      - 8025 in listen_tcp_posts
+      - 25 in listen_tcp_posts
     quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "Mailpit is not listening on ports 1025/8025"
-    success_msg: "Mailpit is listening on ports 1025/8025"
+    fail_msg: "Postfix is not listening on port 25"
+    success_msg: "Postfix is listening on port 25"

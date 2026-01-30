@@ -7,6 +7,9 @@
   become: false
   register: src_symlink_result
 - name: Verify symlink configuration
+  tags:
+    - verify
+    - verify_filesystem
   ansible.builtin.assert:
     that:
       - src_symlink_result.stat.exists

@@ -2,6 +2,10 @@
 # code: language=ansible
 # Verify backup configuration
 - name: Verify Restic installation
+  tags:
+    - verify
+    - verify_backup
+    - verify_restic
   ansible.builtin.assert:
     that:
       - ansible_facts.packages['restic'] is defined
@@ -13,6 +17,9 @@
     path: /backup
   register: backup_base_result
 - name: Verify backup base directory
+  tags:
+    - verify
+    - verify_backup
   ansible.builtin.assert:
     that:
       - backup_base_result.stat.exists
@@ -30,6 +37,9 @@
     - /backup/repo
     - /backup/password
 - name: Verify backup subdirectories
+  tags:
+    - verify
+    - verify_backup
   ansible.builtin.assert:
     that:
       - item.stat.exists

@@ -2,6 +2,9 @@
 # code: language=ansible
 # Verify package installation status
 - name: Verify installed packages
+  tags:
+    - verify
+    - verify_base
   ansible.builtin.assert:
     that:
       - ansible_facts.packages['mariadb-server'] is defined

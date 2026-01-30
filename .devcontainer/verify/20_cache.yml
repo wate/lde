@@ -1,7 +1,11 @@
 ---
 # code: language=ansible
-# Verify Redis
+# Verify cache services
 - name: Verify Redis is running
+  tags:
+    - verify
+    - verify_cache
+    - verify_redis
   ansible.builtin.assert:
     that:
       - ansible_facts.services['redis-server.service'] is defined
@@ -11,6 +15,10 @@
     fail_msg: "Redis is not running"
     success_msg: "Redis is running"
 - name: Verify Redis listening port
+  tags:
+    - verify
+    - verify_cache
+    - verify_redis
   ansible.builtin.assert:
     that:
       - 6379 in listen_tcp_posts

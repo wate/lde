@@ -33,6 +33,10 @@
       tags: role_common
     - role: nodejs
       tags: role_nodejs
+    - role: opendkim
+      tags:
+        - role_dkim
+        - role_opendkim
     - role: mariadb
       tags: role_mariadb
     # - role: postgresql
@@ -45,19 +49,24 @@
     #   tags: role_apache
     - role: dehydrated
       tags: role_dehydrated
+    - role: redis
+      tags: role_redis
     - role: tools
       tags: role_tools
     - role: backup
       tags: role_backup
     - role: logrotate
       tags: role_logrotate
+    - role: mackerel_agent
+      tags:
+        - role_mackerel
+        - role_mackerel_agent
+        - role_monitoring
     ## 開発環境用
     - role: spamassassin
       tags: role_spamassassin
     - role: mailpit
       tags: role_mailpit
-    - role: redis
-      tags: role_redis
     - role: phpredisadmin
       tags: role_phpredisadmin
     - role: logio
