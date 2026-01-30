@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+vars:
+  GREETING: "Welcome to Local Development Environment (LDE)"
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task --list
+    silent: false
+  notify:
+    internal: true
+    silent: true
+    desc: "Notification sound"
+    cmd: afplay /System/Library/Sounds/Glass.aiff
+  daily:
+    desc: "Daily verification tasks"
+    cmd: echo "Running daily tasks..."
+  weekly:
+    desc: "Weekly verification tasks"
+    cmd: echo "Running weekly tasks..."
+  monthly:
+    desc: "Monthly verification tasks"
+    cmd: echo "Running monthly tasks..."
+  quarterly:
+    desc: "Quarterly verification tasks"
+    cmd: echo "Running quarterly tasks..."
