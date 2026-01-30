@@ -1,0 +1,45 @@
+---
+# code: language=ansible
+# Verify monitoring and search services
+- name: Verify Log.io server is running
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['log.io-server.service'] is defined
+      - ansible_facts.services['log.io-server.service']['state'] == 'running'
+      - ansible_facts.services['log.io-server.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Log.io server is not running"
+    success_msg: "Log.io server is running"
+- name: Verify Log.io server listening ports
+  ansible.builtin.assert:
+    that:
+      - 6688 in listen_tcp_posts
+      - 6689 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Log.io server is not listening on ports 6688/6689"
+    success_msg: "Log.io server is listening on ports 6688/6689"
+- name: Verify Log.io file input is running
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['log.io-file-input.service'] is defined
+      - ansible_facts.services['log.io-file-input.service']['state'] == 'running'
+      - ansible_facts.services['log.io-file-input.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Log.io file input is not running"
+    success_msg: "Log.io file input is running"
+- name: Verify Meilisearch is running
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['meilisearch.service'] is defined
+      - ansible_facts.services['meilisearch.service']['state'] == 'running'
+      - ansible_facts.services['meilisearch.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Meilisearch is not running"
+    success_msg: "Meilisearch is running"
+- name: Verify Meilisearch listening port
+  ansible.builtin.assert:
+    that:
+      - 7700 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Meilisearch is not listening on port 7700"
+    success_msg: "Meilisearch is listening on port 7700"

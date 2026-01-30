@@ -48,6 +48,9 @@ roles:
   - name: report
     src: https://github.com/wate/ansible-role-report
     version: main
+  - name: lifecycle
+    src: https://github.com/wate/ansible-role-lifecycle
+    version: main
   - name: meilisearch
     src: https://github.com/wate/ansible-role-meilisearch
     version: develop

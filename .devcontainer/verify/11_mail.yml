@@ -1,0 +1,36 @@
+---
+# code: language=ansible
+# Verify mail services
+- name: Verify SpamAssassin is running
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['spamd.service'] is defined
+      - ansible_facts.services['spamd.service']['state'] == 'running'
+      - ansible_facts.services['spamd.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "SpamAssassin is not running"
+    success_msg: "SpamAssassin is running"
+- name: Verify SpamAssassin listening port
+  ansible.builtin.assert:
+    that:
+      - 783 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "SpamAssassin is not listening on port 783"
+    success_msg: "SpamAssassin is listening on port 783"
+- name: Verify Mailpit is running
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['mailpit.service'] is defined
+      - ansible_facts.services['mailpit.service']['state'] == 'running'
+      - ansible_facts.services['mailpit.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Mailpit is not running"
+    success_msg: "Mailpit is running"
+- name: Verify Mailpit listening ports
+  ansible.builtin.assert:
+    that:
+      - 1025 in listen_tcp_posts
+      - 8025 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Mailpit is not listening on ports 1025/8025"
+    success_msg: "Mailpit is listening on ports 1025/8025"

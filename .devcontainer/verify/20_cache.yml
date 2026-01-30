@@ -1,0 +1,19 @@
+---
+# code: language=ansible
+# Verify Redis
+- name: Verify Redis is running
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['redis-server.service'] is defined
+      - ansible_facts.services['redis-server.service']['state'] == 'running'
+      - ansible_facts.services['redis-server.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Redis is not running"
+    success_msg: "Redis is running"
+- name: Verify Redis listening port
+  ansible.builtin.assert:
+    that:
+      - 6379 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Redis is not listening on port 6379"
+    success_msg: "Redis is listening on port 6379"

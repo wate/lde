@@ -1,222 +1,37 @@
 ---
 # code: language=ansible
-- name: 仮想マシンの検証
+- name: Verify virtual machine
   hosts: all
   gather_facts: false
   become: true
   vars:
     web_server: nginx
     # web_server: apache2
+    php_version: "8.4"
+    assert_quiet_mode: false
   tasks:
-    - name: Verify local development environment
-      tags: verify
-      block:
-        - name: インストール済みパッケージの情報を取得
-          ansible.builtin.package_facts:
-            manager: auto
-        - name: サービスの情報を取得
-          ansible.builtin.service_facts:
-        - name: 待受ポートの情報を取得
-          community.general.listen_ports_facts:
-            command: ss
-        - name: 取得した待受ポートの情報を加工してテスト用変数に格納
-          ansible.builtin.set_fact:
-            listen_tcp_posts: "{{ ansible_facts.tcp_listen | map(attribute='port') | unique | sort | list }}"
-            listen_udp_posts: "{{ ansible_facts.udp_listen | map(attribute='port') | unique | sort | list }}"
-        - name: PHP-FPMのパッケージ名/サービス名を変数に設定
-          ansible.builtin.set_fact:
-            php_fpm_name: "php{{ php_version | default('8.2') }}-fpm"
-        - name: パッケージのインストール状況を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.packages['mariadb-server'] is defined
-              - ansible_facts.packages[php_fpm_name] is defined
-              - ansible_facts.packages['redis'] is defined
-              - ansible_facts.packages['restic'] is defined
-              - ansible_facts.packages['rclone'] is defined
-              - ansible_facts.packages['eza'] is defined
-              - ansible_facts.packages['lnav'] is defined
-            quiet: true
-        - name: シンボリックリンクの確認
-          become: false
-          block:
-            - name: ソースコードディレクトリのシンボリックリンクの確認
-              ansible.builtin.stat:
-                path: ~/src
-              register: src_symlink_result
-            - name: シンボリックリンクの検証
-              ansible.builtin.assert:
-                that:
-                  - src_symlink_result.stat.exists
-                  - src_symlink_result.stat.islnk
-                  - src_symlink_result.stat.lnk_target == '/vagrant'
-                quiet: true
-        - name: データベースサーバーの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services['mariadb.service'] is defined
-              - ansible_facts.services['mariadb.service']['state'] == 'running'
-              - ansible_facts.services['mariadb.service']['status'] == 'enabled'
-            quiet: true
-        - name: データベースサーバーの待受ポートを検証
-          ansible.builtin.assert:
-            that:
-              - 3306 in listen_tcp_posts
-            quiet: true
-        - name: PHP-FPMの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services[php_fpm_name + '.service'] is defined
-              - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
-              - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
-            quiet: true
-        - name: Webサーバーのインストール状況を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.packages[web_server] is defined
-            quiet: true
-        - name: Webサーバーの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services[web_server + '.service'] is defined
-              - ansible_facts.services[web_server + '.service']['state'] == 'running'
-              - ansible_facts.services[web_server + '.service']['status'] == 'enabled'
-            quiet: true
-        - name: Webサーバーの待受ポートを検証
-          ansible.builtin.assert:
-            that:
-              ## Nginx / Apache
-              - 80 in listen_tcp_posts
-            quiet: true
-        - name: SpamAssassinの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services['spamd.service'] is defined
-              - ansible_facts.services['spamd.service']['state'] == 'running'
-              - ansible_facts.services['spamd.service']['status'] == 'enabled'
-            quiet: true
-        - name: SpamAssassinの待受ポートを検証
-          ansible.builtin.assert:
-            that:
-              - 783 in listen_tcp_posts
-            quiet: true
-        - name: Mailpitの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services['mailpit.service'] is defined
-              - ansible_facts.services['mailpit.service']['state'] == 'running'
-              - ansible_facts.services['mailpit.service']['status'] == 'enabled'
-            quiet: true
-        - name: Mailpitの待受ポートを検証
-          ansible.builtin.assert:
-            that:
-              - 1025 in listen_tcp_posts
-              - 8025 in listen_tcp_posts
-            quiet: true
-        - name: Redisの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services['redis-server.service'] is defined
-              - ansible_facts.services['redis-server.service']['state'] == 'running'
-              - ansible_facts.services['redis-server.service']['status'] == 'enabled'
-            quiet: true
-        - name: Redisの待受ポートを検証
-          ansible.builtin.assert:
-            that:
-              - 6379 in listen_tcp_posts
-            quiet: true
-        - name: Log.ioサーバーの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services['log.io-server.service'] is defined
-              - ansible_facts.services['log.io-server.service']['state'] == 'running'
-              - ansible_facts.services['log.io-server.service']['status'] == 'enabled'
-            quiet: true
-        - name: Log.ioサーバーの待受ポートを検証
-          ansible.builtin.assert:
-            that:
-              - 6688 in listen_tcp_posts
-              - 6689 in listen_tcp_posts
-            quiet: true
-        - name: Log.ioファイル監視サーバーの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services['log.io-file-input.service'] is defined
-              - ansible_facts.services['log.io-file-input.service']['state'] == 'running'
-              - ansible_facts.services['log.io-file-input.service']['status'] == 'enabled'
-            quiet: true
-        - name: Meilisearchの稼働状態を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.services['meilisearch.service'] is defined
-              - ansible_facts.services['meilisearch.service']['state'] == 'running'
-              - ansible_facts.services['meilisearch.service']['status'] == 'enabled'
-            quiet: true
-        - name: Meilisearchの待受ポートを検証
-          ansible.builtin.assert:
-            that:
-              - 7700 in listen_tcp_posts
-            quiet: true
-        - name: Dehydratedのパッケージインストール状況を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.packages['dehydrated'] is defined
-            quiet: true
-        - name: Dehydrated設定ディレクトリの確認
-          ansible.builtin.stat:
-            path: /etc/dehydrated
-          register: dehydrated_config_result
-        - name: Dehydrated設定ディレクトリの検証
-          ansible.builtin.assert:
-            that:
-              - dehydrated_config_result.stat.exists
-              - dehydrated_config_result.stat.isdir
-            quiet: true
-        - name: Logrotateのパッケージインストール状況を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.packages['logrotate'] is defined
-            quiet: true
-        - name: Logrotate設定ディレクトリの確認
-          ansible.builtin.stat:
-            path: /etc/logrotate.d
-          register: logrotate_config_result
-        - name: Logrotate設定ディレクトリの検証
-          ansible.builtin.assert:
-            that:
-              - logrotate_config_result.stat.exists
-              - logrotate_config_result.stat.isdir
-            quiet: true
-        - name: Resticのパッケージインストール状況を検証
-          ansible.builtin.assert:
-            that:
-              - ansible_facts.packages['restic'] is defined
-            quiet: true
-        - name: バックアップベースディレクトリの確認
-          ansible.builtin.stat:
-            path: /backup
-          register: backup_base_result
-        - name: バックアップベースディレクトリの検証
-          ansible.builtin.assert:
-            that:
-              - backup_base_result.stat.exists
-              - backup_base_result.stat.isdir
-            quiet: true
-        - name: バックアップサブディレクトリの確認
-          ansible.builtin.stat:
-            path: "{{ item }}"
-          register: backup_subdir_results
-          loop:
-            - /backup/script
-            - /backup/data
-            - /backup/repo
-            - /backup/password
-        - name: バックアップサブディレクトリの検証
-          ansible.builtin.assert:
-            that:
-              - item.stat.exists
-              - item.stat.isdir
-            quiet: true
-          loop: "{{ backup_subdir_results.results }}"
-          loop_control:
-            label: "{{ item.item }}"
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+    - name: Gather listening ports facts
+      community.general.listen_ports_facts:
+        command: ss
+    - name: Set test variables from listening ports
+      ansible.builtin.set_fact:
+        listen_tcp_posts: "{{ ansible_facts.tcp_listen | map(attribute='port') | unique | sort | list }}"
+        listen_udp_posts: "{{ ansible_facts.udp_listen | map(attribute='port') | unique | sort | list }}"
+    - name: Set PHP-FPM package and service names
+      ansible.builtin.set_fact:
+        php_fpm_name: "php{{ php_version | default('8.4') }}-fpm"
+    - name: Detect test files
+      ansible.builtin.set_fact:
+        test_files: "{{ lookup('fileglob', 'verify/*.yml', wantlist=True) | sort }}"
+    - name: Run test files
+      ansible.builtin.include_tasks:
+        file: "{{ test_file }}"
+      loop: "{{ test_files }}"
+      loop_control:
+        loop_var: test_file
+        label: "{{ test_file | basename }}"

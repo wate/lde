@@ -24,11 +24,10 @@
         regexp: 'http://.*\.debian\.org/debian/'
         replace: "http://ftp.jp.debian.org/debian/"
     - name: Lifecycle prepare process
-      block:
-        - name: Update package cache and upgrade packages
-          ansible.builtin.apt:
-            update_cache: "{{ pre_task_update_cache | default(true)  }}"
-            upgrade: "{{ pre_task_update_package | default(true) }}"
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: prepare
+      tags: lifecycle_prepare
   roles:
     - role: common
       tags: role_common
@@ -78,9 +77,6 @@
       tags:
         - role_webfont
         - doc_font
-    ## 運用保守
-    - role: report
-      tags: role_report
     ## アプリケーション
     # - role: cakephp
     #   become: false
@@ -126,12 +122,17 @@
               loop_control:
                 loop_var: custom_script_template
                 label: "{{ (custom_script_template | basename)[:-6] }}"
+    - name: Lifecycle finalize process
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: finalize
+      tags: lifecycle_teardown
   post_tasks:
     - name: Lifecycle teardown process
-      block:
-        - name: Cleanup packages
-          ansible.builtin.apt:
-            autoremove: true
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: teardown
+      tags: lifecycle_teardown
     - name: Update .pre-commit-config.yaml
       become: false
       ansible.builtin.command:
