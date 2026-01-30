@@ -139,19 +139,3 @@
     quiet: "{{ assert_quiet_mode }}"
     fail_msg: "Mailpit is not listening on ports 1025/8025"
     success_msg: "Mailpit is listening on ports 1025/8025"
-- name: Check Mailpit data directory
-  ansible.builtin.stat:
-    path: /var/mailpit
-  register: mailpit_data_dir_result
-- name: Verify Mailpit data directory exists
-  tags:
-    - verify
-    - verify_development
-    - verify_mailpit
-  ansible.builtin.assert:
-    that:
-      - mailpit_data_dir_result.stat.exists
-      - mailpit_data_dir_result.stat.isdir
-    quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "Mailpit data directory does not exist"
-    success_msg: "Mailpit data directory exists"

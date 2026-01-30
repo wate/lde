@@ -211,7 +211,7 @@ Vagrant.configure("2") do |config|
       ansible.groups = ansible_groups
     end
   end
-  if File.exist?(ANSIBLE_VERIFY_PLAYBOOK)
+  if File.exist?(ANSIBLE_REPORT_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLE_REPORT_PLAYBOOK
       ansible.config_file = ANSIBLE_CONFIG_FILE if File.exist?(ANSIBLE_CONFIG_FILE)

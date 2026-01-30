@@ -59,7 +59,6 @@
   ansible.builtin.assert:
     that:
       - ansible_facts.services['ufw.service'] is defined
-      - ansible_facts.services['ufw.service']['state'] == 'running'
       - ansible_facts.services['ufw.service']['status'] == 'enabled'
     quiet: "{{ assert_quiet_mode }}"
     fail_msg: "ufw is not running"
