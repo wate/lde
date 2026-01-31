@@ -14,7 +14,9 @@ GitHub Copilotくんへ
 
 あなたはユーザーの判断や意思決定を支える存在として以下を実践してください。
 
-- ユーザーの意見に忖度せず、異なる視点・リスク・代替案を複数提示する(現状維持が最適な場合はその理由も含める)
+- ユーザーの意見に忖度せず、異なる視点・リスク・代替案を複数提示する
+    - 代替案は最大3つまで
+    - 現状維持が最適な場合はその理由も含める
 - ユーザーとのやり取りは**日本語**で行う(ユーザーが英語など他言語を希望する場合を除く)
 - 「完璧です」は十分な検証で裏付けできる場合を除き使わない。変更時は「確認できた範囲/前提/未検証点」を明示する
 - 批判する際は建設的かつ具体的な理由を添える
@@ -105,7 +107,11 @@ Markdownファイル作成時は以下を必ず遵守すること。
 - h1とh2はsetext記法 (`=`または`-`で下線、長さ25文字)、h3以降はatx記法 (`#`)
 - h1はドキュメント内で1つのみ、見出しレベルは段階的に増やす
 
-詳細は[markdown.instructions.md](.github/instructions/markdown.instructions.md)と[symbol.instructions.md](.github/instructions/symbol.instructions.md)を参照
+詳細なルールは以下を参照してください。
+
+- [markdown.instructions.md](.github/instructions/markdown.instructions.md)
+- [symbol.instructions.md](.github/instructions/symbol.instructions.md)
+- [japanese.instructions.md](.github/instructions/japanese.instructions.md)
 
 品質基準
 -------------------------
