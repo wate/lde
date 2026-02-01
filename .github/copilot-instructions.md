@@ -110,7 +110,6 @@ Markdownファイル作成時は以下を必ず遵守すること。
 詳細なルールは以下を参照してください。
 
 - [markdown.instructions.md](.github/instructions/markdown.instructions.md)
-- [symbol.instructions.md](.github/instructions/symbol.instructions.md)
 - [japanese.instructions.md](.github/instructions/japanese.instructions.md)
 
 品質基準
