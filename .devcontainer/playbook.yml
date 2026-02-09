@@ -22,18 +22,21 @@
       ansible.builtin.replace:
         path: /etc/apt/sources.list.d/debian.sources
         regexp: 'http://.*\.debian\.org/debian/'
-        replace: "http://ftp.jp.debian.org/debian/"
+        replace: "http://deb.debian.org/debian/"
     - name: Lifecycle prepare process
-      block:
-        - name: Update package cache and upgrade packages
-          ansible.builtin.apt:
-            update_cache: "{{ pre_task_update_cache | default(true)  }}"
-            upgrade: "{{ pre_task_update_package | default(true) }}"
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: prepare
+      tags: lifecycle_prepare
   roles:
     - role: common
       tags: role_common
     - role: nodejs
       tags: role_nodejs
+    - role: opendkim
+      tags:
+        - role_dkim
+        - role_opendkim
     - role: mariadb
       tags: role_mariadb
     # - role: postgresql
@@ -46,19 +49,24 @@
     #   tags: role_apache
     - role: dehydrated
       tags: role_dehydrated
+    - role: redis
+      tags: role_redis
     - role: tools
       tags: role_tools
     - role: backup
       tags: role_backup
     - role: logrotate
       tags: role_logrotate
+    - role: mackerel_agent
+      tags:
+        - role_mackerel
+        - role_mackerel_agent
+        - role_monitoring
     ## 開発環境用
     - role: spamassassin
       tags: role_spamassassin
     - role: mailpit
       tags: role_mailpit
-    - role: redis
-      tags: role_redis
     - role: phpredisadmin
       tags: role_phpredisadmin
     - role: logio
@@ -78,9 +86,6 @@
       tags:
         - role_webfont
         - doc_font
-    ## 運用保守
-    - role: report
-      tags: role_report
     ## アプリケーション
     # - role: cakephp
     #   become: false
@@ -126,12 +131,17 @@
               loop_control:
                 loop_var: custom_script_template
                 label: "{{ (custom_script_template | basename)[:-6] }}"
+    - name: Lifecycle finalize process
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: finalize
+      tags: lifecycle_teardown
   post_tasks:
     - name: Lifecycle teardown process
-      block:
-        - name: Cleanup packages
-          ansible.builtin.apt:
-            autoremove: true
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: teardown
+      tags: lifecycle_teardown
     - name: Update .pre-commit-config.yaml
       become: false
       ansible.builtin.command:

@@ -1,0 +1,27 @@
+---
+# code: language=ansible
+- name: Generate operational and maintenance report
+  hosts: all
+  become: true
+  gather_facts: true
+  pre_tasks:
+    - name: Lifecycle prepare process
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: prepare
+      tags: lifecycle_prepare
+  roles:
+    - role: report
+      tags: role_report
+  tasks:
+    - name: Lifecycle finalize process
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: finalize
+      tags: lifecycle_teardown
+  post_tasks:
+    - name: Lifecycle teardown process
+      ansible.builtin.import_role:
+        name: lifecycle
+        tasks_from: teardown
+      tags: lifecycle_teardown

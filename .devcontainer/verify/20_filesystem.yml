@@ -1,0 +1,21 @@
+---
+# code: language=ansible
+# Verify filesystem
+- name: Check source code directory symlink
+  ansible.builtin.stat:
+    path: ~/src
+  become: false
+  register: src_symlink_result
+- name: Verify symlink configuration
+  tags:
+    - verify
+    - verify_filesystem
+  ansible.builtin.assert:
+    that:
+      - src_symlink_result.stat.exists
+      - src_symlink_result.stat.islnk
+      - src_symlink_result.stat.lnk_target == '/vagrant'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Source code directory symlink is not configured correctly"
+    success_msg: "Source code directory symlink is configured correctly"
+  become: false

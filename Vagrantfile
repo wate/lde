@@ -113,6 +113,7 @@ Vagrant.configure("2") do |config|
   ANSIBLE_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "playbook.yml"))
   ANSIBLE_CUSTOM_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "custom.yml"))
   ANSIBLE_VERIFY_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "verify.yml"))
+  ANSIBLE_REPORT_PLAYBOOK = File.expand_path(File.join(LDE_CONFIG_DIR, "report.yml"))
   ## Ansible galaxy role file
   ANSIBLE_GALAXY_ROLE_FILE = File.expand_path(File.join(LDE_CONFIG_DIR, "requirements.yml"))
   ## Ansible roles path
@@ -200,6 +201,19 @@ Vagrant.configure("2") do |config|
   if File.exist?(ANSIBLE_VERIFY_PLAYBOOK)
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = ANSIBLE_VERIFY_PLAYBOOK
+      ansible.config_file = ANSIBLE_CONFIG_FILE if File.exist?(ANSIBLE_CONFIG_FILE)
+      ansible.compatibility_mode = "2.0"
+      ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"
+      ansible.extra_vars = ansible_extra_vars if ansible_extra_vars.length > 0
+      ansible.tags = ansible_provision_tags if ansible_provision_tags.length > 0
+      ansible.skip_tags = ansible_provision_skip_tags if ansible_provision_skip_tags.length > 0
+      ansible.raw_arguments = ansible_raw_arguments if ansible_raw_arguments.length > 0
+      ansible.groups = ansible_groups
+    end
+  end
+  if File.exist?(ANSIBLE_REPORT_PLAYBOOK)
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = ANSIBLE_REPORT_PLAYBOOK
       ansible.config_file = ANSIBLE_CONFIG_FILE if File.exist?(ANSIBLE_CONFIG_FILE)
       ansible.compatibility_mode = "2.0"
       ansible.galaxy_roles_path = ".vagrant/provisioners/ansible/roles"

@@ -1,0 +1,28 @@
+---
+# code: language=ansible
+# Verify log rotation configuration
+- name: Verify Logrotate installation
+  tags:
+    - verify
+    - verify_logrotate
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.packages['logrotate'] is defined
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Logrotate is not installed"
+    success_msg: "Logrotate is installed"
+- name: Check Logrotate configuration directory
+  ansible.builtin.stat:
+    path: /etc/logrotate.d
+  register: logrotate_config_result
+- name: Verify Logrotate configuration directory
+  tags:
+    - verify
+    - verify_logrotate
+  ansible.builtin.assert:
+    that:
+      - logrotate_config_result.stat.exists
+      - logrotate_config_result.stat.isdir
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "Logrotate configuration directory does not exist"
+    success_msg: "Logrotate configuration directory exists"

@@ -1,0 +1,27 @@
+---
+# code: language=ansible
+# Verify MariaDB is running
+- name: Verify database server is running
+  tags:
+    - verify
+    - verify_database
+    - verify_mariadb
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['mariadb.service'] is defined
+      - ansible_facts.services['mariadb.service']['state'] == 'running'
+      - ansible_facts.services['mariadb.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "MariaDB is not running"
+    success_msg: "MariaDB is running"
+- name: Verify database server listening port
+  tags:
+    - verify
+    - verify_database
+    - verify_mariadb
+  ansible.builtin.assert:
+    that:
+      - 3306 in listen_tcp_posts
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "MariaDB is not listening on port 3306"
+    success_msg: "MariaDB is listening on port 3306"

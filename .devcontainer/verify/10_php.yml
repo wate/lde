@@ -1,0 +1,15 @@
+---
+# code: language=ansible
+# Verify PHP-FPM is running
+- name: Verify PHP-FPM is running
+  tags:
+    - verify
+    - verify_php
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services[php_fpm_name + '.service'] is defined
+      - ansible_facts.services[php_fpm_name + '.service']['state'] == 'running'
+      - ansible_facts.services[php_fpm_name + '.service']['status'] == 'enabled'
+    quiet: "{{ assert_quiet_mode }}"
+    fail_msg: "PHP-FPM ({{ php_fpm_name }}) is not running"
+    success_msg: "PHP-FPM ({{ php_fpm_name }}) is running"

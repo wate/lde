@@ -1,8 +1,5 @@
 ---
 # role_update: false
-# pre_task:
-#   update_cache: true
-#   update_package: true
 # tags: []
 # skip_tags: []
 # extra_var: {}

@@ -6,6 +6,9 @@ roles:
   - name: nodejs
     src: https://github.com/wate/ansible-role-nodejs
     version: develop
+  - name: opendkim
+    src: https://github.com/wate/ansible-role-opendkim
+    version: develop
   - name: nginx
     src: https://github.com/wate/ansible-role-nginx
     version: develop
@@ -39,6 +42,9 @@ roles:
   - name: logrotate
     src: https://github.com/wate/ansible-role-logrotate
     version: develop
+  - name: mackerel_agent
+    src: https://github.com/wate/ansible-role-mackerel_agent
+    version: develop
   - name: font
     src: https://github.com/wate/ansible-role-font
     version: develop
@@ -47,6 +53,9 @@ roles:
     version: develop
   - name: report
     src: https://github.com/wate/ansible-role-report
+    version: main
+  - name: lifecycle
+    src: https://github.com/wate/ansible-role-lifecycle
     version: main
   - name: meilisearch
     src: https://github.com/wate/ansible-role-meilisearch
