@@ -23,11 +23,20 @@
         path: /etc/apt/sources.list.d/debian.sources
         regexp: 'http://.*\.debian\.org/debian/'
         replace: "http://deb.debian.org/debian/"
-    - name: Lifecycle prepare process
-      ansible.builtin.import_role:
-        name: lifecycle
-        tasks_from: prepare
-      tags: lifecycle_prepare
+    - name: Update package cache and upgrade packages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: true
+    - name: Get installed kernel version
+      ansible.builtin.shell: |
+        dpkg -l 'linux-image-*' | awk '/^ii/ {print $2}' | \
+        sed 's/linux-image-//' | sort -V | tail -1
+      register: installed_kernel
+      changed_when: false
+    - name: Reboot if kernel was updated
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+      when: ansible_facts['kernel'] != installed_kernel.stdout
   roles:
     - role: common
       tags: role_common
@@ -67,10 +76,10 @@
       tags: role_spamassassin
     - role: mailpit
       tags: role_mailpit
+    - role: logdy
+      tags: role_logdy
     - role: phpredisadmin
       tags: role_phpredisadmin
-    - role: logio
-      tags: role_logio
     - role: meilisearch
       tags: role_meilisearch
     - role: lde
@@ -81,11 +90,11 @@
       tags:
         - role_font
         - doc_font
-    - role: webfont
-      become: false
-      tags:
-        - role_webfont
-        - doc_font
+    # - role: webfont
+    #   become: false
+    #   tags:
+    #     - role_webfont
+    #     - doc_font
     ## アプリケーション
     # - role: cakephp
     #   become: false
@@ -131,17 +140,14 @@
               loop_control:
                 loop_var: custom_script_template
                 label: "{{ (custom_script_template | basename)[:-6] }}"
-    - name: Lifecycle finalize process
+    - name: Create symbolic links to the document root in the home directory
       ansible.builtin.import_role:
-        name: lifecycle
-        tasks_from: finalize
-      tags: lifecycle_teardown
+        name: utils
+        tasks_from: filesystem/symlink
   post_tasks:
-    - name: Lifecycle teardown process
-      ansible.builtin.import_role:
-        name: lifecycle
-        tasks_from: teardown
-      tags: lifecycle_teardown
+    # - name: Cleanup packages
+    #   ansible.builtin.apt:
+    #     autoremove: true
     - name: Update .pre-commit-config.yaml
       become: false
       ansible.builtin.command:

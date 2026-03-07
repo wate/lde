@@ -5,23 +5,20 @@
   become: true
   gather_facts: true
   pre_tasks:
-    - name: Lifecycle prepare process
-      ansible.builtin.import_role:
-        name: lifecycle
-        tasks_from: prepare
-      tags: lifecycle_prepare
+    - name: Update package cache and upgrade packages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: true
   roles:
     - role: report
       tags: role_report
   tasks:
-    - name: Lifecycle finalize process
+    - name: Create symbolic links to the document root in the home directory
       ansible.builtin.import_role:
-        name: lifecycle
-        tasks_from: finalize
-      tags: lifecycle_teardown
+        name: utils
+        tasks_from: filesystem/symlink
+      tags: filesystem_symlink
   post_tasks:
-    - name: Lifecycle teardown process
-      ansible.builtin.import_role:
-        name: lifecycle
-        tasks_from: teardown
-      tags: lifecycle_teardown
+    - name: Cleanup packages
+      ansible.builtin.apt:
+        autoremove: true

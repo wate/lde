@@ -21,6 +21,7 @@ imagemagick
 lazygit
 linux
 lnav
+logdy
 mailpit
 mariadb
 meilisearch
