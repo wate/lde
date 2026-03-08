@@ -28,15 +28,22 @@
         update_cache: true
         upgrade: true
     - name: Get installed kernel version
-      ansible.builtin.shell: |
-        dpkg -l 'linux-image-*' | awk '/^ii/ {print $2}' | \
-        sed 's/linux-image-//' | sort -V | tail -1
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          dpkg -l 'linux-image-*' | awk '/^ii/ {print $2}' | \
+          grep -E 'linux-image-[0-9]' | \
+          sed 's/linux-image-//' | sort -V | tail -1
+      args:
+        executable: /bin/bash
       register: installed_kernel
       changed_when: false
-    - name: Reboot if kernel was updated
-      ansible.builtin.reboot:
-        reboot_timeout: 300
+    - name: Rebuild VirtualBox Guest Additions
       when: ansible_facts['kernel'] != installed_kernel.stdout
+      block:
+        - name: Reboot if kernel was updated
+          ansible.builtin.reboot:
+            reboot_timeout: 300
   roles:
     - role: common
       tags: role_common
@@ -48,14 +55,10 @@
         - role_opendkim
     - role: mariadb
       tags: role_mariadb
-    # - role: postgresql
-    #   tags: role_postgresql
     - role: php
       tags: role_php
     - role: nginx
       tags: role_nginx
-    # - role: apache
-    #   tags: role_apache
     - role: dehydrated
       tags: role_dehydrated
     - role: redis
@@ -145,9 +148,9 @@
         name: utils
         tasks_from: filesystem/symlink
   post_tasks:
-    # - name: Cleanup packages
-    #   ansible.builtin.apt:
-    #     autoremove: true
+    - name: Cleanup packages
+      ansible.builtin.apt:
+        autoremove: true
     - name: Update .pre-commit-config.yaml
       become: false
       ansible.builtin.command:
@@ -160,7 +163,5 @@
         state: restarted
       loop:
         - mariadb
-        - php{{ php_version | default('8.3') }}-fpm
+        - php{{ php_version | default('8.4') }}-fpm
         - nginx
-        # - postgresql
-        # - apache2

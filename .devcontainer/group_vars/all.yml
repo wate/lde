@@ -502,7 +502,7 @@ install_tools:
   ## https://github.com/eza-community/eza
   - eza
   ## https://github.com/sharkdp/fd
-  - fd
+  # - fd
   ## https://github.com/sharkdp/bat
   - bat
   ## https://jonas.github.io/tig/
@@ -511,6 +511,8 @@ install_tools:
   - lnav
   ## https://github.com/ggreer/the_silver_searcher
   - the_silver_searcher
+  ## https://github.com/BurntSushi/ripgrep
+  - ripgrep
   ## https://github.com/jesseduffield/lazygit
   - lazygit
   ## https://github.com/dandavison/delta

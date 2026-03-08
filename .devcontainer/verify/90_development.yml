@@ -1,44 +1,31 @@
 ---
 # code: language=ansible
 # Verify development environment services
-- name: Verify Log.io server is running
+- name: Verify Logdy server is running
   tags:
     - verify
     - verify_development
-    - verify_logio
+    - verify_logdy
   ansible.builtin.assert:
     that:
-      - ansible_facts.services['log.io-server.service'] is defined
-      - ansible_facts.services['log.io-server.service']['state'] == 'running'
-      - ansible_facts.services['log.io-server.service']['status'] == 'enabled'
+      - ansible_facts.services['logdy.service'] is defined
+      - ansible_facts.services['logdy.service']['state'] == 'running'
+      - ansible_facts.services['logdy.service']['status'] == 'enabled'
     quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "Log.io server is not running"
-    success_msg: "Log.io server is running"
-- name: Verify Log.io server listening ports
+    fail_msg: "Logdy server is not running"
+    success_msg: "Logdy server is running"
+- name: Verify Logdy server listening ports
   tags:
     - verify
     - verify_development
-    - verify_logio
+    - verify_logdy
   ansible.builtin.assert:
     that:
-      - 6688 in listen_tcp_posts
-      - 6689 in listen_tcp_posts
+      - 8123 in listen_tcp_posts
+      - 8080 in listen_tcp_posts
     quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "Log.io server is not listening on ports 6688/6689"
-    success_msg: "Log.io server is listening on ports 6688/6689"
-- name: Verify Log.io file input is running
-  tags:
-    - verify
-    - verify_development
-    - verify_logio
-  ansible.builtin.assert:
-    that:
-      - ansible_facts.services['log.io-file-input.service'] is defined
-      - ansible_facts.services['log.io-file-input.service']['state'] == 'running'
-      - ansible_facts.services['log.io-file-input.service']['status'] == 'enabled'
-    quiet: "{{ assert_quiet_mode }}"
-    fail_msg: "Log.io file input is not running"
-    success_msg: "Log.io file input is running"
+    fail_msg: "Logdy server is not listening on ports 8123/8080"
+    success_msg: "Logdy server is listening on ports 8123/8080"
 - name: Verify Meilisearch is running
   tags:
     - verify
