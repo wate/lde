@@ -80,6 +80,18 @@ get_installer_suffix() {
     fi
 }
 
+# Determine kernel headers package based on architecture
+get_kernel_headers_package() {
+    local arch
+    arch=$(uname -m)
+
+    if [[ "$arch" == "arm64" || "$arch" == "aarch64" ]]; then
+        echo "linux-headers-arm64"
+    else
+        echo "linux-headers-amd64"
+    fi
+}
+
 # Download VBoxGuestAdditions ISO if not already present
 download_vbox_iso() {
     local version="$1"
@@ -121,23 +133,10 @@ install_vbox_guest_additions() {
 
     # Install build dependencies
     log_info "Installing build dependencies..."
-
-    # Update package list
     sudo apt-get update -qq
-
-    # Try to install exact kernel headers first
-    if ! sudo apt-get install -y "linux-headers-$(uname -r)" 2>/dev/null; then
-        log_warn "Exact kernel headers not found, installing latest available headers..."
-        # Install metapackage which will pull in the latest headers
-        if ! sudo apt-get install -y linux-headers-arm64; then
-            log_error "Failed to install kernel headers"
-            return 1
-        fi
-        log_warn "Kernel headers installed, but system reboot may be required to use matching kernel"
-    fi
-
-    # Install other build dependencies
-    if ! sudo apt-get install -y build-essential dkms; then
+    local kernel_headers_package
+    kernel_headers_package=$(get_kernel_headers_package)
+    if ! sudo apt-get install -y build-essential dkms "${kernel_headers_package}"; then
         log_error "Failed to install build dependencies"
         return 1
     fi
@@ -159,7 +158,7 @@ install_vbox_guest_additions() {
     # Run installer
     log_info "Running VBoxLinuxAdditions installer..."
     local installer_path="${VBOX_MOUNT_DIR}/VBoxLinuxAdditions${installer_suffix}.run"
-    echo "Installer path: $installer_path"
+
     if (! sudo bash "$installer_path") then
         log_warn "VBoxLinuxAdditions installation may have failed, but continuing..."
     fi
@@ -174,6 +173,11 @@ install_vbox_guest_additions() {
     # Create install marker
     sudo mkdir -p "$install_dir"
     log_info "VirtualBox Guest Additions installation completed"
+
+    # Remove build dependencies
+    log_info "Removing build dependencies..."
+    sudo apt-get autoremove -y dkms "${kernel_headers_package}"
+
     VBOX_INSTALLED=true
     return 0
 }
