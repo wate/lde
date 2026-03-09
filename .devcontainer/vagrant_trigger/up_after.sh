@@ -136,7 +136,19 @@ install_vbox_guest_additions() {
     sudo apt-get update -qq
     local kernel_headers_package
     kernel_headers_package=$(get_kernel_headers_package)
-    if ! sudo apt-get install -y build-essential dkms "${kernel_headers_package}"; then
+    # まずuname -rで取得した正確なカーネルバージョンのヘッダーをインストールする。
+    # Ansibleのリブート後に実際に起動しているカーネルバージョンとアーキテクチャの
+    # メタパッケージ（linux-headers-arm64等）が引っ張るバージョンが食い違う場合があり、
+    # その場合にGuest Additionsのビルドが失敗するため、正確なバージョンを優先する。
+    # 正確なバージョンのヘッダーが見つからない場合はメタパッケージにフォールバックする。
+    if ! sudo apt-get install -y "linux-headers-$(uname -r)" 2>/dev/null; then
+        log_warn "Exact kernel headers not found, falling back to ${kernel_headers_package}..."
+        if ! sudo apt-get install -y "${kernel_headers_package}"; then
+            log_error "Failed to install kernel headers"
+            return 1
+        fi
+    fi
+    if ! sudo apt-get install -y build-essential dkms; then
         log_error "Failed to install build dependencies"
         return 1
     fi
@@ -154,6 +166,8 @@ install_vbox_guest_additions() {
         log_error "Failed to mount VBoxGuestAdditions ISO"
         return 1
     fi
+
+    systemctl daemon-reload
 
     # Run installer
     log_info "Running VBoxLinuxAdditions installer..."
@@ -173,10 +187,6 @@ install_vbox_guest_additions() {
     # Create install marker
     sudo mkdir -p "$install_dir"
     log_info "VirtualBox Guest Additions installation completed"
-
-    # Remove build dependencies
-    log_info "Removing build dependencies..."
-    sudo apt-get autoremove -y dkms "${kernel_headers_package}"
 
     VBOX_INSTALLED=true
     return 0
@@ -226,6 +236,12 @@ VBOX_INSTALLED=false
 main
 
 if "${VBOX_INSTALLED}"; then
+    # リブート前にビルド依存パッケージを削除する。
+    # インストール直後に削除するとカーネルモジュールのリロードが失敗するため、
+    # リブート直前のタイミングで削除する。
+    log_info "Removing build dependencies..."
+    sudo apt-get autoremove -y dkms
+    sudo apt-get purge -y "linux-headers-$(uname -r)" 2>/dev/null || true
     log_info "Rebooting to apply VirtualBox Guest Additions..."
     sudo reboot
 fi
