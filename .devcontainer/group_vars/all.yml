@@ -502,7 +502,7 @@ install_tools:
   ## https://github.com/eza-community/eza
   - eza
   ## https://github.com/sharkdp/fd
-  # - fd
+  - fd
   ## https://github.com/sharkdp/bat
   - bat
   ## https://jonas.github.io/tig/
