@@ -1,5 +1,5 @@
----
 # code: language=ansible
+---
 - name: Setup local development environment
   hosts: all
   become: true
@@ -22,7 +22,8 @@
       ansible.builtin.replace:
         path: /etc/apt/sources.list.d/debian.sources
         regexp: 'http://.*\.debian\.org/debian/'
-        replace: "http://deb.debian.org/debian/"
+        # replace: "http://deb.debian.org/debian/"
+        replace: "http://ftp.jp.debian.org/debian/"
     - name: Update package cache and upgrade packages
       ansible.builtin.apt:
         update_cache: true
