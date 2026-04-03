@@ -191,7 +191,7 @@ export VAGRANT_ANSIBLE_RAW_ARGUMENT_DIFF="--diff"
 
 ### 設定ファイルを利用したVagrantのプロビジョニングの制御
 
-ディレクトリ直下に`provision_config.yml`というファイルを作成し、以下のように設定を記述することで、
+ディレクトリ直下に`provision.yml`というファイルを作成し、以下のように設定を記述することで、
 Vagrantのプロビジョニング時の設定を制御できます。
 
 各設定項目の詳細は以下のとおりです。
