@@ -70,7 +70,7 @@ docs/api/
 
 ### other ###
 .devcontainer/host_vars/default.yml
-provision_config.yml
+provision.yml
 
 ### CakePHP ####
 /config/app_local.php

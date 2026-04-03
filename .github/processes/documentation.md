@@ -18,7 +18,7 @@
 
 #### Markdownファイルの場合
 
-1. `read_file`ツールで以下のファイルを全文読み込む:
+1. 以下のファイルを全文読み込む
    - [markdown.instructions.md](../instructions/markdown.instructions.md)
    - [japanese.instructions.md](../instructions/japanese.instructions.md)
 2. 記載されたルールを理解する
@@ -98,7 +98,7 @@
 - セットアップ手順を明確に記載
 - 使用方法を具体例とともに記載
 
-#### API ドキュメント
+#### APIドキュメント
 
 - エンドポイント、リクエスト、レスポンスを明記
 - 認証方法、エラーコードを記載

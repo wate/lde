@@ -36,6 +36,9 @@ roles:
   - name: mailpit
     src: https://github.com/wate/ansible-role-mailpit
     version: develop
+  - name: logdy
+    src: https://github.com/wate/ansible-role-logdy
+    version: develop
   - name: tools
     src: https://github.com/wate/ansible-role-tools
     version: develop
@@ -54,8 +57,8 @@ roles:
   - name: report
     src: https://github.com/wate/ansible-role-report
     version: main
-  - name: lifecycle
-    src: https://github.com/wate/ansible-role-lifecycle
+  - name: utils
+    src: https://github.com/wate/ansible-role-utils
     version: main
   - name: meilisearch
     src: https://github.com/wate/ansible-role-meilisearch

@@ -49,4 +49,4 @@
     success_msg: "Backup subdirectory exists: {{ item.item }}"
   loop: "{{ backup_subdir_results.results }}"
   loop_control:
-    label: "{{ item.item }}"
+    label: "{{ item.stat.path }}"
