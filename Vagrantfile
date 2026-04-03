@@ -138,7 +138,7 @@ Vagrant.configure("2") do |config|
   provision_config = nil
   provision_config_file_dirs = [".", LDE_CONFIG_DIR]
   provision_config_file_dirs.each do |target_dir|
-    provision_config_file = File.expand_path(File.join(target_dir.to_s, "provision_config.yml"))
+    provision_config_file = File.expand_path(File.join(target_dir.to_s, "provision.yml"))
     if File.exist?(File.expand_path(provision_config_file))
       provision_config = YAML.load_file(provision_config_file)
       break
