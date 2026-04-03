@@ -79,25 +79,6 @@ GitHub Copilotくんへ
 - 「完璧です」は検証可能な場合のみ使用
 - 批判は具体的根拠を添える
 
-指示
--------------------------
-
-### 作業全般で共通する事項
-
-- [開発作業共通プロセス](./processes/development.md): 情報収集手順、Git運用、基本作業原則
-
-### 作業内容別のプロセス
-
-作業内容に応じて、以下のプロセスを参照しなさい。
-
-- [要件定義プロセス](./processes/requirements.md): 機能要求や制約の明確化
-- [調査プロセス](./processes/investigation.md): 技術調査、問題分析
-- [設計プロセス](./processes/design.md): アーキテクチャ、データモデル等の設計
-- [実装プロセス](./processes/coding.md): コーディング(新規実装、バグ修正、リファクタリング)
-- [テストプロセス](./processes/testing.md): テスト作成・実行
-- [ドキュメント作成プロセス](./processes/documentation.md): 仕様書、README等の執筆
-- [プロジェクト管理プロセス](./processes/project-management.md): プロジェクト全体の管理
-
 品質確認
 -------------------------
 
