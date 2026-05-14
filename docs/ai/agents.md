@@ -16,66 +16,66 @@
 
 ### 技術開発系
 
-| エージェント名 | 専門領域 | 主な用途 |
-| -------------- | -------- | -------- |
-| phper | PHPフレームワーク開発 | CakePHP/Laravel/Symfony実装と静的解析 |
-| jser | MPA向けJavaScript | jQuery/HTMX/Vanilla JS実装とレガシー改善 |
-| Pythonista | Pythonアプリ開発 | Django/FastAPI開発とデータ処理 |
-| Rubyist | Rubyアプリ開発 | Rails系実装とTDD |
-| gopher | Go開発 | 高性能API・CLI・並行処理設計 |
-| zx-script-developer | zxスクリプト開発 | 自動化CLIと運用補助スクリプト実装 |
-| database-engineer | DB設計と最適化 | スキーマ設計、クエリ改善、高可用性設計 |
-| test-engineer | テスト実装 | テスト設計、自動化、CI統合 |
-| prompt-engineer | プロンプト設計 | 指示テンプレート設計と出力品質改善 |
+| エージェント名      | 専門領域              | 主な用途                                 |
+| ------------------- | --------------------- | ---------------------------------------- |
+| phper               | PHPフレームワーク開発 | CakePHP/Laravel/Symfony実装と静的解析    |
+| jser                | MPA向けJavaScript     | jQuery/HTMX/Vanilla JS実装とレガシー改善 |
+| Pythonista          | Pythonアプリ開発      | Django/FastAPI開発とデータ処理           |
+| Rubyist             | Rubyアプリ開発        | Rails系実装とTDD                         |
+| gopher              | Go開発                | 高性能API・CLI・並行処理設計             |
+| zx-script-developer | zxスクリプト開発      | 自動化CLIと運用補助スクリプト実装        |
+| database-engineer   | DB設計と最適化        | スキーマ設計、クエリ改善、高可用性設計   |
+| test-engineer       | テスト実装            | テスト設計、自動化、CI統合               |
+| prompt-engineer     | プロンプト設計        | 指示テンプレート設計と出力品質改善       |
 
 ### インフラ・運用系
 
-| エージェント名 | 専門領域 | 主な用途 |
-| -------------- | -------- | -------- |
-| cloud-engineer | クラウド設計 | AWS/Azure/GCP設計とコスト最適化 |
-| devops-engineer | DevOpsとCI/CD | パイプライン構築と運用自動化 |
-| Ansible-specialist | Ansible構成管理 | プレイブック設計とべき等性確保 |
-| Terraform-specialist | Terraform IaC | 宣言的リソース定義と状態管理 |
-| server-engineer | Linux/UNIX運用 | サーバー構築、運用、自動化 |
-| system-engineer | 全体アーキテクチャ | 非機能要件と運用設計の統合 |
-| sre-engineer | 信頼性向上 | 可観測性、SLI/SLO、障害対応 |
-| security-engineer | セキュリティ対策 | 脅威分析、多層防御、脆弱性対応 |
+| エージェント名       | 専門領域           | 主な用途                        |
+| -------------------- | ------------------ | ------------------------------- |
+| cloud-engineer       | クラウド設計       | AWS/Azure/GCP設計とコスト最適化 |
+| devops-engineer      | DevOpsとCI/CD      | パイプライン構築と運用自動化    |
+| Ansible-specialist   | Ansible構成管理    | プレイブック設計とべき等性確保  |
+| Terraform-specialist | Terraform IaC      | 宣言的リソース定義と状態管理    |
+| server-engineer      | Linux/UNIX運用     | サーバー構築、運用、自動化      |
+| system-engineer      | 全体アーキテクチャ | 非機能要件と運用設計の統合      |
+| sre-engineer         | 信頼性向上         | 可観測性、SLI/SLO、障害対応     |
+| security-engineer    | セキュリティ対策   | 脅威分析、多層防御、脆弱性対応  |
 
 ### 分析・設計系
 
-| エージェント名 | 専門領域 | 主な用途 |
-| -------------- | -------- | -------- |
-| business-analyst | 業務分析 | 業務課題の整理と要件導出 |
-| system-analyst | システム要件定義 | 業務要求を実装可能な仕様へ変換 |
-| product-researcher | 市場・ユーザー調査 | 仮説検証とプロダクト企画 |
-| project-manager | プロジェクト管理 | 計画、リスク管理、関係者調整 |
-| web-director | Web進行管理 | クライアント調整と品質管理 |
-| qa-engineer | 品質戦略 | 品質基準、品質プロセス、改善設計 |
-| technical-writer | 技術文書 | API仕様、開発ガイド、利用手順整備 |
-| orchestrator | エージェント統制 | 適切な委譲と開発フロー制御 |
+| エージェント名     | 専門領域           | 主な用途                          |
+| ------------------ | ------------------ | --------------------------------- |
+| business-analyst   | 業務分析           | 業務課題の整理と要件導出          |
+| system-analyst     | システム要件定義   | 業務要求を実装可能な仕様へ変換    |
+| product-researcher | 市場・ユーザー調査 | 仮説検証とプロダクト企画          |
+| project-manager    | プロジェクト管理   | 計画、リスク管理、関係者調整      |
+| web-director       | Web進行管理        | クライアント調整と品質管理        |
+| qa-engineer        | 品質戦略           | 品質基準、品質プロセス、改善設計  |
+| technical-writer   | 技術文書           | API仕様、開発ガイド、利用手順整備 |
+| orchestrator       | エージェント統制   | 適切な委譲と開発フロー制御        |
 
 ### デザイン・UX系
 
-| エージェント名 | 専門領域 | 主な用途 |
-| -------------- | -------- | -------- |
-| ui-designer | UI設計 | コンポーネント設計とデザインシステム構築 |
-| ux-researcher | UX調査 | インタビュー、テスト、行動観察 |
-| web-designer | Webデザイン | 情報設計とビジュアル設計 |
-| graphic-designer | 図解表現 | コンセプト図、SVG、インフォグラフィック |
-| illustrator | イラスト制作 | デジタルイラストと多媒体出力最適化 |
+| エージェント名   | 専門領域     | 主な用途                                 |
+| ---------------- | ------------ | ---------------------------------------- |
+| ui-designer      | UI設計       | コンポーネント設計とデザインシステム構築 |
+| ux-researcher    | UX調査       | インタビュー、テスト、行動観察           |
+| web-designer     | Webデザイン  | 情報設計とビジュアル設計                 |
+| graphic-designer | 図解表現     | コンセプト図、SVG、インフォグラフィック  |
+| illustrator      | イラスト制作 | デジタルイラストと多媒体出力最適化       |
 
 ### 情報不足の記録
 
 調査時点でメタデータの一部が不足していた項目は以下の通りです。
 
-| エージェント名 | 情報不足の内容 |
-| -------------- | -------------- |
+| エージェント名   | 情報不足の内容       |
+| ---------------- | -------------------- |
 | business-analyst | 具体的なツール・手法 |
-| system-analyst | ツール情報 |
-| qa-engineer | 具体的なツール情報 |
-| test-engineer | 自動化ツールの詳細 |
-| web-designer | デザインツールの詳細 |
-| orchestrator | 具体的なツール情報 |
+| system-analyst   | ツール情報           |
+| qa-engineer      | 具体的なツール情報   |
+| test-engineer    | 自動化ツールの詳細   |
+| web-designer     | デザインツールの詳細 |
+| orchestrator     | 具体的なツール情報   |
 
 使い分けの指針
 -------------------------
