@@ -1,0 +1,322 @@
+# AIペア作業フロー：シーケンス図
+# =========================
+# ユーザー(ナビゲーター)とAI(ドライバー)によるAIペア作業の対応フロー
+#
+# フローの概要
+# -------------------------
+# ユーザーがナビゲーター、AIがドライバーとして協働する作業スタイル。
+# プログラミングに限らず、設計・ドキュメント作成・タスク管理など開発作業全般で使用する。
+# 各フェーズはユーザーの明示的な指示で開始する(ドキュメント作成/更新・完了確認はAIが自発的に開始)。
+# AIはユーザーに成果物を渡す前に必ずセルフレビューを実施する。
+# 詳細定義: issue_management/flow.md
+#
+# セルフレビューの定義
+# -------------------------
+# 単なる再確認ではなく、視座を高く・視野を広くして全体を俯瞰し直すこと。
+# また、別の観点や切り口からも見直すことを意識する。
+# 修正が全体に与える影響・不整合・デグレを確認し、問題があればユーザーに報告・ヒアリングする。
+# ユーザーの指示に誤りがあると判断した場合も、その旨を明示して確認を求める。
+#
+# 背景色の凡例
+# -------------------------
+# LightCyan: チケット管理上の作業
+# 未指定  : ローカル環境での作業
+
+## 図表設定
+## -------------------------
+vars: {
+  d2-config: {
+    layout-engine: dagre
+    theme-id: 0
+  }
+}
+
+shape: sequence_diagram
+
+## 関係者(アクター)定義
+## -------------------------
+user: ユーザー(ナビゲーター)
+ai: AI(ドライバー)
+
+## シーケンス定義
+## -------------------------
+タスク開始: {
+  style: {
+    fill: LightCyan
+  }
+  user -> ai: タスクチケットを共有・背景を説明
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 不明点を質問
+  user -> ai: 質問に回答 {
+    class: feedback
+  }
+  ai -> ai: チケットに認識内容を反映 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 認識を確認・合意 {
+    class: update_progress
+  }
+}
+
+タスク分割(条件付き): {
+  style: {
+    fill: LightCyan
+  }
+  # パターン1: AIが粒度の大きさを検知して提案
+  ai -> ai: タスクの粒度・複雑度を判定 {
+    class: self_review
+  }
+  ai -> user: 分割案を提示 {
+    class: update_progress
+  }
+  # パターン2: ユーザーが分割を指示
+  user -> ai: 分割を指示または承認 {
+    class: feedback
+  }
+  ai -> ai: タスクを分割 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> user: 分割結果を報告 {
+    class: update_progress
+  }
+}
+
+概要設計(ループ): {
+  style: {
+    fill: LightCyan
+  }
+  user -> ai: 概要設計の開始を指示
+  ai -> user: 要件の不明点を質問
+  user -> ai: 質問に回答 {
+    class: feedback
+  }
+  ai -> ai: チケットに要件を反映 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 反映内容を報告 {
+    class: update_progress
+  }
+  user -> ai: 方針を承認 {
+    class: feedback
+  }
+  ai -> ai: チケットを更新 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 更新内容を報告 {
+    class: update_progress
+  }
+}
+
+詳細設計(ループ): {
+  user -> ai: 詳細設計(作業プラン作成)の開始を指示
+  ai -> ai: 作業プランを生成 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 作業プランを提示 {
+    class: update_progress
+  }
+  user -> ai: 承認・フィードバック {
+    class: feedback
+  }
+  ai -> ai: 作業プランを更新 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> user: 作業プランの生成/更新を報告 {
+    class: update_progress
+  }
+}
+
+実装(ループ): {
+  user -> ai: 作業プランに基づき指示
+  ai -> ai: 作業プランを参照して今回の実装範囲を確定 {
+    class: self_review
+  }
+  ai -> ai: 作業プランに沿って実装 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 実装結果を提示 {
+    class: update_progress
+  }
+  user -> ai: フィードバック {
+    class: feedback
+  }
+  ai -> ai: 修正 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> ai: 作業プランを更新 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> user: 3サイクルで収束しない場合は論点の再整理を提案 {
+    class: update_progress
+  }
+  ai -> user: 進捗を報告 {
+    class: update_progress
+  }
+}
+
+開発ドキュメント作成/更新(ループ): {
+  ai -> ai: ドキュメントを作成/更新 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: ドキュメントを提示 {
+    class: update_progress
+  }
+  user -> ai: 承認・フィードバック {
+    class: feedback
+  }
+  ai -> ai: ドキュメントを修正 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 対応完了を報告 {
+    class: update_progress
+  }
+}
+
+仕様ドキュメント作成/更新(ループ): {
+  style: {
+    fill: LightCyan
+  }
+  ai -> ai: ドキュメントを作成/更新 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: ドキュメントを提示 {
+    class: update_progress
+  }
+  user -> ai: 承認・フィードバック {
+    class: feedback
+  }
+  ai -> ai: ドキュメントを修正 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> user: 対応完了を報告 {
+    class: update_progress
+  }
+}
+
+完了確認: {
+  style: {
+    fill: LightCyan
+  }
+  ai -> ai: セルフレビュー {
+    class: self_review
+  }
+  ai -> ai: 作業プランをチケットに添付 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> user: 再現手順と検証結果を共有 {
+    class: update_progress
+  }
+  ai -> user: 完了を報告 {
+    class: update_progress
+  }
+  user -> user: 最終確認・チケットをクローズ {
+    style: {
+      font-color: blue
+    }
+  }
+}
+
+## クラス定義（スタイル）
+## -------------------------
+classes: {
+  # AIのアクション(実装・生成・更新・修正など)
+  ai_action: {
+    style: {
+      font-color: DarkGreen
+    }
+  }
+  # 自己レビュー
+  self_review: {
+    style: {
+      font-color: DarkOrange
+      stroke-dash: 3
+    }
+  }
+  # フィードバック
+  feedback: {
+    style: {
+      stroke-dash: 3
+    }
+  }
+  # AIから人間への判断依頼(各フェーズの締めくくり)
+  update_progress: {
+    style: {
+      font-color: Salmon
+      stroke-dash: 3
+    }
+  }
+}
