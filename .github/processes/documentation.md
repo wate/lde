@@ -11,7 +11,7 @@
 
 1. 対象の特定: 何についてのドキュメントかを明確化
 2. 読者の想定: 誰が読むドキュメントかを特定(開発者、運用者、エンドユーザー等)
-3. 既存ドキュメントの確認: 同じ内容を扱うドキュメントが既に存在しないか確認
+3. 既存ドキュメントの確認: 同じ内容を扱うドキュメントがすでに存在しないか確認
 
 ### インストラクションファイルの確認(必須)
 
@@ -22,8 +22,8 @@
 #### Markdownファイルの場合
 
 1. 以下のファイルを全文読み込む
-   - [markdown.instructions.md](../instructions/markdown.instructions.md)
-   - [japanese.instructions.md](../instructions/japanese.instructions.md)
+    - [markdown.instructions.md](../instructions/markdown.instructions.md)
+    - [japanese.instructions.md](../instructions/japanese.instructions.md)
 2. 記載されたルールを理解する
 3. 作業中・作業後にこれらのルールに準拠しているか確認する
 
@@ -69,7 +69,7 @@
 
 ### ドキュメント記述の原則
 
-- 理由と背景の明記: 「なぜそうしたか」の理由と背景を記録
+- 理由と背景の明記:「なぜそうしたか」の理由と背景を記録
 - 具体例の提示: 抽象的な説明だけでなく、実例を示す
 - コンテキストの記録: 実装の理由や制約条件を明記
 - コードとの同期: ドキュメントをコードと同期して更新

@@ -6,7 +6,7 @@
 概要
 -------------------------
 
-このドキュメントは、.github/agents配下の30件のエージェント定義を対象に、
+このドキュメントは、.github/agents配下の29件のエージェント定義を対象に、
 専門領域と活用場面を整理した一覧です。
 用途に応じた選定をしやすくするため、技術領域別の一覧、使い分け、実践例をまとめています。
 関連資料は[スキル一覧](skills.md)と[カスタムプロンプト一覧](prompts.md)を参照してください。
@@ -23,7 +23,6 @@
 | Pythonista          | Pythonアプリ開発      | Django/FastAPI開発とデータ処理           |
 | Rubyist             | Rubyアプリ開発        | Rails系実装とTDD                         |
 | gopher              | Go開発                | 高性能API・CLI・並行処理設計             |
-| zx-script-developer | zxスクリプト開発      | 自動化CLIと運用補助スクリプト実装        |
 | database-engineer   | DB設計と最適化        | スキーマ設計、クエリ改善、高可用性設計   |
 | test-engineer       | テスト実装            | テスト設計、自動化、CI統合               |
 | prompt-engineer     | プロンプト設計        | 指示テンプレート設計と出力品質改善       |
@@ -99,7 +98,7 @@
 
 - test-engineerがテスト設計と自動化を進めます。
 - qa-engineerが品質ゲートと確認観点を定義します。
-- devops-engineer、zx-script-developerがビルド、検証、自動化を支えます。
+- devops-engineerがビルド、検証、自動化を支えます。
 - orchestratorは複数エージェントの分担が増える場面で有効です。
 
 #### 運用・保守段階
@@ -185,7 +184,7 @@
 #### 段階的実装
 
 - phper、jser、test-engineerで改修と回帰確認を反復します。
-- devops-engineerとzx-script-developerが検証や移行の自動化を進めます。
+- devops-engineerが検証や移行の自動化を進めます。
 - technical-writerが旧仕様と新仕様の差分を文書化します。
 
 ### 例3 サーバー構築・インフラ整備
