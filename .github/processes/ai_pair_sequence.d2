@@ -37,6 +37,43 @@ vars: {
 
 shape: sequence_diagram
 
+## クラス定義
+## -------------------------
+classes: {
+  self_review: {
+    label: セルフレビュー
+    style: {
+      fill: "#E8F5E9"
+      font-color: "#2E7D32"
+    }
+  }
+  feedback: {
+    style: {
+      fill: "#FFF3E0"
+      font-color: "#E65100"
+    }
+  }
+  ai_action: {
+    style: {
+      fill: "#E3F2FD"
+      font-color: "#1565C0"
+      stroke-dash: 3
+    }
+  }
+  update_progress: {
+    style: {
+      fill: "#F3E5F5"
+      font-color: "#6A1B9A"
+    }
+  }
+  analysis: {
+    style: {
+      fill: "#E0F7FA"
+      font-color: "#00695C"
+    }
+  }
+}
+
 ## 関係者(アクター)定義
 ## -------------------------
 user: ユーザー(ナビゲーター)
@@ -76,6 +113,9 @@ ai: AI(ドライバー)
   }
   # パターン1: AIが粒度の大きさを検知して提案
   ai -> ai: タスクの粒度・複雑度を判定 {
+    class: analysis
+  }
+  ai -> ai: セルフレビュー {
     class: self_review
   }
   ai -> user: 分割案を提示 {
@@ -165,7 +205,7 @@ ai: AI(ドライバー)
 実装(ループ): {
   user -> ai: 作業プランに基づき指示
   ai -> ai: 作業プランを参照して今回の実装範囲を確定 {
-    class: self_review
+    class: analysis
   }
   ai -> ai: 作業プランに沿って実装 {
     class: ai_action
@@ -197,7 +237,7 @@ ai: AI(ドライバー)
       stroke-dash: 6
     }
   }
-  ai -> user: 3サイクルで収束しない場合は論点の再整理を提案 {
+  ai -> user: 2サイクルで収束しない場合は論点を再定義して方針を再合意 {
     class: update_progress
   }
   ai -> user: 進捗を報告 {
