@@ -78,15 +78,15 @@ AI協業フレームワークの構成要素やテスト資材を生成するプ
 
 | 呼び出し名               | できること                                                                      | 主な入力                                 | 主な出力                                                 |
 | ------------------------ | ------------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------- |
+| `agent-catalog`          | カスタムエージェント一覧(エージェントカタログ)を収集し、YAML形式で構造化        | `.github/agents/*.agent.md` のファイル群 | 状況依存(YAML形式)                                       |
 | `generate-agent`         | カスタムエージェントを設計・作成し、役割定義と責務範囲を明確化                  | エージェントの目的、専門領域、責務       | `.github/agents/{職種名}.agent.md`                       |
-| `generate-agent-catalog` | カスタムエージェント一覧を収集し、YAML形式で構造化                              | `.github/agents/*.agent.md` のファイル群 | 状況依存(YAML形式)                                       |
 | `generate-hearing_sheet` | 複数エージェントによる対象ケース最適化ヒアリングシートを生成                    | ヒアリング対象、目的、業種、ケース情報   | `docs/hearing_sheet_{対象名}.md`                         |
 | `generate-instructions`  | GitHub Copilot用カスタムインストラクションファイルを生成                        | ルール・規約、適用対象ファイルパターン   | `.github/instructions/{対象}.instructions.md`            |
 | `generate-prompt`        | 特定の作業手順を実行するための再利用可能なカスタムプロンプトを設計・作成        | 作業手順情報、タスクの目的・成果物・制約 | `.github/prompts/{prefix}-{名詞}.prompt.md`              |
 | `generate-skill`         | 反復作業を体系化し、エージェントスキルを設計・生成                              | スキルの目的、対象作業、前提条件         | `.github/skills/{スキル名}/SKILL.md`                     |
 | `generate-spec`          | リバースエンジニアリングとコード解析からAPI仕様・データモデルを含む仕様書を生成 | 対象ソースコード                         | `docs/` 配下(複数ファイル: overview.md, structure.md 等) |
-| `generate-test_scenario` | 機能仕様や業務フローから全テストシナリオを列挙                                  | 機能仕様、業務フロー                     | `docs/testcase/{機能名}/scenario.md`                     |
 | `generate-testcase`      | 機能テスト観点を洗い出し、画面種別別テストパターンを設計                        | 機能仕様、画面情報、DB定義               | `docs/testcase/{機能名}/{サブ機能名}.md`                 |
+| `generate-usecase`       | 機能仕様や業務フローから全ユースケースを列挙                                    | 機能仕様、業務フロー                     | `docs/testcase/{機能名}/usecase.md`                      |
 
 ### タスク・課題管理系
 
@@ -162,7 +162,7 @@ AI協業フレームワークの構成要素やテスト資材を生成するプ
     - `check-guideline`: 任意のガイドラインに対する汎用準拠チェック
 - **生成系プロンプトの使い分け**
     - `generate-agent` / `generate-instructions` / `generate-prompt` / `generate-skill`: AI協業フレームワークの構成要素を新規作成
-    - `generate-testcase` / `generate-test_scenario`: テスト設計(テストケース詳細vsシナリオ列挙)
+    - `generate-testcase` / `generate-usecase`: テスト設計(テストケース詳細vsユースケース列挙)
     - `generate-spec`: 既存コードから仕様書をリバース生成
 - **派生プロンプトの関係**
     - `proposal-risk` / `proposal-kpi` は `doc-proposal` の派生(改善提案の補完分析)
