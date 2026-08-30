@@ -5,8 +5,6 @@ applyTo: '**/*.sql'
 SQLファイル作成・編集指針
 =========================
 
-このインストラクションは、SQLファイルにおける統一されたコーディング規約と品質基準を定義します。
-
 コーディング規約
 -------------------------
 
@@ -17,13 +15,14 @@ SQLファイル作成・編集指針
 
 #### 予約語は大文字で記述
 
-**【重要】SQL予約語は必ず大文字で記述する**
+**重要**: SQL予約語は必ず大文字で記述します。
 
 - すべてのSQL予約語(SELECT、FROM、WHERE、INSERT、UPDATE、DELETE等)は大文字で記述
 - データ型(INT、VARCHAR、TEXT、DATETIME等)も大文字で記述
 - 関数名(COUNT、SUM、MAX、NOW等)も大文字で記述
 
-正しい例:
+##### 正しい例
+
 ```sql
 SELECT id, name, email
 FROM users
@@ -31,7 +30,8 @@ WHERE status = 'active'
 ORDER BY created_at DESC;
 ```
 
-誤った例:
+##### 誤った例
+
 ```sql
 select id, name, email
 from users
@@ -76,7 +76,8 @@ order by created_at desc;
 - 主要なキーワード(SELECT、FROM、WHERE、JOIN等)は行の先頭に配置
 - カラムリストは適切に改行してインデント
 
-例:
+##### 例
+
 ```sql
 SELECT
     u.id,
@@ -97,7 +98,8 @@ LIMIT 10;
 
 - カラムリストのカンマは各行の先頭に配置(trailing comma方式も許容)
 
-先頭カンマ方式:
+##### 先頭カンマ方式
+
 ```sql
 SELECT
     id
@@ -106,7 +108,8 @@ SELECT
 FROM users;
 ```
 
-末尾カンマ方式:
+##### 末尾カンマ方式
+
 ```sql
 SELECT
     id,
@@ -122,7 +125,8 @@ FROM users;
 - `--`を使用して行コメントを記述
 - `--`の後にスペースを1つ入れる
 
-例:
+##### 例
+
 ```sql
 -- ユーザー情報を取得
 SELECT id, name FROM users;
@@ -133,7 +137,8 @@ SELECT id, name FROM users;
 - `/* */`を使用してブロックコメントを記述
 - 複雑なクエリの説明や複数行の説明に使用
 
-例:
+##### 例
+
 ```sql
 /*
  * アクティブなユーザーの投稿数を集計
@@ -162,14 +167,16 @@ HAVING COUNT(p.id) > 0;
 - テーブルエイリアスは意味のある短縮形を使用
 - 単一文字のエイリアスは避ける(ただし、シンプルなクエリでは許容)
 
-推奨:
+##### 推奨
+
 ```sql
 SELECT u.name, p.title
 FROM users AS u
 JOIN blog_posts AS p ON u.id = p.user_id;
 ```
 
-非推奨:
+##### 非推奨
+
 ```sql
 SELECT t1.name, t2.title
 FROM users AS t1
@@ -181,7 +188,8 @@ JOIN blog_posts AS t2 ON t1.id = t2.user_id;
 - サブクエリは適切にインデントして可読性を確保
 - 複雑なサブクエリはCTEの使用を検討
 
-例:
+##### 例
+
 ```sql
 WITH active_users AS (
     SELECT id, name
@@ -199,14 +207,16 @@ GROUP BY au.id, au.name;
 - JOIN条件は明示的にON句で記述
 - カンマ結合ではなくJOIN構文を使用
 
-推奨:
+##### 推奨
+
 ```sql
 SELECT u.name, p.title
 FROM users AS u
 JOIN blog_posts AS p ON u.id = p.user_id;
 ```
 
-非推奨:
+##### 非推奨
+
 ```sql
 SELECT u.name, p.title
 FROM users AS u, blog_posts AS p
