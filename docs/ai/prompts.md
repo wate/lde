@@ -219,8 +219,8 @@ AI協業フレームワークの構成要素やテスト資材を生成するプ
 
 #### 例
 
-- `doc-proposal` → `proposal-risk`、`proposal-kpi`
-- `task-generate_tasklist` → `task-visualize`、`task-convert_csv`
+- `doc-proposal` -> `proposal-risk`、`proposal-kpi`
+- `task-generate_tasklist` -> `task-visualize`、`task-convert_csv`
 
 ### 品質チェックの流れ
 
@@ -228,11 +228,11 @@ AI協業フレームワークの構成要素やテスト資材を生成するプ
 
 ### ワークフロー連携例
 
-- `doc-problem` → `doc-proposal` → `doc-requirements` → `doc-rest_api` / `design-database`: 問題分析から設計までの一貫チェーン
-- `scan-vulnerability` → `report-vulnerability`: 脆弱性スキャンからトリアージレポートまで
-- `generate-prompt` → `check-prompt`: プロンプト作成から品質確認まで
-- `infra-hearing` → `infra-terraform`: 要件構造化からコード生成まで
-- `design-ui_layout` → `doc-ui_pattern`: UIレイアウト確定から画面単位の仕様書作成まで
+- `doc-problem` -> `doc-proposal` -> `doc-requirements` -> `doc-rest_api` / `design-database`: 問題分析から設計までの一貫チェーン
+- `scan-vulnerability` -> `report-vulnerability`: 脆弱性スキャンからトリアージレポートまで
+- `generate-prompt` -> `check-prompt`: プロンプト作成から品質確認まで
+- `infra-hearing` -> `infra-terraform`: 要件構造化からコード生成まで
+- `design-ui_layout` -> `doc-ui_pattern`: UIレイアウト確定から画面単位の仕様書作成まで
 
 まとめ
 -------------------------

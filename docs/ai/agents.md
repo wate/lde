@@ -1,23 +1,31 @@
 カスタムエージェント一覧
 =========================
 
-このドキュメントは、`.github/agents/*.agent.md` で定義された29件のカスタムエージェントを技術領域別に整理した一覧です。エージェントとは、特定の専門領域に特化したAIの役割定義であり、プロジェクトのフェーズや課題に応じて適切なエージェントを選ぶことで、作業の品質と効率を高められます。関連資料は[スキル一覧](skills.md)と[カスタムプロンプト一覧](prompts.md)を参照してください。
+このドキュメントは、`.github/agents/*.agent.md` で定義された**30件のカスタムエージェント**を技術領域別に整理した一覧です。
+
+エージェントとは、特定の専門領域に特化したAIの役割定義です。
+プロジェクトのフェーズや課題に応じて適切なエージェントを選ぶことで、作業の品質と効率を高められます。
+
+関連資料は以下を参照してください。
+
+- [スキル一覧](skills.md)
+- [カスタムプロンプト一覧](prompts.md)
 
 技術領域別エージェント一覧
 --------------------------
 
 ### 技術開発系
 
-| エージェント名      | 専門領域              | 主な用途                                                                            |
-| ------------------- | --------------------- | ----------------------------------------------------------------------------------- |
-| `phper`             | PHPフレームワーク開発 | CakePHP/Laravel/Symfonyによるアプリケーション設計・実装、PSR準拠と静的解析          |
-| `jser`              | MPA向けJavaScript     | jQuery/HTMX/Vanilla JS実装とレガシーJavaScriptコードの保守・リファクタリング        |
-| `pythonista`        | Pythonアプリ開発      | Django/Flask/FastAPIによるWebアプリケーション、データ分析、機械学習システム開発     |
-| `rubyist`           | Rubyアプリ開発        | Ruby on Rails/Sinatra/HanamiによるWebアプリケーション開発、TDD                      |
-| `gopher`            | Go開発                | 高性能なマイクロサービス・CLI・インフラツール開発、並行処理設計と標準ライブラリ活用 |
-| `database-engineer` | DB設計と最適化        | スキーマ設計、クエリ最適化、データモデリング、高可用性設計                          |
-| `test-engineer`     | テスト実装            | テスト設計・自動化・実行、テストケース作成からCI統合まで                            |
-| `prompt-engineer`   | プロンプト設計        | AI向けプロンプト設計とテンプレート構築、Chain-of-Thought・Few-shot等の高度技法      |
+| エージェント名      | 専門領域                   | 主な用途                                                                            |
+| ------------------- | -------------------------- | ----------------------------------------------------------------------------------- |
+| `phper`             | PHPフレームワーク開発      | CakePHP/Laravel/Symfonyによるアプリケーション設計・実装、PSR準拠と静的解析          |
+| `jser`              | MPA向けJavaScript          | jQuery/HTMX/Vanilla JS実装とレガシーJavaScriptコードの保守・リファクタリング        |
+| `pythonista`        | Pythonアプリケーション開発 | Django/Flask/FastAPIによるWebアプリケーション、データ分析、機械学習システム開発     |
+| `rubyist`           | Rubyアプリケーション開発   | Ruby on Rails/Sinatra/HanamiによるWebアプリケーション開発、TDD                      |
+| `gopher`            | Go開発                     | 高性能なマイクロサービス・CLI・インフラツール開発、並行処理設計と標準ライブラリ活用 |
+| `database-engineer` | DB設計と最適化             | スキーマ設計、クエリ最適化、データモデリング、高可用性設計                          |
+| `test-engineer`     | テスト実装                 | テスト設計・自動化・実行、テストケース作成からCI統合まで                            |
+| `prompt-engineer`   | プロンプト設計             | AI向けプロンプト設計とテンプレート構築、Chain-of-Thought・Few-shot等の高度技法      |
 
 ### インフラ・運用系
 
@@ -39,6 +47,7 @@
 | `business-analyst`   | 業務分析           | 業務プロセスの分析・改善とビジネス要件導出、現場の課題・業務フローからのシステム化判断           |
 | `system-analyst`     | システム要件定義   | ビジネス要求から実装可能なシステム仕様への変換、要件定義・技術仕様策定・実現可能性評価           |
 | `product-researcher` | 市場・ユーザー調査 | 市場調査とユーザー調査によるデータ駆動型プロダクト企画・改善、ビジネス価値の検証                 |
+| `tech-researcher`    | 技術調査           | コード・ドキュメント・Webを横断する技術調査、調査計画から推奨事項提示まで一気通貫                |
 | `project-manager`    | プロジェクト管理   | アジャイル・ウォーターフォール双方のプロジェクト管理、リスク管理とステークホルダー調整           |
 | `web-director`       | Web進行管理        | Webプロジェクトの進行管理・クライアント対応・品質管理、チーム調整と進捗管理                      |
 | `qa-engineer`        | 品質戦略           | 品質管理プロセスの設計と品質基準の策定、テスト戦略立案と品質メトリクスによるプロセス改善         |
@@ -86,19 +95,25 @@
 - 監視改善: `sre-engineer`が監視・通知・SLI/SLO・障害対応を継続改善します。
 - セキュリティ: `security-engineer`は運用時の脆弱性管理と防御設計を継続します。
 
-### 技術領域別選択指針
+### 技術領域別の選択指針
 
 #### Webアプリケーション開発
 
-中核は`phper`(または使用言語に応じて`pythonista`、`rubyist`、`gopher`)、`jser`、`ui-designer`、`database-engineer`です。企画寄りの初期段階では`business-analyst`、`ux-researcher`、`product-researcher`を加え、リリース前後では`test-engineer`、`qa-engineer`、`devops-engineer`、`sre-engineer`を優先します。
+中核は`phper`(または使用言語に応じて`pythonista`、`rubyist`、`gopher`)、`jser`、`ui-designer`、`database-engineer`です。
+企画寄りの初期段階では`business-analyst`、`ux-researcher`、`product-researcher`を加えます。
+リリース前後では`test-engineer`、`qa-engineer`、`devops-engineer`、`sre-engineer`を優先します。
 
 #### エンタープライズシステム
 
-`system-analyst`、`system-engineer`、`database-engineer`を中心に構成します。`project-manager`、`qa-engineer`、`technical-writer`を加えると統制と文書整備が安定します。`security-engineer`は早い段階で参加させる前提で進めます。
+`system-analyst`、`system-engineer`、`database-engineer`を中心に構成します。
+`project-manager`、`qa-engineer`、`technical-writer`を加えると統制と文書整備が安定します。
+`security-engineer`は早い段階から参加させる前提で進めます。
 
 #### スタートアップ・新規事業
 
-`product-researcher`、`ux-researcher`、`web-designer`で仮説検証を高速に回し、実装は`jser`、`phper`、`pythonista`など採用技術に合わせて最小構成に絞ります。`devops-engineer`は早期デリバリー基盤の整備に向きます。
+`product-researcher`、`ux-researcher`、`web-designer`で仮説検証を高速に回します。
+実装は`jser`、`phper`、`pythonista`など採用技術に合わせて最小構成に絞ります。
+`devops-engineer`は早期デリバリー基盤の整備に向きます。
 
 #### サーバー構築・運用保守
 
@@ -184,40 +199,53 @@
 
 ### エージェント連携による相乗効果
 
-- 設計フェーズ: `business-analyst` → `system-analyst` → `system-engineer` を直列で使うと、要件からアーキテクチャまで判断がぶれません。
-- 画面開発: `ux-researcher`(調査)→ `ui-designer`(設計)→ `jser`(実装)の流れで調査から実装までカバーできます。
+- 設計フェーズ: `business-analyst` -> `system-analyst` -> `system-engineer` を直列で使うと、要件からアーキテクチャまで判断がぶれません。
+- 画面開発: `ux-researcher`(調査)-> `ui-designer`(設計)-> `jser`(実装)の流れで調査から実装までカバーできます。
 - 品質保証: `test-engineer`(テスト設計)・`qa-engineer`(品質基準)・`security-engineer`(セキュリティ検証)の併用で多角的な品質保証が可能です。
-- インフラ構築: `terraform-specialist`(コード化)→ `ansible-specialist`(構成管理)→ `server-engineer`(運用)→ `sre-engineer`(監視)の直列連携が効果的です。
+- インフラ構築: 4つのエージェントを直列に連携させると効果的です。
+    - `terraform-specialist`: コード化
+    - `ansible-specialist`: 構成管理
+    - `server-engineer`: 運用
+    - `sre-engineer`: 監視
 
 ### プロジェクト規模別の推奨組み合わせ
 
 #### 小規模プロジェクト(3ヵ月以内、2-3人月)
 
-`product-researcher`、`ui-designer`、`jser`、`phper`、`devops-engineer`の組み合わせが軽量です。実装寄りのエージェントに絞り、分析系はチャットベースの简易利用に留めます。
+`product-researcher`、`ui-designer`、`jser`、`phper`、`devops-engineer`の組み合わせが軽量です。
+実装寄りのエージェントに絞り、分析系はチャットベースの簡易利用に留めます。
 
 #### 中規模プロジェクト(6ヵ月程度、5-10人月)
 
-小規模の構成に`business-analyst`、`system-analyst`、`database-engineer`、`test-engineer`、`qa-engineer`を加えます。上流工程の品質を確保し、テストの自動化まで対応します。
+小規模の構成に`business-analyst`、`system-analyst`、`database-engineer`、`test-engineer`、`qa-engineer`を加えます。
+上流工程の品質を確保し、テストの自動化まで対応します。
 
 #### 大規模プロジェクト(1年以上、10人月超)
 
-中規模の構成に`project-manager`、`web-director`、`orchestrator`を加えて分担と意思決定を明確化します。`technical-writer`を早い段階から参加させ、文書資産を整備します。
+中規模の構成に`project-manager`、`web-director`、`orchestrator`を加えて分担と意思決定を明確化します。
+`technical-writer`を早い段階から参加させ、文書資産を整備します。
 
 ### 技術特化プロジェクトでの組み合わせ
 
 #### サーバー構築・運用
 
-`server-engineer`、`terraform-specialist`、`ansible-specialist`、`sre-engineer`の4名が中核です。`cloud-engineer`や`security-engineer`を必要に応じて追加します。
+`server-engineer`、`terraform-specialist`、`ansible-specialist`、`sre-engineer`の4名が中核です。
+`cloud-engineer`や`security-engineer`を必要に応じて追加します。
 
 #### データ分析基盤
 
-`database-engineer`、`pythonista`、`system-engineer`、`devops-engineer`の連携が有効です。`product-researcher`を加えると分析要件の具体化がスムーズになります。
+`database-engineer`、`pythonista`、`system-engineer`、`devops-engineer`の連携が有効です。
+`product-researcher`を加えると分析要件の具体化がスムーズになります。
 
 #### セキュアシステム
 
-`security-engineer`、`qa-engineer`、`test-engineer`、`technical-writer`を早期から併走させます。`system-engineer`と`database-engineer`の設計段階からの参加も推奨します。
+`security-engineer`、`qa-engineer`、`test-engineer`、`technical-writer`を早期から併走させます。
+`system-engineer`と`database-engineer`の設計段階からの参加も推奨します。
 
 まとめ
 -------------------------
 
-カスタムエージェントは、専門領域で分類して把握すると選定しやすく、プロジェクトのフェーズに沿って配置すると連携しやすくなります。Web開発・レガシー改善・サーバー構築のいずれの案件でも、分析・設計・実装・品質・運用の役割を分担し、必要最小限の構成から始めてフェーズの進行に応じてエージェントを追加するアプローチが効果的です。まずは主担当を1つ決め、周辺領域のエージェントを追加する形で運用を始めてみてください。
+カスタムエージェントは、専門領域で分類して把握すると選定しやすく、プロジェクトのフェーズに沿って配置すると連携しやすくなります。
+Web開発・レガシー改善・サーバー構築のいずれの案件でも、分析・設計・実装・品質・運用の役割を分担し、必要最小限の構成から始めてフェーズの進行に応じてエージェントを追加するアプローチが効果的です。
+
+まずは主担当を1つ決め、周辺領域のエージェントを追加する形で運用を始めてみてください。
