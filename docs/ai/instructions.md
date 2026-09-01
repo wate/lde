@@ -13,7 +13,7 @@
 | `php.instructions.md`                | `**/*.php`                   | PSR-12準拠、配列短縮構文 `[]` 強制、PHPStan レベル8・Psalm エラーレベル2、Docコメント日本語必須、行長160文字・絶対上限200文字                               |
 | `javascript.instructions.md`         | `**/*.{js,mjs}`              | ES Modules優先、`const` 優先(再代入時のみ `let`)、単一引用符、セミコロン必須、JSDoc日本語記述、Prettier設定準拠                                             |
 | `sql.instructions.md`                | `**/*.sql`                   | 予約語大文字、4スペースインデント、JOIN条件は明示的に `ON` 句、サブクエリの適切なインデント、CTE活用推奨                                                    |
-| `cakephp_controller.instructions.md` | `src/Controller/**/*.php`    | 画面遷移パターン統一(add/edit→view, delete→index)、フラッシュメッセージ英語文言、`isAuthorized()` で所有権確認、破壊的アクションはHTTPメソッド制限          |
+| `cakephp_controller.instructions.md` | `src/Controller/**/*.php`    | 画面遷移パターン統一(add/edit->view, delete->index)、フラッシュメッセージ英語文言、`isAuthorized()` で所有権確認、破壊的アクションはHTTPメソッド制限        |
 | `cakephp_model.instructions.md`      | `src/Model/**/*.php`         | Enumによるステータス管理、カスタムファインダー、Entityへのロジック集約、`meta` カラムの型マッピング明示、bake再生成後の手動復元注意                         |
 | `cakephp_view.instructions.md`       | `templates/**/*.php`         | PHP代替構文不使用、状態表示はヘルパー委譲、ビュー内ロジック最小化、データ存在チェック必須、テンプレート構造化(helper/element/cell)                          |
 | `cakephp_migration.instructions.md`  | `config/Migrations/**/*.php` | `declare(strict_types=1)` + `change()`、ベースクラスはプロジェクト実物に合わせる、テーブル・カラムに日本語 `comment` 必須、ステータス列にEnumマッピング記載 |
@@ -183,7 +183,7 @@
     - 実在パス・固有名詞は必ずインラインコード(バッククォート)で囲む
 - 禁止事項:
     - タブ文字の使用
-    - 見出しレベルのスキップ(h1→h3等)
+    - 見出しレベルのスキップ(h1->h3等)
     - h1見出しの複数使用や太字による見出し代用
     - 文末・段落末尾のコロン使用
     - リスト項目名の太字装飾
@@ -196,7 +196,7 @@
     - 基本はですます調、同一リスト内で体言止めと動詞文を混在させない
     - 一文100文字以内、長文は句点で区切り箇条書きへ分解
     - 半角英数字と全角文字の間は原則スペース禁止
-    - 副詞・形式名詞・補助動詞は原則ひらがな(例: さらに→さらに、〜してください→〜してください)
+    - 副詞・形式名詞・補助動詞は原則ひらがな(例: さらに->さらに、〜してください->〜してください)
     - カタカナ語は続け書き原則、外来語は長音記号省略なし
 - 禁止事項:
     - 文体の混在
