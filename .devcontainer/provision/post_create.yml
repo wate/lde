@@ -5,105 +5,173 @@
   connection: local
   become: false
   vars:
+    ## Base Directory
+    ## -------------
     base_dir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+    ## Development Tools
+    ## -------------
     install_tools:
-      - osv-scanner
-      - delta
-      - task
-      - d2
+      - eza
+      - fd
+      - bat
+      - tig
+      - tree
+      - lnav
+      - ripgrep
+      - tgrep
       - lazygit
-      - pict
+      - delta
+      - goaccess
+      - osv-scanner
+      - direnv
+      - task
+      - restic
+      - rclone
+      - zns
+      - jc
       - duckdb
+      - assh
+      - glow
+      - bottom
+      - pandoc
+      - graphviz
+      - d2
+      - git-flow
+      - tbls
+      - runn
       - gitleaks
-      - fnt
-      # - graphviz
-      # - plantuml
-      - mermaid-cli
+      - pict
       - zx
       - ni
-      - phpDocumentor
+      - mermaid-cli
+      - fnt
+      - lindera
+      # - drawio
+      - uv
+      - rtk
+      - context-mode
+      - playwright-cli
+    ## Markitdown
+    ## -------------
+    markitdown_install: false
+    markitdown_options:
+      ### Installs dependencies for PowerPoint files
+      - pptx
+      ### Installs dependencies for Word files
+      - docx
+      ### Installs dependencies for Excel files
+      - xlsx
+      ###  Installs dependencies for older Excel files
+      # - xls
+      ### Installs dependencies for PDF files
+      - pdf
+      ### Installs dependencies for Outlook messages
+      # - outlook
+      ### Installs dependencies for Azure Document Intelligence
+      # - az-doc-intel
+      ### Installs dependencies for audio transcription of wav and mp3 files
+      # - audio-transcription
+      ### Installs dependencies for fetching YouTube video transcription
+      # - youtube-transcription
+    ## Optional Skeleton Documents
+    ## -------------
+    expand_optional_docs: false
+    optional_skeleton_files:
+      # インフラ設計・運用設計
+      - skel/docs/infrastructure_design.md
+      - skel/docs/operation_design.md
+      # 保守運用
+      - skel/docs/server_operation.md
+      - skel/docs/system_operation.md
+      # セキュリティ運用
+      - skel/docs/vulnerability_scan.md
+      # 必要時に作る補助文書
+      - skel/docs/code_metrics.md
+      - skel/docs/glossary.md
   roles:
     - role: tools
       become: true
   tasks:
-    - name: Set user setting
-      block:
-        - name: Set git safe.directory setting
-          community.general.git_config:
-            name: safe.directory
-            scope: global
-            value: "{{ ansible_facts.env.PWD | dirname | dirname }}"
-        - name: Set completion ignore-case
-          ansible.builtin.lineinfile:
-            path: ~/.inputrc
-            regex: ^set completion-ignore-case
-            line: set completion-ignore-case On
-            create: true
-            mode: "0644"
-        - name: Set direnv setting
-          ansible.builtin.lineinfile:
-            path: ~/.bashrc
-            line: eval "$(direnv hook bash)"
-        - name: Set eza alias
-          ansible.builtin.lineinfile:
-            path: ~/.bashrc
-            line: alias ls="eza --git --header"
-        - name: Set lazygit alias
-          ansible.builtin.lineinfile:
-            path: ~/.bashrc
-            line: alias lg="lazygit"
-        - name: Setup bash-git-prompt
-          block:
-            - name: Checkout bash-git-prompt
-              ansible.builtin.git:
-                repo: https://github.com/magicmonty/bash-git-prompt.git
-                dest: ~/.bash-git-prompt
-                version: master
-                depth: 1
-            - name: Add bash-git-prompt setting
-              ansible.builtin.blockinfile:
-                path: ~/.bashrc
-                marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
-                block: |
-                  if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-                      GIT_PROMPT_ONLY_IN_REPO=1
-                      source $HOME/.bash-git-prompt/gitprompt.sh
-                  fi
-        - name: Add tbls setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} tbls ANSIBLE MANAGED BLOCK"
-            block: |
-              export TBLS_DSN="mariadb://app_dev:app_dev_password@db:3306/app_dev"
-              export TBLS_DOC_PATH="docs/schema"
-        - name: Add phpDocumentor Generate diagram setting
-          ansible.builtin.blockinfile:
-            path: ~/.bashrc
-            marker: "# {mark} Generate diagrams ANSIBLE MANAGED BLOCK"
-            block: |
-              export PHPDOC_PLANTUML_BIN=/usr/bin/plantuml
-        - name: Set git safe.directory setting
-          community.general.git_config:
-            name: safe.directory
-            scope: global
-            value: "{{ ansible_facts.env.PWD | dirname | dirname }}"
-    - name: Add bash-completion files
-      block:
-        - name: Create bash-completion setting directory
-          ansible.builtin.file:
-            path: ~/.local/share/bash-completion/completions
-            state: directory
-            mode: "0755"
-        - name: Add npm command completion setting
-          ansible.builtin.lineinfile:
-            path: ~/.bashrc
-            line: eval "$(npm completion)"
-        - name: Add yarn command completion setting
-          ansible.builtin.get_url:
-            url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
-            dest: ~/.local/share/bash-completion/completions/yarn
-            mode: "0755"
-        - name: Add composer command completion setting
-          ansible.builtin.lineinfile:
-            path: ~/.bashrc
-            line: eval "$(composer completion)"
+    - name: Install pip packages
+      ansible.builtin.import_tasks:
+        file: tasks/pip_package.yml
+    - name: Set git setting
+      ansible.builtin.import_tasks:
+        file: tasks/git.yml
+    - name: Set user environment setting
+      ansible.builtin.import_tasks:
+        file: tasks/environment.yml
+    - name: Set bash-completion setting
+      ansible.builtin.import_tasks:
+        file: tasks/completion.yml
+    - name: Find skeleton files
+      ansible.builtin.find:
+        paths:
+          - skel
+        hidden: true
+        excludes:
+          - .gitkeep
+        recurse: true
+      register: find_skeleton
+    - name: Set optional skeleton target variable
+      ansible.builtin.set_fact:
+        excluded_skeleton_files: "{{ [] if (expand_optional_docs | bool) else optional_skeleton_files }}"
+    - name: Set skeleton file variable
+      ansible.builtin.set_fact:
+        skeleton_files: "{{ (find_skeleton.files | map(attribute='path') | list) | difference(excluded_skeleton_files) }}"
+    - name: Create directory
+      ansible.builtin.file:
+        path: "{{ base_dir }}/{{ dir_path }}"
+        state: directory
+        mode: "0755"
+      loop: "{{ skeleton_files | map('dirname') | map('regex_replace', '^skel/?', '') | select() | unique }}"
+      loop_control:
+        loop_var: dir_path
+        label: "{{ dir_path }}"
+    - name: Copy skeleton files
+      ansible.builtin.copy:
+        src: "{{ skeleton_file }}"
+        dest: "{{ base_dir }}/{{ skeleton_file | regex_replace('^skel/', '') }}"
+        mode: "0644"
+        force: false
+        remote_src: true
+      loop: "{{ skeleton_files }}"
+      loop_control:
+        loop_var: skeleton_file
+        label: "{{ skeleton_file | regex_replace('^skel/', '') }}"
+    # - name: Setup VSCode Github Copilot
+    #   block:
+    #     - name: Setup rtk
+    #       ansible.builtin.command:
+    #         cmd: rtk init -g --copilot
+    #         creates: ~/.copilot/hooks/rtk-rewrite.json
+    #     - name: Setup Playwright
+    #       ansible.builtin.command:
+    #         cmd: playwright-cli install --skills=agents
+    #         creates: .agents/skills/playwright-cli
+    #         chdir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+    #     - name: Setup context-mode
+    #       block:
+    #         - name: Install context-mode
+    #           ansible.builtin.file:
+    #             dest: .github/hooks
+    #             state: directory
+    #             mode: '0755'
+    #         - name: Setup context-mode hooks
+    #           ansible.builtin.copy:
+    #             dest: "{{ ansible_facts.env.PWD | dirname | dirname }}/.github/hooks/context-mode.json"
+    #             content: |
+    #               {
+    #                 "hooks": {
+    #                   "PreToolUse": [
+    #                     { "type": "command", "command": "context-mode hook vscode-copilot pretooluse" }
+    #                   ],
+    #                   "PostToolUse": [
+    #                     { "type": "command", "command": "context-mode hook vscode-copilot posttooluse" }
+    #                   ],
+    #                   "SessionStart": [
+    #                     { "type": "command", "command": "context-mode hook vscode-copilot sessionstart" }
+    #                   ]
+    #                 }
+    #               }
+    #             mode: '0644'

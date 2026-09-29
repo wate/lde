@@ -1,0 +1,123 @@
+---
+## ----------
+## Markitdown
+## @see https://github.com/microsoft/markitdown
+## ----------
+- name: Install markitdown
+  when: markitdown_install | default(false)
+  block:
+    - name: Install dependency packages
+      ansible.builtin.apt:
+        name: libimage-exiftool-perl
+      become: true
+    - name: Install ffmpeg
+      ansible.builtin.apt:
+        name: ffmpeg
+      become: true
+      when: >
+        'audio-transcription' in markitdown_options
+        or
+        'youtube-transcription' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update markitdown
+      community.general.pipx:
+        name: markitdown
+        state: latest
+        install_deps: true
+        include_injected: true
+    - name: Install/update optional dependencies(pptx)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - python-pptx
+      when: >
+        'pptx' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(docx)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - mammoth
+          - lxml
+      when: >
+        'docx' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(xlsx)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - pandas
+          - openpyxl
+      when: >
+        'xlsx' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(xls)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - pandas
+          - xlrd
+      when: >
+        'xls' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(pdf)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - pdfminer.six
+      when: >
+        'pdf' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(outlook)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - olefile
+      when: >
+        'outlook' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(audio-transcription)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - pydub
+          - SpeechRecognition
+      when: >
+        'audio-transcription' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(youtube-transcription)
+      community.general.pipx:
+        state: inject
+        name: markitdown
+        inject_packages:
+          - youtube-transcript-api
+      when: >
+        'youtube-transcription' in markitdown_options
+        or
+        'all' in markitdown_options
+    - name: Install/update optional dependencies(az-doc-intel)
+      community.general.pipx:
+        name: markitdown
+        inject_packages:
+          - azure-ai-documentintelligence
+          - azure-identity
+        state: latest
+      when: >
+        'az-doc-intel' in markitdown_options
+        or
+        'all' in markitdown_options

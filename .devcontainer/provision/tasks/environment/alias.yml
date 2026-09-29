@@ -1,0 +1,25 @@
+---
+# code: language=ansible
+- name: Set eza alias
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: alias ls="eza --git --header"
+  when: "'eza' in install_tools"
+- name: Set lazygit alias
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: alias lg="lazygit"
+  when: "'lazygit' in install_tools"
+- name: Set drawio alias
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: alias drawio="xvfb-run drawio"
+  when: "'drawio' in install_tools"
+- name: Set diff-pdf alias
+  when: "'diff-pdf' in install_tools"
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    marker: "# {mark} diff-pdf ANSIBLE MANAGED BLOCK"
+    block: |
+      alias diff-pdf="xvfb-run diff-pdf"
+      alias pdfdiff="xvfb-run diff-pdf"
