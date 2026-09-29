@@ -27,4 +27,7 @@ if [ -f .pre-commit-config.yaml ] && [ -e ~/.local/pipx/venvs/pre-commit ] && [ 
   pre-commit install
 fi
 
+# .devcontainer/compose.yml側で/usr/local/bin/apache2-foregroundで起動している
+# Webサーバーのログなどをターミナルで確認したい場合は、
+# compose.yml側のcommand部を`sleep infinity`に変更して、下記のコマンドで起動する
 # apache2ctl start

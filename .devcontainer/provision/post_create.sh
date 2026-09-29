@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-echo "${USER}:${USER}" | sudo chpasswd
-
 DEVCONTAINER_DIR="${PWD}/.devcontainer"
 
 ## -------------------
@@ -47,6 +45,10 @@ EOT
 
 cat << EOT >~/.myclirc
 [main]
+# Flag to indicate that the migration from my.cnf is complete.
+# Suppresses the deprecation warning about reading settings from my.cnf.
+my_cnf_transition_done = True
+
 # Enables context sensitive auto-completion. If this is disabled then all
 # possible completions will be listed.
 smart_completion = True
@@ -68,6 +70,15 @@ enable_pager = False
 # Skip intro info on startup and outro info on exit
 less_chatty = True
 
+[client]
+host = db
+database = app_dev
+user = app_dev
+password = app_dev_password
+
+[connection]
+default_character_set = utf8mb4
+
 [alias_dsn]
 dev = mysql://app_dev:app_dev_password@db:3306/app_dev
 test = mysql://app_test:app_test_password@db:3306/app_test
@@ -84,16 +95,39 @@ if [ -f package.json ]; then
   ni
 fi
 
+## Homebrew
+if [ ! -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  NONINTERACTIVE=1
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
+fi
+
+## -------------
+## 各種コマンドラインツールをインストール
+## ----
+## mkdocs-material: https://squidfunk.github.io/mkdocs-material/
+## zensical: https://zensical.org/
+## mycli: https://www.mycli.net/
+## ddgs: https://github.com/deedy5/ddgs
+## pre-commit: https://pre-commit.com/
+## Ansible: https://docs.ansible.com/
+## -------------
 if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
   pipx install mkdocs --include-deps
-  pipx inject mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
-  ## ナビゲーション関連
+  pipx inject mkdocs mkdocs-material mkdocs-glightbox
   pipx inject mkdocs mkdocs-literate-nav mkdocs-section-index
-  ## 作図関連プラグイン
-  pipx inject mkdocs mkdocs-d2-plugin plantuml-markdown mkdocs-drawio
+fi
+if [ ! -e ~/.local/pipx/venvs/zensical ]; then
+  pipx install zensical --include-deps
+  pipx inject zensical mkdocs-glightbox
+  pipx inject zensical mkdocs-literate-nav mkdocs-section-index
+  pipx inject mkdocs mkdocs-git-revision-date-localized-plugin
 fi
 if [ ! -e ~/.local/pipx/venvs/mycli ]; then
   pipx install mycli --include-deps
+fi
+if [ ! -e ~/.local/pipx/venvs/ddgs ]; then
+  pipx install ddgs --include-deps
 fi
 if [ ! -e ~/.local/pipx/venvs/pre-commit ]; then
   pipx install pre-commit --include-deps
@@ -102,8 +136,27 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
   pipx install ansible --include-deps
   pipx inject ansible ansible-lint --include-apps
 fi
-if [ ! -e ~/.local/pipx/venvs/uv ]; then
-  pipx install uv
+if [ ! -e "${HOME}/.local/pipx/venvs/markitdown" ]; then
+  pipx install "markitdown[all]"
+fi
+
+# Playwright利用時のシステム依存ライブラリのインストール(root権限が必要)
+sudo npx playwright install-deps chromium
+
+## Claude Code
+if [ ! -e ~/.local/bin/claude ]; then
+	curl -fsSL https://claude.ai/install.sh | bash
+fi
+## OpenCode
+if [ ! -e ~/.opencode/bin/opencode ]; then
+	curl -fsSL https://opencode.ai/install | bash
+fi
+if [ ! -e ~/.local/bin/opencode ]; then
+	ln -s ~/.opencode/bin/opencode  ~/.local/bin/opencode
+fi
+## Copilot CLI
+if [ ! -e ~/.opencode/bin/copilot ]; then
+  curl -fsSL https://gh.io/copilot-install | bash
 fi
 
 PROVISION_DIR=$(dirname $0)

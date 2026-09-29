@@ -1,0 +1,24 @@
+---
+# code: language=ansible
+- name: Create bash-completion setting directory
+  ansible.builtin.file:
+    path: ~/.local/share/bash-completion/completions
+    state: directory
+    mode: "0755"
+- name: Set npm command completion setting
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: eval "$(npm completion)"
+- name: Set yarn command completion setting
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/dsifford/yarn-completion/master/yarn-completion.bash
+    dest: ~/.local/share/bash-completion/completions/yarn
+    mode: "0755"
+- name: Set composer command completion setting
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: eval "$(composer completion)"
+- name: Set tbls command completion setting
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: eval "$(tbls completion bash)"

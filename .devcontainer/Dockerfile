@@ -13,23 +13,22 @@ RUN . /etc/os-release \
   && rm -f /etc/apt/sources.list.d/yarn.list \
   && apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install -y --no-install-recommends mariadb-client libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libzip-dev \
-  && apt-get install -y --no-install-recommends python3-pymysql \
   && apt-get install -y --no-install-recommends bash-completion build-essential gpg vim \
   && apt-get install -y --no-install-recommends imagemagick libmagickwand-dev \
   && apt-get install -y --no-install-recommends fonts-ipaexfont fonts-morisawa-bizud-gothic fonts-morisawa-bizud-mincho fnt \
   && apt-get install -y --no-install-recommends pipx \
-  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav xvfb sshpass \
+  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav sshpass \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 ## Install php module
-RUN docker-php-ext-install mysqli pdo pdo_mysql intl zip bcmath \
+RUN docker-php-ext-install mysqli pdo pdo_mysql intl zip \
   && docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install -j$(nproc) gd \
   && pecl install imagick \
   && docker-php-ext-enable imagick
 
 ## Install node.js and package manager
-ARG NODE_VERSION="22.x"
+ARG NODE_VERSION="24.x"
 RUN apt-get install -y apt-transport-https ca-certificates curl gnupg \
   && mkdir -p /etc/apt/keyrings \
   && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
@@ -40,10 +39,10 @@ RUN apt-get install -y apt-transport-https ca-certificates curl gnupg \
   && echo "Components: main" >>/etc/apt/sources.list.d/nodesource.sources \
   && echo "Signed-By: /etc/apt/keyrings/nodesource.gpg" >>/etc/apt/sources.list.d/nodesource.sources \
   && echo "Enabled: yes" >>/etc/apt/sources.list.d/nodesource.sources \
-  && rm /usr/bin/yarn /usr/bin/yarnpkg && rm -fr /usr/share/yarn \
   && echo "Package: nodejs"  >>/etc/apt/preferences.d/nodejs \
   && echo "Pin: origin deb.nodesource.com"  >>/etc/apt/preferences.d/nodejs \
   && echo "Pin-Priority: 600" >>/etc/apt/preferences.d/nodejs \
+  && rm -f /usr/bin/yarn /usr/bin/yarnpkg && rm -fr /usr/share/yarn \
   && apt-get update && apt-get install -y nodejs \
   && npm i -g yarn zx @antfu/ni
 

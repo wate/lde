@@ -1,0 +1,47 @@
+---
+# code: language=ansible
+- name: Install/update mycli
+  community.general.pipx:
+    name: mycli
+    install_deps: true
+    state: latest
+- name: Install/update pre-commit
+  community.general.pipx:
+    name: pre-commit
+    install_deps: true
+    state: latest
+- name: Install/update mkdocs
+  community.general.pipx:
+    name: mkdocs
+    install_deps: true
+    state: latest
+    include_injected: true
+- name: Inject mkdocs packages
+  community.general.pipx:
+    name: mkdocs
+    state: inject
+    inject_packages:
+      ## 基本
+      - mkdocs-material
+      - mkdocs-git-revision-date-localized-plugin
+      - mkdocs-glightbox
+      ## ナビゲーション関連
+      - mkdocs-literate-nav
+      - mkdocs-section-index
+      ## 作図関連
+      - mkdocs-d2-plugin
+      - plantuml-markdown
+      - mkdocs-drawio
+- name: Update Ansible
+  community.general.pipx:
+    name: ansible
+    install_deps: true
+    state: latest
+    include_injected: true
+- name: Inject ansible packages
+  community.general.pipx:
+    name: ansible
+    state: inject
+    install_apps: true
+    inject_packages:
+      - ansible-lint

@@ -1,0 +1,24 @@
+---
+- name: Set draw.io setting
+  when: "'drawio' in install_tools"
+  block:
+    - name: Set dbus setting
+      ansible.builtin.blockinfile:
+        path: ~/.bashrc
+        marker: "# {mark} dbus ANSIBLE MANAGED BLOCK"
+        block: |
+          CHECK_STARTED_DBUS_DAEMON=$(ps aux | grep "/usr/bin/dbus-daemon --system" | grep -v grep | wc -l)
+          if [ ${CHECK_STARTED_DBUS_DAEMON} = 0 ]; then
+            sudo /etc/init.d/dbus start
+          fi
+          export XDG_RUNTIME_DIR=/run/user/$(id -u)
+          if [ ! -e "${XDG_RUNTIME_DIR}" ]; then
+            sudo mkdir $XDG_RUNTIME_DIR
+            sudo chmod 700 $XDG_RUNTIME_DIR
+            sudo chown $(id -un):$(id -gn) $XDG_RUNTIME_DIR
+          fi
+          export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
+          CHECK_DBUS_SESSION=$(ps aux | grep "dbus-daemon --session --address=" | grep -v grep | wc -l)
+          if [ ${CHECK_DBUS_SESSION} = 0 ]; then
+            dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
+          fi

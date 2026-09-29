@@ -1,7 +1,22 @@
+---
+# Dev Container環境構築用 Ansible外部ロール依存関係定義
+#
+# このファイルは、Dev Container初回起動時にansible-galaxyで使用される
+# 外部Ansibleロールの依存関係を定義します。
+#
+# 動作フロー:
+# 1. Dev Container起動時に post_create.sh が実行される
+# 2. ansible-galaxy install -r requirements.yml で外部ロールをダウンロード
+# 3. ダウンロードされたロールが .devcontainer/provision/roles/ に配置される
+# 4. 各種プレイブック（post_create.yml等）でこれらのロールが実行される
+#
+# 定義されているロール:
+# - tools: 開発支援ツール群のインストール・設定
+# - nodejs: Node.js環境の構築・設定
 roles:
-  - name: tools
-    src: https://github.com/wate/ansible-role-tools.git
-    version: develop
   - name: nodejs
     src: https://github.com/wate/ansible-role-nodejs.git
+    version: develop
+  - name: tools
+    src: https://github.com/wate/ansible-role-tools.git
     version: develop

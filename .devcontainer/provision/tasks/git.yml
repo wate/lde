@@ -1,0 +1,33 @@
+---
+# code: language=ansible
+- name: Set git safe.directory setting
+  community.general.git_config:
+    name: safe.directory
+    scope: global
+    value: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+- name: Setup bash-git-prompt
+  block:
+    - name: Checkout bash-git-prompt
+      ansible.builtin.git:
+        repo: https://github.com/magicmonty/bash-git-prompt.git
+        dest: ~/.bash-git-prompt
+        version: master
+        depth: 1
+    - name: Set bash-git-prompt setting
+      ansible.builtin.blockinfile:
+        path: ~/.bashrc
+        marker: "# {mark} bash-git-prompt setting ANSIBLE MANAGED BLOCK"
+        block: |
+          if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+              GIT_PROMPT_ONLY_IN_REPO=1
+              source $HOME/.bash-git-prompt/gitprompt.sh
+          fi
+- name: Set draw.io setting
+  ansible.builtin.blockinfile:
+    path: "{{ base_dir }}/.gitattributes"
+    marker: "## {mark} draw.io ANSIBLE MANAGED BLOCK"
+    content: |
+      *.drawio linguist-detectable=true
+      *.drawio linguist-language=xml
+    mode: "0644"
+    create: true

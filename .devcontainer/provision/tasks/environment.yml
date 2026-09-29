@@ -1,0 +1,23 @@
+---
+# code: language=ansible
+- name: Set completion ignore-case
+  ansible.builtin.lineinfile:
+    path: ~/.inputrc
+    regex: ^set completion-ignore-case
+    line: set completion-ignore-case On
+    create: true
+    mode: "0644"
+- name: Set direnv setting
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: eval "$(direnv hook bash)"
+- name: Find other setting task
+  ansible.builtin.set_fact:
+    environment_tasks: "{{ lookup('fileglob', 'tasks/environment/*.yml', wantlist=true) }}"
+- name: Include other setup tasks
+  ansible.builtin.include_tasks:
+    file: "{{ environment_task }}"
+  loop: "{{ environment_tasks }}"
+  loop_control:
+    loop_var: environment_task
+    label: "{{ environment_task | basename }}"

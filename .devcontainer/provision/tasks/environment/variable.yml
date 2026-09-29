@@ -1,0 +1,8 @@
+---
+# code: language=ansible
+- name: Set phpDocumentor Generate diagram setting
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    marker: '# {mark} Generate diagrams ANSIBLE MANAGED BLOCK'
+    block: |
+      export PHPDOC_PLANTUML_BIN=/usr/bin/plantuml
