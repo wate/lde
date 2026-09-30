@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node .github/hooks/session-context-inject/index.mjs",
+        "cwd": ".",
+        "timeout": 5
+      }
+    ]
+  }
+}

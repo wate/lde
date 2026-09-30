@@ -114,14 +114,13 @@ fi
 ## -------------
 if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
   pipx install mkdocs --include-deps
-  pipx inject mkdocs mkdocs-material mkdocs-glightbox
+  pipx inject mkdocs mkdocs-material
+  pipx inject mkdocs mkdocs-glightbox mkdocs-exclude
   pipx inject mkdocs mkdocs-literate-nav mkdocs-section-index
+  pipx inject mkdocs mkdocs-git-revision-date-localized-plugin
 fi
 if [ ! -e ~/.local/pipx/venvs/zensical ]; then
   pipx install zensical --include-deps
-  pipx inject zensical mkdocs-glightbox
-  pipx inject zensical mkdocs-literate-nav mkdocs-section-index
-  pipx inject mkdocs mkdocs-git-revision-date-localized-plugin
 fi
 if [ ! -e ~/.local/pipx/venvs/mycli ]; then
   pipx install mycli --include-deps
