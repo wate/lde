@@ -20,3 +20,6 @@ roles:
   - name: tools
     src: https://github.com/wate/ansible-role-tools.git
     version: develop
+  - name: logdy
+    src: https://github.com/wate/ansible-role-logdy.git
+    version: develop

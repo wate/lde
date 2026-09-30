@@ -97,7 +97,7 @@ fi
 
 ## Homebrew
 if [ ! -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
-  NONINTERACTIVE=1
+  export NONINTERACTIVE=1
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
 fi
