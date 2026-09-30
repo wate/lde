@@ -51,6 +51,10 @@
       - rtk
       - context-mode
       - playwright-cli
+    ## logdy
+    ## -------------
+    logdy_service_enabled: false
+    logdy_service_state: stopped
     ## Markitdown
     ## -------------
     markitdown_install: false
@@ -89,6 +93,8 @@
       - skel/docs/code_metrics.md
       - skel/docs/glossary.md
   roles:
+    - role: logdy
+      become: true
     - role: tools
       become: true
   tasks:
