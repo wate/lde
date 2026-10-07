@@ -135,28 +135,25 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
   pipx install ansible --include-deps
   pipx inject ansible ansible-lint --include-apps
 fi
-if [ ! -e "${HOME}/.local/pipx/venvs/markitdown" ]; then
-  pipx install "markitdown[all]"
-fi
 
 # Playwright利用時のシステム依存ライブラリのインストール(root権限が必要)
 sudo npx playwright install-deps chromium
 
 ## Claude Code
-if [ ! -e ~/.local/bin/claude ]; then
-	curl -fsSL https://claude.ai/install.sh | bash
-fi
+# if [ ! -e ~/.local/bin/claude ]; then
+# 	curl -fsSL https://claude.ai/install.sh | bash
+# fi
 ## OpenCode
-if [ ! -e ~/.opencode/bin/opencode ]; then
-	curl -fsSL https://opencode.ai/install | bash
-fi
-if [ ! -e ~/.local/bin/opencode ]; then
-	ln -s ~/.opencode/bin/opencode  ~/.local/bin/opencode
-fi
+# if [ ! -e ~/.opencode/bin/opencode ]; then
+# 	curl -fsSL https://opencode.ai/install | bash
+# fi
+# if [ ! -e ~/.local/bin/opencode ]; then
+# 	ln -s ~/.opencode/bin/opencode  ~/.local/bin/opencode
+# fi
 ## Copilot CLI
-if [ ! -e ~/.opencode/bin/copilot ]; then
-  curl -fsSL https://gh.io/copilot-install | bash
-fi
+# if [ ! -e ~/.opencode/bin/copilot ]; then
+#   curl -fsSL https://gh.io/copilot-install | bash
+# fi
 
 PROVISION_DIR=$(dirname $0)
 ROLE_DIR="${PROVISION_DIR}/roles"
