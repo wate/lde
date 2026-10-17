@@ -29,7 +29,7 @@ GitHub Copilot設定ガイド
 次の3つは必須ではありません。  
 既存の運用があるプロジェクトでは、そのまま流用できます。
 
-- `prompts/agent-guide.prompt.md`: AGENTS.mdを生成するプロンプトです(索引の実在に応じて導線を切り替えます)。
+- `skills/agent-guide/`: AGENTS.mdを生成するスキルです(参照する出力例を含むため、ディレクトリごとコピーします)。
 - `copilot-instructions.md`: 全作業に常時適用される協働方針です。
 - `instructions/`: ファイル種別に応じて自動適用される規約です。
 
@@ -107,4 +107,4 @@ flowchart LR
 - [Copilot協働方針](copilot-instructions.md)
 - [設定ガイド](hooks/session-context-inject/README.md)
 - [プロセス索引](processes/index.md)
-- [AGENTS.md生成プロンプト](prompts/agent-guide.prompt.md)
+- [AGENTS.md生成スキル](skills/agent-guide/SKILL.md)
