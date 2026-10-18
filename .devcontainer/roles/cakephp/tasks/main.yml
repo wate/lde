@@ -122,18 +122,6 @@
       ansible.builtin.file:
         path: "{{ cakephp_project_tmp_dir }}"
         state: absent
-    - name: ドキュメントファイルの生成
-      block:
-        - name: ドキュメントディレクトリを作成
-          ansible.builtin.file:
-            path: "{{ cakephp_project_source_dir }}/docs"
-            state: directory
-            mode: "0755"
-        - name: チートシートファイルを生成
-          ansible.builtin.template:
-            src: cheatsheet.md.j2
-            dest: "{{ cakephp_project_source_dir }}/docs/cheatsheet.md"
-            mode: "0644"
     - name: Ansibleの各種変数を設定
       ansible.builtin.set_fact:
         cakephp_gitignore_value: |

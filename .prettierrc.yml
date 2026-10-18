@@ -73,3 +73,11 @@ singleQuote: true
 #       - "legacy/**/*.js"
 #     options:
 #       tabWidth: 4
+### YAMLは二重引用符を使用する(Ansibleの変数展開等、既存の表記を変更しない)
+## https://prettier.io/docs/en/options#quotes
+overrides:
+  - files:
+      - "**/*.yml"
+      - "**/*.yaml"
+    options:
+      singleQuote: false

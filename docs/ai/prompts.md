@@ -25,7 +25,6 @@
 | `doc-ai-prompt`           | カスタムプロンプトを調査・整理し、用途と使い分けが分かる一覧ドキュメントを生成                 | `.github/prompts/*.prompt.md` のファイル群                       | `docs/ai/prompts.md`                           |
 | `doc-ai-skill`            | スキルファイルを調査・分析し、実行できる内容と読み込みトリガー条件を一覧化                     | `.github/skills/*/SKILL.md` のファイル群                         | `docs/ai/skills.md`                            |
 | `doc-business_process`    | 業務プロセスを抽出し、頻度別に分類した業務プロセス一覧を生成                                   | 要件定義書、ヒアリングシート等の業務情報                         | `docs/workflow/index.md`                       |
-| `doc-cheat_sheet`         | 開発者向けチートシートを設定ファイル/フレームワーク単位で生成・更新                            | `composer.json`、`package.json`、`Taskfile.yml` 等の設定ファイル | `docs/cheatsheets/` 配下(複数ファイル)         |
 | `doc-code_style`          | Linter設定を解析・統合し、多言語開発環境向けコーディング規約ドキュメントを生成                 | EditorConfig、Markdownlint、言語別Linter設定                     | `docs/code_style.md`                           |
 | `doc-deployment`          | Ansibleプレイブックを解析し、デプロイ手順書を生成                                              | `deploy.yml`、`inventory.yml`                                    | `docs/deployment.md`                           |
 | `doc-directory_structure` | プロジェクトディレクトリ構造を分析し、体系化されたドキュメントを生成                           | プロジェクトディレクトリ                                         | `docs/directory_structure.md`                  |
@@ -197,6 +196,6 @@ AI協業フレームワークの構成要素やテスト資材を生成するプ
 まとめ
 -------------------------
 
-本プロジェクトには48件のカスタムプロンプトが用意されており、ドキュメント生成・品質チェック・設計・図表作成・タスク管理・レポート生成・インフラ運用など多岐にわたる作業をカバーしています。
+本プロジェクトには47件のカスタムプロンプトが用意されており、ドキュメント生成・品質チェック・設計・図表作成・タスク管理・レポート生成・インフラ運用など多岐にわたる作業をカバーしています。
 プレフィックスによる目的分類と出力先の傾向を把握することで、目的のプロンプトを素早く見つけられます。
 また、派生プロンプトの関係性やチェック系プロンプトとの組み合わせを活用することで、一貫性のある成果物生成と品質保証のサイクルを効率的に回せます。
