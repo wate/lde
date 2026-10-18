@@ -92,7 +92,6 @@ Git操作の基本ルールは[Git運用プロセス](./git.md)を参照する�
 
 - [ディレクトリ構造](../../docs/directory_structure.md): ファイル配置の確認
 - [ローカル開発環境](../../docs/local_development.md): 環境構築・設定
-- [チートシート](../../docs/cheat_sheet.md): よく使うコマンドやツール
 
 ### 品質・運用
 
