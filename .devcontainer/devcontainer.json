@@ -16,35 +16,26 @@
         },
         "[markdown]": {
           "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-        },
-        "[sql]": {
-          "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
-        },
-        "sql-formatter.dialect": "sql",
-        "sql-formatter.uppercase": true
+        }
       },
       "extensions": [
         "EditorConfig.EditorConfig",
-        "yzhang.markdown-all-in-one",
-        "DavidAnson.vscode-markdownlint",
-        "bierner.github-markdown-preview",
-        "shd101wyy.markdown-preview-enhanced",
-        "xdebug.php-debug",
         "bmewburn.vscode-intelephense-client",
         "esbenp.prettier-vscode",
-        "vscode-icons-team.vscode-icons",
         "mikestead.dotenv",
         "oderwat.indent-rainbow",
+        "mohammadbaqer.better-folding",
         "mechatroner.rainbow-csv",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "shd101wyy.markdown-preview-enhanced",
         "Terrastruct.d2",
         "hediet.vscode-drawio",
-        "redhat.vscode-yaml",
         "redhat.ansible",
         "streetsidesoftware.code-spell-checker",
-        "adpyke.vscode-sql-formatter",
         "ionutvmi.path-autocomplete",
         "ms-playwright.playwright",
-        "OnesoftQwQ.opencode-go-copilot-provider"
+        "mhutchie.git-graph"
       ]
     }
   },

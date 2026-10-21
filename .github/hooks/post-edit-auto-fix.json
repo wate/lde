@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "node .github/hooks/post-edit-auto-fix/index.mjs",
+        "cwd": ".",
+        "timeout": 180
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "toolNames": [
+    "apply_patch",
+    "create_file",
+    "replace_string_in_file",
+    "multi_replace_string_in_file",
+    "insert_edit_into_file",
+    "Edit",
+    "Write"
+  ],
+  "autoApply": true,
+  "rules": [
+    {
+      "glob": "**/*.php",
+      "command": "composer run cs-fix -- {files}",
+      "timeoutMs": 180000
+    },
+    {
+      "glob": "**/*.md",
+      "excludeGlobs": [
+        "docs/schema/**",
+        ".github/**"
+      ],
+      "command": "npx textlint --fix {files}",
+      "timeoutMs": 180000
+    },
+    {
+      "glob": "**/*.{md,txt}",
+      "excludeGlobs": [
+        "docs/schema/**"
+      ],
+      "command": "npx markdownlint-cli --fix {files}",
+      "timeoutMs": 180000
+    },
+    {
+      "glob": "templates/**/*.{js,ts,css,scss}",
+      "command": "npx prettier --write {files}",
+      "timeoutMs": 180000
+    }
+  ]
+}
