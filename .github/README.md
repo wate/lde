@@ -11,7 +11,7 @@ GitHub Copilot設定ガイド
 
 組み込みに必要な最小構成は、次の2つだけです。
 
-- `hooks/`: セッション開始時に索引を注入するフックです。
+- `hooks/`: 承認制御、コンテキスト注入、編集後の自動整形を行うフックです。
 - `processes/`: 注入する索引と、作業手順書の本体です。
 
 すでに別プロジェクトで`copilot-instructions.md`を運用していても、  
@@ -80,6 +80,53 @@ flowchart LR
 - ワークスペースが信頼されていること
 - Node.jsの実行環境があり、`node`コマンドが利用できること
 
+編集後の自動整形
+-------------------------
+
+`hooks/post-edit-auto-fix.json`は、ファイル編集の直後に整形コマンドを実行するフックです。
+`PostToolUse`で起動し、編集されたファイルのうち`glob`に一致するものへコマンドを適用します。
+
+構成は次のとおりです。
+
+- `hooks/post-edit-auto-fix.json`: フック定義ファイルです。
+- `hooks/post-edit-auto-fix/index.mjs`: 対象ファイルの抽出とルールの実行を担います。
+- `hooks/post-edit-auto-fix/config.sample.json`: 実行ルールの雛形です。
+- `hooks/post-edit-auto-fix/README.md`: 設定項目と判定ルールの説明です。
+
+配布するのは`hooks/post-edit-auto-fix/`配下の3ファイル(`index.mjs`、`config.sample.json`、`README.md`)と、フック定義の`hooks/post-edit-auto-fix.json`です。
+
+自動整形を有効にするには、`config.sample.json`を同じディレクトリへ`config.json`としてコピーし、  
+導入先のツールに合わせて書き換えてください。
+
+`config.json`が無い場合も、フックは編集のたびに起動します。
+ただし適用するルールが0件のため、ファイルを書き換えず、警告も表示しません。
+
+### 設定項目
+
+`config.json`では`toolNames`、`autoApply`、`rules`を指定します。
+`rules`の各要素は、`glob`、`excludeGlobs`、`command`、`timeoutMs`、`cwd`、`autoApply`を持ちます。
+`command`では`{files}`を一致したファイル一覧へ、`{firstFile}`を先頭のファイルへ置換します。
+`toolNames`には、旧LocalハーネスとCopilotハーネスの双方のツール名を既定で含みます。
+
+`config.sample.json`には、次の4つのルールを定義しています。
+
+- `**/*.php`: `composer run cs-fix -- {files}`
+- `**/*.md`: `npx textlint --fix {files}`
+- `**/*.{md,txt}`: `npx markdownlint-cli --fix {files}`
+- `templates/**/*.{js,ts,css,scss}`: `npx prettier --write {files}`
+
+このサンプルは雛形であり、除外設定などの詳細は`hooks/post-edit-auto-fix/README.md`に記載しています。
+導入先のツールに合わせて書き換えてください。
+
+### 実行条件
+
+フックを動かすには、次の条件を満たす必要があります。
+
+- `PostToolUse`フックが有効であること
+- `node`コマンドが利用できること
+
+コマンドが失敗した場合は警告を返し、処理は継続します。
+
 変更時の注意
 -------------------------
 
@@ -89,6 +136,9 @@ flowchart LR
 - 索引には振り分けの情報だけを置き、詳細は各プロセスファイルへ書きます。
 - 注入対象を増やす場合は`config.json`で指定します。
 - 索引が無いと条件付き参照が働かないため、索引から各プロセスへの導線を維持します。
+
+**注意**: `post-edit-auto-fix`のルールは、編集直後にファイルを書き換えます。
+意図しない変更を避けるため、`excludeGlobs`で対象を絞ってください。
 
 関連リンク
 -------------------------
@@ -105,4 +155,5 @@ flowchart LR
 
 - [Copilot協働方針](copilot-instructions.md)
 - [設定ガイド](hooks/session-context-inject/README.md)
+- [post-edit-auto-fix設定ガイド](hooks/post-edit-auto-fix/README.md)
 - [プロセス索引](processes/index.md)
