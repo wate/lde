@@ -35,7 +35,9 @@
         "streetsidesoftware.code-spell-checker",
         "ionutvmi.path-autocomplete",
         "ms-playwright.playwright",
-        "mhutchie.git-graph"
+        "mhutchie.git-graph",
+        "ltmoerdani.opencode-copilot-chat",
+        "dbcode.dbcode"
       ]
     }
   },
@@ -44,7 +46,6 @@
     8025,
     1025,
     // 7700,
-    // 11434,
     3306
   ],
   "postCreateCommand": "if [ -f .devcontainer/provision/post_create.sh ]; then bash .devcontainer/provision/post_create.sh; fi",

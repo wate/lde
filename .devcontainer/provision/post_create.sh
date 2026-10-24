@@ -42,6 +42,7 @@ user=app_dev
 password=app_dev_password
 default-character-set=utf8mb4
 EOT
+chmod 600 ~/.my.cnf
 
 cat << EOT >~/.myclirc
 [main]
@@ -95,30 +96,15 @@ if [ -f package.json ]; then
   ni
 fi
 
-## Homebrew
-if [ ! -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
-  export NONINTERACTIVE=1
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
-fi
-
 ## -------------
 ## 各種コマンドラインツールをインストール
 ## ----
-## mkdocs-material: https://squidfunk.github.io/mkdocs-material/
 ## zensical: https://zensical.org/
 ## mycli: https://www.mycli.net/
 ## ddgs: https://github.com/deedy5/ddgs
 ## pre-commit: https://pre-commit.com/
 ## Ansible: https://docs.ansible.com/
 ## -------------
-if [ ! -e ~/.local/pipx/venvs/mkdocs ]; then
-  pipx install mkdocs --include-deps
-  pipx inject mkdocs mkdocs-material
-  pipx inject mkdocs mkdocs-glightbox mkdocs-exclude
-  pipx inject mkdocs mkdocs-literate-nav mkdocs-section-index
-  pipx inject mkdocs mkdocs-git-revision-date-localized-plugin
-fi
 if [ ! -e ~/.local/pipx/venvs/zensical ]; then
   pipx install zensical --include-deps
 fi
@@ -137,23 +123,7 @@ if [ ! -e ~/.local/pipx/venvs/ansible ]; then
 fi
 
 # Playwright利用時のシステム依存ライブラリのインストール(root権限が必要)
-sudo npx playwright install-deps chromium
-
-## Claude Code
-# if [ ! -e ~/.local/bin/claude ]; then
-# 	curl -fsSL https://claude.ai/install.sh | bash
-# fi
-## OpenCode
-# if [ ! -e ~/.opencode/bin/opencode ]; then
-# 	curl -fsSL https://opencode.ai/install | bash
-# fi
-# if [ ! -e ~/.local/bin/opencode ]; then
-# 	ln -s ~/.opencode/bin/opencode  ~/.local/bin/opencode
-# fi
-## Copilot CLI
-# if [ ! -e ~/.opencode/bin/copilot ]; then
-#   curl -fsSL https://gh.io/copilot-install | bash
-# fi
+sudo npx -y playwright install-deps chromium
 
 PROVISION_DIR=$(dirname $0)
 ROLE_DIR="${PROVISION_DIR}/roles"

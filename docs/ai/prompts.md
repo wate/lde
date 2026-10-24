@@ -18,28 +18,22 @@
 
 ドキュメントの作成・更新するプロンプト群です。
 
-| 呼び出し名                | できること                                                                                     | 主な入力                                                         | 主な出力                                       |
-| ------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------- |
-| `doc-ai-agent`            | カスタムエージェントファイルを調査・分析し、エンジニアリング職種間の役割分担ドキュメントを生成 | `.github/agents/*.agent.md` のファイル群                         | `docs/ai/agents.md`                            |
-| `doc-ai-instruction`      | インストラクションファイルを調査・分析し、適用対象と規約内容の一覧ドキュメントを生成           | `.github/instructions/*.instructions.md` のファイル群            | `docs/ai/instructions.md`                      |
-| `doc-ai-prompt`           | カスタムプロンプトを調査・整理し、用途と使い分けが分かる一覧ドキュメントを生成                 | `.github/prompts/*.prompt.md` のファイル群                       | `docs/ai/prompts.md`                           |
-| `doc-ai-skill`            | スキルファイルを調査・分析し、実行できる内容と読み込みトリガー条件を一覧化                     | `.github/skills/*/SKILL.md` のファイル群                         | `docs/ai/skills.md`                            |
-| `doc-business_process`    | 業務プロセスを抽出し、頻度別に分類した業務プロセス一覧を生成                                   | 要件定義書、ヒアリングシート等の業務情報                         | `docs/workflow/index.md`                       |
-| `doc-code_style`          | Linter設定を解析・統合し、多言語開発環境向けコーディング規約ドキュメントを生成                 | EditorConfig、Markdownlint、言語別Linter設定                     | `docs/code_style.md`                           |
-| `doc-deployment`          | Ansibleプレイブックを解析し、デプロイ手順書を生成                                              | `deploy.yml`、`inventory.yml`                                    | `docs/deployment.md`                           |
-| `doc-directory_structure` | プロジェクトディレクトリ構造を分析し、体系化されたドキュメントを生成                           | プロジェクトディレクトリ                                         | `docs/directory_structure.md`                  |
-| `doc-docs_nav`            | mkdocs用SUMMARY.mdを生成し、ドキュメントナビゲーションを最適化                                 | `mkdocs.yml`、ドキュメントディレクトリ                           | `{docs_dir}/{nav_file}`(例: `docs/SUMMARY.md`) |
-| `doc-glossary`            | ドメイン駆動設計による用語抽出・分類を行い、用語集を生成・更新                                 | プロジェクトのMarkdownドキュメント群                             | `docs/glossary.md`(対象ディレクトリ直下)       |
-| `doc-persona`             | プロジェクト要件からペルソナを設計し、ユースケース分析と行動パターンを定義                     | プロジェクト要件、ターゲットユーザー情報                         | `docs/persona.md`                              |
-| `doc-problem`             | クライアントヒアリング情報から5Why分析による問題分析書を生成                                   | クライアントヒアリング情報、現状記述                             | `docs/problem.md`                              |
-| `doc-project_brief`       | プロジェクト背景・目的・業務概要をまとめたブリーフドキュメントを生成                           | プロジェクト情報、目的、ステークホルダー情報                     | `docs/index.md`                                |
-| `doc-proposal`            | 問題分析結果からシステム改善提案を策定し、コスト・効果比較を実施                               | 問題分析結果、改善目標                                           | `docs/proposal.md`                             |
-| `doc-readme`              | プロジェクト情報を統合し、新規参加者向けREADMEを生成                                           | プロジェクト概要、構成、セットアップ情報                         | `README.md`(プロジェクトルート)                |
-| `doc-requirements`        | 改善提案とフィードバックを分析し、要件トレーサビリティ管理を含む要件定義書を作成               | 改善提案、クライアントフィードバック、業務要件                   | `docs/requirements.md`                         |
-| `doc-rest_api`            | OpenAPI 3.0.3によるREST API仕様書を生成                                                        | エンドポイント仕様、データモデル、認証方式                       | `docs/api/openapi.yml`                         |
-| `doc-technology`          | プロジェクト技術スタックを分析・ドキュメント化し、バージョン管理ポリシーを策定                 | `composer.json`、`package.json` 等の設定ファイル                 | `docs/technology.md`                           |
-| `doc-ui_pattern`          | 画面単位のUI仕様を構造化し、ワイヤーフレーム基盤となる設計書を生成                             | 画面要件、画面遷移図、DB定義                                     | `docs/feature/{機能名}/{画面ID}_ui_pattern.md` |
-| `doc-workflow`            | 属人化した定型業務を誰でも実行できる業務フロードキュメントを生成                               | 業務フロー記述、担当者、条件分岐情報                             | `docs/workflow/{業務フロー名}.md`              |
+| 呼び出し名             | できること                                                                                     | 主な入力                                              | 主な出力                                       |
+| ---------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------- |
+| `doc-ai-agent`         | カスタムエージェントファイルを調査・分析し、エンジニアリング職種間の役割分担ドキュメントを生成 | `.github/agents/*.agent.md` のファイル群              | `docs/ai/agents.md`                            |
+| `doc-ai-instruction`   | インストラクションファイルを調査・分析し、適用対象と規約内容の一覧ドキュメントを生成           | `.github/instructions/*.instructions.md` のファイル群 | `docs/ai/instructions.md`                      |
+| `doc-ai-prompt`        | カスタムプロンプトを調査・整理し、用途と使い分けが分かる一覧ドキュメントを生成                 | `.github/prompts/*.prompt.md` のファイル群            | `docs/ai/prompts.md`                           |
+| `doc-ai-skill`         | スキルファイルを調査・分析し、実行できる内容と読み込みトリガー条件を一覧化                     | `.github/skills/*/SKILL.md` のファイル群              | `docs/ai/skills.md`                            |
+| `doc-business_process` | 業務プロセスを抽出し、頻度別に分類した業務プロセス一覧を生成                                   | 要件定義書、ヒアリングシート等の業務情報              | `docs/workflow/index.md`                       |
+| `doc-deployment`       | Ansibleプレイブックを解析し、デプロイ手順書を生成                                              | `deploy.yml`、`inventory.yml`                         | `docs/deployment.md`                           |
+| `doc-docs_nav`         | mkdocs用SUMMARY.mdを生成し、ドキュメントナビゲーションを最適化                                 | `mkdocs.yml`、ドキュメントディレクトリ                | `{docs_dir}/{nav_file}`(例: `docs/SUMMARY.md`) |
+| `doc-persona`          | プロジェクト要件からペルソナを設計し、ユースケース分析と行動パターンを定義                     | プロジェクト要件、ターゲットユーザー情報              | `docs/persona.md`                              |
+| `doc-problem`          | クライアントヒアリング情報から5Why分析による問題分析書を生成                                   | クライアントヒアリング情報、現状記述                  | `docs/problem.md`                              |
+| `doc-proposal`         | 問題分析結果からシステム改善提案を策定し、コスト・効果比較を実施                               | 問題分析結果、改善目標                                | `docs/proposal.md`                             |
+| `doc-requirements`     | 改善提案とフィードバックを分析し、要件トレーサビリティ管理を含む要件定義書を作成               | 改善提案、クライアントフィードバック、業務要件        | `docs/requirements.md`                         |
+| `doc-rest_api`         | OpenAPI 3.0.3によるREST API仕様書を生成                                                        | エンドポイント仕様、データモデル、認証方式            | `docs/api/openapi.yml`                         |
+| `doc-ui_pattern`       | 画面単位のUI仕様を構造化し、ワイヤーフレーム基盤となる設計書を生成                             | 画面要件、画面遷移図、DB定義                          | `docs/feature/{機能名}/{画面ID}_ui_pattern.md` |
+| `doc-workflow`         | 属人化した定型業務を誰でも実行できる業務フロードキュメントを生成                               | 業務フロー記述、担当者、条件分岐情報                  | `docs/workflow/{業務フロー名}.md`              |
 
 ### 図表・設計系
 
@@ -196,6 +190,6 @@ AI協業フレームワークの構成要素やテスト資材を生成するプ
 まとめ
 -------------------------
 
-本プロジェクトには47件のカスタムプロンプトが用意されており、ドキュメント生成・品質チェック・設計・図表作成・タスク管理・レポート生成・インフラ運用など多岐にわたる作業をカバーしています。
+本プロジェクトには41件のカスタムプロンプトが用意されており、ドキュメント生成・品質チェック・設計・図表作成・タスク管理・レポート生成・インフラ運用など多岐にわたる作業をカバーしています。
 プレフィックスによる目的分類と出力先の傾向を把握することで、目的のプロンプトを素早く見つけられます。
 また、派生プロンプトの関係性やチェック系プロンプトとの組み合わせを活用することで、一貫性のある成果物生成と品質保証のサイクルを効率的に回せます。
