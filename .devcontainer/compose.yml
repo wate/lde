@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         VARIANT: '8'
-        NODE_VERSION: '22.x'
+        NODE_VERSION: '24.x'
     environment:
       TZ: Asia/Tokyo
       GITHUB_TOKEN: '${GITHUB_TOKEN}'
@@ -47,14 +47,6 @@ services:
   #   image: getmeili/meilisearch:latest
   #   # ports:
   #   #   - "7700:7700"
-  #   environment:
-  #     TZ: Asia/Tokyo
-  # ollama:
-  #   image: ollama/ollama:latest
-  #   # ports:
-  #   #   - "11434:11434"
-  #   volumes:
-  #     - ~/.ollama/models:/root/.ollama/models
   #   environment:
   #     TZ: Asia/Tokyo
 volumes:

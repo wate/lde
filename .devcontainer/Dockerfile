@@ -17,7 +17,7 @@ RUN . /etc/os-release \
   && apt-get install -y --no-install-recommends imagemagick libmagickwand-dev \
   && apt-get install -y --no-install-recommends fonts-ipaexfont fonts-morisawa-bizud-gothic fonts-morisawa-bizud-mincho fnt \
   && apt-get install -y --no-install-recommends pipx \
-  && apt-get install -y --no-install-recommends direnv tig silversearcher-ag plantuml graphviz git-flow lnav sshpass \
+  && apt-get install -y --no-install-recommends direnv tig ripgrep lnav \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 ## Install php module

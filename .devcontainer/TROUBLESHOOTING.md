@@ -96,7 +96,14 @@ Linuxでは追記した行を削除して再ログインします。
 `.devcontainer` 配下の設定変更では解決しません。
 恒久策はbuildxまたはCompose側の修正であり、修正リリース後はこのファイルと回避設定を撤去します。
 
+### 上流の修正状況
+
+`docker/compose`の修正PR [#14325](https://github.com/docker/compose/pull/14325)は2026-10-12にmainへマージされています。
+ただし、最新リリース`v5.6.1`(2026-10-21)にはまだ収録されていません。
+Docker Desktopが修正版のComposeを同梱した時点で、回避設定とこのファイルを撤去します。
+
 ### 参考情報
 
 - [docker/compose#14285](https://github.com/docker/compose/issues/14285)
+- [docker/compose#14325](https://github.com/docker/compose/pull/14325)
 - [microsoft/vscode-remote-release#11887](https://github.com/microsoft/vscode-remote-release/issues/11887)

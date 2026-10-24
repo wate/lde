@@ -19,9 +19,7 @@
       - lnav
       - ripgrep
       - tgrep
-      - lazygit
       - delta
-      - goaccess
       - osv-scanner
       - direnv
       - task
@@ -31,52 +29,25 @@
       - jc
       - duckdb
       - assh
-      - glow
-      - bottom
       - pandoc
       - graphviz
       - d2
       - git-flow
       - tbls
-      - runn
       - gitleaks
       - pict
       - zx
       - ni
-      - mermaid-cli
       - fnt
       - lindera
-      # - drawio
+      - drawio
       - uv
       - rtk
       - context-mode
-      - playwright-cli
     ## logdy
     ## -------------
     logdy_service_enabled: false
     logdy_service_state: stopped
-    ## Markitdown
-    ## -------------
-    markitdown_install: false
-    markitdown_options:
-      ### Installs dependencies for PowerPoint files
-      - pptx
-      ### Installs dependencies for Word files
-      - docx
-      ### Installs dependencies for Excel files
-      - xlsx
-      ###  Installs dependencies for older Excel files
-      # - xls
-      ### Installs dependencies for PDF files
-      - pdf
-      ### Installs dependencies for Outlook messages
-      # - outlook
-      ### Installs dependencies for Azure Document Intelligence
-      # - az-doc-intel
-      ### Installs dependencies for audio transcription of wav and mp3 files
-      # - audio-transcription
-      ### Installs dependencies for fetching YouTube video transcription
-      # - youtube-transcription
     ## Optional Skeleton Documents
     ## -------------
     expand_optional_docs: false
