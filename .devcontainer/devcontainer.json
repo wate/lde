@@ -33,6 +33,7 @@
         "ionutvmi.path-autocomplete",
         "ms-playwright.playwright",
         "mhutchie.git-graph",
+        "task.vscode-task",
         "ltmoerdani.opencode-copilot-chat",
         "dbcode.dbcode"
       ]
