@@ -18,15 +18,14 @@ services:
     ports:
       - '8080:8080'
     depends_on:
-      - db
-      # - ollama
-  db:
+      - database
+  database:
     image: mariadb:11
     restart: unless-stopped
     volumes:
       - ./mariadb/z-customize.cnf:/etc/mysql/mariadb.conf.d/z-customize.cnf
       - ./mariadb/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
-      - mariadb-data:/var/lib/mysql
+      - database-data:/var/lib/mysql
     environment:
       TZ: Asia/Tokyo
       MYSQL_ROOT_PASSWORD: mariadb
@@ -50,4 +49,4 @@ services:
   #   environment:
   #     TZ: Asia/Tokyo
 volumes:
-  mariadb-data:
+  database-data:

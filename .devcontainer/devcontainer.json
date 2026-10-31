@@ -7,9 +7,6 @@
     "vscode": {
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",
-        "yaml.schemas": {
-          "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
-        },
         "files.associations": {
           "deploy.yml": "ansible",
           "release.yml": "ansible"
