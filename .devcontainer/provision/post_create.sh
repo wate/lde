@@ -36,7 +36,7 @@ cat << EOT >~/.my.cnf
 auto-rehash
 
 [client]
-host=db
+host=database
 database=app_dev
 user=app_dev
 password=app_dev_password
@@ -72,7 +72,7 @@ enable_pager = False
 less_chatty = True
 
 [client]
-host = db
+host = database
 database = app_dev
 user = app_dev
 password = app_dev_password
@@ -81,20 +81,11 @@ password = app_dev_password
 default_character_set = utf8mb4
 
 [alias_dsn]
-dev = mysql://app_dev:app_dev_password@db:3306/app_dev
-test = mysql://app_test:app_test_password@db:3306/app_test
-stg = mysql://app_stg:app_stg_password@db:3306/app_stg
-prod = mysql://app_prod:app_prod_password@db:3306/app_prod
+dev = mysql://app_dev:app_dev_password@database:3306/app_dev
+test = mysql://app_test:app_test_password@database:3306/app_test
+stg = mysql://app_stg:app_stg_password@database:3306/app_stg
+prod = mysql://app_prod:app_prod_password@database:3306/app_prod
 EOT
-
-if [ -f composer.json ]; then
-  composer install --no-interaction
-fi
-
-if [ -f package.json ]; then
-  ## @see https://github.com/antfu/ni
-  ni
-fi
 
 ## -------------
 ## 各種コマンドラインツールをインストール
