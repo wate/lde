@@ -41,6 +41,8 @@ database=app_dev
 user=app_dev
 password=app_dev_password
 default-character-set=utf8mb4
+# 開発環境ではSSL接続を使用しない
+skip-ssl
 EOT
 chmod 600 ~/.my.cnf
 
@@ -79,6 +81,8 @@ password = app_dev_password
 
 [connection]
 default_character_set = utf8mb4
+# 開発環境ではSSL接続を使用しない
+default_ssl_mode = off
 
 [alias_dsn]
 dev = mysql://app_dev:app_dev_password@database:3306/app_dev

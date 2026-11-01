@@ -12,6 +12,7 @@ services:
       GH_TOKEN: '${GH_TOKEN:-${GITHUB_TOKEN}}'
     volumes:
       - ..:/workspace:cached
+      - ./web/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./php/z-custom.ini:/usr/local/etc/php/conf.d/z-custom.ini
     # command: sleep infinity
     command: /usr/local/bin/apache2-foreground
@@ -23,8 +24,8 @@ services:
     image: mariadb:11
     restart: unless-stopped
     volumes:
-      - ./mariadb/z-customize.cnf:/etc/mysql/mariadb.conf.d/z-customize.cnf
-      - ./mariadb/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - ./database/z-customize.cnf:/etc/mysql/mariadb.conf.d/z-customize.cnf
+      - ./database/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - database-data:/var/lib/mysql
     environment:
       TZ: Asia/Tokyo

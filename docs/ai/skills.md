@@ -1,7 +1,7 @@
 スキル一覧
 =========================
 
-このドキュメントは、`.github/skills/*/SKILL.md` で定義された69件のスキルを技術領域別に整理した一覧です。各スキルの「できること」と「読み込みトリガー条件」を確認し、作業内容に適したスキルを選べます。
+このドキュメントは、`.github/skills/*/SKILL.md` で定義された70件のスキルを技術領域別に整理した一覧です。各スキルの「できること」と「読み込みトリガー条件」を確認し、作業内容に適したスキルを選べます。
 
 技術領域別スキル一覧
 -------------------------
@@ -44,6 +44,7 @@
 | `agent-creator`       | GitHub Copilotのカスタムエージェント(`.agent.md`)を、職種や専門領域ごとに新しく作る、または既存のものを直す。よく知らない職種は、ヒアリングと公開情報の裏付けで中身を固める              | 「エージェントを作って」「{職種}のエージェントが欲しい」「このエージェントを直して」と依頼された場合                                                                                                                                     |
 | `agent-guide`         | プロジェクト構成とドキュメントの実在を確かめ、種別判定に沿ってAIエージェント向けのオンボーディング文書`AGENTS.md`を生成                                                                  | 「AGENTS.mdを作って」「AGENTS.mdを更新して」「agent-guide」に言及した場合、`AGENTS.md`がないプロジェクトで作業する場合                                                                                                                   |
 | `agent-skill-creator` | Agent Skillsの`SKILL.md`と、定型の指示を各ツールの`/`コマンドから呼び出すラッパーを作成する                                                                                              | 「スキルを作って」「スラッシュコマンドにしたい」「ラッパーを作って」「Copilotのプロンプトファイルを作って」に言及した場合                                                                                                                |
+| `ai-asset-placement`  | 作りたいルール・手順・役割・自動化をどの機構に置くかを判定し、GitHub Copilot・Claude Code・Codex・OpenCodeの間で対応する機構を示す                                                       | 「どこに置くべきか」「スキルとエージェントのどちらにするか」「Claude Codeでは何に当たるか」と相談された場合や、AI資産の責務境界を確かめる場合                                                                                            |
 | `annotate-code`       | ソースコードのクラス・関数・メソッド・プロパティに、言語の標準形式のドキュメントコメントを追加・改善する。コードの動作は変えず、静的解析の前後比較で確かめる                             | 「アノテーションを付けて」「Docコメントを書いて」「PHPDocを整えて」「JSDocを追加して」と依頼された場合                                                                                                                                   |
 | `api-spec`            | REST APIの仕様書をOpenAPI形式のYAMLで、指定された出力先に作成・追記する。資料にない内容は補わず質問する                                                                                  | 「API仕様書を作って」「OpenAPIの定義を書いて」「エンドポイントを仕様書に追加して」と依頼された場合                                                                                                                                       |
 | `business-flow`       | 要件定義書やヒアリング結果から頻度別の業務プロセス一覧を作り、業務ごとに担当者・手順・判断条件・例外処理を書いた業務フロー文書を、推測の箇所を明示したたたき台として作る                 | 「業務プロセス一覧を作って」「業務フローを文書化して」「業務を洗い出して」「業務手順書を作って」と依頼された場合                                                                                                                         |
@@ -109,10 +110,8 @@
 
 ### ワークフロー型スキルの連鎖
 
-上位のワークフロースキルは、実行フェーズに応じて下位スキルを連鎖的に読み込みます。
-
-- スライド制作: `slide-workflow` -> `hearing` / `slide-structure` / `design-token` / `pptx`
-- Webサイト制作: `website-workflow` -> `screen-flow` / `design-token` / `ui-pattern` / `mockup`
+上位のワークフロースキル(`slide-workflow`、`website-workflow`)は、実行フェーズに応じて下位スキルを連鎖的に読み込みます。
+読み込む下位スキルは、[スキル間の依存関係](#スキル間の依存関係)を参照してください。
 
 ### セキュリティ・コンプライアンス対応
 
@@ -136,8 +135,8 @@
 
 以下のスキルはユーザーから明示的に呼び出せます(`user-invocable`が`true`または未指定)。要件に応じて直接指定してください。
 
-- `agent-creator`・`agent-guide`・`agent-skill-creator`・`annotate-code`・`api-spec`・`business-flow`
-- `check-code`・`check-document`・`check-fact`・`d2`・`database-design`・`design-token`・`drawio`
+- `agent-creator`・`agent-guide`・`agent-skill-creator`・`ai-asset-placement`・`annotate-code`・`api-spec`
+- `business-flow`・`check-code`・`check-document`・`check-fact`・`d2`・`database-design`・`design-token`・`drawio`
 - `feedback`・`generate-spec`・`glossary`・`graphic-creator`・`handoff`・`hearing-sheet`
 - `image-manipulator`・`infrastructure`・`md-links`・`operation-design`・`persona`・`pict`
 - `problem-analysis`・`project-docs`・`project-overview`・`prompt-creator`・`proposal`・`refine`
@@ -149,8 +148,101 @@
 
 新規作成系の作業は、上位のワークフロースキル(`slide-workflow`、`website-workflow`)を起点にすると、必要な下位スキルが自動連鎖的に読み込まれます。
 
+スキル間の依存関係
+-------------------------
+
+あるスキルが手順の中で別のスキルを読み込む、または別のスキルの規約に従う関係を示します。
+スキルを配布・公開する場合や変更する場合は、依存先のスキルも一緒に置き、影響を確かめます。
+
+### 依存関係の一覧
+
+依存元のスキルごとに、依存先のスキルと使う場面を示します。
+ここに出てこないスキルは、ほかのスキルに依存していません。
+
+#### 制作ワークフロー
+
+- `slide-workflow`
+    - `slide-structure`: ヒアリング・分析・構成案の作成
+    - `design-token`: カラー・フォント・デザインテイストの決定
+    - `graphic-creator`: 背景画像・ビジュアル素材の生成
+    - `image-manipulator`: 提供された写真・素材の加工
+    - `drawio`: 業務フロー・システム構成図の作成
+    - `review`: 各フェーズの完了時のセルフレビュー
+- `slide-structure`
+    - `hearing`: 資料の情報を引き出すヒアリング
+    - `thinking`: 条件に該当する場合の事業構造の分析
+    - `drawio`: 構成案に入れる図の作成
+    - `review`: 構成案のセルフレビュー
+- `website-workflow`
+    - `hearing`: サイトの情報を引き出すヒアリング
+    - `screen-flow`: サイトマップ・画面遷移図の作成
+    - `design-token`: カラー・フォント・デザインテイストの決定
+    - `ui-pattern`: 各ページのコンポーネント構成の決定
+    - `bootstrap4-ui`・`bulma-ui`: 選んだCSSフレームワークでの実装
+    - `mockup`: テンプレートの実装とビルド
+    - `graphic-creator`: ヒーローイメージ・バナーの生成
+    - `image-manipulator`: 提供された写真・素材の加工
+    - `drawio`: 業務フロー・システム構成図の作成
+    - `review`: 各フェーズの完了時のセルフレビュー
+
+#### 画面設計・UI
+
+- `screen-flow`
+    - `d2`: 画面遷移図の作成
+    - `drawio`: ワイヤーフレームの作成
+    - `ui-pattern`: 画面の構成要素とUIコンポーネントの選択
+- `ui-pattern`
+    - `drawio`: ワイヤーフレームの作成
+    - `adminlte3-ui`・`bootstrap4-ui`・`bulma-ui`: 選んだフレームワークでの実装
+- `adminlte3-ui`
+    - `bootstrap4-ui`: Bootstrap 4標準のclass・コンポーネント・レイアウトの仕様
+    - `ui-pattern`: UIパターンの分類
+- `bootstrap4-ui`
+    - `ui-pattern`: UIパターンの分類
+- `bulma-ui`
+    - `ui-pattern`: UIパターンの分類
+
+#### レビュー
+
+- `review`
+    - `agent-skill-creator`: スキル・プロンプトの品質チェックリストと、ツールごとのfrontmatterと配置
+    - `agent-creator`: エージェントの品質チェックリスト
+    - `prompt-creator`: 単発プロンプトの確認項目
+    - `ai-asset-placement`: AI資産の責務境界
+- `check-code`
+    - `review`: 評価フレームワークと重要度分類
+- `check-document`
+    - `review`: ドキュメント評価のガイド
+
+#### 補助スクリプト・調査
+
+- `cve-analyzer`・`e-gov`・`endoflife`・`jgrants`・`md-links`・`meilisearch`
+    - `zx`: 補助スクリプトを動かすzxのインストール手順と使い方
+- `osv-scanner`
+    - `cve-analyzer`: PoC公開状況を加味した優先度判定のためのCVE詳細の調査
+
+### 依存に含めない参照
+
+次の参照は、対象外の依頼を別のスキルへ案内するもので、依存ではありません。
+
+- `d2`と`drawio`: 図の読み手や編集方法による使い分け
+- `drawio`から`mockup`・`screen-flow`・`ui-pattern`: ワイヤーフレーム以外の作業の案内
+- `duckdb`と`excel`: 集計・変換と、Workbookの構造の操作との使い分け
+
+また、`slide-structure`は`canvas-design`スキルを、`slide-workflow`は`pptx`スキルを、それぞれ代わりの手段として挙げています。
+どちらもこのリポジトリにはないスキルです。
+
+### 依存関係の確かめ方
+
+スキルからほかのスキルへの参照は、次のコマンドで洗い出せます。
+出てきた行のうち、依存と使い分けの案内を読み分けて、この節を更新します。
+
+```bash
+rg -n -e '`[a-z0-9-]+`スキル' -e '\.\./[a-z0-9-]+/(SKILL|references|assets|scripts)' .github/skills/
+```
+
 まとめ
 -------------------------
 
-本一覧は、66件のスキルを4分類で網羅し、全スキルに「できること」と「読み込みトリガー条件」を記載しました。
+本一覧は、70件のスキルを4分類で網羅し、全スキルに「できること」と「読み込みトリガー条件」を記載しました。
 実作業では、まず利用シーンを決め、対応するワークフロー型または単機能型スキルを起点に選択します。この手順で、読み込み漏れと過剰読み込みの両方を抑制できます。
