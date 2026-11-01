@@ -104,7 +104,7 @@ Markdownファイル作成・編集指針
 
 - markdownlintルールに準拠した構造・構文を維持
 - textlintルールに準拠した日本語品質を維持
-    - `.github/`配下の`prompts/` `agents/` `skills/` `instructions/` `spec/`では必須としない
+    - `.github/`配下の`prompts/` `agents/` `skills/` `instructions/`では必須としない
     - ただし指示の解釈が一意になる修正であれば適用してよい
 - 技術文書として適切な表現を使用
 - プロジェクト固有の用語統一ルールに準拠

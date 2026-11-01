@@ -25,8 +25,9 @@ VS CodeのDev Container機能で利用する設定です。
 │   ├ post_start.yml       # コンテナ起動時のプレイブック
 │   ├ requirements.yml     # 外部ロールの定義
 │   └ tasks/               # プロビジョニング用の個別タスク
-├ mariadb/                  # MariaDBの設定と初期データ
+├ database/                 # MariaDBの設定と初期データ
 ├ php/                      # PHPの設定
+├ web/                      # Apacheの設定
 └ log/                      # PHPエラーログの出力先
 ```
 
@@ -42,9 +43,10 @@ VS CodeのDev Container機能で利用する設定です。
     - `post_start.yml`: `Taskfile.yml`を初期化するプレイブックです。
     - `requirements.yml`: 外部ロールを定義するファイルです。
     - `tasks/`: プロビジョニング用の個別タスクを格納しています。
-- `mariadb/create_db.sql`: 4つのデータベースとユーザーを作成するSQLです。
-- `mariadb/z-customize.cnf`: MariaDBの設定ファイルです。
+- `database/create_db.sql`: 4つのデータベースとユーザーを作成するSQLです。
+- `database/z-customize.cnf`: MariaDBの設定ファイルです。
 - `php/z-custom.ini`: PHPの設定ファイルです。
+- `web/000-default.conf`: Apacheのバーチャルホスト設定です。
 - `log/`: PHPのエラーログ出力先です。
 
 ### 抽出時の注意
