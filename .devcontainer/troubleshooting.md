@@ -38,14 +38,22 @@ buildxが提供する検査無効化スイッチ `BUILDX_BAKE_ENTITLEMENTS_FS=0`
 
 ### macOS
 
-ホストのターミナルで次を実行します。
+ビルドが必要なセッションだけで有効にするため、ターミナルから環境変数を渡してVS Codeを起動します。
+
+```bash
+export BUILDX_BAKE_ENTITLEMENTS_FS=0 && code .
+```
+
+VS Codeを起動済みの場合は、`Cmd + Q` で終了してから実行します。
+
+ユーザーセッション全体に設定したい場合は、次の方法でも代用できます。
+この値はmacOSの再起動で失われます。
 
 ```bash
 launchctl setenv BUILDX_BAKE_ENTITLEMENTS_FS 0
 ```
 
-設定後、VS Codeを終了して(`Cmd + Q`)再起動します。
-ターミナルから `export BUILDX_BAKE_ENTITLEMENTS_FS=0 && code .` で起動する方法でも代用できます。
+設定後、VS Codeを終了して(`Cmd + Q`)起動し直します。
 
 ### Windows
 
@@ -67,7 +75,7 @@ setx BUILDX_BAKE_ENTITLEMENTS_FS 0
 
 **重要**: VS Codeの再起動を省略すると、設定は反映されません。
 
-1. VS Codeを再起動します。
+1. 回避設定を渡してVS Codeを起動します。
 2. コマンドパレットから「Dev Containers: Rebuild and Reopen in Container」を実行します。
 3. ビルドが成功し、コンテナへ接続できることを確認します。
 4. ホストのターミナルで `curl -s -o /dev/null -w '%{http_code}' http://localhost:8080` を実行し、`200` が返ることを確認します。
@@ -88,8 +96,13 @@ Linuxでは追記した行を削除して再ログインします。
 
 ### 副作用
 
-この設定はbuildxのファイル読み取り権限検査をすべて無効化します。
-信頼できるプロジェクトでの一時回避として使用し、恒久設定としては扱いません。
+この設定は、buildxのファイルシステム系の権限検査を無効化します。
+
+- 無効になる検査: `fs.read`、`fs.write`、`ssh`
+- 残る検査: `network.host`、`security.insecure`、`device`、`buildx.local.delete`
+
+検査は、ビルド設定が作業ディレクトリ外のパスを参照したときに発火する防御です。
+設定中はマシン上のすべてのビルドに適用されるため、一時回避として扱い、恒久設定にはしません。
 
 ### 対象外
 
