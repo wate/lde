@@ -1,7 +1,7 @@
 スキル一覧
 =========================
 
-このドキュメントは、`.github/skills/*/SKILL.md` で定義された74件のスキルを技術領域別に整理した一覧です。各スキルの「できること」と「読み込みトリガー条件」を確認し、作業内容に適したスキルを選べます。
+このドキュメントは、`.github/skills/*/SKILL.md` で定義された75件のスキルを技術領域別に整理した一覧です。各スキルの「できること」と「読み込みトリガー条件」を確認し、作業内容に適したスキルを選べます。
 
 技術領域別スキル一覧
 -------------------------
@@ -38,6 +38,7 @@
 | `redmine`              | Redmineのチケット・Wiki操作(作成・更新・コメント・添付)とMarkdown同期を一元化                                                                  | 「Redmine」「チケット」「Wiki同期」に言及した場合                                                                                                                                                         |
 | `toggl`                | Toggl Track APIで時間エントリーの作成・更新・削除、タイマー操作、プロジェクト別工数レポート取得を自動化                                        | 「Toggl」「工数」「タイムトラッキング」「タイムエントリー」に言及した場合                                                                                                                                 |
 | `vulnerability-triage` | 脆弱性スキャン結果(OSV形式のJSON)をCVSSとSSVCで評価し、対応優先度(P0〜P3)と期限を付けたトリアージレポートを生成                                | 「脆弱性トリアージ」「SSVC」「脆弱性の優先度判定」「脆弱性レポート」に言及した場合。スキャン結果から対応の優先順位を決めたい場合                                                                          |
+| `vulnerability-report` | 依存パッケージのスキャン、CVEの詳細の調査、対応優先度の判定を順に行い、脆弱性レポートを作成する。プロジェクトごとに書き換えて使う              | `/vulnerability-report`での明示的な呼び出し時のみ(`disable-model-invocation: true`のためAIは自動で読み込まない)                                                                                           |
 
 ### 分析・設計系
 
@@ -147,7 +148,7 @@
 - `problem-analysis`・`project-docs`・`project-guideline`・`project-overview`・`project-policy`
 - `prompt-creator`・`proposal`・`refine`
 - `requirements`・`review`・`slide-structure`・`slide-workflow`・`tasklist`・`tbls`・`test-data`・`testcase`・`toggl`
-- `ui-docs`・`unresolved-proposal`・`usecase`・`vulnerability-triage`・`web-search`
+- `ui-docs`・`unresolved-proposal`・`usecase`・`vulnerability-report`・`vulnerability-triage`・`web-search`
 - `website-workflow`・`workplan`・`zensical`
 
 ### ワークフロースキル起点の選択
@@ -226,6 +227,10 @@
     - `zx`: 補助スクリプトを動かすzxのインストール手順と使い方
 - `osv-scanner`
     - `cve-analyzer`: PoC公開状況を加味した優先度判定のためのCVE詳細の調査
+- `vulnerability-report`
+    - `osv-scanner`: 依存パッケージのスキャン
+    - `cve-analyzer`: CVEの詳細の調査
+    - `vulnerability-triage`: 対応優先度の判定とレポートの作成
 
 ### 依存に含めない参照
 
@@ -250,6 +255,6 @@ rg -n -e '`[a-z0-9-]+`スキル' -e '\.\./[a-z0-9-]+/(SKILL|references|assets|sc
 まとめ
 -------------------------
 
-本一覧は、74件のスキルを4分類で網羅し、全スキルに「できること」と「読み込みトリガー条件」を記載しました。
+本一覧は、75件のスキルを4分類で網羅し、全スキルに「できること」と「読み込みトリガー条件」を記載しました。
 実作業では、まず利用シーンを決め、対応するワークフロー型または単機能型スキルを起点に選択します。
 この手順で、読み込み漏れと過剰読み込みの両方を抑制できます。
