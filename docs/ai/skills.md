@@ -10,8 +10,8 @@
 
 | スキル名         | できること                                                                                                                                                         | 読み込みトリガー条件                                                                                                                                                                                         |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `duckdb`         | DuckDBでSQL実行、集計、CSV/JSON/Parquet/XLSX変換、外部DB連携を行う                                                                                                 | 「DuckDB」「SQLで集計」「CSV変換」「Parquet」「ログ解析」「アクセスログ」に言及された場合や、Excelから表データを抽出してインポートしたい場合                                                                 |
-| `excel`          | Excelワークブックの読み書き、テーブル操作、複数シート処理、書式・数式・帳票出力を行う                                                                              | 「Excelファイル」「Excelテーブル」「複数シート」「Workbook」「セル書式」「帳票出力」に言及した場合                                                                                                           |
+| `duckdb`         | DuckDBでSQL実行、集計、CSV/JSON/Parquet変換、XLSXへの書き出し、外部DB連携(既定は読み取り専用)、アクセスログの解析を行う                                            | 「DuckDB」「SQLで集計」「CSV変換」「Parquet」「ログ解析」「アクセスログ」に言及された場合                                                                                                                    |
+| `excel`          | Excelワークブックの構造を棚卸しし、テーブル・一覧の読み取りと、帳票への差し込みなどの書き込みを元のファイルを守りながら行う                                        | 「Excelファイル」「Excelテーブル」「複数シート」「Workbook」「セル書式」「帳票出力」に言及した場合                                                                                                           |
 | `htmx`           | htmxの主要属性(hx-get/hx-post/hx-target等)を使った非同期通信・部分更新UIの実装を支援                                                                               | 「htmx」に言及された場合や、`hx-get`・`hx-post`・`hx-swap`などの`hx-*`属性を含むコードを書く・直す場合                                                                                                       |
 | `knowledge-base` | ローカル完結のドキュメント検索基盤の設定・取り込み・検索・辞書育成を支援                                                                                           | 「ナレッジベース」「knowledge-base」「ドキュメント検索」「ベクトル検索」「BM25」に言及した場合                                                                                                               |
 | `lindera`        | Rust製形態素解析ライブラリLinderaのトークナイズ、辞書切替、フィルタ、ユーザー辞書ビルド、未知語抽出を提供                                                          | 「Lindera」「形態素解析」「分かち書き」「ユーザー辞書」「未知語」に言及された場合                                                                                                                            |
@@ -52,7 +52,7 @@
 | `api-spec`            | REST APIの仕様書をOpenAPI形式のYAMLで、指定された出力先に作成・追記する。資料にない内容は補わず質問する                                                                                               | 「API仕様書を作って」「OpenAPIの定義を書いて」「エンドポイントを仕様書に追加して」と依頼された場合                                                                                                                                       |
 | `business-flow`       | 要件定義書やヒアリング結果から頻度別の業務プロセス一覧を作り、業務ごとに担当者・手順・判断条件・例外処理を書いた業務フロー文書を、推測の箇所を明示したたたき台として作る                              | 「業務プロセス一覧を作って」「業務フローを文書化して」「業務を洗い出して」「業務手順書を作って」と依頼された場合                                                                                                                         |
 | `check-code`          | 既定は変更差分を対象に、コードレビューを4カテゴリー5段階重要度で包括的に行い、構造化された指摘と改善提案を返す                                                                                        | コードの妥当性評価やレビュー、改善提案を依頼されたとき                                                                                                                                                                                   |
-| `check-document`      | ドキュメントの品質を点検し、読者適合性・情報構造・記述品質とプロジェクト固有のMarkdown規約の不備を根拠付きで報告する                                                                                  | ドキュメントの品質チェックや、作成した文書の点検を依頼されたとき                                                                                                                                                                         |
+| `check-document`      | 文書が読み手に伝わるかを点検し、流れの追えない箇所・複雑な文・図が要る説明を重要度付きで報告する                                                                                                      | 読みやすさの点検や、書いた文書を渡す前の確認を依頼されたとき                                                                                                                                                                             |
 | `check-fact`          | 資料中の事実ベースの記述を一次情報で照合し、誤情報・古い記述・不確実な断定を判定付きで報告する                                                                                                        | ドキュメントのファクトチェック、事実確認、裏取り、記述の最新性検証を依頼されたとき                                                                                                                                                       |
 | `database-design`     | 業務の資料からエンティティを抽出し、データドメインとテーブル定義からなるデータベース設計書を、指定された出力先に作成・更新する。推測した箇所は明示する                                                | 「データベースを設計して」「テーブル設計をして」「テーブル定義を追加して」と依頼された場合                                                                                                                                               |
 | `generate-spec`       | 既存のソースコードを段階的に解析し、システム概要・技術スタック・ディレクトリ構造・データモデル・機能・API・処理ロジック・環境設定・索引からなる仕様書一式を同梱テンプレートに沿って生成               | `/generate-spec`での明示的な呼び出し時のみ(`disable-model-invocation: true`のためAIは自動で読み込まない)                                                                                                                                 |
@@ -88,10 +88,11 @@
 | `adminlte3-ui`      | AdminLTE 3の標準コンポーネントに沿ってWeb画面を構成し、Bootstrap 4前提のレイアウト規約・コード例を提供                                    | 「AdminLTE」に言及された場合や、`content-wrapper`・`small-box`・`info-box`・`card-tools`を含むテンプレートを編集する場合                               |
 | `bootstrap4-ui`     | Bootstrap 4の標準コンポーネントに沿ってWeb画面を構成し、Bootstrap 5との混在を防止                                                         | 「Bootstrap 4」「bs4」に言及された場合や、`data-toggle`・`ml-*`・`form-group`を使う既存画面を編集する場合                                              |
 | `bulma-ui`          | Bulma標準class(columns/field/box/card/table等)に沿ってWeb画面を構成し、Bootstrap系classの混入を防止                                       | 「Bulma」に言及された場合や、`columns`・`field`・`control`・`is-*`修飾子を使う既存画面を編集する場合                                                   |
+| `concept-diagram`   | 文書の文章から要素と関係を抜き出し、承認を得てから概念図・インフォグラフィックをSVGとPNGで作成                                            | 「概念図を作って」「図解して」「インフォグラフィックにして」と依頼された場合や、文章だけでは伝わりにくい説明を図にする場合                             |
 | `d2`                | D2言語でシステムフロー図・データフロー図・シーケンス図・アーキテクチャ図等を作成・編集・解析し、図種別の生成手順を提供                    | 「D2」「.d2ファイル」「テキストベースの図表」「画面遷移図」「シーケンス図」「フローチャート」「アクティビティ図」「ER図」に言及した場合                |
 | `design-token`      | スライドやWebサイト向けのデザイントークン(カラー・タイポグラフィ・スペーシング等)を定義・管理                                             | 「デザイントークン」「テーマカラー」「配色を決めたい」に言及された場合や、スクリーンショットや既存スライドから配色を抜き出す場合                       |
 | `drawio`            | draw.io XML形式でシステムフロー図・UML図等を作成・編集・解析し、ER図・スイムレーン図・ワイヤーフレームを生成し、PNG/SVG/PDFにエクスポート | 「draw.io」「drawio」「diagrams.net」「.drawio」「スイムレーン図」「ワイヤーフレーム」「画面イメージ」に言及した場合                                   |
-| `graphic-creator`   | デザイン哲学の作成から始め、ポスター・バナー・インフォグラフィック等のビジュアル素材を生成                                                | 日本語の文字を入れた画像の作成を依頼された場合や、「バナーを作って」「アイキャッチを作って」と依頼された場合                                           |
+| `graphic-creator`   | デザイン哲学の作成から始め、ポスター・バナー・アイキャッチ等のビジュアル素材を生成                                                        | 日本語の文字を入れた画像の作成を依頼された場合や、「バナーを作って」「アイキャッチを作って」と依頼された場合                                           |
 | `image-manipulator` | 既存画像ファイルのリサイズ・クロップ・フォーマット変換・色調補正・透かし合成・Exif操作等を実行                                            | 「画像を加工したい」「リサイズ」「フォーマット変換」「透かし」「差分画像」に言及した場合                                                               |
 | `mockup`            | NunjucksテンプレートからHTMLをビルドし、開発サーバー起動・監視を行う                                                                      | 「モックアップをビルド」「mockup」「Nunjucks」に言及された場合や、`.mockuprc.yml`・`vars.yml`・`.njk`ファイルを扱う場合                                |
 | `screen-flow`       | 業務フロー/サービスフローからユーザーフローを抽出し、画面遷移図へ段階的に落とし込む設計プロセスを提供                                     | 「画面遷移」「遷移図」「ユーザーフロー」に言及された場合や、画面一覧と画面間のつながりを決める・見直す場合                                             |
@@ -109,14 +110,14 @@
 - 要件が曖昧な開始時: `hearing` を優先して目的と制約を明確化します。
 - 計画が必要な場合: `workplan` で作業をWBS分解し、実行可能なタスク構造にします。
 - 品質確認が必要な場合: `review` で成果物を5段階重要度で評価します。
-- ドキュメント・コードの点検: `check-document`(ドキュメント品質)、`check-fact`(事実)、`check-code`(コード)、`refine`(記述の詰め)を使い分けます。
-- データ分析・変換: `duckdb` で大規模データを処理し、`excel` で帳票を出力します。
-- 画像制作: `graphic-creator` で新規生成、`image-manipulator` で既存画像を加工します。
+- ドキュメント・コードの点検: `check-document`(読みやすさ)、`check-fact`(事実)、`check-code`(コード)、`refine`(記述の詰め)を使い分けます。
+- データ分析・変換: 既存の`.xlsx`は`excel`で棚卸しして抽出し、`duckdb`で集計します。帳票の出力は`excel`で行います。
+- 画像制作: `graphic-creator` で新規生成、`image-manipulator` で既存画像を加工します。文書の説明を図にする場合は `concept-diagram` を使います。
+- 図表の作成: 作成するファイル形式(`.d2`/`.drawio`)で選び、GUIで配置を手直しする前提の図は `drawio` スキルを使います。
 
 ### ワークフロー型スキルの連鎖
 
 上位のワークフロースキル(`slide-workflow`、`website-workflow`)は、実行フェーズに応じて下位スキルを連鎖的に読み込みます。
-読み込む下位スキルは、[スキル間の依存関係](#スキル間の依存関係)を参照してください。
 
 ### セキュリティ・コンプライアンス対応
 
@@ -141,8 +142,8 @@
 以下のスキルはユーザーから明示的に呼び出せます(`user-invocable`が`true`または未指定)。要件に応じて直接指定してください。
 
 - `agent-creator`・`agent-guide`・`agent-skill-creator`・`ai-asset-placement`・`annotate-code`・`api-spec`
-- `business-flow`・`check-code`・`check-document`・`check-fact`・`d2`
-- `database-design`・`design-token`・`devcontainer`・`drawio`
+- `business-flow`・`check-code`・`check-document`・`check-fact`・`concept-diagram`・`d2`
+- `database-design`・`design-token`・`devcontainer`・`drawio`・`excel`
 - `feedback`・`generate-spec`・`glossary`・`graphic-creator`・`handoff`・`hearing-sheet`
 - `image-manipulator`・`infrastructure`・`md-links`・`operation-design`・`persona`・`pict`
 - `problem-analysis`・`project-docs`・`project-guideline`・`project-overview`・`project-policy`
@@ -154,103 +155,6 @@
 ### ワークフロースキル起点の選択
 
 新規作成系の作業は、上位のワークフロースキル(`slide-workflow`、`website-workflow`)を起点にすると、必要な下位スキルが自動連鎖的に読み込まれます。
-
-スキル間の依存関係
--------------------------
-
-あるスキルが手順の中で別のスキルを読み込む、または別のスキルの規約に従う関係を示します。
-スキルを配布・公開する場合や変更する場合は、依存先のスキルも一緒に置き、影響を確かめます。
-
-### 依存関係の一覧
-
-依存元のスキルごとに、依存先のスキルと使う場面を示します。
-ここに出てこないスキルは、ほかのスキルに依存していません。
-
-#### 制作ワークフロー
-
-- `slide-workflow`
-    - `slide-structure`: ヒアリング・分析・構成案の作成
-    - `design-token`: カラー・フォント・デザインテイストの決定
-    - `graphic-creator`: 背景画像・ビジュアル素材の生成
-    - `image-manipulator`: 提供された写真・素材の加工
-    - `drawio`: 業務フロー・システム構成図の作成
-    - `review`: 各フェーズの完了時のセルフレビュー
-- `slide-structure`
-    - `hearing`: 資料の情報を引き出すヒアリング
-    - `thinking`: 条件に該当する場合の事業構造の分析
-    - `drawio`: 構成案に入れる図の作成
-    - `review`: 構成案のセルフレビュー
-- `website-workflow`
-    - `hearing`: サイトの情報を引き出すヒアリング
-    - `screen-flow`: サイトマップ・画面遷移図の作成
-    - `design-token`: カラー・フォント・デザインテイストの決定
-    - `ui-pattern`: 各ページのコンポーネント構成の決定
-    - `bootstrap4-ui`・`bulma-ui`: 選んだCSSフレームワークでの実装
-    - `mockup`: テンプレートの実装とビルド
-    - `graphic-creator`: ヒーローイメージ・バナーの生成
-    - `image-manipulator`: 提供された写真・素材の加工
-    - `drawio`: 業務フロー・システム構成図の作成
-    - `review`: 各フェーズの完了時のセルフレビュー
-
-#### 画面設計・UI
-
-- `screen-flow`
-    - `d2`: 画面遷移図の作成
-    - `drawio`: ワイヤーフレームの作成
-    - `ui-pattern`: 画面の構成要素とUIコンポーネントの選択
-- `ui-pattern`
-    - `drawio`: ワイヤーフレームの作成
-    - `adminlte3-ui`・`bootstrap4-ui`・`bulma-ui`: 選んだフレームワークでの実装
-- `adminlte3-ui`
-    - `bootstrap4-ui`: Bootstrap 4標準のclass・コンポーネント・レイアウトの仕様
-    - `ui-pattern`: UIパターンの分類
-- `bootstrap4-ui`
-    - `ui-pattern`: UIパターンの分類
-- `bulma-ui`
-    - `ui-pattern`: UIパターンの分類
-
-#### レビュー
-
-- `review`
-    - `agent-skill-creator`: スキルの品質チェックリストと、スキルのツールごとのfrontmatterと配置
-    - `agent-creator`: エージェントの品質チェックリスト
-    - `prompt-creator`: 単発プロンプトとローカルハーネス向けプロンプトの確認項目、プロンプトのツールごとのfrontmatterと配置
-    - `ai-asset-placement`: AI資産の責務境界
-- `check-code`
-    - `review`: 評価フレームワークと重要度分類
-- `check-document`
-    - `review`: ドキュメント評価のガイド
-
-#### 補助スクリプト・調査
-
-- `cve-analyzer`・`e-gov`・`endoflife`・`jgrants`・`md-links`・`meilisearch`
-    - `zx`: 補助スクリプトを動かすzxのインストール手順と使い方
-- `osv-scanner`
-    - `cve-analyzer`: PoC公開状況を加味した優先度判定のためのCVE詳細の調査
-- `vulnerability-report`
-    - `osv-scanner`: 依存パッケージのスキャン
-    - `cve-analyzer`: CVEの詳細の調査
-    - `vulnerability-triage`: 対応優先度の判定とレポートの作成
-
-### 依存に含めない参照
-
-次の参照は、対象外の依頼を別のスキルへ案内するもので、依存ではありません。
-
-- `d2`と`drawio`: 図の読み手や編集方法による使い分け
-- `drawio`から`mockup`・`screen-flow`・`ui-pattern`: ワイヤーフレーム以外の作業の案内
-- `duckdb`と`excel`: 集計・変換と、Workbookの構造の操作との使い分け
-
-また、`slide-structure`は`canvas-design`スキルを、`slide-workflow`は`pptx`スキルを、それぞれ代わりの手段として挙げています。
-どちらもこのリポジトリにはないスキルです。
-
-### 依存関係の確かめ方
-
-スキルからほかのスキルへの参照は、次のコマンドで洗い出せます。
-出てきた行のうち、依存と使い分けの案内を読み分けて、この節を更新します。
-
-```bash
-rg -n -e '`[a-z0-9-]+`スキル' -e '\.\./[a-z0-9-]+/(SKILL|references|assets|scripts)' .github/skills/
-```
 
 まとめ
 -------------------------

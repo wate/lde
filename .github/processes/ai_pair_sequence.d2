@@ -8,9 +8,10 @@
 #
 # ユーザーがナビゲーター、AIがドライバーとして協働する作業スタイル。
 # プログラミングに限らず、設計・ドキュメント作成・タスク管理など開発作業全般で使用する。
-# 各フェーズはユーザーの明示的な指示で開始する(ドキュメント作成/更新・完了確認はAIが自発的に開始)。
+# 各フェーズはユーザーの明示的な指示で開始する(ドキュメント作成/更新・テスト・完了確認はAIが自発的に開始)。
 # AIはユーザーに成果物を渡す前に必ずセルフレビューを実施する。
-# 詳細定義: issue_management/flow.md
+# 作る工程のあとには、スキルを使ったAIレビューを行う(青の太字)。使うスキルと人の関与は review/review_guide.md を参照。
+# 詳細定義: ai_pair_flow.md
 #
 # セルフレビューの定義
 # -------------------------
@@ -39,33 +40,50 @@ shape: sequence_diagram
 
 ## クラス定義
 ## -------------------------
+# 以前は2か所に分かれていた定義を、描画結果が変わらないように合成して1つにまとめた
 classes: {
+  # 自己レビュー
   self_review: {
     label: セルフレビュー
     style: {
       fill: "#E8F5E9"
-      font-color: "#2E7D32"
+      font-color: DarkOrange
+      stroke-dash: 3
     }
   }
+  # スキルを使ったAIレビュー
+  ai_review: {
+    style: {
+      font-color: "#1565C0"
+      bold: true
+      stroke-dash: 3
+    }
+  }
+  # フィードバック
   feedback: {
     style: {
       fill: "#FFF3E0"
       font-color: "#E65100"
-    }
-  }
-  ai_action: {
-    style: {
-      fill: "#E3F2FD"
-      font-color: "#1565C0"
       stroke-dash: 3
     }
   }
+  # AIのアクション(実装・生成・更新・修正など)
+  ai_action: {
+    style: {
+      fill: "#E3F2FD"
+      font-color: DarkGreen
+      stroke-dash: 3
+    }
+  }
+  # AIから人間への判断依頼(各フェーズの締めくくり)
   update_progress: {
     style: {
       fill: "#F3E5F5"
-      font-color: "#6A1B9A"
+      font-color: Salmon
+      stroke-dash: 3
     }
   }
+  # 分析・判定
   analysis: {
     style: {
       fill: "#E0F7FA"
@@ -154,6 +172,9 @@ ai: AI(ドライバー)
   ai -> ai: セルフレビュー {
     class: self_review
   }
+  ai -> ai: タスクレビュー(review: タスクガイド) {
+    class: ai_review
+  }
   ai -> user: 反映内容を報告 {
     class: update_progress
   }
@@ -184,6 +205,9 @@ ai: AI(ドライバー)
   }
   ai -> ai: セルフレビュー {
     class: self_review
+  }
+  ai -> ai: 設計レビュー(review: タスクガイドにチケットと作業プランを渡す) {
+    class: ai_review
   }
   ai -> user: 作業プランを提示 {
     class: update_progress
@@ -241,6 +265,13 @@ ai: AI(ドライバー)
     class: update_progress
   }
   ai -> user: 進捗を報告 {
+    class: update_progress
+  }
+  # 作業プランのすべての項目を終えたあとに行う
+  ai -> ai: 実装レビュー(check-code) {
+    class: ai_review
+  }
+  ai -> user: 実装レビューの結果を報告 {
     class: update_progress
   }
 }
@@ -308,6 +339,34 @@ ai: AI(ドライバー)
   }
 }
 
+テスト(ループ): {
+  # 入力は、フェーズ7で漏れを反映した後のチケット
+  ai -> ai: チケットを入力にテストパターンを作成 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: テストパターンのレビュー(review: テストガイド) {
+    class: ai_review
+  }
+  ai -> ai: テストコードを実装 {
+    class: ai_action
+    style: {
+      stroke-dash: 6
+    }
+  }
+  ai -> ai: テストコードの確認(check-code) {
+    class: ai_review
+  }
+  ai -> user: 人の判断を要する指摘があるときだけ判断を依頼 {
+    class: update_progress
+  }
+  user -> ai: 指摘への判断 {
+    class: feedback
+  }
+}
+
 完了確認: {
   style: {
     fill: LightCyan
@@ -330,37 +389,6 @@ ai: AI(ドライバー)
   user -> user: 最終確認・チケットをクローズ {
     style: {
       font-color: blue
-    }
-  }
-}
-
-## クラス定義（スタイル）
-## -------------------------
-classes: {
-  # AIのアクション(実装・生成・更新・修正など)
-  ai_action: {
-    style: {
-      font-color: DarkGreen
-    }
-  }
-  # 自己レビュー
-  self_review: {
-    style: {
-      font-color: DarkOrange
-      stroke-dash: 3
-    }
-  }
-  # フィードバック
-  feedback: {
-    style: {
-      stroke-dash: 3
-    }
-  }
-  # AIから人間への判断依頼(各フェーズの締めくくり)
-  update_progress: {
-    style: {
-      font-color: Salmon
-      stroke-dash: 3
     }
   }
 }
