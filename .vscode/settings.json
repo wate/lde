@@ -10,9 +10,6 @@
   "files.associations": {
     "*.pict": "powershell",
   },
-  "chat.editor.localAgent.enabled": true,
-  "chat.editor.preferCopilotHarness": false,
-  "chat.defaultToCopilotHarness": false,
   "github.copilot.chat.agentDebugLog.fileLogging.enabled": false,
   "chat.agentHost.agentDebugLog.enabled": false
 }
