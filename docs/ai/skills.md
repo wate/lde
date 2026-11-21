@@ -1,7 +1,7 @@
 スキル一覧
 =========================
 
-このドキュメントは、`.github/skills/*/SKILL.md` で定義された77件のスキルを技術領域別に整理した一覧です。
+このドキュメントは、`.github/skills/*/SKILL.md`で定義された79件のスキルを技術領域別に整理した一覧です。
 各スキルの「できること」と「読み込みトリガー条件」を確認し、作業内容に適したスキルを選べます。
 
 技術領域別スキル一覧
@@ -191,6 +191,10 @@
     - できること: ヒアリングで繰り返し使う正本のヒアリングシートを、
       話題ごとの設問・例・回答欄を持つ書式で、指定された出力先に作る
     - 読み込みトリガー:「ヒアリングシートを作って」「新しいヒアリングシートを追加して」「ヒアリングシートの設問を増やして」と依頼された場合
+- `instruction-creator`
+    - できること: `.instructions.md`を、置き場所の判定と元情報の確認を経て作成・改善する。
+      規範とコードが食い違う場合は、事実を揃えて利用者に選んでもらう
+    - 読み込みトリガー:「インストラクションファイルを作って」「カスタムインストラクションを作って」「`.instructions.md`を追加して」「`applyTo`を見直して」と依頼された場合
 - `operation-design`
     - できること: システムの運用体制・監視・バックアップ・障害対応・メンテナンスを、
       案件規模に合わせた運用設計書として指定された出力先に作成・更新する。
@@ -252,6 +256,12 @@
     - できること: 全フェーズの成果物をフェーズ別チェックリストで評価し、
       5段階重要度で分類した構造化フィードバックを提供
     - 読み込みトリガー: 成果物の妥当性評価・改善提案が依頼の主目的である場合(「レビューして」「問題点を洗い出して」「評価して」等)。「見てほしい」「確認して」だけでは発動しない。「複数の視点で」「いろいろな視点で」と依頼された場合は観点ごとに分けて評価する
+- `summarize`
+    - できること: 作業プラン・引き継ぎ資料・チケット・Git履歴などの作業の記録を読み、
+      網羅性より流れ(経緯・現在地・次)を優先して進捗報告の要約へ圧縮する。
+      チャットに貼れる短縮版と、単体で読める標準版の2段階を出力する
+    - 読み込みトリガー:「進捗報告にまとめて」「作業を要約して」「日報にして」と依頼された場合や、
+      長い記録を読まずに全体像をつかみたい場合
 - `tasklist`
     - できること: 要件定義からプロジェクト全体のタスクを洗い出し、共通形式のタスクリストを作成し、
       依存関係図・リスク分析表・issueのたたき台・CSVへ展開する
@@ -401,10 +411,10 @@
 - `business-flow`・`check-code`・`check-document`・`check-fact`・`concept-diagram`・`d2`
 - `database-design`・`design-token`・`devcontainer`・`drawio`・`excel`・`feature-design`
 - `feedback`・`generate-spec`・`glossary`・`graphic-creator`・`handoff`・`hearing-sheet`
-- `image-manipulator`・`infrastructure`・`md-links`・`operation-design`・`persona`・`pict`
+- `image-manipulator`・`infrastructure`・`instruction-creator`・`md-links`・`operation-design`・`persona`・`pict`
 - `problem-analysis`・`project-docs`・`project-guideline`・`project-overview`・`project-policy`
 - `prompt-creator`・`proposal`・`refine`
-- `requirements`・`review`・`slide-structure`・`slide-workflow`・`tasklist`・`tbls`・`test-data`・`testcase`・`toggl`
+- `requirements`・`review`・`slide-structure`・`slide-workflow`・`summarize`・`tasklist`・`tbls`・`test-data`・`testcase`・`toggl`
 - `ui-docs`・`unresolved-proposal`・`usecase`・`vulnerability-report`・`vulnerability-triage`・`web-search`
 - `website-workflow`・`workplan`・`zensical`
 
@@ -416,6 +426,6 @@
 まとめ
 -------------------------
 
-本一覧は、77件のスキルを4分類で網羅し、全スキルに「できること」と「読み込みトリガー条件」を記載しました。
+本一覧は、79件のスキルを4分類で網羅し、全スキルに「できること」と「読み込みトリガー条件」を記載しました。
 実作業では、まず利用シーンを決め、対応するワークフロー型または単機能型スキルを起点に選択します。
 この手順で、読み込み漏れと過剰読み込みの両方を抑制できます。
