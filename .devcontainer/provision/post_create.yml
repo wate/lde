@@ -48,6 +48,12 @@
     ## -------------
     logdy_service_enabled: false
     logdy_service_state: stopped
+    ## AI Agent
+    ## -------------
+    ## 認証情報は、~/.ai-agent-data(名前付きボリューム)がある場合だけ、その中へリンクして残す
+    opencode_install: false
+    opencode_latest_install: false
+    claude_code_install: false
   roles:
     - role: logdy
       become: true
@@ -66,6 +72,9 @@
     - name: Set bash-completion setting
       ansible.builtin.import_tasks:
         file: tasks/completion.yml
+    - name: Setup AI agent
+      ansible.builtin.import_tasks:
+        file: tasks/ai_agent.yml
     - name: Setup VSCode Github Copilot
       block:
         - name: Setup rtk

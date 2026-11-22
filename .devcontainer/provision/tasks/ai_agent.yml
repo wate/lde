@@ -1,0 +1,34 @@
+---
+## ----------
+## AIエージェント
+##
+## エージェントごとのタスクは tasks/ai_agent/*.yml に置き、
+## post_create.yml の変数(opencode_install など)で入れるものを選ぶ
+## ----------
+- name: Set AI agent data directory
+  ansible.builtin.set_fact:
+    ai_agent_data_dir: "{{ ansible_facts.env.HOME }}/.ai-agent-data"
+- name: Check AI agent data directory
+  ansible.builtin.stat:
+    path: "{{ ai_agent_data_dir }}"
+  register: ai_agent_data_dir_stat
+## 名前付きボリュームのマウント先はrootの持ち物で作られるため、持ち主を直す
+- name: Set owner of AI agent data directory
+  ansible.builtin.file:
+    path: "{{ ai_agent_data_dir }}"
+    state: directory
+    owner: "{{ ansible_facts.user_id }}"
+    group: "{{ ansible_facts.user_gid }}"
+    mode: "0700"
+  become: true
+  when: ai_agent_data_dir_stat.stat.exists
+- name: Find AI agent tasks
+  ansible.builtin.set_fact:
+    ai_agent_tasks: "{{ lookup('fileglob', 'tasks/ai_agent/*.yml', wantlist=true) }}"
+- name: Include AI agent tasks
+  ansible.builtin.include_tasks:
+    file: "{{ ai_agent_task }}"
+  loop: "{{ ai_agent_tasks }}"
+  loop_control:
+    loop_var: ai_agent_task
+    label: "{{ ai_agent_task | basename }}"
