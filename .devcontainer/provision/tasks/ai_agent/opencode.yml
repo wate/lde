@@ -12,7 +12,7 @@
 ## ~/.ai-agent-data がある場合は、その中へリンクして残す
 ## ----------
 - name: Install OpenCode
-  when: opencode_install | default(false)
+  when: opencode_install | default(false) | bool
   block:
     - name: Link OpenCode data directory
       when: ai_agent_data_dir_stat.stat.exists
@@ -42,7 +42,7 @@
       when: >
         opencode_installed_version.rc != 0
         or
-        opencode_latest_install | default(false)
+        opencode_latest_install | default(false) | bool
       block:
         - name: Set GitHub API request header
           ansible.builtin.set_fact:

@@ -1,0 +1,75 @@
+---
+# code: language=ansible
+## ----------
+## Laravel
+##
+## 変数 project_dir は framework_setup.yml で用意する
+## 公開先(/var/www/html)の張り替えは framework_setup.yml の link_docroot で行う
+## ----------
+- name: Set the framework public directory
+  ansible.builtin.set_fact:
+    framework_public_dir: public
+## ----------
+## 一時ディレクトリに雛形を作り、project_dir へ写す
+## ----------
+- name: Remove a leftover temporary directory
+  ansible.builtin.file:
+    path: /tmp/framework-setup-laravel
+    state: absent
+- name: Create a temporary directory
+  ansible.builtin.file:
+    path: /tmp/framework-setup-laravel
+    state: directory
+    mode: '0700'
+- name: Create the Laravel skeleton in the temporary directory
+  ansible.builtin.command:
+    cmd: composer create-project --prefer-dist --no-interaction laravel/laravel /tmp/framework-setup-laravel/app
+  changed_when: true
+- name: Copy the skeleton to the project directory
+  ansible.builtin.copy:
+    src: /tmp/framework-setup-laravel/app/
+    dest: '{{ project_dir }}/'
+    remote_src: true
+    mode: preserve
+- name: Remove the temporary directory
+  ansible.builtin.file:
+    path: /tmp/framework-setup-laravel
+    state: absent
+## ----------
+## Webサーバー(www-data)が実行時に書き込めるようにする
+## link_docrootで公開した画面をエラーなく表示するために必要
+## ----------
+- name: Allow the web server to write runtime directories
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+    recurse: true
+    mode: 'o+w'
+  loop:
+    - '{{ project_dir }}/storage'
+    - '{{ project_dir }}/bootstrap/cache'
+## ----------
+## .env の接続先をDevContainerのデータベースとメールへ向ける
+##
+## コメント行(# で始まる行)も対象にして、有効な行へ置き換える
+## セッションとキャッシュは、データベースのテーブルを増やさないようファイルに置く
+## (既定値のdatabaseはsessions・cacheテーブルがなく、画面の表示で失敗する)
+## ----------
+- name: Configure database, mail and locale in .env
+  ansible.builtin.lineinfile:
+    path: '{{ project_dir }}/.env'
+    regexp: '^#?\s*{{ item.key }}='
+    line: '{{ item.key }}={{ item.value }}'
+  loop:
+    - { key: DB_CONNECTION, value: mysql }
+    - { key: DB_HOST, value: database }
+    - { key: DB_PORT, value: 3306 }
+    - { key: DB_DATABASE, value: app_dev }
+    - { key: DB_USERNAME, value: app_dev }
+    - { key: DB_PASSWORD, value: app_dev_password }
+    - { key: MAIL_MAILER, value: smtp }
+    - { key: MAIL_HOST, value: mailpit }
+    - { key: MAIL_PORT, value: 1025 }
+    - { key: APP_LOCALE, value: ja }
+    - { key: SESSION_DRIVER, value: file }
+    - { key: CACHE_STORE, value: file }

@@ -1,0 +1,69 @@
+---
+# code: language=ansible
+## ----------
+## PHPフレームワークの雛形作成
+##
+## 使い方:
+##   ansible-playbook -i 127.0.0.1, -c local .devcontainer/provision/framework_setup.yml -e framework=cakephp
+##
+## 変数:
+##   framework: cakephp か laravel(必須。varsには書かず -e で渡す)
+##   project_dir: 雛形を作るフォルダーの絶対パス(既定値 /workspace)
+##   allow_workspace: false のとき、/workspace の下へは作れないようにする(サンドボックス向け)
+##   link_docroot: true のとき、/var/www/html を雛形の公開フォルダーへ張り替える
+##
+## コンテナを作るとき(post_create.sh)からは読み込まない
+## ----------
+- name: Setup PHP framework skeleton
+  hosts: all
+  connection: local
+  become: false
+  vars:
+    project_dir: /workspace
+    allow_workspace: true
+    link_docroot: true
+  tasks:
+    - name: Check the framework
+      ansible.builtin.assert:
+        that:
+          - framework is defined
+          - framework in ['cakephp', 'laravel']
+        fail_msg: frameworkにはcakephpかlaravelを指定してください
+        quiet: true
+    ## -e で渡した値は文字列になるため、真偽値として評価する
+    - name: Check the project directory in the sandbox
+      ansible.builtin.assert:
+        that:
+          - allow_workspace | bool or (project_dir != '/workspace' and not project_dir.startswith('/workspace/'))
+        fail_msg: allow_workspaceがfalseのため、/workspaceには作れません。project_dirを指定してください
+        quiet: true
+    ## 雛形を作る先にアプリがあると上書きしてしまうため、composer.json の有無で止める
+    - name: Check for an existing application
+      ansible.builtin.stat:
+        path: '{{ project_dir }}/composer.json'
+      register: framework_project_composer_json
+    - name: Stop when the project already has an application
+      ansible.builtin.fail:
+        msg: composer.jsonがあるため、既存のアプリを上書きしないよう止めました
+      when: framework_project_composer_json.stat.exists
+    - name: Create the project directory
+      ansible.builtin.file:
+        path: '{{ project_dir }}'
+        state: directory
+        mode: '0755'
+    - name: Setup the framework skeleton
+      ansible.builtin.include_tasks:
+        file: 'tasks/framework/{{ framework }}.yml'
+    - name: Link the document root to the project
+      when: link_docroot | bool
+      become: true
+      block:
+        - name: Remove the default document root
+          ansible.builtin.file:
+            path: /var/www/html
+            state: absent
+        - name: Link the document root to the project
+          ansible.builtin.file:
+            src: '{{ project_dir }}/{{ framework_public_dir }}'
+            dest: /var/www/html
+            state: link

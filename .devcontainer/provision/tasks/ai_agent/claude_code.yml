@@ -9,7 +9,7 @@
 ## ~/.ai-agent-data がある場合は、どちらもその中へリンクして残す
 ## ----------
 - name: Install Claude Code
-  when: claude_code_install | default(false)
+  when: claude_code_install | default(false) | bool
   block:
     - name: Link Claude Code data
       when: ai_agent_data_dir_stat.stat.exists

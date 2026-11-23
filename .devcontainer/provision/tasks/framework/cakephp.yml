@@ -1,0 +1,211 @@
+---
+# code: language=ansible
+# yamllint disable rule:line-length
+## config/.env の接続先のURLは、スクリプトと同じ内容を保つため1行にする
+## ----------
+## CakePHP
+##
+## 元は .devcontainer/scripts/setup_cakephp.sh の処理で、同じ内容をAnsibleのタスクにしたもの
+## 変数 project_dir は framework_setup.yml で用意する
+## 公開先(/var/www/html)の張り替えは framework_setup.yml の link_docroot で行う
+## ----------
+- name: Set the framework public directory
+  ansible.builtin.set_fact:
+    framework_public_dir: webroot
+## ----------
+## 一時ディレクトリに雛形を作り、project_dir へ写す
+## ----------
+- name: Remove a leftover temporary directory
+  ansible.builtin.file:
+    path: /tmp/framework-setup-cakephp
+    state: absent
+- name: Create a temporary directory
+  ansible.builtin.file:
+    path: /tmp/framework-setup-cakephp
+    state: directory
+    mode: '0700'
+- name: Create the CakePHP skeleton in the temporary directory
+  ansible.builtin.command:
+    cmd: composer create-project --prefer-dist --no-interaction cakephp/app /tmp/framework-setup-cakephp/app
+  changed_when: true
+- name: Copy the skeleton to the project directory
+  ansible.builtin.copy:
+    src: /tmp/framework-setup-cakephp/app/
+    dest: '{{ project_dir }}/'
+    remote_src: true
+    mode: preserve
+- name: Remove the temporary directory
+  ansible.builtin.file:
+    path: /tmp/framework-setup-cakephp
+    state: absent
+## ----------
+## Webサーバー(www-data)が実行時に書き込めるようにする
+## link_docrootで公開した画面をエラーなく表示するために必要
+## ----------
+- name: Allow the web server to write runtime directories
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+    recurse: true
+    mode: 'o+w'
+  loop:
+    - '{{ project_dir }}/tmp'
+    - '{{ project_dir }}/logs'
+## ----------
+## CakePHPの初期セットアップ
+## ----------
+- name: Create config/.env
+  ansible.builtin.copy:
+    dest: '{{ project_dir }}/config/.env'
+    mode: '0644'
+    content: |
+      export DEBUG="True"
+      export APP_NAME="app"
+      export APP_DEFAULT_LOCALE="ja_JP"
+      export APP_DEFAULT_TIMEZONE="Asia/Tokyo"
+
+      ## ---------------------
+      ## Database
+      ## ---------------------
+      export DATABASE_URL="mysql://app_dev:app_dev_password@database/app_dev?encoding=utf8mb4&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+      export DATABASE_TEST_URL="mysql://app_test:app_test_password@database/app_test?encoding=utf8mb4&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+
+      ## ---------------------
+      ## Email
+      ## ---------------------
+      export EMAIL_TRANSPORT_DEFAULT_URL="smtp://mailpit:1025"
+      ## Example for Gmail
+      # export EMAIL_TRANSPORT_DEFAULT_URL="smtp://my@gmail.com:secret@smtp.gmail.com:587?tls=true"
+
+      ## ---------------------
+      ## Cache
+      ## ---------------------
+      # export CACHE_DURATION="+2 minutes"
+      # export CACHE_DEFAULT_URL="file:///path/to/tmp/cache/?prefix=${APP_NAME}_default_&duration=${CACHE_DURATION}"
+      # export CACHE_CAKECORE_URL="file:///path/to/tmp/cache/persistent?prefix=${APP_NAME}_cake_translations_&serialize=true&duration=${CACHE_DURATION}"
+      # export CACHE_CAKEMODEL_URL="file:///path/to/tmp/cache/models?prefix=${APP_NAME}_cake_model_&serialize=true&duration=${CACHE_DURATION}"
+
+      ## ---------------------
+      ## Log
+      ## ---------------------
+      # export LOG_DEBUG_URL="file:///path/to/logs/?levels[]=notice&levels[]=info&levels[]=debug&file=debug"
+      # export LOG_ERROR_URL="file:///path/to/logs/?levels[]=warning&levels[]=error&levels[]=critical&levels[]=alert&levels[]=emergency&file=error"
+## ----------
+## dotenvパッケージを必須パッケージに変更する
+## ----------
+- name: Add josegonzalez/dotenv
+  ansible.builtin.command:
+    cmd: composer require josegonzalez/dotenv -q
+    chdir: '{{ project_dir }}'
+  changed_when: true
+## ----------
+## PHPStanを開発パッケージに追加する
+## ----------
+- name: Add phpstan/phpstan
+  ansible.builtin.command:
+    cmd: composer require phpstan/phpstan --dev -q
+    chdir: '{{ project_dir }}'
+  changed_when: true
+## ----------
+## config/bootstrap.php で .env を読み込む処理を有効化する
+## ----------
+- name: Write the patch for config/bootstrap.php
+  ansible.builtin.copy:
+    dest: '{{ project_dir }}/bootstrap.php.patch'
+    mode: '0644'
+    content: |
+      diff --git a/config/bootstrap.php b/config/bootstrap.php
+      index fa67096..1ef0f20 100644
+      --- a/config/bootstrap.php
+      +++ b/config/bootstrap.php
+      @@ -64,13 +64,13 @@ require CAKE . 'functions.php';
+        * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
+        * for more information for recommended practices.
+       */
+      -// if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
+      -//     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+      -//     $dotenv->parse()
+      -//         ->putenv()
+      -//         ->toEnv()
+      -//         ->toServer();
+      -// }
+      +if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
+      +    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+      +    $dotenv->parse()
+      +        ->putenv()
+      +        ->toEnv()
+      +        ->toServer();
+      +}
+
+       /*
+        * Initializes default Config store and loads the main configuration file (app.php)
+- name: Enable loading .env in config/bootstrap.php
+  ansible.posix.patch:
+    src: '{{ project_dir }}/bootstrap.php.patch'
+    basedir: '{{ project_dir }}'
+    strip: 1
+    remote_src: true
+- name: Remove the patch file
+  ansible.builtin.file:
+    path: '{{ project_dir }}/bootstrap.php.patch'
+    state: absent
+## ----------
+## cakeコマンドのコマンド補完が効くようにする
+## ----------
+- name: Create the bash completion directory
+  ansible.builtin.file:
+    path: '{{ ansible_facts.env.HOME }}/.local/share/bash-completion/completions'
+    state: directory
+    mode: '0755'
+- name: Install the completion for the cake command
+  ansible.builtin.copy:
+    src: '{{ project_dir }}/bin/bash_completion.sh'
+    dest: '{{ ansible_facts.env.HOME }}/.local/share/bash-completion/completions/cake'
+    remote_src: true
+    mode: '0644'
+## ----------
+## .gitignore に無視するファイルの設定を追記する
+## ----------
+- name: Read the current .gitignore
+  ansible.builtin.slurp:
+    src: '{{ project_dir }}/.gitignore'
+  register: cakephp_gitignore
+- name: Append ignore settings to .gitignore
+  ansible.builtin.copy:
+    dest: '{{ project_dir }}/.gitignore'
+    mode: '0644'
+    content: '{{ (cakephp_gitignore.content | b64decode) + cakephp_gitignore_settings }}'
+  vars:
+    cakephp_gitignore_settings: |
+      ### Cache file directory ###
+      .cache
+      *.cache
+
+      ### Ansible ###
+      .ansible
+      .devcontainer/provision/roles/
+
+      ### direnv ###
+      .direnv
+      .envrc
+
+      ### dotenv ###
+      .env
+## ----------
+## direnvの設定ファイルを生成し、設定を有効化する
+## ----------
+- name: Create .envrc
+  ansible.builtin.copy:
+    dest: '{{ project_dir }}/.envrc'
+    mode: '0644'
+    content: |
+      PATH_add bin
+      PATH_add .
+      layout php
+      layout node
+      source_env_if_exists .env
+- name: Allow direnv in the project
+  ansible.builtin.command:
+    cmd: direnv allow
+    chdir: '{{ project_dir }}'
+  changed_when: true

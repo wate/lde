@@ -7,7 +7,7 @@
   vars:
     ## Base Directory
     ## -------------
-    base_dir: "{{ ansible_facts.env.PWD | dirname | dirname }}"
+    base_dir: '{{ ansible_facts.env.PWD | dirname | dirname }}'
     ## Development Tools
     ## -------------
     install_tools:
@@ -54,6 +54,7 @@
     opencode_install: false
     opencode_latest_install: false
     claude_code_install: false
+    copilot_cli_install: false
   roles:
     - role: logdy
       become: true
