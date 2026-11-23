@@ -1,0 +1,34 @@
+---
+## ----------
+## Copilot CLI
+## @see https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli
+## @see https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-programmatic-reference
+##
+## 公式のインストールスクリプトで入れる。root以外では、既定で ~/.local/bin に入る。
+## 設定は ~/.copilot に保存される(COPILOT_HOMEで変更できる)。
+## ~/.ai-agent-data がある場合は、その中へリンクして残す
+##
+## ~/.copilot は、post_create.yml の「Setup VSCode Github Copilot」でrtkのフックの置き場所にも使う。
+## tasks/ai_agent.yml の読み込みがrtkのタスクより先のため、リンクを張ってからrtkが書き込む
+## ----------
+- name: Install Copilot CLI
+  when: copilot_cli_install | default(false) | bool
+  block:
+    - name: Link Copilot CLI data
+      when: ai_agent_data_dir_stat.stat.exists
+      block:
+        - name: Create Copilot CLI data directory
+          ansible.builtin.file:
+            path: '{{ ai_agent_data_dir }}/copilot'
+            state: directory
+            mode: '0700'
+        - name: Link Copilot CLI config directory
+          ansible.builtin.file:
+            src: '{{ ai_agent_data_dir }}/copilot'
+            dest: '{{ ansible_facts.env.HOME }}/.copilot'
+            state: link
+    - name: Install Copilot CLI with the install script
+      ansible.builtin.shell:
+        cmd: set -o pipefail && curl -fsSL https://gh.io/copilot-install | bash
+        executable: /bin/bash
+        creates: '{{ ansible_facts.env.HOME }}/.local/bin/copilot'
