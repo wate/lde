@@ -1,0 +1,75 @@
+---
+## ----------
+## OpenCode
+## @see https://opencode.ai/
+## @see https://github.com/anomalyco/opencode/releases
+##
+## v2はnpmで配られていない(npmのopencode-aiはv1系)ため、GitHubのリリースのバイナリを入れる。
+## v1系のリリースも続いており、releases/latestがv1系を返すことがあるため、
+## リリースの一覧から opencode_release_prefix で始まる最新のものを選ぶ。
+##
+## 認証情報は ~/.local/share/opencode に保存される。
+## ~/.ai-agent-data がある場合は、その中へリンクして残す
+## ----------
+- name: Install OpenCode
+  when: opencode_install | default(false)
+  block:
+    - name: Link OpenCode data directory
+      when: ai_agent_data_dir_stat.stat.exists
+      block:
+        - name: Create OpenCode data directory
+          ansible.builtin.file:
+            path: "{{ ai_agent_data_dir }}/opencode"
+            state: directory
+            mode: "0700"
+        - name: Create parent directory of OpenCode data directory
+          ansible.builtin.file:
+            path: "{{ ansible_facts.env.HOME }}/.local/share"
+            state: directory
+            mode: "0755"
+        - name: Link OpenCode data directory
+          ansible.builtin.file:
+            src: "{{ ai_agent_data_dir }}/opencode"
+            dest: "{{ ansible_facts.env.HOME }}/.local/share/opencode"
+            state: link
+    - name: Check installed OpenCode
+      ansible.builtin.command:
+        cmd: /usr/local/bin/opencode --version
+      register: opencode_installed_version
+      changed_when: false
+      failed_when: false
+    - name: Install OpenCode binary
+      when: >
+        opencode_installed_version.rc != 0
+        or
+        opencode_latest_install | default(false)
+      block:
+        - name: Set GitHub API request header
+          ansible.builtin.set_fact:
+            opencode_api_headers: "{{ {'Accept': 'application/vnd.github+json'} | combine(opencode_auth_header) }}"
+          vars:
+            opencode_auth_header: "{{ {'Authorization': 'Bearer ' ~ lookup('env', 'GITHUB_TOKEN')} if lookup('env', 'GITHUB_TOKEN') | length > 0 else {} }}"
+        - name: Get OpenCode releases
+          ansible.builtin.uri:
+            url: https://api.github.com/repos/anomalyco/opencode/releases?per_page=30
+            headers: "{{ opencode_api_headers }}"
+          register: opencode_releases
+        - name: Set OpenCode version
+          ansible.builtin.set_fact:
+            opencode_version: >-
+              {{ opencode_releases.json
+              | rejectattr('prerelease')
+              | selectattr('tag_name', 'match', '^' ~ (opencode_release_prefix | default('v2.')) | regex_escape)
+              | map(attribute='tag_name')
+              | first }}
+            opencode_asset_file: "opencode-linux-{{ {'x86_64': 'x64', 'aarch64': 'arm64'}[ansible_facts['architecture']] }}.tar.gz"
+        - name: Install OpenCode
+          ansible.builtin.unarchive:
+            src: "https://github.com/anomalyco/opencode/releases/download/{{ opencode_version }}/{{ opencode_asset_file }}"
+            dest: /usr/local/bin
+            include:
+              - opencode
+            mode: "0755"
+            remote_src: true
+          become: true
+          when: opencode_version | regex_replace('^v', '') not in opencode_installed_version.stdout

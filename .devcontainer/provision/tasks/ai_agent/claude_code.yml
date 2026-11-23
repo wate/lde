@@ -1,0 +1,38 @@
+---
+## ----------
+## Claude Code
+## @see https://code.claude.com/docs/en/setup
+##
+## 公式が推奨するネイティブインストーラーで、~/.local/bin/claude に入れる。
+## 更新はClaude Code自身が行う。
+## 認証情報は ~/.claude/.credentials.json、アカウントの情報は ~/.claude.json に保存される。
+## ~/.ai-agent-data がある場合は、どちらもその中へリンクして残す
+## ----------
+- name: Install Claude Code
+  when: claude_code_install | default(false)
+  block:
+    - name: Link Claude Code data
+      when: ai_agent_data_dir_stat.stat.exists
+      block:
+        - name: Create Claude Code data directory
+          ansible.builtin.file:
+            path: "{{ ai_agent_data_dir }}/claude"
+            state: directory
+            mode: "0700"
+        - name: Link Claude Code config directory
+          ansible.builtin.file:
+            src: "{{ ai_agent_data_dir }}/claude"
+            dest: "{{ ansible_facts.env.HOME }}/.claude"
+            state: link
+        ## リンク先のファイルはClaude Codeが初回に作るため、まだなくてもリンクを張る
+        - name: Link Claude Code account file
+          ansible.builtin.file:
+            src: "{{ ai_agent_data_dir }}/claude.json"
+            dest: "{{ ansible_facts.env.HOME }}/.claude.json"
+            state: link
+            force: true
+    - name: Install Claude Code with native installer
+      ansible.builtin.shell:
+        cmd: set -o pipefail && curl -fsSL https://claude.ai/install.sh | bash
+        executable: /bin/bash
+        creates: "{{ ansible_facts.env.HOME }}/.local/bin/claude"
