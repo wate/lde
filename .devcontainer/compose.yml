@@ -10,6 +10,8 @@ services:
       TZ: Asia/Tokyo
       GITHUB_TOKEN: '${GITHUB_TOKEN}'
       GH_TOKEN: '${GH_TOKEN:-${GITHUB_TOKEN}}'
+      ## post_create.ymlのlindera_dictionaries_dirと同じ値にする
+      LINDERA_DICTIONARIES_DIR: /usr/local/share/lindera/dictionaries
     volumes:
       - ..:/workspace:cached
       - ./web/000-default.conf:/etc/apache2/sites-available/000-default.conf
