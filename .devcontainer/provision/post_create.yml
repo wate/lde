@@ -44,6 +44,9 @@
       - uv
       - rtk
       - context-mode
+    ## 辞書をrootのホームでなく共有の場所へ入れ、開発ユーザーからも使えるようにする
+    ## 同じ値をcompose.ymlの環境変数LINDERA_DICTIONARIES_DIRで渡す
+    lindera_dictionaries_dir: /usr/local/share/lindera/dictionaries
     ## logdy
     ## -------------
     logdy_service_enabled: false
